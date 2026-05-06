@@ -660,6 +660,14 @@ body.leaping .page-content {
   100% { opacity: 0; transform: translateY(300px) scale(1.1); filter: blur(15px); }
 }
 
+@keyframes animusScan {
+  0% { opacity: 0; }
+  8% { opacity: 0.8; }
+  40% { opacity: 0.4; }
+  80% { opacity: 0.15; }
+  100% { opacity: 0; }
+}
+
 /* Landing Synchronization (Snappy landing) */
 .page-content {
   animation: syncRise 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -677,6 +685,170 @@ body.leaping .page-content {
     transform: scale(1) translateY(0);
     filter: brightness(1) contrast(1) blur(0);
   }
+}
+
+/* ── GLITCH BARS ── */
+.glitch-bars {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+body.leaping .glitch-bars {
+  animation: glitchBarsFlash 2.5s steps(1);
+}
+.glitch-bars div {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: rgba(240,235,227,0.12);
+}
+.glitch-bars div:nth-child(1) { top: 22%; }
+.glitch-bars div:nth-child(2) { top: 45%; height: 3px; background: rgba(139,26,26,0.18); }
+.glitch-bars div:nth-child(3) { top: 67%; }
+.glitch-bars div:nth-child(4) { top: 83%; height: 1px; }
+
+@keyframes glitchBarsFlash {
+  0%,100% { opacity: 0; }
+  3%  { opacity: 1; }
+  4%  { opacity: 0; }
+  12% { opacity: 0.7; }
+  13% { opacity: 0; }
+  25% { opacity: 0.35; }
+  26% { opacity: 0; }
+  45% { opacity: 0.2; }
+  46% { opacity: 0; }
+  65% { opacity: 0.15; }
+  66% { opacity: 0; }
+}
+
+/* ── CORNER BRACKETS ── */
+.ac-corner {
+  position: absolute;
+  width: 14px; height: 14px;
+  border-style: solid;
+  border-color: rgba(139,26,26,0.25);
+  pointer-events: none;
+  opacity: 0;
+}
+body.leaping .ac-corner {
+  animation: cornerFade 2.5s ease-out forwards;
+}
+.ac-corner.c-tl { top: 20px; left: 20px; border-width: 1px 0 0 1px; }
+.ac-corner.c-tr { top: 20px; right: 20px; border-width: 1px 1px 0 0; }
+.ac-corner.c-bl { bottom: 20px; left: 20px; border-width: 0 0 1px 1px; }
+.ac-corner.c-br { bottom: 20px; right: 20px; border-width: 0 1px 1px 0; }
+
+@keyframes cornerFade {
+  0% { opacity: 0; }
+  10% { opacity: 0.8; }
+  80% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+/* ── HUD CONTAINER ── */
+.ac-hud {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 380px;
+  opacity: 0;
+  z-index: 3;
+}
+body.leaping .ac-hud {
+  animation: hudFade 2.5s ease-out forwards;
+}
+@keyframes hudFade {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  78%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.ac-hud-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(240,235,227,0.75);
+  height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.ac-hud-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(139,26,26,0.55);
+  height: 13px;
+  text-align: center;
+  transition: opacity 0.25s;
+}
+
+/* ── SYNC BAR ── */
+.ac-sync-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ac-sync-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(139,26,26,0.4);
+  white-space: nowrap;
+}
+
+.ac-sync-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(240,235,227,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.ac-sync-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #8b1a1a, #c23b3b);
+  transition: width 0.1s linear;
+  position: relative;
+}
+
+.ac-sync-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -2px;
+  width: 1px;
+  height: 7px;
+  background: #c23b3b;
+  box-shadow: 0 0 6px rgba(194,59,59,0.6);
+}
+
+.ac-sync-pct {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(240,235,227,0.5);
+  min-width: 32px;
+  text-align: right;
+}
+
+@media (max-width: 500px) {
+  .ac-hud { width: 280px; bottom: 40px; }
+  .ac-hud-text { font-size: 10px; letter-spacing: 0.15em; }
 }
 
 /* ── HOME NAV GRID: 6-CARD LAYOUT ── */
