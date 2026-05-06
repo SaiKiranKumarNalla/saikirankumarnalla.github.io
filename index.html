@@ -13,15 +13,51 @@
 .hero-name .stroke{-webkit-text-stroke:1.5px var(--paper);color:transparent}
 .hero-title{font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.35em;color:var(--blood-glow);margin:1.5rem 0 2.5rem}
 .hero-desc{font-size:1rem;line-height:1.8;color:var(--mist);font-weight:300;max-width:550px;margin:0 auto 3rem}
-.nav-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--ghost-line);position:relative;z-index:1}
+.hero-btns{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap}
+
+/* ── BRIEF INTRO SECTION ── */
+.intro-strip{padding:5rem 3rem;position:relative;z-index:1;border-top:1px solid var(--ghost-line)}
+.intro-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.intro-text{font-size:0.95rem;line-height:1.9;color:var(--mist);font-weight:300}
+.intro-text strong{color:var(--paper);font-weight:500}
+.intro-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ghost-line);border:1px solid var(--ghost-line)}
+.intro-stat{background:var(--ink);padding:2rem 1.5rem;text-align:center;transition:background 0.3s}
+.intro-stat:hover{background:rgba(139,26,26,0.04)}
+.intro-stat-num{font-family:'Zen Antique',serif;font-size:2.2rem;color:var(--blood-glow);line-height:1;margin-bottom:0.4rem}
+.intro-stat-label{font-family:'Space Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--mist)}
+
+/* ── NAV GRID ── */
+.nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--ghost-line);position:relative;z-index:1}
 .nav-card{padding:3rem 2rem;text-align:center;text-decoration:none;color:var(--paper);border-right:1px solid var(--ghost-line);border-bottom:1px solid var(--ghost-line);transition:all 0.4s;position:relative;overflow:hidden}
-.nav-card:last-child{border-right:none}
+.nav-card:nth-child(4n){border-right:none}
 .nav-card::before{content:'';position:absolute;inset:0;background:var(--blood);opacity:0;transition:opacity 0.4s}
 .nav-card:hover::before{opacity:0.08}
 .nav-card-kanji{font-family:'Noto Serif JP',serif;font-size:2.5rem;font-weight:900;color:rgba(139,26,26,0.25);margin-bottom:0.8rem;transition:color 0.4s;position:relative;z-index:1}
 .nav-card:hover .nav-card-kanji{color:rgba(139,26,26,0.5)}
 .nav-card-label{font-family:'Zen Antique',serif;font-size:1rem;margin-bottom:0.2rem;position:relative;z-index:1}
 .nav-card-sub{font-family:'Space Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--steel);position:relative;z-index:1}
+
+/* ── CV DOWNLOAD TILE ── */
+.nav-card-cv{background:linear-gradient(135deg, rgba(139,26,26,0.08) 0%, transparent 60%);position:relative}
+.nav-card-cv .nav-card-kanji{color:rgba(212,175,55,0.35);transition:color 0.4s, text-shadow 0.4s}
+.nav-card-cv:hover .nav-card-kanji{color:rgba(212,175,55,0.7);text-shadow:0 0 20px rgba(212,175,55,0.3)}
+.nav-card-cv .nav-card-label{color:var(--paper)}
+.nav-card-cv .nav-card-sub{color:rgba(212,175,55,0.6)}
+/* animus corner brackets */
+.nav-card-cv .cv-corner{position:absolute;width:14px;height:14px;border-color:rgba(212,175,55,0.25);border-style:solid;pointer-events:none;transition:border-color 0.4s}
+.nav-card-cv .cv-corner.tl{top:10px;left:10px;border-width:1px 0 0 1px}
+.nav-card-cv .cv-corner.tr{top:10px;right:10px;border-width:1px 1px 0 0}
+.nav-card-cv .cv-corner.bl{bottom:10px;left:10px;border-width:0 0 1px 1px}
+.nav-card-cv .cv-corner.br{bottom:10px;right:10px;border-width:0 1px 1px 0}
+.nav-card-cv:hover .cv-corner{border-color:rgba(212,175,55,0.6)}
+/* eagle vision pulse on hover */
+.nav-card-cv::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center, rgba(212,175,55,0.12), transparent 70%);opacity:0;transition:opacity 0.5s;pointer-events:none}
+.nav-card-cv:hover::after{opacity:1}
+/* scan line */
+.cv-scan{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right, transparent, rgba(212,175,55,0.4), transparent);opacity:0;transition:opacity 0.4s}
+.nav-card-cv:hover .cv-scan{opacity:1;animation:cvScanPulse 2.5s ease-in-out infinite}
+@keyframes cvScanPulse{0%,100%{opacity:0.3}50%{opacity:0.8}}
+
 .quote-strip{overflow:hidden;white-space:nowrap;padding:1.2rem 0;border-top:1px solid var(--ghost-line);border-bottom:1px solid var(--ghost-line);position:relative;z-index:1}
 .quote-strip-inner{display:inline-block;animation:scrollQuote 45s linear infinite}
 .quote-strip-item{display:inline-block;font-family:'Zen Antique',serif;font-size:0.85rem;color:var(--mist);padding:0 3rem;opacity:0.5}
@@ -31,7 +67,8 @@
 .philosophy-kanji{font-family:'Noto Serif JP',serif;font-size:clamp(8rem,16vw,14rem);font-weight:900;color:rgba(139,26,26,0.08);text-align:center;line-height:1}
 .philosophy-text h3{font-family:'Zen Antique',serif;font-size:1.6rem;margin-bottom:1rem}
 .philosophy-text p{font-size:0.92rem;line-height:1.8;color:var(--mist);font-weight:300}
-@media(max-width:900px){.nav-grid{grid-template-columns:1fr 1fr}.philosophy{grid-template-columns:1fr;gap:2rem}}
+@media(max-width:900px){.nav-grid{grid-template-columns:1fr 1fr}.philosophy{grid-template-columns:1fr;gap:2rem}.intro-inner{grid-template-columns:1fr;gap:2rem}}
+@media(max-width:500px){.nav-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -43,7 +80,6 @@
   <div class="ac-insignia">鷹</div>
 </div>
 
-
 <nav>
   <a href="index.html" class="nav-brand">
     <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><rect y="3" width="32" height="6" fill="#0a0a0b" stroke="#8b1a1a" stroke-width="0.8"/><circle cx="16" cy="6" r="2.5" fill="none" stroke="#8b1a1a" stroke-width="0.6"/></svg>
@@ -54,18 +90,17 @@
     <span class="nav-divider"></span>
     <a href="about.html">About</a>
     <a href="experience.html">Experience</a>
-     <a href="education.html">Education</a>
+    <a href="education.html">Education</a>
     <a href="projects.html">Projects</a>
     <a href="papers.html">Publications</a>
-    <a href="contact.html">Reach out</a>
+    <a href="contact.html">Reach Out</a>
   </div>
 </nav>
 
 <div class="v-accent"></div>
 
-<!-- BG: Crossed katanas instead of just kanji -->
+<!-- BG: Crossed katanas -->
 <svg class="bg-katana-dual" width="800" height="700" viewBox="0 0 800 700" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Katana 1 - diagonal left to right -->
   <g transform="rotate(-35 400 350)">
     <path d="M50 360Q65 355 100 353L700 335Q740 332 770 325L785 320Q790 318 788 316L700 320L100 338Q65 340 50 345Z" fill="#f0ebe3"/>
     <path d="M35 358Q42 354 50 360L50 345Q42 340 35 344Z" fill="#c4bfb6"/>
@@ -73,7 +108,6 @@
     <line x1="102" y1="332" x2="102" y2="356" stroke="#8b1a1a" stroke-width="0.5"/>
     <rect x="110" y="336" width="4" height="16" rx="1" fill="none" stroke="#f0ebe3" stroke-width="0.4"/>
   </g>
-  <!-- Katana 2 - diagonal right to left -->
   <g transform="rotate(35 400 350)">
     <path d="M50 360Q65 355 100 353L700 335Q740 332 770 325L785 320Q790 318 788 316L700 320L100 338Q65 340 50 345Z" fill="#f0ebe3"/>
     <path d="M35 358Q42 354 50 360L50 345Q42 340 35 344Z" fill="#c4bfb6"/>
@@ -86,7 +120,6 @@
 <div class="page-content">
 <section class="home-hero">
   <div class="hero-center reveal">
-    <!-- Multi-lingual Greeting Bar -->
     <div class="hero-title mono" style="margin-bottom: 2rem; color: var(--mist); opacity: 0.8;">
       Hello · Bonjour · నమస్కారం · नमस्ते · こんにちは
     </div>
@@ -105,7 +138,24 @@
       Forging PET/CT simulation tools where the clinic meets the code.
     </p>
     
-    <a href="about.html" class="btn">Enter Animus<span class="arrow">→</span></a>
+    <div class="hero-btns">
+      <a href="about.html" class="btn">Enter Animus<span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ── BRIEF INTRO ── -->
+<section class="intro-strip bg-smoke">
+  <div class="intro-inner reveal">
+    <div class="intro-text">
+      <strong>Medical technology specialist</strong> with over 3 years of translational R&amp;D across med-tech startups and hospitals. Trained at <strong>École Polytechnique</strong>, now completing a PhD at the <strong>Université de Toulouse</strong>. My work sits at the crossroads of physics, engineering, and oncology — with one foot in the clinic and the other in the code.
+    </div>
+    <div class="intro-stats stagger">
+      <div class="intro-stat"><div class="intro-stat-num">6</div><div class="intro-stat-label">Publications</div></div>
+      <div class="intro-stat"><div class="intro-stat-num">3+</div><div class="intro-stat-label">Years R&amp;D</div></div>
+      <div class="intro-stat"><div class="intro-stat-num">4</div><div class="intro-stat-label">Institutions</div></div>
+      <div class="intro-stat"><div class="intro-stat-num">3</div><div class="intro-stat-label">Countries</div></div>
+    </div>
   </div>
 </section>
 
@@ -137,6 +187,16 @@
   <a href="projects.html" class="nav-card"><div class="nav-card-kanji">鍛</div><div class="nav-card-label">The Forge</div><div class="nav-card-sub">Projects</div></a>
   <a href="papers.html" class="nav-card"><div class="nav-card-kanji">刀</div><div class="nav-card-label">The Scrolls</div><div class="nav-card-sub">Publications</div></a>
   <a href="contact.html" class="nav-card"><div class="nav-card-kanji">縁</div><div class="nav-card-label">Reach Out</div><div class="nav-card-sub">Contact</div></a>
+
+  <!-- ── CV DOWNLOAD TILE (AC Eagle Vision Theme) ── -->
+  <a href="Assets/Sai_Nalla_CV.pdf" download class="nav-card nav-card-cv" style="grid-column: span 2;">
+    <div class="cv-scan"></div>
+    <div class="cv-corner tl"></div><div class="cv-corner tr"></div>
+    <div class="cv-corner bl"></div><div class="cv-corner br"></div>
+    <div class="nav-card-kanji">鷹</div>
+    <div class="nav-card-label">Eagle Vision — Download CV</div>
+    <div class="nav-card-sub">Synchronize Memory · PDF</div>
+  </a>
 </div>
 
 <section class="philosophy bg-smoke">
@@ -152,7 +212,6 @@
   <div class="footer-text">© 2026 Sai Kiran Kumar Nalla</div>
   <div class="footer-text">鍛えた刀 — A Forged Blade</div>
 </footer>
-
 
 <script src="transitions.js"></script>
 </body>
