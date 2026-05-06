@@ -3,14 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Arsenal — Sai Nalla</title>
+<title>The Scrolls — Sai Nalla</title>
 <link rel="stylesheet" href="styles.css">
 <style>
+/* ── PAPER CARDS ── */
 .papers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
+
+.paper-wrap{position:relative}
+
 .paper-card{padding:2rem;border:1px solid var(--ghost-line);background:var(--ghost);transition:all 0.4s;position:relative;overflow:hidden}
 .paper-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--blood);transition:height 0.4s}
 .paper-card:hover{border-color:rgba(139,26,26,0.3);background:rgba(139,26,26,0.03)}
 .paper-card:hover::before{height:100%}
+.paper-wrap.abstract-open .paper-card{border-color:rgba(139,26,26,0.3);border-bottom-color:transparent}
+
 .paper-status{font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.8rem;display:flex;align-items:center;gap:0.8rem}
 .paper-status .dot{width:6px;height:6px;border-radius:0;transform:rotate(45deg)}
 .dot-published{background:var(--blood-glow)}
@@ -20,8 +26,48 @@
 .paper-status span{color:var(--blood)}
 .paper-title{font-family:'Zen Antique',serif;font-size:1rem;line-height:1.5;margin-bottom:0.8rem}
 .paper-journal{font-size:0.78rem;color:var(--steel);font-style:italic}
-.paper-link{display:inline-block;margin-top:1rem;font-family:'Space Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--blood-glow);text-decoration:none;transition:color 0.3s}
+
+.paper-actions{display:flex;gap:1.5rem;align-items:center;margin-top:1rem;flex-wrap:wrap}
+.paper-link{font-family:'Space Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--blood-glow);text-decoration:none;transition:color 0.3s;cursor:pointer;background:none;border:none;padding:0}
 .paper-link:hover{color:var(--paper)}
+
+/* ── ABSTRACT ACCORDION ── */
+.abstract-body{max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);border:1px solid transparent;border-top:none;background:transparent}
+.paper-wrap.abstract-open .abstract-body{max-height:800px;border-color:rgba(139,26,26,0.3);background:linear-gradient(135deg, rgba(139,26,26,0.04) 0%, transparent 40%), var(--ghost)}
+
+.abstract-inner{padding:1.8rem 2rem;position:relative}
+
+/* scan line */
+.abstract-scan{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right, transparent, var(--blood), transparent);animation:scanPulse 3.5s ease-in-out infinite}
+@keyframes scanPulse{0%,100%{opacity:0.2}50%{opacity:0.75}}
+
+/* corner brackets */
+.abs-corner{position:absolute;width:9px;height:9px;border-color:rgba(139,26,26,0.2);border-style:solid;pointer-events:none}
+.abs-corner.tl{top:8px;left:8px;border-width:1px 0 0 1px}
+.abs-corner.tr{top:8px;right:8px;border-width:1px 1px 0 0}
+.abs-corner.bl{bottom:8px;left:8px;border-width:0 0 1px 1px}
+.abs-corner.br{bottom:8px;right:8px;border-width:0 1px 1px 0}
+
+.abstract-label{font-family:'Space Mono',monospace;font-size:0.48rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--blood);margin-bottom:0.8rem;display:flex;align-items:center;gap:0.8rem}
+.abstract-label::after{content:'';flex:1;height:1px;background:var(--ghost-line)}
+
+.abstract-text{font-size:0.85rem;line-height:1.85;color:var(--mist);font-weight:300}
+.abstract-loading{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.1em}
+
+/* ── BLOG / OPINIONS SECTION ── */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
+
+.blog-card{padding:2rem;border:1px solid var(--ghost-line);background:var(--ghost);transition:all 0.4s;position:relative;overflow:hidden;text-decoration:none;color:var(--paper);display:block}
+.blog-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blood);transform:scaleX(0);transform-origin:left;transition:transform 0.4s}
+.blog-card:hover{border-color:rgba(139,26,26,0.3);background:rgba(139,26,26,0.03)}
+.blog-card:hover::before{transform:scaleX(1)}
+
+.blog-tag{font-family:'Space Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--blood-glow);margin-bottom:0.6rem}
+.blog-title{font-family:'Zen Antique',serif;font-size:1.05rem;line-height:1.5;margin-bottom:0.6rem}
+.blog-excerpt{font-size:0.82rem;color:var(--mist);line-height:1.7;font-weight:300;margin-bottom:1rem}
+.blog-meta{font-family:'Space Mono',monospace;font-size:0.52rem;color:var(--steel);letter-spacing:0.08em;text-transform:uppercase}
+.blog-coming{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.12em;text-transform:uppercase;text-align:center;padding:3rem;border:1px dashed var(--ghost-line)}
+
 .arsenal-katana{display:flex;align-items:center;justify-content:center;padding:3rem 0}
 </style>
 </head>
@@ -33,7 +79,6 @@
   <div class="animus-lines"></div>
   <div class="ac-insignia">鷹</div>
 </div>
-
 
 <nav>
   <a href="index.html" class="nav-brand">
@@ -70,45 +115,166 @@
 
   <div class="papers-grid stagger">
 
-    <div class="paper-card">
-      <div class="paper-status"><span class="dot dot-published"></span><span>2025 — Published</span></div>
-      <div class="paper-title">Enhancing PET/CT Target Assessment with Porous 3D Printed Grids: A Pilot Study</div>
-      <div class="paper-journal">Physical and Engineering Sciences in Medicine</div>
-      <a href="https://doi.org/10.1007/s13246-025-01687-y" target="_blank" class="paper-link">Read paper →</a>
+    <!-- Paper 1 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-1.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-published"></span><span>2025 — Published</span></div>
+        <div class="paper-title">Enhancing PET/CT Target Assessment with Porous 3D Printed Grids: A Pilot Study</div>
+        <div class="paper-journal">Physical and Engineering Sciences in Medicine</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1007/s13246-025-01687-y" target="_blank" class="paper-link">Read Paper →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="paper-card">
-      <div class="paper-status"><span class="dot dot-review"></span><span>2025 — Under Review</span></div>
-      <div class="paper-title">From Digital File to Transferable Phantom: Dual-Centre Evaluation of Multi-contrast Phantom for Standardized PET Quantification</div>
-      <div class="paper-journal">MedRxiv (Pre-print)</div>
-      <a href="https://doi.org/10.1101/2025.05.30.25328639" target="_blank" class="paper-link">Read pre-print →</a>
+    <!-- Paper 2 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-2.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-review"></span><span>2025 — Under Review</span></div>
+        <div class="paper-title">From Digital File to Transferable Phantom: Dual-Centre Evaluation of Multi-contrast Phantom for Standardized PET Quantification</div>
+        <div class="paper-journal">MedRxiv (Pre-print)</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1101/2025.05.30.25328639" target="_blank" class="paper-link">Read Pre-print →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="paper-card">
-      <div class="paper-status"><span class="dot dot-review"></span><span>2025 — Under Review</span></div>
-      <div class="paper-title">Quantitative Reality: A Physical Ground Truth to Assess Heterogeneity Beyond Visual Limits in Molecular Imaging</div>
-      <div class="paper-journal">MedRxiv (Pre-print)</div>
-      <a href="https://doi.org/10.1101/2025.11.26.25341036" target="_blank" class="paper-link">Read pre-print →</a>
+    <!-- Paper 3 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-3.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-review"></span><span>2025 — Under Review</span></div>
+        <div class="paper-title">Quantitative Reality: A Physical Ground Truth to Assess Heterogeneity Beyond Visual Limits in Molecular Imaging</div>
+        <div class="paper-journal">MedRxiv (Pre-print)</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1101/2025.11.26.25341036" target="_blank" class="paper-link">Read Pre-print →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="paper-card">
-      <div class="paper-status"><span class="dot dot-preprint"></span><span>2025 — Pre-print</span></div>
-      <div class="paper-title">MuPET: Bridging Computational Mass Transport Physics and Medical Imaging for Synthetic PET Data Generation</div>
-      <div class="paper-journal">MedRxiv</div>
-      <a href="https://doi.org/10.1101/2025.07.31.25332512" target="_blank" class="paper-link">Read pre-print →</a>
+    <!-- Paper 4 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-4.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-preprint"></span><span>2025 — Pre-print</span></div>
+        <div class="paper-title">MuPET: Bridging Computational Mass Transport Physics and Medical Imaging for Synthetic PET Data Generation</div>
+        <div class="paper-journal">MedRxiv</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1101/2025.07.31.25332512" target="_blank" class="paper-link">Read Pre-print →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="paper-card">
-      <div class="paper-status"><span class="dot dot-conference"></span><span>2025 — Conference</span></div>
-      <div class="paper-title">3D Printed PET/CT Phantom with Mixed Target Uptake Characteristics to Investigate Lesion Development</div>
-      <div class="paper-journal">EANM Congress — e-Poster EP-0949</div>
+    <!-- Paper 5 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-5.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-conference"></span><span>2025 — Conference</span></div>
+        <div class="paper-title">3D Printed PET/CT Phantom with Mixed Target Uptake Characteristics to Investigate Lesion Development</div>
+        <div class="paper-journal">EANM Congress — e-Poster EP-0949</div>
+        <div class="paper-actions">
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="paper-card">
-      <div class="paper-status"><span class="dot dot-published"></span><span>2022 — Published</span></div>
-      <div class="paper-title">Effects of Gas Embolism on Pulsatile Flow Characteristics Within a Human Carotid Artery</div>
-      <div class="paper-journal">Journal of Biomechanical Engineering (ASME)</div>
-      <a href="https://doi.org/10.1115/1.4054679" target="_blank" class="paper-link">Read paper →</a>
+    <!-- Paper 6 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-6.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-published"></span><span>2022 — Published</span></div>
+        <div class="paper-title">Effects of Gas Embolism on Pulsatile Flow Characteristics Within a Human Carotid Artery</div>
+        <div class="paper-journal">Journal of Biomechanical Engineering (ASME)</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1115/1.4054679" target="_blank" class="paper-link">Read Paper →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── BLOG / OPINIONS ── -->
+<section class="content-section bg-smoke">
+  <div class="section-header reveal">
+    <span class="section-num">筆</span>
+    <h2 class="section-title">Opinions &amp; Reflections</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="blog-grid stagger">
+
+    <div class="blog-card">
+      <div class="blog-tag">Opinion</div>
+      <div class="blog-title">Why PET/CT Phantoms Need to Stop Being Perfect</div>
+      <div class="blog-excerpt">Clinical tumours are heterogeneous. Our test objects shouldn't pretend otherwise. A case for porous, 3D-printed phantoms as the new standard for quantitative validation.</div>
+      <div class="blog-meta">Coming Soon</div>
+    </div>
+
+    <div class="blog-card">
+      <div class="blog-tag">Reflection</div>
+      <div class="blog-title">From Hyderabad to Toulouse — What a PhD in France Actually Looks Like</div>
+      <div class="blog-excerpt">Visa paperwork, research autonomy, cultural adaptation, and the gap between what you expect from a PhD abroad and what it actually demands of you.</div>
+      <div class="blog-meta">Coming Soon</div>
+    </div>
+
+    <div class="blog-coming reveal">
+      More pieces on medtech translation, deep-tech ventures, and life at the intersection of research and strategy — arriving soon.
     </div>
 
   </div>
@@ -120,7 +286,56 @@
   <div class="footer-text">刀 — The Blade</div>
 </footer>
 
-
 <script src="transitions.js"></script>
+<script>
+// Abstract accordion: fetch from txt file, cache, toggle
+const abstractCache = {};
+
+document.querySelectorAll('.abstract-toggle').forEach(btn => {
+  btn.addEventListener('click', async function() {
+    const wrap = this.closest('.paper-wrap');
+    const isOpen = wrap.classList.contains('abstract-open');
+
+    // Close all others
+    document.querySelectorAll('.paper-wrap.abstract-open').forEach(w => {
+      if (w !== wrap) {
+        w.classList.remove('abstract-open');
+        w.querySelector('.abstract-toggle').textContent = 'View Abstract ↓';
+      }
+    });
+
+    if (isOpen) {
+      wrap.classList.remove('abstract-open');
+      this.textContent = 'View Abstract ↓';
+      return;
+    }
+
+    // Open this one
+    wrap.classList.add('abstract-open');
+    this.textContent = 'Hide Abstract ↑';
+
+    const src = wrap.dataset.abstract;
+    const contentEl = wrap.querySelector('.abstract-content');
+
+    // Fetch if not cached
+    if (!abstractCache[src]) {
+      try {
+        const res = await fetch(src);
+        if (!res.ok) throw new Error('Not found');
+        abstractCache[src] = await res.text();
+      } catch (e) {
+        abstractCache[src] = 'Abstract not yet available. Check back soon.';
+      }
+    }
+
+    contentEl.innerHTML = abstractCache[src];
+
+    // Smooth scroll into view
+    setTimeout(() => {
+      wrap.querySelector('.abstract-body').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 150);
+  });
+});
+</script>
 </body>
 </html>
