@@ -348,26 +348,46 @@
     .attr('d', path).attr('fill', 'none')
     .attr('stroke', 'rgba(240,235,227,0.025)').attr('stroke-width', 0.3);
 
+  // Filter France to mainland only (exclude French Guiana, Réunion, etc.)
+  function mainlandOnly(feature) {
+    if (feature.geometry.type === 'Polygon') {
+      const [lon, lat] = d3.geoCentroid(feature);
+      return (lat > 40 && lat < 55 && lon > -6 && lon < 10) ? feature : null;
+    }
+    if (feature.geometry.type === 'MultiPolygon') {
+      const filtered = feature.geometry.coordinates.filter(poly => {
+        const temp = { type: 'Feature', geometry: { type: 'Polygon', coordinates: poly } };
+        const [lon, lat] = d3.geoCentroid(temp);
+        return lat > 40 && lat < 55 && lon > -6 && lon < 10;
+      });
+      if (filtered.length === 0) return null;
+      return { ...feature, geometry: { ...feature.geometry, type: 'MultiPolygon', coordinates: filtered } };
+    }
+    return feature;
+  }
+
   // Draw all countries
   svg.append('g').selectAll('path')
     .data(land.features).enter().append('path')
-    .attr('d', path)
-    .attr('fill', d => {
+    .each(function(d) {
       const id = d.id;
-      if (LIVED.includes(id)) return 'rgba(194,59,59,0.25)';
-      if (VISITED.includes(id)) return 'rgba(212,175,55,0.15)';
-      return 'rgba(240,235,227,0.03)';
-    })
-    .attr('stroke', d => {
-      const id = d.id;
-      if (LIVED.includes(id)) return 'rgba(194,59,59,0.6)';
-      if (VISITED.includes(id)) return 'rgba(212,175,55,0.4)';
-      return 'rgba(240,235,227,0.1)';
-    })
-    .attr('stroke-width', d => {
-      const id = d.id;
-      if (LIVED.includes(id) || VISITED.includes(id)) return 0.8;
-      return 0.4;
+      let geo = d;
+
+      // Use mainland-only geometry for France
+      if (id === '250') {
+        geo = mainlandOnly(d);
+        if (!geo) return;
+      }
+
+      const isFrance = id === '250';
+      const isLived = LIVED.includes(id);
+      const isVisited = VISITED.includes(id);
+
+      d3.select(this)
+        .attr('d', path(geo))
+        .attr('fill', isLived ? 'rgba(194,59,59,0.25)' : isVisited ? 'rgba(212,175,55,0.15)' : 'rgba(240,235,227,0.03)')
+        .attr('stroke', isLived ? 'rgba(194,59,59,0.6)' : isVisited ? 'rgba(212,175,55,0.4)' : 'rgba(240,235,227,0.1)')
+        .attr('stroke-width', (isLived || isVisited) ? 0.8 : 0.4);
     });
 
   // Borders
