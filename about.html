@@ -40,7 +40,25 @@
 .interest-tag:hover{border-color:var(--blood);color:var(--paper);background:rgba(139,26,26,0.08)}
 .katana-inline{display:block;margin:3rem auto;opacity:0.12}
 
+/* ── PERSONAL STATS ── */
+.personal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ghost-line);border:1px solid var(--ghost-line);margin-bottom:3rem}
+.p-stat{background:var(--ink);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden;transition:background 0.3s}
+.p-stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blood);transform:scaleX(0);transform-origin:left;transition:transform 0.4s}
+.p-stat:hover{background:rgba(139,26,26,0.04)}
+.p-stat:hover::after{transform:scaleX(1)}
+.p-stat-num{font-family:'Zen Antique',serif;font-size:clamp(2.8rem,5vw,4.5rem);color:var(--blood-glow);line-height:1;margin-bottom:0.5rem}
+.p-stat-label{font-family:'Space Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--mist)}
+
+/* ── TRAVEL MAP ── */
+.travel-map-wrap{width:100%;position:relative;border:1px solid var(--ghost-line);background:var(--ink);overflow:hidden}
+.travel-legend{display:flex;gap:2rem;justify-content:center;margin-top:1rem}
+.legend-item{font-family:'Space Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--steel);display:flex;align-items:center;gap:0.5rem}
+.legend-dot{width:10px;height:10px;border-radius:0;transform:rotate(45deg)}
+.legend-dot.lived{background:#c23b3b}
+.legend-dot.visited{background:rgba(212,175,55,0.6)}
+
 @media(max-width:720px){
+  .personal-stats{grid-template-columns:1fr}
   .journey-chapter{grid-template-columns:1fr;gap:0.5rem}
   .journey-era,.journey-era-kanji{text-align:left}
 }
@@ -178,6 +196,37 @@
   </div>
 </section>
 
+<!-- ── OFF THE MAP — Travel & Personal ── -->
+<section class="content-section bg-smoke">
+  <div class="section-header reveal">
+    <span class="section-num">世</span>
+    <h2 class="section-title">Off the Map</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="personal-stats stagger">
+    <div class="p-stat">
+      <div class="p-stat-num">12+</div>
+      <div class="p-stat-label">Countries Explored</div>
+    </div>
+    <div class="p-stat">
+      <div class="p-stat-num">5</div>
+      <div class="p-stat-label">Languages</div>
+    </div>
+    <div class="p-stat">
+      <div class="p-stat-num">3</div>
+      <div class="p-stat-label">Cities Lived In</div>
+    </div>
+  </div>
+
+  <!-- Travel map -->
+  <div class="travel-map-wrap reveal" id="travelMap"></div>
+  <div class="travel-legend">
+    <span class="legend-item"><span class="legend-dot lived"></span>Lived</span>
+    <span class="legend-item"><span class="legend-dot visited"></span>Visited</span>
+  </div>
+</section>
+
 <!-- ── THE TOOLKIT ── -->
 <section class="content-section bg-smoke">
   <div class="section-header reveal">
@@ -223,5 +272,131 @@
 </footer>
 
 <script src="transitions.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+(async () => {
+  const container = document.getElementById('travelMap');
+  if (!container) return;
+
+  const W = 920, H = 460;
+  const world = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+  const land = topojson.feature(world, world.objects.countries);
+  const borders = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+
+  // Country codes (ISO numeric)
+  const LIVED = ['250', '356'];  // France, India
+  const VISITED = ['724', '620', '276', '380', '203', '040', '528', '056', '442', '704'];
+  // Spain, Portugal, Germany, Italy, Czech Republic, Austria, Netherlands, Belgium, Luxembourg, Vietnam
+
+  const svg = d3.select(container).append('svg')
+    .attr('width', '100%')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .style('display', 'block');
+
+  svg.append('rect').attr('width', W).attr('height', H).attr('fill', '#0a0a0b');
+
+  const proj = d3.geoNaturalEarth1()
+    .scale(175)
+    .translate([W / 2, H / 2 + 10])
+    .rotate([-10, 0]);
+
+  const path = d3.geoPath().projection(proj);
+
+  // Graticule
+  const graticule = d3.geoGraticule().step([20, 20]);
+  svg.append('path').datum(graticule())
+    .attr('d', path).attr('fill', 'none')
+    .attr('stroke', 'rgba(240,235,227,0.025)').attr('stroke-width', 0.3);
+
+  // Draw all countries
+  svg.append('g').selectAll('path')
+    .data(land.features).enter().append('path')
+    .attr('d', path)
+    .attr('fill', d => {
+      const id = d.id;
+      if (LIVED.includes(id)) return 'rgba(194,59,59,0.25)';
+      if (VISITED.includes(id)) return 'rgba(212,175,55,0.15)';
+      return 'rgba(240,235,227,0.03)';
+    })
+    .attr('stroke', d => {
+      const id = d.id;
+      if (LIVED.includes(id)) return 'rgba(194,59,59,0.6)';
+      if (VISITED.includes(id)) return 'rgba(212,175,55,0.4)';
+      return 'rgba(240,235,227,0.1)';
+    })
+    .attr('stroke-width', d => {
+      const id = d.id;
+      if (LIVED.includes(id) || VISITED.includes(id)) return 0.8;
+      return 0.4;
+    });
+
+  // Borders
+  svg.append('path').datum(borders).attr('d', path)
+    .attr('fill', 'none').attr('stroke', 'rgba(240,235,227,0.05)')
+    .attr('stroke-width', 0.3);
+
+  // City markers — lived
+  const cities = [
+    { coords: [78.4867, 17.385], name: 'Hyderabad', sub: '2016–2021', lived: true },
+    { coords: [2.3522, 48.8566], name: 'Paris', sub: '2021–2023', lived: true },
+    { coords: [1.4437, 43.6047], name: 'Toulouse', sub: '2023–Present', lived: true }
+  ];
+
+  cities.forEach(city => {
+    const [cx, cy] = proj(city.coords);
+
+    // Pulse
+    const pulse = svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 5)
+      .attr('fill', 'none').attr('stroke', '#c23b3b').attr('stroke-width', 0.6);
+    pulse.append('animate').attr('attributeName', 'r').attr('values', '5;12;5')
+      .attr('dur', '3s').attr('repeatCount', 'indefinite');
+    pulse.append('animate').attr('attributeName', 'opacity').attr('values', '0.6;0;0.6')
+      .attr('dur', '3s').attr('repeatCount', 'indefinite');
+
+    // Dot
+    svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 5)
+      .attr('fill', 'none').attr('stroke', '#8b1a1a').attr('stroke-width', 1);
+    svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 2.2)
+      .attr('fill', '#c23b3b');
+
+    // Label
+    const leftAlign = cx > W / 2;
+    const off = leftAlign ? -10 : 10;
+    const anchor = leftAlign ? 'end' : 'start';
+
+    svg.append('text').attr('x', cx + off).attr('y', cy - 5)
+      .attr('font-family', "'Helvetica Neue',sans-serif").attr('font-size', '10px')
+      .attr('fill', 'rgba(240,235,227,0.85)').attr('letter-spacing', '0.04em')
+      .attr('text-anchor', anchor).text(city.name);
+    svg.append('text').attr('x', cx + off).attr('y', cy + 7)
+      .attr('font-family', "'Helvetica Neue',sans-serif").attr('font-size', '7px')
+      .attr('fill', 'rgba(240,235,227,0.4)').attr('letter-spacing', '0.1em')
+      .attr('text-anchor', anchor).style('text-transform', 'uppercase').text(city.sub);
+  });
+
+  // Corner brackets
+  const cLen = 12;
+  const cG = svg.append('g').attr('stroke', 'rgba(139,26,26,0.2)').attr('stroke-width', 1).attr('fill', 'none');
+  [[8,8,1,1],[W-8,8,-1,1],[8,H-8,1,-1],[W-8,H-8,-1,-1]].forEach(([x,y,dx,dy]) => {
+    cG.append('line').attr('x1',x).attr('y1',y).attr('x2',x+cLen*dx).attr('y2',y);
+    cG.append('line').attr('x1',x).attr('y1',y).attr('x2',x).attr('y2',y+cLen*dy);
+  });
+
+  // Section label
+  svg.append('text').attr('x', 28).attr('y', 24)
+    .attr('font-family', 'monospace').attr('font-size', '7.5px')
+    .attr('fill', 'rgba(139,26,26,0.45)').attr('letter-spacing', '0.22em')
+    .text('TERRITORIES EXPLORED');
+  svg.append('line').attr('x1', 28).attr('y1', 30).attr('x2', 260).attr('y2', 30)
+    .attr('stroke', 'rgba(139,26,26,0.12)').attr('stroke-width', 0.5);
+
+  // Scan line
+  svg.append('line').attr('x1', 0).attr('y1', 0).attr('x2', W).attr('y2', 0)
+    .attr('stroke', 'rgba(139,26,26,0.3)').attr('stroke-width', 1)
+    .append('animate').attr('attributeName', 'opacity').attr('values', '0.15;0.6;0.15')
+    .attr('dur', '3.5s').attr('repeatCount', 'indefinite');
+})();
+</script>
 </body>
 </html>
