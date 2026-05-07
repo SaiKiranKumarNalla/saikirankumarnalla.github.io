@@ -450,6 +450,77 @@
   backdrop-filter: blur(2px);
 }
 
+
+.project-data-plate{
+  margin:1rem 0 1.05rem;
+  border:1px solid var(--ghost-line);
+  background:rgba(10,10,11,0.42);
+}
+.project-data-row{
+  display:grid;
+  grid-template-columns:104px 1fr;
+  gap:.75rem;
+  padding:.55rem .65rem;
+  border-bottom:1px solid var(--ghost-line);
+}
+.project-data-row:last-child{border-bottom:none}
+.project-data-key{
+  font-family:'Space Mono',monospace;
+  font-size:.43rem;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:rgba(139,26,26,.48);
+  white-space:nowrap;
+}
+.project-data-value{
+  font-size:.72rem;
+  line-height:1.5;
+  color:var(--mist);
+  font-weight:300;
+}
+.project-data-value strong{
+  color:var(--paper);
+  font-weight:500;
+}
+
+
+/* Multiple build-type tags */
+.type-stack{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:.35rem;
+}
+.type-seal.secondary{
+  color:color-mix(in srgb,var(--accent) 68%,var(--mist));
+  background:transparent;
+  border-color:color-mix(in srgb,var(--accent) 28%,var(--ghost-line));
+  opacity:.86;
+}
+.project-type-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.38rem;
+}
+.project-type-chip{
+  font-family:'Space Mono',monospace;
+  font-size:.45rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  padding:.25rem .45rem;
+  border:1px solid color-mix(in srgb,var(--accent) 32%,var(--ghost-line));
+  color:color-mix(in srgb,var(--accent) 70%,var(--mist));
+  background:color-mix(in srgb,var(--accent) 8%,transparent);
+}
+.project-type-chip.primary{
+  color:var(--paper);
+  background:color-mix(in srgb,var(--accent) 14%,transparent);
+  border-color:color-mix(in srgb,var(--accent) 55%,transparent);
+}
+.projects-page .archive-grid{
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+}
+
 </style>
 </head>
 <body class="projects-page">
@@ -503,7 +574,7 @@
     <div class="forge-dashboard stagger">
       <div class="forge-stat"><div class="forge-stat-num">09</div><div class="forge-stat-label">Project Records</div></div>
       <div class="forge-stat"><div class="forge-stat-num">05</div><div class="forge-stat-label">Project Types</div></div>
-      <div class="forge-stat"><div class="forge-stat-num">03</div><div class="forge-stat-label">Featured Projects</div></div>
+      <div class="forge-stat"><div class="forge-stat-num">03</div><div class="forge-stat-label">Selected Projects</div></div>
       <div class="forge-stat"><div class="forge-stat-num">06</div><div class="forge-stat-label">Research Outputs</div></div>
     </div>
 
@@ -528,17 +599,39 @@
       </div>
     </div>
 
-    <div class="forge-section-label reveal">Featured Projects</div>
-    <div class="featured-grid stagger">
-      <article class="artifact-card featured" data-type="design">
+    <div class="forge-section-label reveal">Selected Projects</div>
+    <div class="archive-grid stagger">
+      <article class="artifact-card featured" data-type="design" data-types="design toolset experimental">
       <div class="artifact-visual"><div class="visual-grid"></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-001</span>
-          <span class="type-seal">design</span>
+          <div class="type-stack">
+            <span class="type-seal">design</span>
+            <span class="type-seal secondary">toolset</span><span class="type-seal secondary">experimental</span>
+          </div>
         </div>
         <h3 class="artifact-title">3DynaPET — 3D-Printed Dynamic PET/CT Validation System</h3>
         <p class="artifact-brief">A physical validation system for Dynamic PET/CT built around 3D-printed structures, controlled acquisition logic, and quantitative scanner-side assessment.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Research / Thesis</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">design</span><span class="project-type-chip ">toolset</span><span class="project-type-chip ">experimental</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">IUCT Oncopole · University of Toulouse · GE Healthcare · eMotion · Mahindra University</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Olivier Caselles · John Kennedy</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -556,15 +649,37 @@
         </div>
       </div>
     </article>
-<article class="artifact-card featured" data-type="toolset">
+<article class="artifact-card featured" data-type="toolset" data-types="toolset design numerical">
       <div class="artifact-visual"><div class="visual-flow"></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-002</span>
-          <span class="type-seal">toolset</span>
+          <div class="type-stack">
+            <span class="type-seal">toolset</span>
+            <span class="type-seal secondary">design</span><span class="type-seal secondary">numerical</span>
+          </div>
         </div>
         <h3 class="artifact-title">MuPET — Multiphysics PET Synthetic Data Generation</h3>
         <p class="artifact-brief">A toolset that bridges mass-transport physics and PET imaging to generate controlled synthetic datasets with known ground truth behaviour.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Research / Thesis</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">toolset</span><span class="project-type-chip ">design</span><span class="project-type-chip ">numerical</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">IUCT Oncopole · University of Toulouse</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Olivier Caselles · John Kennedy</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -582,15 +697,37 @@
         </div>
       </div>
     </article>
-<article class="artifact-card featured" data-type="framework">
+<article class="artifact-card featured" data-type="framework" data-types="framework toolset design">
       <div class="artifact-visual"><div class="visual-stack"><span></span><span></span><span></span></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-003</span>
-          <span class="type-seal">framework</span>
+          <div class="type-stack">
+            <span class="type-seal">framework</span>
+            <span class="type-seal secondary">toolset</span><span class="type-seal secondary">design</span>
+          </div>
         </div>
         <h3 class="artifact-title">CASSOULET — Ground Truth Lesion Cohort Framework</h3>
         <p class="artifact-brief">Compositional Anthropomorphic Spatial Synthesizer for ground truth Lesion ExporT: a clinically oriented framework for multimodal imaging data cohorts.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Research Framework</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">framework</span><span class="project-type-chip ">toolset</span><span class="project-type-chip ">design</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">IUCT Oncopole · University of Toulouse</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Olivier Caselles · John Kennedy</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -608,19 +745,37 @@
         </div>
       </div>
     </article>
-    </div>
-
-    <div class="forge-section-label reveal">Project Archive</div>
-    <div class="archive-grid stagger">
-      <article class="artifact-card " data-type="toolset">
-      
+<article class="artifact-card featured" data-type="toolset" data-types="toolset design">
+      <div class="artifact-visual"><div class="visual-ring"></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-004</span>
-          <span class="type-seal">toolset</span>
+          <div class="type-stack">
+            <span class="type-seal">toolset</span>
+            <span class="type-seal secondary">design</span>
+          </div>
         </div>
         <h3 class="artifact-title">Real-Time Cancer Ablation Clinical Visualization</h3>
         <p class="artifact-brief">Automated visualization tools translating ablation R&D data and CT/MRI-derived outputs into clearer clinical and investor-facing demonstrations.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Industrial R&D</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">toolset</span><span class="project-type-chip ">design</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">Hepta Medical</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Thomas Bancel</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -638,15 +793,37 @@
         </div>
       </div>
     </article>
-<article class="artifact-card " data-type="numerical">
-      
+<article class="artifact-card featured" data-type="numerical" data-types="numerical toolset">
+      <div class="artifact-visual"><div class="visual-flow"></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-005</span>
-          <span class="type-seal">numerical</span>
+          <div class="type-stack">
+            <span class="type-seal">numerical</span>
+            <span class="type-seal secondary">toolset</span>
+          </div>
         </div>
         <h3 class="artifact-title">4D TEVAR — Patient-Specific Vascular Simulation</h3>
         <p class="artifact-brief">Translation of CT and 4D Flow MRI into patient-specific computational models for post-TEVAR vascular flow assessment.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Class Project / Research Study</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">numerical</span><span class="project-type-chip ">toolset</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">École Polytechnique · Hospital Marie Lannelongue</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Abdul Barakat · Alexandra Hauguel · Daei Daei Mahdi</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -664,15 +841,37 @@
         </div>
       </div>
     </article>
-<article class="artifact-card " data-type="numerical">
-      
+<article class="artifact-card featured" data-type="numerical" data-types="numerical experimental">
+      <div class="artifact-visual"><div class="visual-flow"></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-006</span>
-          <span class="type-seal">numerical</span>
+          <div class="type-stack">
+            <span class="type-seal">numerical</span>
+            <span class="type-seal secondary">experimental</span>
+          </div>
         </div>
         <h3 class="artifact-title">RBC Drug Delivery — Shear-Based Encapsulation</h3>
         <p class="artifact-brief">Multiphase numerical study of red blood cell drug encapsulation and release behaviour under in-vivo and ex-vivo flow conditions.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Class Project / Research Study</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">numerical</span><span class="project-type-chip ">experimental</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">École Polytechnique</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Abdul Barakat</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -690,15 +889,37 @@
         </div>
       </div>
     </article>
-<article class="artifact-card " data-type="design">
-      
+<article class="artifact-card featured" data-type="design" data-types="design numerical toolset">
+      <div class="artifact-visual"><div class="visual-ring"></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-007</span>
-          <span class="type-seal">design</span>
+          <div class="type-stack">
+            <span class="type-seal">design</span>
+            <span class="type-seal secondary">numerical</span><span class="type-seal secondary">toolset</span>
+          </div>
         </div>
         <h3 class="artifact-title">AUV Systems Engineering & Design</h3>
         <p class="artifact-brief">Autonomous underwater vehicle development combining hydrodynamics, thermal simulation, object recognition, and systems-engineering execution.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Student Engineering Project</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">design</span><span class="project-type-chip ">numerical</span><span class="project-type-chip ">toolset</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">AUV MEC · Mahindra University</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Naval Pattar · Pulkit Mehta · Nishith Patnaik · Sai Sree Venkata Manohar · Sai Madhavan Surabathula · Naga Suresh Krishna · Sebastian Uppapalli</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -716,15 +937,37 @@
         </div>
       </div>
     </article>
-<article class="artifact-card " data-type="experimental">
-      
+<article class="artifact-card featured" data-type="experimental" data-types="experimental design">
+      <div class="artifact-visual"><div class="visual-grid"></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-008</span>
-          <span class="type-seal">experimental</span>
+          <div class="type-stack">
+            <span class="type-seal">experimental</span>
+            <span class="type-seal secondary">design</span>
+          </div>
         </div>
         <h3 class="artifact-title">3D-Printed Flexible Electrodes</h3>
         <p class="artifact-brief">Experimental development and characterization of flexible dry electrodes using printable polymers, conductive inks, microscopy, and impedance testing.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Industrial Design Project</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">experimental</span><span class="project-type-chip ">design</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">Manitty · LadHyX · École Polytechnique</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Philippe Blasquez · Joni Frederick</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -742,15 +985,37 @@
         </div>
       </div>
     </article>
-<article class="artifact-card " data-type="experimental">
-      
+<article class="artifact-card featured" data-type="experimental" data-types="experimental toolset">
+      <div class="artifact-visual"><div class="visual-flow"></div></div>
       <div class="artifact-body">
         <div class="record-line">
           <span class="record-id">Record F-009</span>
-          <span class="type-seal">experimental</span>
+          <div class="type-stack">
+            <span class="type-seal">experimental</span>
+            <span class="type-seal secondary">toolset</span>
+          </div>
         </div>
         <h3 class="artifact-title">Bubble Tea / Soft Gel Experimental Study</h3>
         <p class="artifact-brief">Soft-matter experimental study using flow-resistance measurements and semi-automated image tracking to understand large-particle suspension behaviour.</p>
+
+        <div class="project-data-plate">
+          <div class="project-data-row">
+            <div class="project-data-key">Type</div>
+            <div class="project-data-value">Research Internship</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Build Tags</div>
+            <div class="project-data-value"><div class="project-type-row"><span class="project-type-chip primary">experimental</span><span class="project-type-chip ">toolset</span></div></div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Partners</div>
+            <div class="project-data-value">LadHyX · École Polytechnique</div>
+          </div>
+          <div class="project-data-row">
+            <div class="project-data-key">Collaborators</div>
+            <div class="project-data-value">Gabriel Amselem · Charles Paul Moore</div>
+          </div>
+        </div>
 
         <div class="tag-block">
           <div class="tag-label">Methods</div>
@@ -791,7 +1056,8 @@ forgeFilters.forEach(button => {
     button.classList.add('active');
 
     artifactCards.forEach(card => {
-      const match = filter === 'all' || card.dataset.type === filter;
+      const types = (card.dataset.types || card.dataset.type || '').split(' ');
+      const match = filter === 'all' || types.includes(filter);
       card.classList.toggle('hidden', !match);
     });
   });
