@@ -55,6 +55,431 @@
 .philosophy-text p{font-size:0.92rem;line-height:1.8;color:var(--mist);font-weight:300}
 @media(max-width:900px){.nav-grid{grid-template-columns:1fr 1fr}.philosophy{grid-template-columns:1fr;gap:2rem}.intro-inner{grid-template-columns:1fr;gap:2rem}.hero-btns{flex-direction:column;align-items:center}}
 @media(max-width:500px){.nav-grid{grid-template-columns:1fr}}
+
+
+/* ── ANIMUS MODE SELECT / MEMORY MAP ───────── */
+.animus-trigger{
+  font:inherit;
+}
+
+.animus-modal{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(139,26,26,0.16), transparent 36%),
+    linear-gradient(180deg, rgba(10,10,11,0.96), rgba(10,10,11,0.99));
+  color:var(--paper);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+  overflow:hidden;
+}
+.animus-modal.open{display:flex}
+
+.animus-modal::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg, rgba(240,235,227,0.025) 1px, transparent 1px),
+    linear-gradient(rgba(240,235,227,0.025) 1px, transparent 1px);
+  background-size:34px 34px;
+  pointer-events:none;
+}
+.animus-modal::after{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:1px;
+  background:linear-gradient(to right, transparent, var(--blood), transparent);
+  animation:animusScan 4s ease-in-out infinite;
+  opacity:.7;
+}
+@keyframes animusScan{
+  0%{top:0;opacity:.1}
+  50%{opacity:.75}
+  100%{top:100%;opacity:.1}
+}
+
+.animus-shell{
+  position:relative;
+  z-index:2;
+  width:min(1120px,100%);
+  min-height:min(720px,88vh);
+  border:1px solid rgba(240,235,227,0.08);
+  background:linear-gradient(135deg, rgba(139,26,26,0.06), transparent 45%), rgba(10,10,11,0.82);
+  box-shadow:0 30px 80px rgba(0,0,0,0.55);
+  overflow:hidden;
+}
+.animus-corner{
+  position:absolute;
+  width:18px;
+  height:18px;
+  border-style:solid;
+  border-color:rgba(139,26,26,0.45);
+  pointer-events:none;
+}
+.animus-corner.tl{top:12px;left:12px;border-width:1px 0 0 1px}
+.animus-corner.tr{top:12px;right:12px;border-width:1px 1px 0 0}
+.animus-corner.bl{bottom:12px;left:12px;border-width:0 0 1px 1px}
+.animus-corner.br{bottom:12px;right:12px;border-width:0 1px 1px 0}
+
+.animus-topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  padding:1.2rem 1.4rem;
+  border-bottom:1px solid var(--ghost-line);
+}
+.animus-status{
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--blood-glow);
+}
+.animus-exit{
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--mist);
+  background:transparent;
+  border:1px solid var(--ghost-line);
+  padding:.55rem .8rem;
+  cursor:pointer;
+  transition:all .3s;
+}
+.animus-exit:hover{
+  border-color:rgba(139,26,26,.45);
+  color:var(--paper);
+  background:rgba(139,26,26,.08);
+}
+
+.animus-screen{display:none;padding:3rem;min-height:calc(min(720px,88vh) - 65px)}
+.animus-screen.active{display:block}
+
+.mode-select{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:3rem;
+  align-items:center;
+  min-height:560px;
+}
+.mode-title-kicker{
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;
+  text-transform:uppercase;
+  letter-spacing:.24em;
+  color:rgba(139,26,26,.62);
+  margin-bottom:1rem;
+}
+.mode-title{
+  font-family:'Zen Antique',serif;
+  font-size:clamp(2.2rem,4vw,4rem);
+  line-height:1.08;
+  margin-bottom:1rem;
+}
+.mode-copy{
+  color:var(--mist);
+  line-height:1.8;
+  font-weight:300;
+  max-width:480px;
+}
+.mode-options{
+  display:grid;
+  gap:1rem;
+}
+.mode-card{
+  border:1px solid var(--ghost-line);
+  background:var(--ghost);
+  padding:1.7rem;
+  cursor:pointer;
+  text-align:left;
+  color:var(--paper);
+  position:relative;
+  overflow:hidden;
+  transition:all .35s;
+}
+.mode-card::after{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:2px;
+  background:var(--blood);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .35s;
+}
+.mode-card:hover{
+  border-color:rgba(139,26,26,.35);
+  background:rgba(139,26,26,.06);
+  transform:translateY(-3px);
+}
+.mode-card:hover::after{transform:scaleX(1)}
+.mode-card-label{
+  font-family:'Space Mono',monospace;
+  font-size:.5rem;
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  color:var(--blood-glow);
+  margin-bottom:.7rem;
+}
+.mode-card-title{
+  font-family:'Zen Antique',serif;
+  font-size:1.2rem;
+  margin-bottom:.45rem;
+}
+.mode-card-desc{
+  font-size:.82rem;
+  color:var(--mist);
+  line-height:1.65;
+  font-weight:300;
+}
+
+/* Adventure memory map */
+.memory-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:1.5rem;
+  margin-bottom:2rem;
+}
+.memory-title-wrap{max-width:620px}
+.memory-title{
+  font-family:'Zen Antique',serif;
+  font-size:clamp(1.8rem,3vw,2.8rem);
+  margin-bottom:.5rem;
+}
+.memory-sub{
+  color:var(--mist);
+  font-size:.9rem;
+  line-height:1.7;
+  font-weight:300;
+}
+.memory-progress{
+  min-width:220px;
+  border:1px solid var(--ghost-line);
+  padding:.8rem;
+  background:rgba(10,10,11,.55);
+}
+.memory-progress-label{
+  font-family:'Space Mono',monospace;
+  font-size:.48rem;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:var(--steel);
+  margin-bottom:.45rem;
+}
+.memory-progress-track{
+  height:5px;
+  background:rgba(240,235,227,.06);
+  overflow:hidden;
+}
+.memory-progress-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, var(--blood), var(--blood-glow));
+  transition:width .35s;
+}
+
+.memory-map{
+  position:relative;
+  min-height:445px;
+  border:1px solid var(--ghost-line);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(139,26,26,.11), transparent 28%),
+    rgba(240,235,227,.025);
+  overflow:visible;
+}
+.memory-map::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(to right, transparent 49.95%, rgba(240,235,227,.035) 50%, transparent 50.05%),
+    linear-gradient(to bottom, transparent 49.95%, rgba(240,235,227,.035) 50%, transparent 50.05%);
+  pointer-events:none;
+}
+.memory-core{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:230px;
+  height:155px;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(139,26,26,.34);
+  background:rgba(10,10,11,.82);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  z-index:3;
+}
+.memory-core-kanji{
+  font-family:'Noto Serif JP',serif;
+  font-size:2.3rem;
+  color:rgba(139,26,26,.45);
+  line-height:1;
+  margin-bottom:.5rem;
+}
+.memory-core-title{
+  font-family:'Zen Antique',serif;
+  font-size:1.1rem;
+}
+.memory-core-sub{
+  font-family:'Space Mono',monospace;
+  font-size:.46rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--steel);
+  margin-top:.35rem;
+}
+.memory-line{
+  position:absolute;
+  left:50%;
+  top:50%;
+  height:1px;
+  background:linear-gradient(to right, rgba(139,26,26,.6), transparent);
+  transform-origin:left center;
+  opacity:.45;
+}
+.memory-line.origin{width:210px;transform:rotate(-132deg)}
+.memory-line.path{width:245px;transform:rotate(-38deg)}
+.memory-line.dojo{width:230px;transform:rotate(180deg)}
+.memory-line.forge{width:245px;transform:rotate(28deg)}
+.memory-line.scrolls{width:225px;transform:rotate(122deg)}
+.memory-line.signal{width:210px;transform:rotate(68deg)}
+
+.memory-node{
+  position:absolute;
+  width:190px;
+  min-height:106px;
+  border:1px solid var(--ghost-line);
+  background:rgba(10,10,11,.86);
+  padding:1rem;
+  text-decoration:none;
+  color:var(--paper);
+  z-index:5;
+  transition:all .3s;
+}
+.memory-node::after{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:2px;
+  background:var(--blood);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .3s;
+}
+.memory-node:hover{
+  border-color:rgba(139,26,26,.45);
+  background:rgba(139,26,26,.08);
+  transform:translateY(-4px);
+  box-shadow:0 18px 42px rgba(0,0,0,.35);
+}
+.memory-node:hover::after{transform:scaleX(1)}
+.memory-node.origin{left:8%;top:42px}
+.memory-node.path{right:9%;top:64px}
+.memory-node.dojo{left:7%;top:246px}
+.memory-node.forge{right:6%;top:244px}
+.memory-node.scrolls{left:36%;bottom:28px}
+.memory-node.signal{right:34%;bottom:28px}
+
+.memory-node-top{
+  display:flex;
+  justify-content:space-between;
+  gap:.8rem;
+  margin-bottom:.45rem;
+}
+.memory-node-title{
+  font-family:'Zen Antique',serif;
+  font-size:1rem;
+  line-height:1.25;
+}
+.memory-node-kanji{
+  font-family:'Noto Serif JP',serif;
+  color:rgba(139,26,26,.4);
+  font-size:1.35rem;
+  line-height:1;
+}
+.memory-node-desc{
+  color:var(--mist);
+  font-size:.74rem;
+  line-height:1.55;
+  font-weight:300;
+}
+.memory-node-access{
+  margin-top:.7rem;
+  font-family:'Space Mono',monospace;
+  font-size:.45rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--blood-glow);
+}
+
+.adventure-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  margin-top:1rem;
+  font-family:'Space Mono',monospace;
+  font-size:.48rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--steel);
+}
+.adventure-footer button{
+  font-family:'Space Mono',monospace;
+  font-size:.5rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--mist);
+  background:transparent;
+  border:1px solid var(--ghost-line);
+  padding:.55rem .8rem;
+  cursor:pointer;
+}
+.adventure-footer button:hover{
+  border-color:rgba(139,26,26,.4);
+  color:var(--paper);
+}
+
+@media(max-width:900px){
+  .mode-select{grid-template-columns:1fr;gap:2rem;min-height:auto}
+  .animus-screen{padding:2rem;min-height:auto}
+  .memory-header{flex-direction:column;align-items:flex-start}
+  .memory-progress{width:100%}
+  .memory-map{display:grid;grid-template-columns:1fr 1fr;gap:1rem;min-height:auto;padding:1rem}
+  .memory-map::before,.memory-line{display:none}
+  .memory-core,.memory-node{
+    position:relative;
+    left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+    transform:none;
+    width:auto;
+  }
+  .memory-core{grid-column:1 / -1;width:auto}
+  .memory-node:hover{transform:none}
+}
+@media(max-width:560px){
+  .animus-modal{padding:.75rem}
+  .animus-topbar{padding:1rem}
+  .memory-map{grid-template-columns:1fr}
+  .mode-title{font-size:2rem}
+}
+
 </style>
 </head>
 <body>
@@ -64,6 +489,116 @@
   <div class="eagle-flash"></div>
   <div class="animus-lines"></div>
   <div class="ac-insignia">鷹</div>
+</div>
+
+<div class="animus-modal" id="animusModal" aria-hidden="true">
+  <div class="animus-shell">
+    <div class="animus-corner tl"></div>
+    <div class="animus-corner tr"></div>
+    <div class="animus-corner bl"></div>
+    <div class="animus-corner br"></div>
+
+    <div class="animus-topbar">
+      <div class="animus-status" id="animusStatus">ANIMUS SESSION: STANDBY</div>
+      <button class="animus-exit" id="exitAnimus" type="button">Exit Animus</button>
+    </div>
+
+    <section class="animus-screen active" id="modeScreen">
+      <div class="mode-select">
+        <div>
+          <div class="mode-title-kicker">DNA match confirmed</div>
+          <h2 class="mode-title">Choose how to reconstruct the profile.</h2>
+          <p class="mode-copy">
+            Professional mode keeps the website as a direct portfolio. Adventure mode turns the visit into an interactive memory map — an optional game-like route through identity, training, work, builds, research, and contact.
+          </p>
+        </div>
+
+        <div class="mode-options">
+          <button class="mode-card" id="professionalMode" type="button">
+            <div class="mode-card-label">Professional Mode</div>
+            <div class="mode-card-title">Standard Portfolio Access</div>
+            <div class="mode-card-desc">Use the normal tabs and page buttons. Best for recruiters, collaborators, and quick review.</div>
+          </button>
+
+          <button class="mode-card" id="adventureMode" type="button">
+            <div class="mode-card-label">Adventure Mode</div>
+            <div class="mode-card-title">Memory Map Navigation</div>
+            <div class="mode-card-desc">Disable the normal path temporarily and explore the profile as connected Animus sequences. Exit anytime.</div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="animus-screen" id="adventureScreen">
+      <div class="memory-header">
+        <div class="memory-title-wrap">
+          <div class="mode-title-kicker">Animus Memory Map</div>
+          <h2 class="memory-title">Select a sequence to know me better.</h2>
+          <p class="memory-sub">Each node opens one part of the portfolio. This mode is optional; use Exit Animus anytime to return to the normal site.</p>
+        </div>
+        <div class="memory-progress">
+          <div class="memory-progress-label">Synchronization</div>
+          <div class="memory-progress-track"><div class="memory-progress-fill" id="syncFill"></div></div>
+        </div>
+      </div>
+
+      <div class="memory-map">
+        <div class="memory-line origin"></div>
+        <div class="memory-line path"></div>
+        <div class="memory-line dojo"></div>
+        <div class="memory-line forge"></div>
+        <div class="memory-line scrolls"></div>
+        <div class="memory-line signal"></div>
+
+        <div class="memory-core">
+          <div class="memory-core-kanji">記憶</div>
+          <div class="memory-core-title">Sai Nalla</div>
+          <div class="memory-core-sub">Memory Profile</div>
+        </div>
+
+        <a class="memory-node origin" href="about.html" data-sync="18">
+          <div class="memory-node-top"><div class="memory-node-title">Origin</div><div class="memory-node-kanji">浪</div></div>
+          <div class="memory-node-desc">The person behind the work: Hyderabad, Paris, Toulouse, and the ronin arc.</div>
+          <div class="memory-node-access">Access About</div>
+        </a>
+
+        <a class="memory-node path" href="experience.html" data-sync="34">
+          <div class="memory-node-top"><div class="memory-node-title">Path</div><div class="memory-node-kanji">道</div></div>
+          <div class="memory-node-desc">Professional missions, clinical work, startup R&amp;D, and research field experience.</div>
+          <div class="memory-node-access">Access Experience</div>
+        </a>
+
+        <a class="memory-node dojo" href="education.html" data-sync="49">
+          <div class="memory-node-top"><div class="memory-node-title">Dōjō</div><div class="memory-node-kanji">学</div></div>
+          <div class="memory-node-desc">Training grounds: mechanical engineering, biomedical engineering, and PhD research.</div>
+          <div class="memory-node-access">Access Education</div>
+        </a>
+
+        <a class="memory-node forge" href="projects.html" data-sync="66">
+          <div class="memory-node-top"><div class="memory-node-title">Forge</div><div class="memory-node-kanji">鍛</div></div>
+          <div class="memory-node-desc">Built systems: toolsets, frameworks, designs, numerical models, and experiments.</div>
+          <div class="memory-node-access">Access Projects</div>
+        </a>
+
+        <a class="memory-node scrolls" href="papers.html" data-sync="82">
+          <div class="memory-node-top"><div class="memory-node-title">Scrolls</div><div class="memory-node-kanji">巻</div></div>
+          <div class="memory-node-desc">Publications, preprints, conference outputs, and research communications.</div>
+          <div class="memory-node-access">Access Publications</div>
+        </a>
+
+        <a class="memory-node signal" href="contact.html" data-sync="100">
+          <div class="memory-node-top"><div class="memory-node-title">Signal</div><div class="memory-node-kanji">縁</div></div>
+          <div class="memory-node-desc">Open a channel for collaboration, roles, ventures, and conversations.</div>
+          <div class="memory-node-access">Access Contact</div>
+        </a>
+      </div>
+
+      <div class="adventure-footer">
+        <span>Adventure mode active · normal page controls are behind the Animus layer</span>
+        <button type="button" id="backToModes">Change Mode</button>
+      </div>
+    </section>
+  </div>
 </div>
 
 <nav>
@@ -125,7 +660,7 @@
     </p>
     
     <div class="hero-btns">
-      <a href="about.html" class="btn">Enter Animus<span class="arrow">→</span></a>
+      <button type="button" class="btn animus-trigger" id="enterAnimus">Enter Animus<span class="arrow">→</span></button>
       <a href="Assets/Sai_Nalla_CV.pdf" target="_blank" class="btn btn-cv"><span class="cv-glyph">伝</span>View CV<span class="arrow">→</span></a>
     </div>
   </div>
@@ -191,5 +726,76 @@
 </footer>
 
 <script src="transitions.js"></script>
+
+<script>
+const animusModal = document.getElementById('animusModal');
+const enterAnimus = document.getElementById('enterAnimus');
+const exitAnimus = document.getElementById('exitAnimus');
+const professionalMode = document.getElementById('professionalMode');
+const adventureMode = document.getElementById('adventureMode');
+const modeScreen = document.getElementById('modeScreen');
+const adventureScreen = document.getElementById('adventureScreen');
+const backToModes = document.getElementById('backToModes');
+const animusStatus = document.getElementById('animusStatus');
+const syncFill = document.getElementById('syncFill');
+const memoryNodes = document.querySelectorAll('.memory-node');
+
+function openAnimus(){
+  animusModal.classList.add('open');
+  animusModal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+  modeScreen.classList.add('active');
+  adventureScreen.classList.remove('active');
+  animusStatus.textContent = 'ANIMUS SESSION: MODE SELECT';
+  syncFill.style.width = '0%';
+}
+
+function closeAnimus(){
+  animusModal.classList.remove('open');
+  animusModal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+  animusStatus.textContent = 'ANIMUS SESSION: STANDBY';
+}
+
+function showAdventure(){
+  modeScreen.classList.remove('active');
+  adventureScreen.classList.add('active');
+  animusStatus.textContent = 'ADVENTURE MODE: MEMORY MAP ACTIVE';
+  syncFill.style.width = '12%';
+}
+
+enterAnimus.addEventListener('click', openAnimus);
+exitAnimus.addEventListener('click', closeAnimus);
+adventureMode.addEventListener('click', showAdventure);
+backToModes.addEventListener('click', () => {
+  adventureScreen.classList.remove('active');
+  modeScreen.classList.add('active');
+  animusStatus.textContent = 'ANIMUS SESSION: MODE SELECT';
+  syncFill.style.width = '0%';
+});
+
+professionalMode.addEventListener('click', () => {
+  window.location.href = 'about.html';
+});
+
+memoryNodes.forEach(node => {
+  node.addEventListener('mouseenter', () => {
+    syncFill.style.width = `${node.dataset.sync || 50}%`;
+  });
+  node.addEventListener('focus', () => {
+    syncFill.style.width = `${node.dataset.sync || 50}%`;
+  });
+  node.addEventListener('click', () => {
+    animusStatus.textContent = 'SYNCHRONIZING MEMORY SEQUENCE...';
+  });
+});
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && animusModal.classList.contains('open')){
+    closeAnimus();
+  }
+});
+</script>
+
 </body>
 </html>
