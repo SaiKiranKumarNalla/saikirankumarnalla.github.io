@@ -6,27 +6,428 @@
 <title>The Forge — Sai Nalla</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
-.project-card{padding:2rem;border:1px solid var(--ghost-line);background:var(--ghost);transition:all 0.4s;position:relative;overflow:hidden}
-.project-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--blood);transition:height 0.4s}
-.project-card:hover{border-color:rgba(139,26,26,0.3);background:rgba(139,26,26,0.03);transform:translateY(-4px)}
-.project-card:hover::before{height:100%}
-.project-status{font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.8rem;display:flex;align-items:center;gap:0.8rem}
-.project-status .dot{width:6px;height:6px;border-radius:0;transform:rotate(45deg)}
-.dot-live{background:var(--blood-glow)}
-.dot-research{background:var(--blood-dim)}
-.dot-clinical{background:transparent;border:1px solid var(--blood)}
-.dot-startup{background:var(--steel);border:1px solid var(--mist)}
-.project-status span{color:var(--blood)}
-.project-title{font-family:'Zen Antique',serif;font-size:1.08rem;line-height:1.45;margin-bottom:0.8rem}
-.project-desc{font-size:0.84rem;line-height:1.75;color:var(--mist);font-weight:300;margin-bottom:1rem}
-.project-meta{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem}
-.project-tag{font-family:'Space Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--steel);border:1px solid var(--ghost-line);padding:0.35rem 0.65rem}
-.project-impact{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--ghost-line);font-size:0.78rem;color:var(--mist);line-height:1.7}
-.project-impact strong{color:var(--paper);font-weight:500}
-.forge-divider{display:flex;align-items:center;justify-content:center;padding:3rem 0}
-.featured-project{grid-column:span 2}
-@media(max-width:900px){.featured-project{grid-column:span 1}.projects-grid{grid-template-columns:1fr}}
+/* ── PROJECTS / FORGE RECORDS ───────────────── */
+:root{
+  --toolset:#3b82a0;
+  --framework:#8a6f3d;
+  --design:#9a5a2e;
+  --numerical:#5f6f52;
+  --experimental:#6f5a8a;
+}
+
+.forge-shell{max-width:1180px;margin:0 auto}
+.forge-divider{display:flex;align-items:center;justify-content:center;padding:2.5rem 0 3rem}
+
+/* Dashboard */
+.forge-dashboard{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--ghost-line);
+  border:1px solid var(--ghost-line);
+  margin-bottom:2rem;
+}
+.forge-stat{
+  background:var(--ink);
+  padding:2.2rem 1.4rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.forge-stat::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,var(--blood),transparent);
+  opacity:0;
+  transition:opacity .35s;
+}
+.forge-stat::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;height:2px;
+  background:var(--blood);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .35s;
+}
+.forge-stat:hover::before{opacity:.7}
+.forge-stat:hover::after{transform:scaleX(1)}
+.forge-stat-num{
+  font-family:'Zen Antique',serif;
+  font-size:clamp(2.4rem,4vw,3.7rem);
+  line-height:1;
+  color:var(--blood-glow);
+  margin-bottom:.45rem;
+}
+.forge-stat-label{
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--mist);
+}
+
+/* Filters */
+.forge-filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.65rem;
+  margin:0 0 2.2rem;
+}
+.forge-filter{
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--mist);
+  background:transparent;
+  border:1px solid var(--ghost-line);
+  padding:.65rem .9rem;
+  cursor:pointer;
+  transition:all .3s;
+  position:relative;
+  overflow:hidden;
+}
+.forge-filter::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;bottom:0;height:2px;
+  background:var(--blood);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .3s;
+}
+.forge-filter:hover,
+.forge-filter.active{
+  color:var(--paper);
+  border-color:rgba(139,26,26,.35);
+  background:rgba(139,26,26,.06);
+}
+.forge-filter:hover::after,
+.forge-filter.active::after{transform:scaleX(1)}
+
+/* Forge path */
+.forge-path{
+  border:1px solid var(--ghost-line);
+  background:linear-gradient(135deg,rgba(139,26,26,.05) 0%,transparent 42%),var(--ghost);
+  padding:1.8rem 1.5rem;
+  margin-bottom:3rem;
+  position:relative;
+  overflow:hidden;
+}
+.forge-path::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,var(--blood),transparent);
+  opacity:.4;
+}
+.path-label{
+  font-family:'Space Mono',monospace;
+  font-size:.52rem;
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  color:rgba(139,26,26,.5);
+  margin-bottom:1.4rem;
+}
+.path-track{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:0;
+  position:relative;
+}
+.path-track::before{
+  content:'';
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:18px;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(139,26,26,.7),transparent);
+}
+.path-node{position:relative;text-align:center;z-index:1}
+.path-dot{
+  width:36px;height:36px;margin:0 auto .85rem;
+  border:1px solid rgba(139,26,26,.35);
+  background:var(--ink);
+  transform:rotate(45deg);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;
+}
+.path-dot span{
+  font-family:'Noto Serif JP',serif;
+  transform:rotate(-45deg);
+  color:rgba(139,26,26,.55);
+  font-size:.85rem;
+}
+.path-node:hover .path-dot{
+  border-color:var(--blood);
+  box-shadow:0 0 18px rgba(139,26,26,.2);
+}
+.path-name{
+  font-family:'Space Mono',monospace;
+  font-size:.48rem;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:var(--steel);
+}
+
+/* Section labels */
+.forge-section-label{
+  font-family:'Space Mono',monospace;
+  font-size:.52rem;
+  text-transform:uppercase;
+  letter-spacing:.26em;
+  color:rgba(139,26,26,.48);
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  margin:0 0 1rem;
+}
+.forge-section-label::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:var(--ghost-line);
+}
+
+/* Cards */
+.featured-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.15rem;
+  margin-bottom:3rem;
+}
+.archive-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:1.15rem;
+}
+.artifact-card{
+  --accent:var(--blood);
+  border:1px solid var(--ghost-line);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 12%,transparent) 0%,transparent 38%),var(--ghost);
+  position:relative;
+  overflow:hidden;
+  transition:all .35s;
+  min-height:100%;
+}
+.artifact-card:hover{
+  border-color:color-mix(in srgb,var(--accent) 50%,var(--ghost-line));
+  transform:translateY(-4px);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 16%,transparent) 0%,transparent 45%),rgba(240,235,227,.045);
+}
+.artifact-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,var(--accent),transparent);
+  opacity:.45;
+}
+.artifact-card::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;height:2px;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .35s;
+}
+.artifact-card:hover::after{transform:scaleX(1)}
+.artifact-card.featured{min-height:430px}
+
+.artifact-visual{
+  height:150px;
+  border-bottom:1px solid var(--ghost-line);
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,rgba(240,235,227,.035) 1px,transparent 1px),
+    linear-gradient(rgba(240,235,227,.035) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.artifact-visual::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--accent) 35%,transparent),transparent 42%);
+  opacity:.4;
+}
+.visual-ring{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:96px;
+  height:96px;
+  border:1px solid color-mix(in srgb,var(--accent) 60%,transparent);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+.visual-ring::before,.visual-ring::after{
+  content:'';
+  position:absolute;
+  border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+  border-radius:50%;
+}
+.visual-ring::before{inset:16px}
+.visual-ring::after{inset:32px}
+.visual-grid{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:120px;
+  height:72px;
+  border:1px solid color-mix(in srgb,var(--accent) 48%,transparent);
+  transform:translate(-50%,-50%) rotate(-4deg);
+  background:
+    repeating-linear-gradient(90deg,transparent 0 14px,color-mix(in srgb,var(--accent) 36%,transparent) 15px),
+    repeating-linear-gradient(0deg,transparent 0 14px,color-mix(in srgb,var(--accent) 30%,transparent) 15px);
+}
+.visual-flow{
+  position:absolute;
+  inset:24px;
+  background:
+    radial-gradient(circle at 20% 55%,var(--accent) 0 3px,transparent 4px),
+    radial-gradient(circle at 42% 35%,var(--accent) 0 2px,transparent 3px),
+    radial-gradient(circle at 68% 60%,var(--accent) 0 3px,transparent 4px),
+    radial-gradient(circle at 82% 34%,var(--accent) 0 2px,transparent 3px);
+  opacity:.65;
+}
+.visual-flow::before{
+  content:'';
+  position:absolute;
+  left:10%;
+  right:10%;
+  top:50%;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--accent),transparent);
+  transform:rotate(-8deg);
+}
+.visual-stack{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:130px;
+  height:88px;
+  transform:translate(-50%,-50%);
+}
+.visual-stack span{
+  position:absolute;
+  width:80px;
+  height:52px;
+  border:1px solid color-mix(in srgb,var(--accent) 50%,transparent);
+  background:rgba(10,10,11,.45);
+}
+.visual-stack span:nth-child(1){left:0;top:22px}
+.visual-stack span:nth-child(2){left:25px;top:11px}
+.visual-stack span:nth-child(3){left:50px;top:0}
+
+.artifact-body{padding:1.65rem}
+.record-line{
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  align-items:center;
+  margin-bottom:1rem;
+}
+.record-id{
+  font-family:'Space Mono',monospace;
+  font-size:.48rem;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--steel);
+}
+.type-seal{
+  font-family:'Space Mono',monospace;
+  font-size:.48rem;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:var(--paper);
+  border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);
+  padding:.32rem .52rem;
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+}
+.artifact-title{
+  font-family:'Zen Antique',serif;
+  font-size:1.13rem;
+  line-height:1.38;
+  margin-bottom:.7rem;
+  color:var(--paper);
+}
+.artifact-brief{
+  font-size:.82rem;
+  color:var(--mist);
+  line-height:1.65;
+  font-weight:300;
+  margin-bottom:1rem;
+}
+.tag-block{margin-top:.9rem}
+.tag-label{
+  font-family:'Space Mono',monospace;
+  font-size:.45rem;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:rgba(139,26,26,.46);
+  margin-bottom:.45rem;
+}
+.tag-row{display:flex;flex-wrap:wrap;gap:.4rem}
+.method-tag,.app-tag{
+  font-family:'Space Mono',monospace;
+  font-size:.46rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  padding:.26rem .48rem;
+  border:1px solid var(--ghost-line);
+  color:var(--steel);
+}
+.app-tag{
+  border-color:color-mix(in srgb,var(--accent) 34%,var(--ghost-line));
+  color:color-mix(in srgb,var(--accent) 70%,var(--mist));
+}
+.stage-row{
+  margin-top:1.05rem;
+  padding-top:.9rem;
+  border-top:1px solid var(--ghost-line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+}
+.stage-label{
+  font-family:'Space Mono',monospace;
+  font-size:.45rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--steel);
+}
+.stage-dots{display:flex;gap:.35rem}
+.stage-dot{
+  width:7px;
+  height:7px;
+  transform:rotate(45deg);
+  border:1px solid color-mix(in srgb,var(--accent) 45%,var(--steel));
+}
+.stage-dot.filled{background:var(--accent)}
+
+[data-type="toolset"]{--accent:var(--toolset)}
+[data-type="framework"]{--accent:var(--framework)}
+[data-type="design"]{--accent:var(--design)}
+[data-type="numerical"]{--accent:var(--numerical)}
+[data-type="experimental"]{--accent:var(--experimental)}
+.artifact-card.hidden{display:none}
+
+@media(max-width:960px){
+  .forge-dashboard{grid-template-columns:repeat(2,1fr)}
+  .featured-grid{grid-template-columns:1fr}
+  .path-track{grid-template-columns:repeat(3,1fr);row-gap:1.5rem}
+  .path-track::before{display:none}
+}
+@media(max-width:560px){
+  .forge-dashboard{grid-template-columns:1fr}
+  .archive-grid{grid-template-columns:1fr}
+  .path-track{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
@@ -62,105 +463,289 @@
   <div class="page-tag reveal">The Forge</div>
   <div class="page-title-jp reveal">鍛冶場 — かじば</div>
   <h1 class="page-title reveal">04 — Projects</h1>
-  <p class="page-subtitle reveal">Where ideas are hammered into tools — prototypes, pipelines, phantoms, and translational systems</p>
+  <p class="page-subtitle reveal">Built systems from scanner, code, and steel — toolsets, frameworks, designs, numerical models, and experimental systems</p>
 </section>
 
 <section class="content-section">
+  <div class="forge-shell">
 
-  <div class="forge-divider">
-    <svg width="520" height="34" viewBox="0 0 520 34" opacity="0.12">
-      <path d="M8 21Q15 18 32 17L474 12Q500 11 515 7L518 6Q520 5 518 5L474 7L32 12Q15 13 8 16Z" fill="#f0ebe3"/>
-      <path d="M3 20Q5 17 8 21L8 16Q5 13 3 15Z" fill="#c4bfb6"/>
-      <rect x="30" y="10" width="7" height="14" rx="1" fill="none" stroke="#f0ebe3" stroke-width="0.7"/>
-      <line x1="33.5" y1="10" x2="33.5" y2="24" stroke="#8b1a1a" stroke-width="0.35"/>
-    </svg>
-  </div>
-
-  <div class="projects-grid stagger">
-
-    <div class="project-card featured-project">
-      <div class="project-status"><span class="dot dot-live"></span><span>Featured — Research Platform</span></div>
-      <div class="project-title">MuPET — Synthetic PET Data Generation Platform</div>
-      <div class="project-desc">
-        Built as a bridge between computational mass transport physics and medical imaging, MuPET generates synthetic PET-like datasets to explore tracer behavior, lesion development, and quantitative imaging limits.
-      </div>
-      <div class="project-meta">
-        <span class="project-tag">PET Imaging</span>
-        <span class="project-tag">Simulation</span>
-        <span class="project-tag">Mass Transport</span>
-        <span class="project-tag">Synthetic Data</span>
-      </div>
-      <div class="project-impact"><strong>Impact:</strong> Converts physical transport models into imaging-ready data for controlled PET/CT research and phantom validation workflows.</div>
+    <div class="forge-divider">
+      <svg width="520" height="34" viewBox="0 0 520 34" opacity="0.12">
+        <path d="M8 21Q15 18 32 17L474 12Q500 11 515 7L518 6Q520 5 518 5L474 7L32 12Q15 13 8 16Z" fill="#f0ebe3"/>
+        <path d="M3 20Q5 17 8 21L8 16Q5 13 3 15Z" fill="#c4bfb6"/>
+        <rect x="30" y="10" width="7" height="14" rx="1" fill="none" stroke="#f0ebe3" stroke-width="0.7"/>
+        <line x1="33.5" y1="10" x2="33.5" y2="24" stroke="#8b1a1a" stroke-width="0.35"/>
+      </svg>
     </div>
 
-    <div class="project-card">
-      <div class="project-status"><span class="dot dot-research"></span><span>Medical Imaging</span></div>
-      <div class="project-title">PET/CT 3D-Printed Phantom Platform</div>
-      <div class="project-desc">
-        Designed heterogeneous 3D-printed porous grids and transferable phantoms to create controlled uptake patterns for PET/CT target assessment and quantification studies.
-      </div>
-      <div class="project-meta">
-        <span class="project-tag">3D Printing</span>
-        <span class="project-tag">Phantom Design</span>
-        <span class="project-tag">PET/CT</span>
-      </div>
-      <div class="project-impact"><strong>Outcome:</strong> Supports reproducible testing of lesion contrast, heterogeneity, and scanner-side quantification behavior.</div>
+    <div class="forge-dashboard stagger">
+      <div class="forge-stat"><div class="forge-stat-num">09</div><div class="forge-stat-label">Forge Records</div></div>
+      <div class="forge-stat"><div class="forge-stat-num">05</div><div class="forge-stat-label">Artifact Types</div></div>
+      <div class="forge-stat"><div class="forge-stat-num">03</div><div class="forge-stat-label">Featured Systems</div></div>
+      <div class="forge-stat"><div class="forge-stat-num">06</div><div class="forge-stat-label">Research Outputs</div></div>
     </div>
 
-    <div class="project-card">
-      <div class="project-status"><span class="dot dot-clinical"></span><span>Clinical Study Tools</span></div>
-      <div class="project-title">Dynamic PET Retrospective Study Pipeline</div>
-      <div class="project-desc">
-        Developed analysis workflows for retrospective Dynamic PET data, supporting expanded image libraries and quantitative evaluation across clinical imaging cases.
-      </div>
-      <div class="project-meta">
-        <span class="project-tag">Dynamic PET</span>
-        <span class="project-tag">Clinical Data</span>
-        <span class="project-tag">Image Analysis</span>
-      </div>
-      <div class="project-impact"><strong>Focus:</strong> Turns clinical imaging archives into analyzable datasets for translational radiophysics research.</div>
+    <div class="forge-filters reveal" aria-label="Project filters">
+      <button class="forge-filter active" data-filter="all">All Artifacts</button>
+      <button class="forge-filter" data-filter="toolset">Toolset</button>
+      <button class="forge-filter" data-filter="framework">Framework</button>
+      <button class="forge-filter" data-filter="design">Design</button>
+      <button class="forge-filter" data-filter="numerical">Numerical</button>
+      <button class="forge-filter" data-filter="experimental">Experimental System</button>
     </div>
 
-    <div class="project-card">
-      <div class="project-status"><span class="dot dot-startup"></span><span>Startup R&D</span></div>
-      <div class="project-title">Cancer Treatment Device Prediction & Visualization Tools</div>
-      <div class="project-desc">
-        Built predictive models and automated visualization tools for a minimally invasive cancer treatment device, translating experimental R&D outputs into clear clinical and investor-facing demos.
+    <div class="forge-path reveal">
+      <div class="path-label">Forge Path — from idea to translational system</div>
+      <div class="path-track">
+        <div class="path-node"><div class="path-dot"><span>理</span></div><div class="path-name">Model</div></div>
+        <div class="path-node"><div class="path-dot"><span>符</span></div><div class="path-name">Code</div></div>
+        <div class="path-node"><div class="path-dot"><span>真</span></div><div class="path-name">Ground Truth</div></div>
+        <div class="path-node"><div class="path-dot"><span>形</span></div><div class="path-name">Prototype</div></div>
+        <div class="path-node"><div class="path-dot"><span>試</span></div><div class="path-name">Validation</div></div>
+        <div class="path-node"><div class="path-dot"><span>臨</span></div><div class="path-name">Translation</div></div>
       </div>
-      <div class="project-meta">
-        <span class="project-tag">Predictive Models</span>
-        <span class="project-tag">MedTech</span>
-        <span class="project-tag">Visualization</span>
-      </div>
-      <div class="project-impact"><strong>Use case:</strong> Helped connect pre-clinical validation data with product storytelling and technical decision-making.</div>
     </div>
 
-    <div class="project-card">
-      <div class="project-status"><span class="dot dot-research"></span><span>In-silico Modelling</span></div>
-      <div class="project-title">4D MRI to Simulation Model Translation</div>
-      <div class="project-desc">
-        Converted clinical 4D MRI datasets into high-fidelity in-silico models to study flow, delivery, and patient-specific anatomical behavior.
+    <div class="forge-section-label reveal">Featured Records</div>
+    <div class="featured-grid stagger">
+      <article class="artifact-card featured" data-type="design">
+      <div class="artifact-visual"><div class="visual-grid"></div></div>
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-001</span>
+          <span class="type-seal">design</span>
+        </div>
+        <h3 class="artifact-title">3DynaPET — 3D-Printed Dynamic PET/CT Validation System</h3>
+        <p class="artifact-brief">A physical validation system for Dynamic PET/CT built around 3D-printed structures, controlled acquisition logic, and quantitative scanner-side assessment.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">PET/CT</span><span class="method-tag">Dynamic PET</span><span class="method-tag">3D Printing</span><span class="method-tag">Phantom Validation</span><span class="method-tag">Quality Control</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">Medical Imaging</span><span class="app-tag">Clinical Translation</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span></div>
+        </div>
       </div>
-      <div class="project-meta">
-        <span class="project-tag">4D MRI</span>
-        <span class="project-tag">CFD</span>
-        <span class="project-tag">Patient-Specific Models</span>
+    </article>
+<article class="artifact-card featured" data-type="toolset">
+      <div class="artifact-visual"><div class="visual-flow"></div></div>
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-002</span>
+          <span class="type-seal">toolset</span>
+        </div>
+        <h3 class="artifact-title">MuPET — Multiphysics PET Synthetic Data Generation</h3>
+        <p class="artifact-brief">A toolset that bridges mass-transport physics and PET imaging to generate controlled synthetic datasets with known ground truth behaviour.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">Synthetic Data</span><span class="method-tag">Mass Transport</span><span class="method-tag">Multiphysics</span><span class="method-tag">PET Modelling</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">Medical Imaging</span><span class="app-tag">Oncology</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span></div>
+        </div>
       </div>
-      <div class="project-impact"><strong>Value:</strong> Bridges real clinical imaging with computational simulation for biomedical engineering studies.</div>
+    </article>
+<article class="artifact-card featured" data-type="framework">
+      <div class="artifact-visual"><div class="visual-stack"><span></span><span></span><span></span></div></div>
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-003</span>
+          <span class="type-seal">framework</span>
+        </div>
+        <h3 class="artifact-title">CASSOULET — Ground Truth Lesion Cohort Framework</h3>
+        <p class="artifact-brief">Compositional Anthropomorphic Spatial Synthesizer for ground truth Lesion ExporT: a clinically oriented framework for multimodal imaging data cohorts.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">Toolkit</span><span class="method-tag">Multimodal Imaging</span><span class="method-tag">Anthropomorphic Models</span><span class="method-tag">Cohort Generation</span><span class="method-tag">Lesion Ground Truth</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">Medical Imaging</span><span class="app-tag">Clinical Translation</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span><span class="stage-dot "></span></div>
+        </div>
+      </div>
+    </article>
     </div>
 
-    <div class="project-card">
-      <div class="project-status"><span class="dot dot-clinical"></span><span>Clinical Prototyping</span></div>
-      <div class="project-title">Patient-Specific 3D Surgical Simulation Benches</div>
-      <div class="project-desc">
-        Translated anatomical data into 3D-printed patient-specific benches for procedural simulation and clinical prototyping during hospital-based preclinical work.
+    <div class="forge-section-label reveal">Archive Grid</div>
+    <div class="archive-grid stagger">
+      <article class="artifact-card " data-type="toolset">
+      
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-004</span>
+          <span class="type-seal">toolset</span>
+        </div>
+        <h3 class="artifact-title">Real-Time Cancer Ablation Clinical Visualization</h3>
+        <p class="artifact-brief">Automated visualization tools translating ablation R&D data and CT/MRI-derived outputs into clearer clinical and investor-facing demonstrations.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">CT/MRI</span><span class="method-tag">Segmentation</span><span class="method-tag">Visualization</span><span class="method-tag">MATLAB</span><span class="method-tag">Automation</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">Oncology</span><span class="app-tag">MedTech</span><span class="app-tag">Clinical Translation</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span></div>
+        </div>
       </div>
-      <div class="project-meta">
-        <span class="project-tag">Anatomical Data</span>
-        <span class="project-tag">3D Printing</span>
-        <span class="project-tag">Clinical Prototyping</span>
+    </article>
+<article class="artifact-card " data-type="numerical">
+      
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-005</span>
+          <span class="type-seal">numerical</span>
+        </div>
+        <h3 class="artifact-title">4D TEVAR — Patient-Specific Vascular Simulation</h3>
+        <p class="artifact-brief">Translation of CT and 4D Flow MRI into patient-specific computational models for post-TEVAR vascular flow assessment.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">4D Flow MRI</span><span class="method-tag">CT Segmentation</span><span class="method-tag">CFD</span><span class="method-tag">Patient-Specific Modelling</span><span class="method-tag">Vascular Flow</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">Vascular Biomechanics</span><span class="app-tag">Clinical Translation</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span><span class="stage-dot "></span></div>
+        </div>
       </div>
-      <div class="project-impact"><strong>Context:</strong> Built from direct exposure to surgical workflows and unmet clinical needs.</div>
+    </article>
+<article class="artifact-card " data-type="numerical">
+      
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-006</span>
+          <span class="type-seal">numerical</span>
+        </div>
+        <h3 class="artifact-title">RBC Drug Delivery — Shear-Based Encapsulation</h3>
+        <p class="artifact-brief">Multiphase numerical study of red blood cell drug encapsulation and release behaviour under in-vivo and ex-vivo flow conditions.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">Multiphase Flow</span><span class="method-tag">Species Transport</span><span class="method-tag">COMSOL</span><span class="method-tag">Euler-Euler Modelling</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">Drug Delivery</span><span class="app-tag">Biofluidics</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span><span class="stage-dot "></span></div>
+        </div>
+      </div>
+    </article>
+<article class="artifact-card " data-type="design">
+      
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-007</span>
+          <span class="type-seal">design</span>
+        </div>
+        <h3 class="artifact-title">AUV Systems Engineering & Design</h3>
+        <p class="artifact-brief">Autonomous underwater vehicle development combining hydrodynamics, thermal simulation, object recognition, and systems-engineering execution.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">CFD</span><span class="method-tag">Thermal Simulation</span><span class="method-tag">OpenCV</span><span class="method-tag">Systems Engineering</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">AUV</span><span class="app-tag">Defense</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span></div>
+        </div>
+      </div>
+    </article>
+<article class="artifact-card " data-type="experimental">
+      
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-008</span>
+          <span class="type-seal">experimental</span>
+        </div>
+        <h3 class="artifact-title">3D-Printed Flexible Electrodes</h3>
+        <p class="artifact-brief">Experimental development and characterization of flexible dry electrodes using printable polymers, conductive inks, microscopy, and impedance testing.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">PDMS</span><span class="method-tag">PEDOT:PSS</span><span class="method-tag">Silver Ink</span><span class="method-tag">AFM</span><span class="method-tag">Impedance Spectroscopy</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">Wearables</span><span class="app-tag">Biomedical Devices</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span><span class="stage-dot "></span></div>
+        </div>
+      </div>
+    </article>
+<article class="artifact-card " data-type="experimental">
+      
+      <div class="artifact-body">
+        <div class="record-line">
+          <span class="record-id">Record F-009</span>
+          <span class="type-seal">experimental</span>
+        </div>
+        <h3 class="artifact-title">Bubble Tea / Soft Gel Experimental Study</h3>
+        <p class="artifact-brief">Soft-matter experimental study using flow-resistance measurements and semi-automated image tracking to understand large-particle suspension behaviour.</p>
+
+        <div class="tag-block">
+          <div class="tag-label">Methods</div>
+          <div class="tag-row"><span class="method-tag">Soft Matter</span><span class="method-tag">Image Tracking</span><span class="method-tag">MATLAB</span><span class="method-tag">Flow Resistance</span></div>
+        </div>
+
+        <div class="tag-block">
+          <div class="tag-label">Applied to</div>
+          <div class="tag-row"><span class="app-tag">Drug Delivery Models</span><span class="app-tag">Soft Matter</span></div>
+        </div>
+
+        <div class="stage-row">
+          <span class="stage-label">Maturity</span>
+          <div class="stage-dots"><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot filled"></span><span class="stage-dot "></span><span class="stage-dot "></span></div>
+        </div>
+      </div>
+    </article>
     </div>
 
   </div>
@@ -173,5 +758,22 @@
 </footer>
 
 <script src="transitions.js"></script>
+<script>
+const forgeFilters = document.querySelectorAll('.forge-filter');
+const artifactCards = document.querySelectorAll('.artifact-card');
+
+forgeFilters.forEach(button => {
+  button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+    forgeFilters.forEach(b => b.classList.remove('active'));
+    button.classList.add('active');
+
+    artifactCards.forEach(card => {
+      const match = filter === 'all' || card.dataset.type === filter;
+      card.classList.toggle('hidden', !match);
+    });
+  });
+});
+</script>
 </body>
 </html>
