@@ -129,109 +129,371 @@
 
 
 
-/* ── HOVER TOOLKIT ─────────────────────────── */
-.toolkit-section { margin-bottom: 4.5rem; }
-.toolkit-intro {
+/* ── CAPABILITY MAP ────────────────────────── */
+.capability-section { margin-bottom: 4.5rem; }
+.capability-intro {
   border:1px solid var(--ghost-line);
   background:linear-gradient(135deg, rgba(139,26,26,0.05) 0%, transparent 38%), var(--ghost);
-  padding:1.4rem 1.6rem;
-  margin-bottom:1.2rem;
+  padding:1.45rem 1.6rem;
+  margin-bottom:1.25rem;
 }
-.toolkit-kicker {
-  font-family:'Space Mono',monospace; font-size:0.52rem; text-transform:uppercase;
-  letter-spacing:0.22em; color:rgba(139,26,26,0.5); margin-bottom:0.65rem;
+.capability-kicker {
+  font-family:'Space Mono',monospace;
+  font-size:0.52rem;
+  text-transform:uppercase;
+  letter-spacing:0.22em;
+  color:rgba(139,26,26,0.5);
+  margin-bottom:0.65rem;
 }
-.toolkit-intro p { font-size:0.9rem; color:var(--mist); line-height:1.75; font-weight:300; max-width:760px; }
-.toolkit-intro strong { color:var(--paper); font-weight:500; }
+.capability-intro p {
+  font-size:0.9rem;
+  color:var(--mist);
+  line-height:1.75;
+  font-weight:300;
+  max-width:760px;
+}
+.capability-intro strong { color:var(--paper); font-weight:500; }
 
-.workstream-grid {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; overflow:visible; margin-bottom:1.8rem;
+.capability-map {
+  position:relative;
+  min-height:620px;
+  border:1px solid var(--ghost-line);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(139,26,26,0.08) 0%, transparent 28%),
+    linear-gradient(135deg, rgba(139,26,26,0.04) 0%, transparent 42%),
+    var(--ghost);
+  overflow:visible;
 }
-.workstream-card {
-  position:relative; border:1px solid var(--ghost-line); background:var(--ghost); min-height:150px;
-  padding:1.35rem 1.25rem 1.15rem; overflow:visible; cursor:pointer; transition:all 0.32s;
-}
-.workstream-card:hover, .workstream-card.active { border-color:rgba(139,26,26,0.25); background:rgba(139,26,26,0.04); z-index:10; }
-.workstream-card::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--blood);
-  transform:scaleX(0); transform-origin:left; transition:transform 0.35s;
-}
-.workstream-card:hover::after, .workstream-card.active::after { transform:scaleX(1); }
-.ws-top { display:flex; align-items:flex-start; justify-content:space-between; gap:0.8rem; margin-bottom:0.9rem; }
-.ws-title { font-family:'Zen Antique',serif; font-size:1.02rem; line-height:1.3; }
-.ws-kanji { font-family:'Noto Serif JP',serif; font-size:1.6rem; line-height:1; color:rgba(139,26,26,0.26); }
-.ws-meta { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.65rem; }
-.ws-chip {
-  font-family:'Space Mono',monospace; font-size:0.46rem; text-transform:uppercase; letter-spacing:0.1em;
-  color:var(--steel); border:1px solid var(--ghost-line); padding:0.24rem 0.48rem;
-}
-.ws-hint { font-size:0.75rem; color:var(--steel); line-height:1.55; }
-.tool-pop {
-  position:absolute; left:0; right:0; top:calc(100% + 10px); z-index:20;
-  border:1px solid rgba(139,26,26,0.25); background:linear-gradient(135deg, rgba(139,26,26,0.07) 0%, transparent 34%), rgba(10,10,11,0.98);
-  box-shadow:0 18px 42px rgba(0,0,0,0.35); padding:1rem 1rem 0.95rem;
-  opacity:0; visibility:hidden; transform:translateY(8px) scale(0.98);
-  transition:opacity 0.22s, transform 0.22s, visibility 0.22s;
+.capability-map::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(to right, transparent 49.95%, rgba(240,235,227,0.04) 50%, transparent 50.05%),
+    linear-gradient(to bottom, transparent 49.95%, rgba(240,235,227,0.04) 50%, transparent 50.05%);
   pointer-events:none;
 }
-.workstream-card:hover .tool-pop,
-.workstream-card:focus-within .tool-pop,
-.workstream-card.active .tool-pop {
-  opacity:1; visibility:visible; transform:translateY(0) scale(1); pointer-events:auto;
+.capability-map::after {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(to right, transparent, var(--blood), transparent);
+  opacity:0.35;
 }
-.tool-pop-label {
-  font-family:'Space Mono',monospace; font-size:0.46rem; text-transform:uppercase; letter-spacing:0.18em;
-  color:rgba(139,26,26,0.55); margin-bottom:0.75rem;
-}
-.tool-item { margin-bottom:0.72rem; }
-.tool-item:last-child { margin-bottom:0; }
-.tool-item-top { display:flex; justify-content:space-between; gap:0.7rem; align-items:baseline; margin-bottom:0.32rem; }
-.tool-item-name { font-size:0.84rem; color:var(--paper); font-weight:500; line-height:1.4; }
-.tool-item-score { font-family:'Space Mono',monospace; font-size:0.5rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--blood-glow); white-space:nowrap; }
-.tool-item-bar { height:5px; background:rgba(240,235,227,0.06); overflow:hidden; }
-.tool-item-fill { height:100%; background:linear-gradient(90deg, rgba(139,26,26,0.78), var(--blood-glow)); }
-.tool-item-meta { display:flex; justify-content:space-between; gap:0.7rem; margin-top:0.28rem; font-family:'Space Mono',monospace; font-size:0.44rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--steel); }
 
-.competency-map-wrap {
-  border:1px solid var(--ghost-line); background:linear-gradient(135deg, rgba(139,26,26,0.05) 0%, transparent 42%), var(--ghost);
-  padding:1.4rem; position:relative; overflow:hidden;
+.cap-line {
+  position:absolute;
+  left:50%;
+  top:50%;
+  height:1px;
+  background:linear-gradient(to right, rgba(139,26,26,0.55), transparent);
+  transform-origin:left center;
+  opacity:0.45;
+  pointer-events:none;
 }
-.competency-map-wrap::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right, transparent, var(--blood), transparent); opacity:0.35;
+.cap-line.model { width:220px; transform:rotate(-118deg); }
+.cap-line.design { width:240px; transform:rotate(-44deg); }
+.cap-line.imaging { width:260px; transform:rotate(180deg); }
+.cap-line.experimental { width:230px; transform:rotate(104deg); }
+.cap-line.defense { width:250px; transform:rotate(18deg); }
+
+.cap-core {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:250px;
+  min-height:180px;
+  border:1px solid rgba(139,26,26,0.28);
+  background:linear-gradient(135deg, rgba(139,26,26,0.12), rgba(10,10,11,0.88));
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:1.4rem;
+  z-index:3;
 }
-.comp-map-title { font-family:'Zen Antique',serif; font-size:1.1rem; margin-bottom:1rem; }
-.comp-map {
-  display:grid; grid-template-columns:1fr 1.2fr 1fr; grid-template-areas:
-  "medtech core modeling"
-  "medical core design"
-  "experimental core defense";
-  gap:0.8rem; align-items:stretch;
+.cap-core::before,
+.cap-core::after {
+  content:'';
+  position:absolute;
+  inset:12px;
+  border:1px solid rgba(240,235,227,0.04);
+  pointer-events:none;
 }
-.comp-card {
-  border:1px solid var(--ghost-line); background:rgba(10,10,11,0.58); padding:0.9rem 0.95rem; position:relative;
+.cap-core-kanji {
+  font-family:'Noto Serif JP',serif;
+  font-size:2.5rem;
+  line-height:1;
+  color:rgba(139,26,26,0.42);
+  margin-bottom:0.75rem;
 }
-.comp-card.core {
-  grid-area:core; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
-  background:linear-gradient(135deg, rgba(139,26,26,0.08) 0%, transparent 38%), rgba(10,10,11,0.78);
+.cap-core-title {
+  font-family:'Zen Antique',serif;
+  font-size:1.25rem;
+  line-height:1.25;
+  color:var(--paper);
+  margin-bottom:0.55rem;
 }
-.comp-card.medtech{grid-area:medtech;} .comp-card.medical{grid-area:medical;} .comp-card.experimental{grid-area:experimental;}
-.comp-card.modeling{grid-area:modeling;} .comp-card.design{grid-area:design;} .comp-card.defense{grid-area:defense;}
-.comp-mini { font-family:'Space Mono',monospace; font-size:0.42rem; text-transform:uppercase; letter-spacing:0.16em; color:rgba(139,26,26,0.52); margin-bottom:0.35rem; }
-.comp-name { font-family:'Zen Antique',serif; font-size:0.95rem; line-height:1.3; margin-bottom:0.28rem; }
-.comp-level { font-family:'Space Mono',monospace; font-size:0.47rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--blood-glow); }
-.comp-core-title { font-family:'Zen Antique',serif; font-size:1.24rem; line-height:1.25; margin-bottom:0.42rem; }
-.comp-core-sub { font-size:0.78rem; color:var(--mist); line-height:1.6; max-width:220px; }
+.cap-core-sub {
+  font-size:0.78rem;
+  color:var(--mist);
+  line-height:1.65;
+  font-weight:300;
+}
+
+.cap-node {
+  position:absolute;
+  width:205px;
+  min-height:118px;
+  border:1px solid var(--ghost-line);
+  background:rgba(10,10,11,0.82);
+  padding:1rem 1rem 0.9rem;
+  z-index:4;
+  cursor:pointer;
+  transition:transform 0.28s, border-color 0.28s, background 0.28s, box-shadow 0.28s;
+}
+.cap-node::after {
+  content:'';
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:var(--blood);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.3s;
+}
+.cap-node:hover,
+.cap-node:focus-within,
+.cap-node.active {
+  transform:translateY(-3px);
+  border-color:rgba(139,26,26,0.35);
+  background:rgba(139,26,26,0.08);
+  box-shadow:0 18px 42px rgba(0,0,0,0.35);
+  z-index:20;
+}
+.cap-node:hover::after,
+.cap-node:focus-within::after,
+.cap-node.active::after { transform:scaleX(1); }
+
+.cap-node.model { left:calc(50% - 105px); top:54px; }
+.cap-node.design { right:70px; top:118px; }
+.cap-node.imaging { left:58px; top:250px; }
+.cap-node.experimental { left:calc(50% - 245px); bottom:66px; }
+.cap-node.defense { right:72px; bottom:92px; }
+
+.cap-node-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:0.8rem;
+  margin-bottom:0.65rem;
+}
+.cap-node-title {
+  font-family:'Zen Antique',serif;
+  font-size:1rem;
+  line-height:1.28;
+  color:var(--paper);
+}
+.cap-node-kanji {
+  font-family:'Noto Serif JP',serif;
+  font-size:1.45rem;
+  line-height:1;
+  color:rgba(139,26,26,0.32);
+}
+.cap-level {
+  display:inline-block;
+  font-family:'Space Mono',monospace;
+  font-size:0.47rem;
+  text-transform:uppercase;
+  letter-spacing:0.14em;
+  color:var(--blood-glow);
+  border:1px solid rgba(139,26,26,0.2);
+  padding:0.28rem 0.48rem;
+}
+.cap-hover-hint {
+  margin-top:0.65rem;
+  font-family:'Space Mono',monospace;
+  font-size:0.43rem;
+  text-transform:uppercase;
+  letter-spacing:0.14em;
+  color:var(--steel);
+}
+
+.cap-popup {
+  position:absolute;
+  width:245px;
+  border:1px solid rgba(139,26,26,0.3);
+  background:linear-gradient(135deg, rgba(139,26,26,0.08) 0%, transparent 42%), rgba(10,10,11,0.98);
+  box-shadow:0 18px 48px rgba(0,0,0,0.48);
+  padding:0.95rem;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:scale(0.96);
+  transition:opacity 0.22s, transform 0.22s, visibility 0.22s;
+  z-index:30;
+}
+.cap-node:hover .cap-popup,
+.cap-node:focus-within .cap-popup,
+.cap-node.active .cap-popup {
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:scale(1);
+}
+
+/* popup directions */
+.cap-popup.up {
+  left:50%;
+  bottom:calc(100% + 18px);
+  transform:translateX(-50%) translateY(8px) scale(0.96);
+}
+.cap-node:hover .cap-popup.up,
+.cap-node:focus-within .cap-popup.up,
+.cap-node.active .cap-popup.up {
+  transform:translateX(-50%) translateY(0) scale(1);
+}
+.cap-popup.right {
+  left:calc(100% + 18px);
+  top:50%;
+  transform:translateY(-50%) translateX(-8px) scale(0.96);
+}
+.cap-node:hover .cap-popup.right,
+.cap-node:focus-within .cap-popup.right,
+.cap-node.active .cap-popup.right {
+  transform:translateY(-50%) translateX(0) scale(1);
+}
+.cap-popup.left {
+  right:calc(100% + 18px);
+  top:50%;
+  transform:translateY(-50%) translateX(8px) scale(0.96);
+}
+.cap-node:hover .cap-popup.left,
+.cap-node:focus-within .cap-popup.left,
+.cap-node.active .cap-popup.left {
+  transform:translateY(-50%) translateX(0) scale(1);
+}
+.cap-popup.down {
+  left:50%;
+  top:calc(100% + 18px);
+  transform:translateX(-50%) translateY(-8px) scale(0.96);
+}
+.cap-node:hover .cap-popup.down,
+.cap-node:focus-within .cap-popup.down,
+.cap-node.active .cap-popup.down {
+  transform:translateX(-50%) translateY(0) scale(1);
+}
+
+.cap-popup::before {
+  content:'';
+  position:absolute;
+  width:18px;
+  height:1px;
+  background:rgba(139,26,26,0.65);
+}
+.cap-popup.up::before { left:50%; bottom:-10px; transform:translateX(-50%) rotate(90deg); }
+.cap-popup.down::before { left:50%; top:-10px; transform:translateX(-50%) rotate(90deg); }
+.cap-popup.left::before { right:-18px; top:50%; }
+.cap-popup.right::before { left:-18px; top:50%; }
+
+.popup-label {
+  font-family:'Space Mono',monospace;
+  font-size:0.45rem;
+  text-transform:uppercase;
+  letter-spacing:0.18em;
+  color:rgba(139,26,26,0.55);
+  margin-bottom:0.75rem;
+}
+.popup-tool { margin-bottom:0.7rem; }
+.popup-tool:last-child { margin-bottom:0; }
+.popup-tool-top {
+  display:flex;
+  justify-content:space-between;
+  gap:0.7rem;
+  align-items:baseline;
+  margin-bottom:0.3rem;
+}
+.popup-tool-name {
+  font-size:0.82rem;
+  color:var(--paper);
+  font-weight:500;
+  line-height:1.35;
+}
+.popup-score {
+  font-family:'Space Mono',monospace;
+  font-size:0.5rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--blood-glow);
+  white-space:nowrap;
+}
+.popup-bar {
+  height:5px;
+  background:rgba(240,235,227,0.06);
+  overflow:hidden;
+}
+.popup-fill {
+  height:100%;
+  background:linear-gradient(90deg, rgba(139,26,26,0.78), var(--blood-glow));
+}
+.popup-meta {
+  margin-top:0.27rem;
+  font-family:'Space Mono',monospace;
+  font-size:0.43rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--steel);
+}
 
 @media(max-width:980px){
-  .workstream-grid { grid-template-columns:repeat(2,1fr); }
-  .comp-map { grid-template-columns:1fr; grid-template-areas:
-    "core" "medtech" "modeling" "medical" "design" "experimental" "defense"; }
+  .capability-map {
+    min-height:auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+    padding:1rem;
+  }
+  .capability-map::before,
+  .cap-line { display:none; }
+  .cap-core,
+  .cap-node {
+    position:relative;
+    left:auto !important;
+    right:auto !important;
+    top:auto !important;
+    bottom:auto !important;
+    transform:none;
+    width:auto;
+  }
+  .cap-core { grid-column:1 / -1; min-height:150px; }
+  .cap-node:hover,
+  .cap-node:focus-within,
+  .cap-node.active { transform:none; }
+  .cap-popup {
+    position:relative;
+    left:auto !important;
+    right:auto !important;
+    top:auto !important;
+    bottom:auto !important;
+    width:auto;
+    margin-top:0.9rem;
+    opacity:1;
+    visibility:visible;
+    transform:none !important;
+    display:none;
+    pointer-events:auto;
+  }
+  .cap-popup::before { display:none; }
+  .cap-node.active .cap-popup { display:block; }
+  .cap-node:hover .cap-popup { display:none; }
 }
 @media(max-width:680px){
-  .workstream-grid { grid-template-columns:1fr; }
-  .tool-pop { position:relative; top:auto; left:auto; right:auto; margin-top:0.9rem; opacity:1; visibility:visible; transform:none; display:none; pointer-events:auto; }
-  .workstream-card.active .tool-pop { display:block; }
-  .workstream-card:hover .tool-pop { display:none; }
+  .capability-map { grid-template-columns:1fr; }
 }
 
 /* ── VOLUNTEERING ──────────────────────────── */
@@ -498,90 +760,164 @@
     </div>
 
 
-    <div class="exp-divider reveal">Toolkit &amp; Applied Competencies</div>
+    <div class="exp-divider reveal">Capability Map — Hover to reveal tools</div>
 
-    <section class="toolkit-section stagger">
-      <div class="toolkit-intro">
-        <div class="toolkit-kicker">The toolkit — mapped to experience</div>
-        <p><strong>Hover a workstream</strong> to reveal the exact tools and approximate operating level. The goal is to keep the section visual, fast, and easy to scan.</p>
+    <section class="capability-section stagger">
+      <div class="capability-intro">
+        <div class="capability-kicker">Unified toolkit &amp; field map</div>
+        <p><strong>One capability map</strong> replaces the duplicated toolkit and competency sections. Hover a node to reveal the tools, methods, and operating level behind that capability.</p>
       </div>
 
-      <div class="workstream-grid">
-        <div class="workstream-card" tabindex="0">
-          <div class="ws-top"><div class="ws-title">Computational Modelling</div><div class="ws-kanji">算</div></div>
-          <div class="ws-hint">Simulation, scientific computing, and engineering analysis.</div>
-          <div class="ws-meta"><span class="ws-chip">3 tools</span><span class="ws-chip">4+ yrs</span><span class="ws-chip">advanced</span></div>
-          <div class="tool-pop">
-            <div class="tool-pop-label">Tool stack</div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">COMSOL Multiphysics</div><div class="tool-item-score">7 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:70%"></div></div><div class="tool-item-meta"><span>3+ yrs</span><span>Multiphysics</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">MATLAB</div><div class="tool-item-score">8 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:80%"></div></div><div class="tool-item-meta"><span>5+ yrs</span><span>Numerical analysis</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Python</div><div class="tool-item-score">8 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:80%"></div></div><div class="tool-item-meta"><span>4+ yrs</span><span>Automation &amp; data</span></div></div>
+      <div class="capability-map">
+        <div class="cap-line model"></div>
+        <div class="cap-line design"></div>
+        <div class="cap-line imaging"></div>
+        <div class="cap-line experimental"></div>
+        <div class="cap-line defense"></div>
+
+        <div class="cap-core">
+          <div class="cap-core-kanji">医</div>
+          <div class="cap-core-title">MedTech / Translational R&amp;D</div>
+          <div class="cap-core-sub">Where modelling, design, imaging, and experimentation converge.</div>
+        </div>
+
+        <div class="cap-node model" tabindex="0">
+          <div class="cap-node-top">
+            <div class="cap-node-title">Computational Modelling</div>
+            <div class="cap-node-kanji">算</div>
+          </div>
+          <span class="cap-level">Advanced</span>
+          <div class="cap-hover-hint">Hover for tools</div>
+          <div class="cap-popup up">
+            <div class="popup-label">Tool stack</div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">COMSOL Multiphysics</span><span class="popup-score">7/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:70%"></div></div>
+              <div class="popup-meta">3+ yrs · Multiphysics</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">MATLAB</span><span class="popup-score">8/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:80%"></div></div>
+              <div class="popup-meta">5+ yrs · Numerical analysis</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Python</span><span class="popup-score">8/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:80%"></div></div>
+              <div class="popup-meta">4+ yrs · Automation &amp; data</div>
+            </div>
           </div>
         </div>
 
-        <div class="workstream-card" tabindex="0">
-          <div class="ws-top"><div class="ws-title">Product Design</div><div class="ws-kanji">鍛</div></div>
-          <div class="ws-hint">CAD, fabrication, and making concepts testable in physical form.</div>
-          <div class="ws-meta"><span class="ws-chip">3 tools</span><span class="ws-chip">6+ yrs</span><span class="ws-chip">strong</span></div>
-          <div class="tool-pop">
-            <div class="tool-pop-label">Tool stack</div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Autodesk Fusion 360</div><div class="tool-item-score">8 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:80%"></div></div><div class="tool-item-meta"><span>3+ yrs</span><span>CAD design</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">SolidWorks</div><div class="tool-item-score">5 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:50%"></div></div><div class="tool-item-meta"><span>working</span><span>Model editing</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Ultimaker Cura</div><div class="tool-item-score">8 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:80%"></div></div><div class="tool-item-meta"><span>3+ yrs</span><span>Print preparation</span></div></div>
+        <div class="cap-node design" tabindex="0">
+          <div class="cap-node-top">
+            <div class="cap-node-title">Product Design</div>
+            <div class="cap-node-kanji">鍛</div>
+          </div>
+          <span class="cap-level">Strong</span>
+          <div class="cap-hover-hint">Hover for tools</div>
+          <div class="cap-popup right">
+            <div class="popup-label">Design stack</div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Autodesk Fusion 360</span><span class="popup-score">8/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:80%"></div></div>
+              <div class="popup-meta">3+ yrs · CAD design</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">SolidWorks</span><span class="popup-score">5/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:50%"></div></div>
+              <div class="popup-meta">Working · Model review/editing</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Ultimaker Cura</span><span class="popup-score">8/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:80%"></div></div>
+              <div class="popup-meta">3+ yrs · Print preparation</div>
+            </div>
           </div>
         </div>
 
-        <div class="workstream-card" tabindex="0">
-          <div class="ws-top"><div class="ws-title">Experimental Method</div><div class="ws-kanji">試</div></div>
-          <div class="ws-hint">Study design, validation logic, and structured interpretation.</div>
-          <div class="ws-meta"><span class="ws-chip">3 methods</span><span class="ws-chip">4+ yrs</span><span class="ws-chip">strong</span></div>
-          <div class="tool-pop">
-            <div class="tool-pop-label">Method stack</div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">JASP</div><div class="tool-item-score">7 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:70%"></div></div><div class="tool-item-meta"><span>2+ yrs</span><span>Statistics</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Experimental Design</div><div class="tool-item-score">8 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:80%"></div></div><div class="tool-item-meta"><span>4+ yrs</span><span>Protocol planning</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Data Collection &amp; Analysis</div><div class="tool-item-score">8 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:80%"></div></div><div class="tool-item-meta"><span>4+ yrs</span><span>Validation</span></div></div>
+        <div class="cap-node imaging" tabindex="0">
+          <div class="cap-node-top">
+            <div class="cap-node-title">Medical Imaging Analysis</div>
+            <div class="cap-node-kanji">診</div>
+          </div>
+          <span class="cap-level">Strong</span>
+          <div class="cap-hover-hint">Hover for tools</div>
+          <div class="cap-popup left">
+            <div class="popup-label">Imaging stack</div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">ImageJ / Fiji</span><span class="popup-score">7/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:70%"></div></div>
+              <div class="popup-meta">3+ yrs · Image processing</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Quality Control</span><span class="popup-score">7/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:70%"></div></div>
+              <div class="popup-meta">3+ projects · Imaging QC</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Retrospective Clinical Evaluation</span><span class="popup-score">7/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:70%"></div></div>
+              <div class="popup-meta">2+ studies · Clinical review</div>
+            </div>
           </div>
         </div>
 
-        <div class="workstream-card" tabindex="0">
-          <div class="ws-top"><div class="ws-title">Medical Imaging Analysis</div><div class="ws-kanji">診</div></div>
-          <div class="ws-hint">Imaging workflows, QC awareness, and retrospective clinical evaluation.</div>
-          <div class="ws-meta"><span class="ws-chip">3 areas</span><span class="ws-chip">3+ projects</span><span class="ws-chip">strong</span></div>
-          <div class="tool-pop">
-            <div class="tool-pop-label">Imaging stack</div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">ImageJ / Fiji</div><div class="tool-item-score">7 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:70%"></div></div><div class="tool-item-meta"><span>3+ yrs</span><span>Image processing</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Imaging Quality Control</div><div class="tool-item-score">7 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:70%"></div></div><div class="tool-item-meta"><span>3+ projects</span><span>QC workflows</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Retrospective Clinical Evaluation</div><div class="tool-item-score">7 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:70%"></div></div><div class="tool-item-meta"><span>2+ studies</span><span>Clinical review</span></div></div>
+        <div class="cap-node experimental" tabindex="0">
+          <div class="cap-node-top">
+            <div class="cap-node-title">Experimental Method</div>
+            <div class="cap-node-kanji">試</div>
+          </div>
+          <span class="cap-level">Strong</span>
+          <div class="cap-hover-hint">Hover for methods</div>
+          <div class="cap-popup down">
+            <div class="popup-label">Method stack</div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">JASP</span><span class="popup-score">7/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:70%"></div></div>
+              <div class="popup-meta">2+ yrs · Statistics</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Experimental Design</span><span class="popup-score">8/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:80%"></div></div>
+              <div class="popup-meta">4+ yrs · Protocol planning</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Data Collection &amp; Analysis</span><span class="popup-score">8/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:80%"></div></div>
+              <div class="popup-meta">4+ yrs · Validation</div>
+            </div>
           </div>
         </div>
 
-        <div class="workstream-card" tabindex="0">
-          <div class="ws-top"><div class="ws-title">Defense / Robotics</div><div class="ws-kanji">海</div></div>
-          <div class="ws-hint">AUV-rooted systems work with mechanics, integration, and mission logic.</div>
-          <div class="ws-meta"><span class="ws-chip">3 areas</span><span class="ws-chip">2+ yrs</span><span class="ws-chip">emerging</span></div>
-          <div class="tool-pop">
-            <div class="tool-pop-label">Systems stack</div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">AUV Systems</div><div class="tool-item-score">7 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:70%"></div></div><div class="tool-item-meta"><span>2+ yrs</span><span>Systems integration</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Mechanical Design</div><div class="tool-item-score">7 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:70%"></div></div><div class="tool-item-meta"><span>2+ yrs</span><span>Subsystem design</span></div></div>
-            <div class="tool-item"><div class="tool-item-top"><div class="tool-item-name">Mission Ops &amp; Team Execution</div><div class="tool-item-score">7 / 10</div></div><div class="tool-item-bar"><div class="tool-item-fill" style="width:70%"></div></div><div class="tool-item-meta"><span>2+ yrs</span><span>Team leadership</span></div></div>
+        <div class="cap-node defense" tabindex="0">
+          <div class="cap-node-top">
+            <div class="cap-node-title">Defense / Robotics</div>
+            <div class="cap-node-kanji">海</div>
           </div>
-        </div>
-      </div>
-
-      <div class="competency-map-wrap">
-        <div class="toolkit-kicker">Field competencies</div>
-        <div class="comp-map-title">Applied Competency Map</div>
-        <div class="comp-map">
-          <div class="comp-card medtech"><div class="comp-mini">Field</div><div class="comp-name">MedTech Translation</div><div class="comp-level">Core</div></div>
-          <div class="comp-card medical"><div class="comp-mini">Field</div><div class="comp-name">Medical Imaging Analysis</div><div class="comp-level">Strong</div></div>
-          <div class="comp-card experimental"><div class="comp-mini">Field</div><div class="comp-name">Experimental Method</div><div class="comp-level">Strong</div></div>
-          <div class="comp-card core"><div class="comp-mini">Operating Zone</div><div class="comp-core-title">Translational R&amp;D</div><div class="comp-core-sub">Where modelling, prototyping, imaging, and clinical context meet.</div></div>
-          <div class="comp-card modeling"><div class="comp-mini">Field</div><div class="comp-name">Computational Modelling</div><div class="comp-level">Advanced</div></div>
-          <div class="comp-card design"><div class="comp-mini">Field</div><div class="comp-name">Product Design</div><div class="comp-level">Strong</div></div>
-          <div class="comp-card defense"><div class="comp-mini">Field</div><div class="comp-name">Defense / Robotics</div><div class="comp-level">Emerging</div></div>
+          <span class="cap-level">Emerging</span>
+          <div class="cap-hover-hint">Hover for systems</div>
+          <div class="cap-popup right">
+            <div class="popup-label">Systems stack</div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">AUV Systems</span><span class="popup-score">7/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:70%"></div></div>
+              <div class="popup-meta">2+ yrs · Systems integration</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Mechanical Design</span><span class="popup-score">7/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:70%"></div></div>
+              <div class="popup-meta">2+ yrs · Subsystem design</div>
+            </div>
+            <div class="popup-tool">
+              <div class="popup-tool-top"><span class="popup-tool-name">Mission Ops &amp; Team Execution</span><span class="popup-score">7/10</span></div>
+              <div class="popup-bar"><div class="popup-fill" style="width:70%"></div></div>
+              <div class="popup-meta">2+ yrs · AUV team leadership</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
 
     <div class="exp-divider reveal">Volunteering &amp; Leadership</div>
 
@@ -613,20 +949,20 @@ document.querySelectorAll('.acc-header').forEach(header => {
   });
 });
 
-const workstreamCards = document.querySelectorAll('.workstream-card');
-workstreamCards.forEach(card => {
-  card.addEventListener('click', function() {
-    if (window.innerWidth > 680) return;
+const capNodes = document.querySelectorAll('.cap-node');
+capNodes.forEach(node => {
+  node.addEventListener('click', function() {
+    if (window.innerWidth > 980) return;
     const wasActive = this.classList.contains('active');
-    workstreamCards.forEach(c => c.classList.remove('active'));
+    capNodes.forEach(n => n.classList.remove('active'));
     if (!wasActive) this.classList.add('active');
   });
 });
 
 document.addEventListener('click', function(e) {
-  if (window.innerWidth > 680) return;
-  if (!e.target.closest('.workstream-card')) {
-    workstreamCards.forEach(c => c.classList.remove('active'));
+  if (window.innerWidth > 980) return;
+  if (!e.target.closest('.cap-node')) {
+    capNodes.forEach(n => n.classList.remove('active'));
   }
 });
 </script>
