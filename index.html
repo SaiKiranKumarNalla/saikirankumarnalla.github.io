@@ -57,7 +57,9 @@
 @media(max-width:500px){.nav-grid{grid-template-columns:1fr}}
 
 
-/* ── ANIMUS PROFILE RECONSTRUCTION GAME ────── */
+/* ═══════════════════════════════════════════
+   ANIMUS QUEST — PROFILE RECONSTRUCTION GAME
+   ═══════════════════════════════════════════ */
 .hero-game-note{
   margin-top:1rem;
   font-family:'Space Mono',monospace;
@@ -78,106 +80,120 @@
   color:var(--blood-glow);
 }
 
-.animus-game{
+.animus-quest{
   position:fixed;
   inset:0;
   z-index:5000;
   display:none;
   background:
-    radial-gradient(circle at 50% 42%, rgba(139,26,26,.18), transparent 34%),
-    radial-gradient(circle at 78% 16%, rgba(194,59,59,.06), transparent 22%),
-    linear-gradient(180deg, rgba(10,10,11,.97), rgba(10,10,11,.995));
+    radial-gradient(circle at 50% 38%, rgba(139,26,26,.18), transparent 34%),
+    radial-gradient(circle at 80% 15%, rgba(194,59,59,.06), transparent 24%),
+    linear-gradient(180deg, rgba(10,10,11,.98), rgba(10,10,11,1));
   color:var(--paper);
   padding:1.2rem;
   overflow:hidden;
 }
-.animus-game.open{display:block}
-.animus-game::before{
+.animus-quest.open{display:block}
+.animus-quest::before{
   content:'';
   position:absolute;
   inset:0;
   background:
-    linear-gradient(90deg, rgba(240,235,227,.025) 1px, transparent 1px),
-    linear-gradient(rgba(240,235,227,.025) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(240,235,227,.024) 1px, transparent 1px),
+    linear-gradient(rgba(240,235,227,.024) 1px, transparent 1px);
   background-size:34px 34px;
   pointer-events:none;
 }
-.animus-game::after{
+.animus-quest::after{
   content:'';
   position:absolute;
-  left:0;
-  right:0;
-  top:0;
-  height:1px;
+  left:0;right:0;top:0;height:1px;
   background:linear-gradient(to right, transparent, var(--blood), transparent);
+  animation:questScan 4.8s ease-in-out infinite;
   opacity:.55;
-  animation:animusGameScan 4.5s ease-in-out infinite;
 }
-@keyframes animusGameScan{
-  0%{top:0;opacity:.05}
-  45%{opacity:.7}
-  100%{top:100%;opacity:.05}
+@keyframes questScan{
+  0%{top:0;opacity:.04}
+  45%{opacity:.72}
+  100%{top:100%;opacity:.04}
 }
-
-.game-shell{
+.quest-shell{
   position:relative;
   z-index:2;
   height:calc(100vh - 2.4rem);
-  max-width:1180px;
+  max-width:1220px;
   margin:0 auto;
   border:1px solid rgba(240,235,227,.08);
-  background:linear-gradient(135deg, rgba(139,26,26,.06), transparent 42%), rgba(10,10,11,.82);
-  box-shadow:0 32px 90px rgba(0,0,0,.62);
-  overflow:hidden;
+  background:linear-gradient(135deg, rgba(139,26,26,.065), transparent 44%), rgba(10,10,11,.86);
+  box-shadow:0 34px 100px rgba(0,0,0,.64);
   display:flex;
   flex-direction:column;
+  overflow:hidden;
+  transform-style:preserve-3d;
 }
-.game-corner{
+.quest-corner{
   position:absolute;
-  width:18px;
-  height:18px;
+  width:18px;height:18px;
   border-style:solid;
-  border-color:rgba(139,26,26,.45);
+  border-color:rgba(139,26,26,.46);
+  z-index:5;
   pointer-events:none;
-  z-index:4;
 }
-.game-corner.tl{top:12px;left:12px;border-width:1px 0 0 1px}
-.game-corner.tr{top:12px;right:12px;border-width:1px 1px 0 0}
-.game-corner.bl{bottom:12px;left:12px;border-width:0 0 1px 1px}
-.game-corner.br{bottom:12px;right:12px;border-width:0 1px 1px 0}
+.quest-corner.tl{top:12px;left:12px;border-width:1px 0 0 1px}
+.quest-corner.tr{top:12px;right:12px;border-width:1px 1px 0 0}
+.quest-corner.bl{bottom:12px;left:12px;border-width:0 0 1px 1px}
+.quest-corner.br{bottom:12px;right:12px;border-width:0 1px 1px 0}
 
-.game-topbar{
-  height:64px;
-  flex:0 0 64px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.quest-topbar{
+  min-height:70px;
+  flex:0 0 auto;
+  display:grid;
+  grid-template-columns:1fr auto auto;
   gap:1rem;
-  padding:0 1.4rem;
+  align-items:center;
+  padding:1rem 1.4rem;
   border-bottom:1px solid var(--ghost-line);
 }
-.game-status{
+.quest-status{
   font-family:'Space Mono',monospace;
   font-size:.52rem;
   text-transform:uppercase;
   letter-spacing:.18em;
   color:var(--blood-glow);
 }
-.game-controls{
+.sync-wrap{
   display:flex;
   align-items:center;
   gap:.65rem;
+  min-width:260px;
 }
-.game-step-counter{
+.sync-label{
   font-family:'Space Mono',monospace;
-  font-size:.5rem;
+  font-size:.48rem;
   text-transform:uppercase;
   letter-spacing:.14em;
   color:var(--steel);
-  border:1px solid var(--ghost-line);
-  padding:.55rem .7rem;
 }
-.game-exit{
+.sync-track{
+  flex:1;
+  height:5px;
+  background:rgba(240,235,227,.06);
+  overflow:hidden;
+}
+.sync-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, var(--blood), var(--blood-glow));
+  transition:width .5s cubic-bezier(.2,.8,.2,1);
+}
+.sync-score{
+  font-family:'Space Mono',monospace;
+  font-size:.52rem;
+  color:var(--paper);
+  width:38px;
+  text-align:right;
+}
+.quest-exit{
   font-family:'Space Mono',monospace;
   font-size:.5rem;
   text-transform:uppercase;
@@ -185,319 +201,350 @@
   color:var(--mist);
   background:transparent;
   border:1px solid var(--ghost-line);
-  padding:.55rem .75rem;
+  padding:.6rem .8rem;
   cursor:pointer;
+  transition:all .25s;
 }
-.game-exit:hover{
-  color:var(--paper);
-  border-color:rgba(139,26,26,.45);
-  background:rgba(139,26,26,.08);
-}
-.game-progress{
-  position:absolute;
-  left:0;
-  right:0;
-  top:64px;
-  height:3px;
-  background:rgba(240,235,227,.04);
-  z-index:3;
-}
-.game-progress-fill{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg, var(--blood), var(--blood-glow));
-  transition:width .45s;
-}
+.quest-exit:hover{color:var(--paper);border-color:rgba(139,26,26,.45);background:rgba(139,26,26,.08)}
 
-.game-stage{
+.fragment-bar{
+  flex:0 0 auto;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:1px;
+  background:var(--ghost-line);
+  border-bottom:1px solid var(--ghost-line);
+}
+.fragment{
+  background:rgba(10,10,11,.86);
+  padding:.65rem .5rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.45rem;
+  color:var(--steel);
+  font-family:'Space Mono',monospace;
+  font-size:.45rem;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  transition:all .3s;
+}
+.fragment span{
+  width:8px;height:8px;
+  border:1px solid rgba(139,26,26,.35);
+  transform:rotate(45deg);
+}
+.fragment.unlocked{color:var(--mist);background:rgba(139,26,26,.055)}
+.fragment.unlocked span{background:var(--blood-glow);box-shadow:0 0 10px rgba(194,59,59,.45)}
+
+.quest-stage{
   flex:1;
   display:none;
-  padding:2.6rem;
   overflow:auto;
+  padding:2.2rem;
 }
-.game-stage.active{display:block}
-.stage-grid{
+.quest-stage.active{display:block}
+
+.quest-layout{
   min-height:100%;
   display:grid;
-  grid-template-columns:.85fr 1.15fr;
-  gap:2.4rem;
+  grid-template-columns:.82fr 1.18fr;
+  gap:2rem;
   align-items:center;
 }
-.stage-copy{
-  max-width:480px;
-}
-.stage-kicker{
+.quest-copy{max-width:450px}
+.quest-kicker{
   font-family:'Space Mono',monospace;
   font-size:.52rem;
   text-transform:uppercase;
   letter-spacing:.22em;
-  color:rgba(139,26,26,.64);
+  color:rgba(139,26,26,.65);
   margin-bottom:1rem;
 }
-.stage-title{
+.quest-title{
   font-family:'Zen Antique',serif;
-  font-size:clamp(2rem,4vw,3.7rem);
+  font-size:clamp(2rem,3.8vw,3.4rem);
   line-height:1.08;
   margin-bottom:1rem;
 }
-.stage-desc{
+.quest-desc{
   color:var(--mist);
   line-height:1.8;
   font-weight:300;
-  font-size:.95rem;
+  font-size:.94rem;
 }
-.game-action{
+.guide-box{
+  margin-top:1.2rem;
+  border:1px solid var(--ghost-line);
+  background:rgba(10,10,11,.58);
+  padding:1rem;
+}
+.guide-label{
+  font-family:'Space Mono',monospace;
+  font-size:.45rem;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:var(--blood-glow);
+  margin-bottom:.5rem;
+}
+.guide-text{
+  font-size:.8rem;
+  line-height:1.65;
+  color:var(--mist);
+  font-weight:300;
+}
+.quest-action{
   display:inline-flex;
   align-items:center;
   gap:.65rem;
-  margin-top:1.6rem;
+  margin-top:1.35rem;
   font-family:'Space Mono',monospace;
-  font-size:.55rem;
+  font-size:.54rem;
   text-transform:uppercase;
   letter-spacing:.15em;
   color:var(--paper);
   background:transparent;
   border:1px solid rgba(139,26,26,.42);
-  padding:.85rem 1.1rem;
+  padding:.85rem 1.05rem;
   cursor:pointer;
   transition:all .3s;
 }
-.game-action:hover{
-  background:rgba(139,26,26,.1);
-  transform:translateY(-2px);
-}
-.game-action:disabled{
-  opacity:.35;
-  cursor:not-allowed;
-  transform:none;
-}
+.quest-action:hover{background:rgba(139,26,26,.1);transform:translateY(-2px)}
+.quest-action:disabled{opacity:.35;cursor:not-allowed;transform:none;background:transparent}
 
-.visual-panel{
-  min-height:430px;
+.quest-panel{
+  min-height:440px;
   border:1px solid var(--ghost-line);
-  background:linear-gradient(135deg, rgba(139,26,26,.05), transparent 45%), rgba(240,235,227,.025);
+  background:linear-gradient(135deg, rgba(139,26,26,.045), transparent 45%), rgba(240,235,227,.025);
   position:relative;
   overflow:hidden;
+  transform:perspective(1100px) rotateX(4deg) rotateY(-2deg);
+  transform-style:preserve-3d;
 }
-.visual-panel::before{
+.quest-panel::before{
   content:'';
   position:absolute;
   inset:0;
   background:
-    linear-gradient(90deg, rgba(240,235,227,.026) 1px, transparent 1px),
-    linear-gradient(rgba(240,235,227,.026) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(240,235,227,.025) 1px, transparent 1px),
+    linear-gradient(rgba(240,235,227,.025) 1px, transparent 1px);
   background-size:28px 28px;
   pointer-events:none;
 }
 .panel-scan{
   position:absolute;
-  left:0;
-  right:0;
-  height:1px;
-  top:0;
+  left:0;right:0;top:0;height:1px;
   background:linear-gradient(to right, transparent, var(--blood), transparent);
+  animation:panelQuestScan 3.8s ease-in-out infinite;
   opacity:.55;
-  animation:panelScan 3.5s ease-in-out infinite;
 }
-@keyframes panelScan{
-  0%{top:0;opacity:.08}
-  50%{opacity:.65}
-  100%{top:100%;opacity:.08}
+@keyframes panelQuestScan{
+  0%{top:0;opacity:.06}
+  52%{opacity:.68}
+  100%{top:100%;opacity:.06}
 }
 
-/* Start screen */
-.start-sigil{
+/* Gate / quest map */
+.gate-grid{
   position:absolute;
-  left:50%;
-  top:50%;
-  width:260px;
-  height:260px;
-  border:1px solid rgba(139,26,26,.4);
-  border-radius:50%;
-  transform:translate(-50%,-50%);
+  inset:2rem;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1rem;
+  align-items:center;
 }
-.start-sigil::before,
-.start-sigil::after{
+.gate-card{
+  min-height:210px;
+  border:1px solid var(--ghost-line);
+  background:rgba(10,10,11,.72);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  cursor:pointer;
+  transition:all .3s;
+  position:relative;
+  transform:translateZ(20px);
+}
+.gate-card::before{
   content:'';
-  position:absolute;
-  inset:38px;
-  border:1px solid rgba(139,26,26,.28);
-  border-radius:50%;
+  width:76px;height:76px;
+  border:1px solid rgba(139,26,26,.45);
+  transform:rotate(45deg);
+  margin-bottom:1.3rem;
 }
-.start-sigil::after{
-  inset:78px;
-}
-.start-kanji{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  font-family:'Noto Serif JP',serif;
-  font-size:5rem;
-  color:rgba(139,26,26,.34);
-}
+.gate-card:hover,.gate-card.selected{border-color:rgba(139,26,26,.52);background:rgba(139,26,26,.08);transform:translateY(-6px) translateZ(32px)}
+.gate-card.selected::before{background:rgba(139,26,26,.24);box-shadow:0 0 24px rgba(139,26,26,.36)}
+.gate-title{font-family:'Zen Antique',serif;font-size:1.1rem;margin-bottom:.45rem}
+.gate-sub{font-family:'Space Mono',monospace;font-size:.46rem;text-transform:uppercase;letter-spacing:.12em;color:var(--steel);line-height:1.55}
 
-/* Origin scan */
-.map-line-path{
+/* Origin */
+.route-line{
   position:absolute;
-  left:12%;
-  right:12%;
-  top:50%;
+  left:11%;right:11%;top:52%;
   height:1px;
   background:linear-gradient(to right, transparent, rgba(139,26,26,.75), transparent);
 }
-.origin-node{
+.route-node{
   position:absolute;
-  width:120px;
+  width:130px;
   text-align:center;
   cursor:pointer;
+  transform:translateZ(22px);
 }
-.origin-node[data-place="hyderabad"]{left:10%;top:52%}
-.origin-node[data-place="paris"]{left:43%;top:32%}
-.origin-node[data-place="toulouse"]{right:10%;top:54%}
-.origin-dot{
-  width:34px;
-  height:34px;
-  margin:0 auto .7rem;
-  border:1px solid rgba(139,26,26,.5);
+.route-node[data-order="1"]{left:8%;top:54%}
+.route-node[data-order="2"]{left:43%;top:30%}
+.route-node[data-order="3"]{right:8%;top:56%}
+.route-dot{
+  width:36px;height:36px;margin:0 auto .7rem;
+  border:1px solid rgba(139,26,26,.52);
   background:var(--ink);
   transform:rotate(45deg);
   transition:all .3s;
 }
-.origin-node.active .origin-dot,
-.origin-node.unlocked .origin-dot{
-  background:rgba(139,26,26,.35);
-  box-shadow:0 0 22px rgba(139,26,26,.38);
-}
-.origin-label{
-  font-family:'Space Mono',monospace;
-  font-size:.52rem;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  color:var(--mist);
-}
-.origin-sub{
-  margin-top:.25rem;
-  color:var(--steel);
-  font-size:.72rem;
-}
+.route-node:hover .route-dot,.route-node.unlocked .route-dot{background:rgba(139,26,26,.34);box-shadow:0 0 22px rgba(139,26,26,.4)}
+.route-label{font-family:'Space Mono',monospace;font-size:.52rem;text-transform:uppercase;letter-spacing:.12em;color:var(--mist)}
+.route-sub{font-size:.72rem;color:var(--steel);margin-top:.25rem}
 
-/* Training timeline */
-.training-stack{
+/* Dojo blade */
+.blade-base{
   position:absolute;
-  inset:2rem;
-  display:grid;
-  grid-template-columns:1fr;
-  gap:1rem;
-  align-content:center;
+  left:12%;right:12%;top:50%;
+  height:8px;
+  background:linear-gradient(to right, rgba(240,235,227,.08), rgba(240,235,227,.18), rgba(139,26,26,.18));
+  transform:rotate(-8deg);
+  border:1px solid rgba(240,235,227,.05);
 }
-.training-card{
+.blade-piece{
+  position:absolute;
+  width:210px;
   border:1px solid var(--ghost-line);
-  background:rgba(10,10,11,.72);
-  padding:1.1rem 1.25rem;
+  background:rgba(10,10,11,.76);
+  padding:1rem;
   cursor:pointer;
-  position:relative;
   transition:all .3s;
+  transform:translateZ(28px);
 }
-.training-card::before{
-  content:attr(data-order);
+.blade-piece:nth-of-type(1){left:8%;top:13%}
+.blade-piece:nth-of-type(2){right:9%;top:18%}
+.blade-piece:nth-of-type(3){left:30%;bottom:12%}
+.blade-piece:hover,.blade-piece.selected{border-color:rgba(139,26,26,.52);background:rgba(139,26,26,.08);transform:translateY(-4px) translateZ(38px)}
+.blade-piece.selected{box-shadow:0 14px 32px rgba(0,0,0,.3)}
+.blade-piece-title{font-family:'Zen Antique',serif;font-size:1rem;margin-bottom:.35rem}
+.blade-piece-sub{font-family:'Space Mono',monospace;font-size:.45rem;text-transform:uppercase;letter-spacing:.1em;color:var(--steel);line-height:1.55}
+
+/* Arsenal */
+.loadout-slots{
   position:absolute;
-  right:1rem;
-  top:50%;
-  transform:translateY(-50%);
-  font-family:'Zen Antique',serif;
-  font-size:2rem;
-  color:rgba(139,26,26,.22);
+  left:2rem;right:2rem;top:1.3rem;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:.65rem;
 }
-.training-card:hover,
-.training-card.selected{
-  border-color:rgba(139,26,26,.45);
-  background:rgba(139,26,26,.08);
-}
-.training-card-title{
-  font-family:'Zen Antique',serif;
-  font-size:1.12rem;
-  margin-bottom:.3rem;
-}
-.training-card-sub{
+.loadout-slot{
+  border:1px solid var(--ghost-line);
+  background:rgba(10,10,11,.55);
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-family:'Space Mono',monospace;
-  font-size:.5rem;
+  font-size:.48rem;
   text-transform:uppercase;
   letter-spacing:.12em;
   color:var(--steel);
 }
-
-/* Capabilities */
-.capability-grid{
+.loadout-slot.filled{color:var(--mist);border-color:rgba(139,26,26,.35);background:rgba(139,26,26,.06)}
+.arsenal-grid{
   position:absolute;
-  inset:2rem;
+  left:2rem;right:2rem;bottom:2rem;top:6rem;
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:.85rem;
-  align-items:stretch;
+  gap:.75rem;
 }
-.capability-tile{
+.arsenal-item{
   border:1px solid var(--ghost-line);
   background:rgba(10,10,11,.72);
-  padding:1rem .8rem;
   text-align:center;
+  padding:.9rem .7rem;
   cursor:pointer;
   transition:all .3s;
   position:relative;
   overflow:hidden;
+  transform:translateZ(20px);
 }
-.capability-tile::after{
+.arsenal-item::after{
   content:'';
   position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  height:2px;
+  left:0;right:0;bottom:0;height:2px;
   background:var(--blood);
   transform:scaleX(0);
   transform-origin:left;
   transition:transform .3s;
 }
-.capability-tile:hover,
-.capability-tile.selected{
-  border-color:rgba(139,26,26,.45);
-  background:rgba(139,26,26,.08);
-  transform:translateY(-4px);
-}
-.capability-tile:hover::after,
-.capability-tile.selected::after{transform:scaleX(1)}
-.cap-kanji{
-  font-family:'Noto Serif JP',serif;
-  font-size:2rem;
-  color:rgba(139,26,26,.38);
-  margin-bottom:.7rem;
-}
-.cap-name{
-  font-family:'Zen Antique',serif;
-  font-size:.95rem;
-  line-height:1.25;
-  margin-bottom:.7rem;
-}
-.cap-tools{
-  font-family:'Space Mono',monospace;
-  font-size:.45rem;
-  text-transform:uppercase;
-  letter-spacing:.09em;
-  color:var(--steel);
-  line-height:1.6;
-}
+.arsenal-item:hover,.arsenal-item.selected{border-color:rgba(139,26,26,.5);background:rgba(139,26,26,.08);transform:translateY(-4px) translateZ(32px)}
+.arsenal-item.selected::after{transform:scaleX(1)}
+.arsenal-kanji{font-family:'Noto Serif JP',serif;font-size:2rem;color:rgba(139,26,26,.4);margin-bottom:.6rem}
+.arsenal-name{font-family:'Zen Antique',serif;font-size:.93rem;line-height:1.25;margin-bottom:.65rem}
+.arsenal-tools{font-family:'Space Mono',monospace;font-size:.43rem;text-transform:uppercase;letter-spacing:.08em;color:var(--steel);line-height:1.55}
 
-/* Project forge */
-.project-emblems{
+/* Forge relic matching */
+.match-board{
+  position:absolute;
+  inset:1.5rem;
+  display:grid;
+  grid-template-columns:1fr .8fr;
+  gap:1rem;
+}
+.relic-column,.type-column{
+  display:grid;
+  gap:.75rem;
+}
+.match-relic,.match-type{
+  border:1px solid var(--ghost-line);
+  background:rgba(10,10,11,.72);
+  padding:.9rem 1rem;
+  cursor:pointer;
+  transition:all .3s;
+  position:relative;
+}
+.match-relic:hover,.match-type:hover,.match-relic.selected,.match-type.selected{border-color:rgba(139,26,26,.5);background:rgba(139,26,26,.08)}
+.match-relic.matched,.match-type.matched{border-color:rgba(194,59,59,.42);background:rgba(139,26,26,.1)}
+.match-title{font-family:'Zen Antique',serif;font-size:1rem;margin-bottom:.3rem}
+.match-sub{font-family:'Space Mono',monospace;font-size:.45rem;text-transform:uppercase;letter-spacing:.1em;color:var(--steel);line-height:1.5}
+.match-type{display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Space Mono',monospace;font-size:.55rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mist)}
+.mini-relics{
+  position:absolute;
+  left:1.5rem;right:1.5rem;bottom:.55rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+}
+.side-relic{
+  font-family:'Space Mono',monospace;
+  font-size:.42rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:var(--steel);
+  border:1px solid var(--ghost-line);
+  background:rgba(10,10,11,.55);
+  padding:.45rem .55rem;
+  cursor:pointer;
+}
+.side-relic.unlocked{color:var(--mist);border-color:rgba(139,26,26,.4);background:rgba(139,26,26,.07)}
+
+/* Scroll Chamber */
+.scroll-grid{
   position:absolute;
   inset:2rem;
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(4,1fr);
   gap:1rem;
   align-items:center;
 }
-.project-emblem{
-  min-height:230px;
+.scroll-crystal{
+  min-height:200px;
   border:1px solid var(--ghost-line);
   background:rgba(10,10,11,.72);
   display:flex;
@@ -506,208 +553,201 @@
   align-items:center;
   text-align:center;
   cursor:pointer;
-  padding:1.2rem;
   transition:all .3s;
   position:relative;
 }
-.project-emblem::before{
+.scroll-crystal::before{
   content:'';
-  width:72px;
-  height:72px;
-  border:1px solid rgba(139,26,26,.45);
-  transform:rotate(45deg);
-  margin-bottom:1.4rem;
+  width:54px;height:86px;
+  border:1px solid rgba(139,26,26,.42);
+  clip-path:polygon(50% 0,100% 24%,80% 100%,20% 100%,0 24%);
+  margin-bottom:1rem;
   transition:all .3s;
 }
-.project-emblem.unlocked{
-  border-color:rgba(139,26,26,.5);
-  background:rgba(139,26,26,.08);
-}
-.project-emblem.unlocked::before{
-  background:rgba(139,26,26,.22);
-  box-shadow:0 0 24px rgba(139,26,26,.32);
-}
-.project-emblem-title{
-  font-family:'Zen Antique',serif;
-  font-size:1.08rem;
-  margin-bottom:.5rem;
-}
-.project-emblem-desc{
-  color:var(--mist);
-  font-size:.78rem;
-  line-height:1.55;
-  min-height:38px;
-}
+.scroll-crystal:hover,.scroll-crystal.decoded{border-color:rgba(139,26,26,.5);background:rgba(139,26,26,.08);transform:translateY(-5px)}
+.scroll-crystal.decoded::before{background:rgba(139,26,26,.23);box-shadow:0 0 22px rgba(139,26,26,.35)}
+.scroll-title{font-family:'Zen Antique',serif;font-size:1rem;margin-bottom:.35rem}
+.scroll-sub{font-family:'Space Mono',monospace;font-size:.44rem;text-transform:uppercase;letter-spacing:.1em;color:var(--steel)}
 
-/* Future direction */
-.direction-grid{
+/* Crossroads */
+.crossroads-grid{
   position:absolute;
   inset:2rem;
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1rem;
+  grid-template-columns:repeat(4,1fr);
+  gap:.85rem;
   align-items:center;
 }
-.direction-card{
-  min-height:250px;
+.crossroad-card{
+  min-height:245px;
   border:1px solid var(--ghost-line);
   background:rgba(10,10,11,.72);
-  padding:1.3rem;
+  padding:1.1rem;
   cursor:pointer;
   transition:all .3s;
   position:relative;
   overflow:hidden;
 }
-.direction-card::after{
+.crossroad-card::after{
   content:'';
   position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  height:2px;
+  left:0;right:0;bottom:0;height:2px;
   background:var(--blood);
   transform:scaleX(0);
   transform-origin:left;
   transition:transform .3s;
 }
-.direction-card:hover,
-.direction-card.selected{
-  border-color:rgba(139,26,26,.5);
-  background:rgba(139,26,26,.08);
-  transform:translateY(-4px);
-}
-.direction-card:hover::after,
-.direction-card.selected::after{transform:scaleX(1)}
-.direction-kanji{
-  font-family:'Noto Serif JP',serif;
-  font-size:2.3rem;
-  color:rgba(139,26,26,.38);
-  margin-bottom:1rem;
-}
-.direction-title{
-  font-family:'Zen Antique',serif;
-  font-size:1.12rem;
-  margin-bottom:.65rem;
-}
-.direction-desc{
-  color:var(--mist);
-  font-size:.82rem;
-  line-height:1.6;
-}
+.crossroad-card:hover,.crossroad-card.selected{border-color:rgba(139,26,26,.5);background:rgba(139,26,26,.08);transform:translateY(-5px)}
+.crossroad-card.selected::after{transform:scaleX(1)}
+.cross-kanji{font-family:'Noto Serif JP',serif;font-size:2.2rem;color:rgba(139,26,26,.4);margin-bottom:.9rem}
+.cross-title{font-family:'Zen Antique',serif;font-size:1rem;margin-bottom:.55rem}
+.cross-desc{font-size:.78rem;line-height:1.55;color:var(--mist);font-weight:300}
 
-/* Result */
+/* Final profile */
 .result-panel{
-  max-width:880px;
+  max-width:980px;
   margin:0 auto;
   min-height:100%;
   display:flex;
-  flex-direction:column;
-  justify-content:center;
+  align-items:center;
 }
-.result-card{
-  border:1px solid rgba(139,26,26,.3);
-  background:linear-gradient(135deg, rgba(139,26,26,.08), transparent 48%), rgba(10,10,11,.78);
-  padding:2rem;
+.profile-card{
+  width:100%;
+  border:1px solid rgba(139,26,26,.32);
+  background:linear-gradient(135deg, rgba(139,26,26,.08), transparent 48%), rgba(10,10,11,.82);
+  padding:1.8rem;
   position:relative;
 }
-.result-title{
-  font-family:'Zen Antique',serif;
-  font-size:clamp(2rem,4vw,3.2rem);
-  margin-bottom:1rem;
-}
-.result-summary{
-  color:var(--mist);
-  font-size:1rem;
-  line-height:1.8;
-  max-width:720px;
-  font-weight:300;
-  margin-bottom:1.4rem;
-}
-.result-unlocks{
+.profile-top{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:.6rem;
-  margin:1.4rem 0;
+  grid-template-columns:1fr auto;
+  gap:1rem;
+  align-items:start;
+  border-bottom:1px solid var(--ghost-line);
+  padding-bottom:1.2rem;
+  margin-bottom:1.2rem;
 }
-.unlock-badge{
-  border:1px solid var(--ghost-line);
-  padding:.75rem .55rem;
-  text-align:center;
+.profile-title{
+  font-family:'Zen Antique',serif;
+  font-size:clamp(2rem,4vw,3rem);
+  margin-bottom:.45rem;
+}
+.profile-sub{
   font-family:'Space Mono',monospace;
-  font-size:.46rem;
+  font-size:.52rem;
   text-transform:uppercase;
-  letter-spacing:.1em;
+  letter-spacing:.16em;
+  color:var(--blood-glow);
+}
+.profile-sync{
+  text-align:right;
+  font-family:'Space Mono',monospace;
+}
+.profile-sync-num{
+  font-size:2rem;
+  color:var(--blood-glow);
+}
+.profile-sync-rank{
+  font-size:.48rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
   color:var(--mist);
 }
-.result-actions{
+.profile-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--ghost-line);
+  margin-bottom:1.3rem;
+}
+.profile-cell{
+  background:rgba(10,10,11,.86);
+  padding:1rem;
+}
+.profile-key{
+  font-family:'Space Mono',monospace;
+  font-size:.45rem;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  color:rgba(139,26,26,.5);
+  margin-bottom:.45rem;
+}
+.profile-value{
+  color:var(--mist);
+  line-height:1.65;
+  font-size:.86rem;
+  font-weight:300;
+}
+.profile-value strong{color:var(--paper);font-weight:500}
+.profile-summary{
+  color:var(--mist);
+  line-height:1.75;
+  font-size:.96rem;
+  margin-bottom:1.2rem;
+  font-weight:300;
+}
+.profile-actions{
   display:flex;
   flex-wrap:wrap;
-  gap:.8rem;
-  margin-top:1.4rem;
+  gap:.75rem;
 }
-.result-actions a,
-.result-actions button{
+.profile-actions a,.profile-actions button{
   font-family:'Space Mono',monospace;
-  font-size:.54rem;
+  font-size:.52rem;
   text-transform:uppercase;
   letter-spacing:.14em;
   color:var(--paper);
   text-decoration:none;
   border:1px solid rgba(139,26,26,.42);
   background:transparent;
-  padding:.8rem 1rem;
+  padding:.8rem .95rem;
   cursor:pointer;
 }
-.result-actions a:hover,
-.result-actions button:hover{
-  background:rgba(139,26,26,.1);
-}
+.profile-actions a:hover,.profile-actions button:hover{background:rgba(139,26,26,.1)}
 
-.game-toast{
+.quest-toast{
   position:absolute;
   left:50%;
   bottom:1.1rem;
   transform:translateX(-50%);
   font-family:'Space Mono',monospace;
-  font-size:.5rem;
+  font-size:.49rem;
   text-transform:uppercase;
   letter-spacing:.14em;
   color:var(--blood-glow);
   border:1px solid rgba(139,26,26,.24);
-  background:rgba(10,10,11,.82);
+  background:rgba(10,10,11,.88);
   padding:.7rem .95rem;
   opacity:0;
   pointer-events:none;
   transition:opacity .3s, transform .3s;
-  z-index:5;
+  z-index:9;
 }
-.game-toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(-4px);
-}
+.quest-toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
 
-@media(max-width:980px){
-  .game-stage{padding:1.5rem}
-  .stage-grid{grid-template-columns:1fr;gap:1.2rem}
-  .visual-panel{min-height:360px}
-  .capability-grid{grid-template-columns:repeat(2,1fr)}
-  .project-emblems,.direction-grid{grid-template-columns:1fr}
-  .project-emblem,.direction-card{min-height:150px}
-  .result-unlocks{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1020px){
+  .quest-topbar{grid-template-columns:1fr;gap:.8rem}
+  .sync-wrap{width:100%}
+  .quest-layout{grid-template-columns:1fr}
+  .quest-panel{min-height:500px;transform:none}
+  .gate-grid,.project-emblems,.scroll-grid,.crossroads-grid{grid-template-columns:1fr 1fr}
+  .arsenal-grid{grid-template-columns:1fr 1fr}
+  .match-board{grid-template-columns:1fr}
 }
-@media(max-width:620px){
-  .animus-game{padding:.5rem}
-  .game-shell{height:calc(100vh - 1rem)}
-  .game-topbar{height:auto;min-height:64px;align-items:flex-start;flex-direction:column;padding:1rem}
-  .game-progress{top:94px}
-  .game-controls{width:100%;justify-content:space-between}
-  .visual-panel{min-height:430px}
-  .origin-node{width:100px}
-  .origin-node[data-place="hyderabad"]{left:4%;top:58%}
-  .origin-node[data-place="paris"]{left:36%;top:28%}
-  .origin-node[data-place="toulouse"]{right:2%;top:60%}
-  .training-stack,.capability-grid,.project-emblems,.direction-grid{inset:1rem}
-  .capability-grid{grid-template-columns:1fr}
+@media(max-width:700px){
+  .animus-quest{padding:.5rem}
+  .quest-shell{height:calc(100vh - 1rem)}
+  .quest-stage{padding:1rem}
+  .fragment-bar{grid-template-columns:repeat(2,1fr)}
+  .quest-panel{min-height:620px}
+  .gate-grid,.scroll-grid,.crossroads-grid,.arsenal-grid{grid-template-columns:1fr}
+  .loadout-slots{grid-template-columns:1fr;position:relative;left:auto;right:auto;top:auto;margin:1rem}
+  .arsenal-grid{position:relative;left:auto;right:auto;bottom:auto;top:auto;margin:1rem}
+  .blade-piece{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:auto;margin:1rem}
+  .blade-base{display:none}
+  .profile-top,.profile-grid{grid-template-columns:1fr}
+  .profile-sync{text-align:left}
+  .match-board,.scroll-grid,.crossroads-grid,.gate-grid{position:relative;inset:auto;margin:1rem}
 }
 
 </style>
@@ -722,225 +762,229 @@
 </div>
 
 
-<div class="animus-game" id="animusGame" aria-hidden="true">
-  <div class="game-shell">
-    <div class="game-corner tl"></div>
-    <div class="game-corner tr"></div>
-    <div class="game-corner bl"></div>
-    <div class="game-corner br"></div>
+<div class="animus-quest" id="animusQuest" aria-hidden="true">
+  <div class="quest-shell">
+    <div class="quest-corner tl"></div><div class="quest-corner tr"></div><div class="quest-corner bl"></div><div class="quest-corner br"></div>
 
-    <div class="game-topbar">
-      <div class="game-status" id="gameStatus">ANIMUS MINI-SEQUENCE: STANDBY</div>
-      <div class="game-controls">
-        <div class="game-step-counter" id="gameCounter">00 / 05</div>
-        <button class="game-exit" id="closeGame" type="button">Exit</button>
+    <div class="quest-topbar">
+      <div class="quest-status" id="questStatus">ANIMUS QUEST: STANDBY</div>
+      <div class="sync-wrap">
+        <div class="sync-label">Sync</div>
+        <div class="sync-track"><div class="sync-fill" id="syncFill"></div></div>
+        <div class="sync-score" id="syncScore">0%</div>
       </div>
+      <button class="quest-exit" id="exitQuest" type="button">Exit</button>
     </div>
-    <div class="game-progress"><div class="game-progress-fill" id="gameProgress"></div></div>
 
-    <section class="game-stage active" data-stage="0">
-      <div class="stage-grid">
-        <div class="stage-copy">
-          <div class="stage-kicker">Animus Mini-Sequence</div>
-          <h2 class="stage-title">Reconstruct the profile.</h2>
-          <p class="stage-desc">
-            A short interactive scan to understand Sai Kiran Kumar Nalla: origin, training, capabilities, built systems, and future direction. No page jumps. No long reading.
-          </p>
-          <button class="game-action" id="beginGame" type="button">Begin Reconstruction <span>→</span></button>
-        </div>
-        <div class="visual-panel">
-          <div class="panel-scan"></div>
-          <div class="start-sigil"></div>
-          <div class="start-kanji">記</div>
-        </div>
-      </div>
-    </section>
+    <div class="fragment-bar">
+      <div class="fragment" data-fragment="origin"><span></span>Origin</div>
+      <div class="fragment" data-fragment="dojo"><span></span>Dōjō</div>
+      <div class="fragment" data-fragment="arsenal"><span></span>Arsenal</div>
+      <div class="fragment" data-fragment="forge"><span></span>Forge</div>
+      <div class="fragment" data-fragment="scrolls"><span></span>Scrolls</div>
+      <div class="fragment" data-fragment="crossroads"><span></span>Path</div>
+    </div>
 
-    <section class="game-stage" data-stage="1">
-      <div class="stage-grid">
-        <div class="stage-copy">
-          <div class="stage-kicker">01 / Origin Scan</div>
-          <h2 class="stage-title">Trace the route.</h2>
-          <p class="stage-desc">Click the memory nodes in order: Hyderabad → Paris → Toulouse.</p>
-          <button class="game-action next-stage" type="button" disabled>Unlock Training Ground <span>→</span></button>
+    <section class="quest-stage active" data-stage="0">
+      <div class="quest-layout">
+        <div class="quest-copy">
+          <div class="quest-kicker">Animus: The Ronin Archive</div>
+          <h2 class="quest-title">Recover the memory fragments.</h2>
+          <p class="quest-desc">Enter a short profile adventure. Complete six quests, recover fragments, build a sync score, and unlock a character-style profile summary of Sai.</p>
+          <div class="guide-box">
+            <div class="guide-label">Eagle Signal</div>
+            <div class="guide-text">This is not a navigation menu. It is a 2–3 minute interactive reconstruction of the person, training, tools, projects, and direction behind the portfolio.</div>
+          </div>
+          <button class="quest-action" id="startQuest" type="button">Open Quest Map <span>→</span></button>
         </div>
-        <div class="visual-panel">
+        <div class="quest-panel">
           <div class="panel-scan"></div>
-          <div class="map-line-path"></div>
-          <div class="origin-node" data-place="hyderabad" data-order="1">
-            <div class="origin-dot"></div>
-            <div class="origin-label">Hyderabad</div>
-            <div class="origin-sub">Mechanical roots</div>
-          </div>
-          <div class="origin-node" data-place="paris" data-order="2">
-            <div class="origin-dot"></div>
-            <div class="origin-label">Paris</div>
-            <div class="origin-sub">Biomedical training</div>
-          </div>
-          <div class="origin-node" data-place="toulouse" data-order="3">
-            <div class="origin-dot"></div>
-            <div class="origin-label">Toulouse</div>
-            <div class="origin-sub">Medical imaging PhD</div>
+          <div class="gate-grid">
+            <div class="gate-card selected"><div class="gate-title">Origin Gate</div><div class="gate-sub">Route memory</div></div>
+            <div class="gate-card selected"><div class="gate-title">The Dōjō</div><div class="gate-sub">Training blade</div></div>
+            <div class="gate-card selected"><div class="gate-title">The Forge</div><div class="gate-sub">Project relics</div></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="game-stage" data-stage="2">
-      <div class="stage-grid">
-        <div class="stage-copy">
-          <div class="stage-kicker">02 / Training Ground</div>
-          <h2 class="stage-title">Assemble the training path.</h2>
-          <p class="stage-desc">Select the three foundations. The profile is built from mechanics, biomedical engineering, and medical imaging.</p>
-          <button class="game-action next-stage" type="button" disabled>Open Capability Scan <span>→</span></button>
+    <section class="quest-stage" data-stage="1">
+      <div class="quest-layout">
+        <div class="quest-copy">
+          <div class="quest-kicker">Quest 01 — Origin Gate</div>
+          <h2 class="quest-title">Trace the route.</h2>
+          <p class="quest-desc">The archive is fragmented. Light the gates in order: Hyderabad → Palaiseau / Paris → Toulouse.</p>
+          <div class="guide-box"><div class="guide-label">Eagle Signal</div><div class="guide-text">A route is more than geography. It marks the move from mechanical systems into biomedical engineering and medical imaging.</div></div>
+          <button class="quest-action next-quest" type="button" disabled>Enter the Dōjō <span>→</span></button>
         </div>
-        <div class="visual-panel">
+        <div class="quest-panel">
           <div class="panel-scan"></div>
-          <div class="training-stack">
-            <div class="training-card" data-order="01">
-              <div class="training-card-title">Mechanical Engineering</div>
-              <div class="training-card-sub">Mahindra University · systems, fluids, design</div>
-            </div>
-            <div class="training-card" data-order="02">
-              <div class="training-card-title">Biomechanical & Biomedical Engineering</div>
-              <div class="training-card-sub">École Polytechnique · modelling, biomechanics, clinical problems</div>
-            </div>
-            <div class="training-card" data-order="03">
-              <div class="training-card-title">Medical Imaging & Radiophysics</div>
-              <div class="training-card-sub">University of Toulouse · PET/CT, oncology, translational R&D</div>
-            </div>
+          <div class="route-line"></div>
+          <div class="route-node" data-order="1"><div class="route-dot"></div><div class="route-label">Hyderabad</div><div class="route-sub">Mechanical roots</div></div>
+          <div class="route-node" data-order="2"><div class="route-dot"></div><div class="route-label">Palaiseau / Paris</div><div class="route-sub">Biomedical training</div></div>
+          <div class="route-node" data-order="3"><div class="route-dot"></div><div class="route-label">Toulouse</div><div class="route-sub">Medical imaging PhD</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quest-stage" data-stage="2">
+      <div class="quest-layout">
+        <div class="quest-copy">
+          <div class="quest-kicker">Quest 02 — The Dōjō</div>
+          <h2 class="quest-title">Forge the training blade.</h2>
+          <p class="quest-desc">A blade is only as strong as its layers. Select all three training fragments to complete the blade.</p>
+          <div class="guide-box"><div class="guide-label">Eagle Signal</div><div class="guide-text">This profile is layered: mechanical foundations, biomedical systems, then imaging and radiophysics.</div></div>
+          <button class="quest-action next-quest" type="button" disabled>Open the Arsenal <span>→</span></button>
+        </div>
+        <div class="quest-panel">
+          <div class="panel-scan"></div>
+          <div class="blade-base"></div>
+          <div class="blade-piece"><div class="blade-piece-title">Mechanical Engineering</div><div class="blade-piece-sub">Mahindra University · fluids · design · systems</div></div>
+          <div class="blade-piece"><div class="blade-piece-title">Biomechanical & Biomedical Engineering</div><div class="blade-piece-sub">École Polytechnique · modelling · clinical problems</div></div>
+          <div class="blade-piece"><div class="blade-piece-title">Medical Imaging & Radiophysics</div><div class="blade-piece-sub">University of Toulouse · PET/CT · oncology · validation</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quest-stage" data-stage="3">
+      <div class="quest-layout">
+        <div class="quest-copy">
+          <div class="quest-kicker">Quest 03 — The Arsenal</div>
+          <h2 class="quest-title">Equip the loadout.</h2>
+          <p class="quest-desc">Every mission needs a loadout. Choose any three capabilities. Your choices influence the final subclass.</p>
+          <div class="guide-box"><div class="guide-label">Eagle Signal</div><div class="guide-text">Pick what you care about most: modelling, design, experimentation, imaging, or systems.</div></div>
+          <button class="quest-action next-quest" type="button" disabled>Enter the Forge <span>→</span></button>
+        </div>
+        <div class="quest-panel">
+          <div class="panel-scan"></div>
+          <div class="loadout-slots"><div class="loadout-slot">Slot I</div><div class="loadout-slot">Slot II</div><div class="loadout-slot">Slot III</div></div>
+          <div class="arsenal-grid">
+            <div class="arsenal-item" data-cap="modelling"><div class="arsenal-kanji">算</div><div class="arsenal-name">Numerical Modelling</div><div class="arsenal-tools">COMSOL · MATLAB · Python</div></div>
+            <div class="arsenal-item" data-cap="design"><div class="arsenal-kanji">鍛</div><div class="arsenal-name">Product Design</div><div class="arsenal-tools">Fusion 360 · Cura · CAD</div></div>
+            <div class="arsenal-item" data-cap="experimental"><div class="arsenal-kanji">試</div><div class="arsenal-name">Experimental Method</div><div class="arsenal-tools">JASP · validation · data</div></div>
+            <div class="arsenal-item" data-cap="imaging"><div class="arsenal-kanji">診</div><div class="arsenal-name">Medical Imaging Analysis</div><div class="arsenal-tools">ImageJ · QC · clinical review</div></div>
+            <div class="arsenal-item" data-cap="systems"><div class="arsenal-kanji">海</div><div class="arsenal-name">AUV / Systems</div><div class="arsenal-tools">CFD · OpenCV · mission design</div></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="game-stage" data-stage="3">
-      <div class="stage-grid">
-        <div class="stage-copy">
-          <div class="stage-kicker">03 / Capability Scan</div>
-          <h2 class="stage-title">Choose the operating blade.</h2>
-          <p class="stage-desc">Select any three capabilities to synchronize the technical profile.</p>
-          <button class="game-action next-stage" type="button" disabled>Enter Project Forge <span>→</span></button>
+    <section class="quest-stage" data-stage="4">
+      <div class="quest-layout">
+        <div class="quest-copy">
+          <div class="quest-kicker">Quest 04 — The Forge</div>
+          <h2 class="quest-title">Match the project relics.</h2>
+          <p class="quest-desc">Awaken the three flagship builds by matching each relic to its build type. Optional side relics add bonus sync.</p>
+          <div class="guide-box"><div class="guide-label">Eagle Signal</div><div class="guide-text">These are the project cores: validation system, synthetic PET toolset, and multimodal framework.</div></div>
+          <button class="quest-action next-quest" type="button" disabled>Open Scroll Chamber <span>→</span></button>
         </div>
-        <div class="visual-panel">
+        <div class="quest-panel">
           <div class="panel-scan"></div>
-          <div class="capability-grid">
-            <div class="capability-tile">
-              <div class="cap-kanji">算</div>
-              <div class="cap-name">Numerical Modelling</div>
-              <div class="cap-tools">COMSOL · MATLAB · Python</div>
+          <div class="match-board">
+            <div class="relic-column">
+              <div class="match-relic" data-match="design"><div class="match-title">3DynaPET</div><div class="match-sub">3D-printed Dynamic PET/CT validation system</div></div>
+              <div class="match-relic" data-match="toolset"><div class="match-title">MuPET</div><div class="match-sub">Multiphysics PET synthetic data generation</div></div>
+              <div class="match-relic" data-match="framework"><div class="match-title">CASSOULET</div><div class="match-sub">Ground truth multimodal imaging cohort framework</div></div>
             </div>
-            <div class="capability-tile">
-              <div class="cap-kanji">鍛</div>
-              <div class="cap-name">Product Design</div>
-              <div class="cap-tools">Fusion 360 · Cura · CAD</div>
+            <div class="type-column">
+              <div class="match-type" data-match="toolset">Toolset</div>
+              <div class="match-type" data-match="framework">Framework</div>
+              <div class="match-type" data-match="design">Design</div>
             </div>
-            <div class="capability-tile">
-              <div class="cap-kanji">試</div>
-              <div class="cap-name">Experimental Method</div>
-              <div class="cap-tools">JASP · validation · data</div>
-            </div>
-            <div class="capability-tile">
-              <div class="cap-kanji">診</div>
-              <div class="cap-name">Medical Imaging</div>
-              <div class="cap-tools">ImageJ · QC · clinical review</div>
-            </div>
-            <div class="capability-tile">
-              <div class="cap-kanji">海</div>
-              <div class="cap-name">AUV Systems</div>
-              <div class="cap-tools">CFD · OpenCV · mission design</div>
-            </div>
+          </div>
+          <div class="mini-relics">
+            <button type="button" class="side-relic">AUV Systems</button>
+            <button type="button" class="side-relic">RBC Drug Delivery</button>
+            <button type="button" class="side-relic">Flexible Electrodes</button>
+            <button type="button" class="side-relic">4D TEVAR</button>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="game-stage" data-stage="4">
-      <div class="stage-grid">
-        <div class="stage-copy">
-          <div class="stage-kicker">04 / Project Forge</div>
-          <h2 class="stage-title">Unlock the flagship builds.</h2>
-          <p class="stage-desc">Click each emblem to reveal the core project ecosystem.</p>
-          <button class="game-action next-stage" type="button" disabled>Choose Future Direction <span>→</span></button>
+    <section class="quest-stage" data-stage="5">
+      <div class="quest-layout">
+        <div class="quest-copy">
+          <div class="quest-kicker">Quest 05 — Scroll Chamber</div>
+          <h2 class="quest-title">Decode the research trace.</h2>
+          <p class="quest-desc">Work leaves traces. Scan the four output crystals to recover the scientific communication fragment.</p>
+          <div class="guide-box"><div class="guide-label">Eagle Signal</div><div class="guide-text">Publications, preprints, conference posters, and valorisation work turn research into visible output.</div></div>
+          <button class="quest-action next-quest" type="button" disabled>Reach the Crossroads <span>→</span></button>
         </div>
-        <div class="visual-panel">
+        <div class="quest-panel">
           <div class="panel-scan"></div>
-          <div class="project-emblems">
-            <div class="project-emblem" data-project="3DynaPET">
-              <div class="project-emblem-title">3DynaPET</div>
-              <div class="project-emblem-desc">Locked validation system</div>
-            </div>
-            <div class="project-emblem" data-project="MuPET">
-              <div class="project-emblem-title">MuPET</div>
-              <div class="project-emblem-desc">Locked synthetic data toolset</div>
-            </div>
-            <div class="project-emblem" data-project="CASSOULET">
-              <div class="project-emblem-title">CASSOULET</div>
-              <div class="project-emblem-desc">Locked cohort framework</div>
-            </div>
+          <div class="scroll-grid">
+            <div class="scroll-crystal"><div class="scroll-title">Publication</div><div class="scroll-sub">Peer-reviewed trace</div></div>
+            <div class="scroll-crystal"><div class="scroll-title">Preprint</div><div class="scroll-sub">Open research signal</div></div>
+            <div class="scroll-crystal"><div class="scroll-title">Conference</div><div class="scroll-sub">Technical communication</div></div>
+            <div class="scroll-crystal"><div class="scroll-title">Valorisation</div><div class="scroll-sub">Research-to-market trace</div></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="game-stage" data-stage="5">
-      <div class="stage-grid">
-        <div class="stage-copy">
-          <div class="stage-kicker">05 / Future Direction</div>
-          <h2 class="stage-title">Select the path you care about.</h2>
-          <p class="stage-desc">The final profile summary adapts to your chosen direction.</p>
-          <button class="game-action next-stage" type="button" disabled>Complete Reconstruction <span>→</span></button>
+    <section class="quest-stage" data-stage="6">
+      <div class="quest-layout">
+        <div class="quest-copy">
+          <div class="quest-kicker">Quest 06 — The Crossroads</div>
+          <h2 class="quest-title">Choose the final route.</h2>
+          <p class="quest-desc">Your route changes the final class and profile summary. Choose the lens that matters to you.</p>
+          <div class="guide-box"><div class="guide-label">Eagle Signal</div><div class="guide-text">Different visitors read the same profile differently: clinic, MedTech, strategy, or research collaboration.</div></div>
+          <button class="quest-action next-quest" type="button" disabled>Reconstruct Profile <span>→</span></button>
         </div>
-        <div class="visual-panel">
+        <div class="quest-panel">
           <div class="panel-scan"></div>
-          <div class="direction-grid">
-            <div class="direction-card" data-direction="clinical">
-              <div class="direction-kanji">臨</div>
-              <div class="direction-title">Clinical Translation</div>
-              <div class="direction-desc">Scanner-side validation, clinical imaging workflows, retrospective evaluation.</div>
-            </div>
-            <div class="direction-card" data-direction="medtech">
-              <div class="direction-kanji">医</div>
-              <div class="direction-title">MedTech / Deep Tech</div>
-              <div class="direction-desc">Product-facing R&D, prototypes, toolsets, and startup translation.</div>
-            </div>
-            <div class="direction-card" data-direction="strategy">
-              <div class="direction-kanji">策</div>
-              <div class="direction-title">Strategy / Ventures</div>
-              <div class="direction-desc">IP, valorisation, technical due diligence, and research-to-market thinking.</div>
-            </div>
+          <div class="crossroads-grid">
+            <div class="crossroad-card" data-route="clinical"><div class="cross-kanji">臨</div><div class="cross-title">Clinical Translation</div><div class="cross-desc">Scanner-side validation, image QC, and clinical imaging workflows.</div></div>
+            <div class="crossroad-card" data-route="medtech"><div class="cross-kanji">医</div><div class="cross-title">MedTech / Deep Tech</div><div class="cross-desc">Prototypes, toolsets, frameworks, and product-facing R&D.</div></div>
+            <div class="crossroad-card" data-route="strategy"><div class="cross-kanji">策</div><div class="cross-title">Strategy / Ventures</div><div class="cross-desc">IP, valorisation, technical due diligence, and research-to-market thinking.</div></div>
+            <div class="crossroad-card" data-route="research"><div class="cross-kanji">研</div><div class="cross-title">Research Collaboration</div><div class="cross-desc">Simulation, medical imaging, validation, and translational research partnerships.</div></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="game-stage" data-stage="6">
+    <section class="quest-stage" data-stage="7">
       <div class="result-panel">
-        <div class="result-card">
-          <div class="stage-kicker">Sequence Complete</div>
-          <h2 class="result-title">Profile Reconstructed</h2>
-          <p class="result-summary" id="resultSummary">
-            Sai is a medical imaging researcher building translational systems between scanner, code, and clinic.
-          </p>
-          <div class="result-unlocks">
-            <div class="unlock-badge">Origin</div>
-            <div class="unlock-badge">Training</div>
-            <div class="unlock-badge">Capabilities</div>
-            <div class="unlock-badge">Projects</div>
-            <div class="unlock-badge">Direction</div>
+        <div class="profile-card">
+          <div class="profile-top">
+            <div>
+              <div class="quest-kicker">Sequence Complete</div>
+              <h2 class="profile-title">Profile Reconstructed</h2>
+              <div class="profile-sub">Sai Kiran Kumar Nalla</div>
+            </div>
+            <div class="profile-sync">
+              <div class="profile-sync-num" id="finalSync">0%</div>
+              <div class="profile-sync-rank" id="finalRank">Calculating</div>
+            </div>
           </div>
-          <div class="result-actions">
+
+          <p class="profile-summary" id="finalSummary"></p>
+
+          <div class="profile-grid">
+            <div class="profile-cell"><div class="profile-key">Class</div><div class="profile-value" id="finalClass"></div></div>
+            <div class="profile-cell"><div class="profile-key">Subclass</div><div class="profile-value" id="finalSubclass"></div></div>
+            <div class="profile-cell"><div class="profile-key">Origin</div><div class="profile-value">Hyderabad → Palaiseau / Paris → Toulouse</div></div>
+            <div class="profile-cell"><div class="profile-key">Training</div><div class="profile-value">Mechanical Engineering → Biomedical Engineering → Medical Imaging &amp; Radiophysics</div></div>
+            <div class="profile-cell"><div class="profile-key">Core Loadout</div><div class="profile-value" id="finalLoadout"></div></div>
+            <div class="profile-cell"><div class="profile-key">Signature Builds</div><div class="profile-value">3DynaPET · MuPET · CASSOULET</div></div>
+            <div class="profile-cell"><div class="profile-key">Research Trace</div><div class="profile-value">Publications · Preprints · Conference outputs · PET/CT validation · Clinical visualization</div></div>
+            <div class="profile-cell"><div class="profile-key">Bonus Relics</div><div class="profile-value" id="finalBonus">None recovered</div></div>
+          </div>
+
+          <div class="profile-actions">
             <a href="projects.html">View Projects</a>
             <a href="experience.html">View Experience</a>
             <a href="papers.html">View Publications</a>
+            <a href="contact.html">Contact</a>
             <a href="Assets/Sai_Nalla_CV.pdf" target="_blank">Download CV</a>
-            <button type="button" id="replayGame">Replay</button>
+            <button type="button" id="replayQuest">Replay Quest</button>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="game-toast" id="gameToast">Memory fragment synchronized</div>
+    <div class="quest-toast" id="questToast">Memory fragment recovered</div>
   </div>
 </div>
 
@@ -1004,10 +1048,10 @@
     
     <div class="hero-btns">
       <a href="about.html" class="btn">Explore Portfolio<span class="arrow">→</span></a>
-      <button type="button" class="btn btn-game" id="playAnimusGame"><span class="game-glyph">記</span>Play Animus Game<span class="arrow">→</span></button>
+      <button type="button" class="btn btn-game" id="playQuest"><span class="game-glyph">記</span>Play Animus Quest<span class="arrow">→</span></button>
       <a href="Assets/Sai_Nalla_CV.pdf" target="_blank" class="btn btn-cv"><span class="cv-glyph">伝</span>View CV<span class="arrow">→</span></a>
     </div>
-    <div class="hero-game-note">2–3 minute interactive profile reconstruction · exit anytime</div>
+    <div class="hero-game-note">2–3 minute memory adventure · profile reconstruction · exit anytime</div>
   </div>
 </section>
 
@@ -1073,152 +1117,282 @@
 <script src="transitions.js"></script>
 
 <script>
-const game = document.getElementById('animusGame');
-const playGame = document.getElementById('playAnimusGame');
-const closeGame = document.getElementById('closeGame');
-const stages = [...document.querySelectorAll('.game-stage')];
-const gameProgress = document.getElementById('gameProgress');
-const gameCounter = document.getElementById('gameCounter');
-const gameStatus = document.getElementById('gameStatus');
-const gameToast = document.getElementById('gameToast');
-const resultSummary = document.getElementById('resultSummary');
-const replayGame = document.getElementById('replayGame');
+const quest = document.getElementById('animusQuest');
+const playQuest = document.getElementById('playQuest');
+const exitQuest = document.getElementById('exitQuest');
+const stages = [...document.querySelectorAll('.quest-stage')];
+const questStatus = document.getElementById('questStatus');
+const syncFill = document.getElementById('syncFill');
+const syncScore = document.getElementById('syncScore');
+const questToast = document.getElementById('questToast');
+const replayQuest = document.getElementById('replayQuest');
 
-let currentStage = 0;
-let selectedDirection = 'clinical';
+let stage = 0;
+let sync = 0;
+let routeStep = 1;
+let selectedRoute = '';
+let selectedCaps = [];
+let bonusRelics = [];
+let selectedRelic = null;
+let matchedCount = 0;
 
-function showToast(text){
-  gameToast.textContent = text;
-  gameToast.classList.add('show');
-  setTimeout(() => gameToast.classList.remove('show'), 1200);
+const capLabels = {
+  modelling:'Numerical Modelling',
+  design:'Product Design',
+  experimental:'Experimental Method',
+  imaging:'Medical Imaging Analysis',
+  systems:'AUV / Systems Engineering'
+};
+
+const routeProfiles = {
+  clinical:{
+    className:'Clinical Translation Researcher',
+    defaultSubclass:'Medical Imaging Systems Builder',
+    summary:'Sai is a medical imaging researcher building translational systems between scanner, code, and clinic — with emphasis on PET/CT validation, image quality, and clinical research workflows.'
+  },
+  medtech:{
+    className:'MedTech R&D Builder',
+    defaultSubclass:'Prototype-to-Product Translator',
+    summary:'Sai works at the intersection of clinical needs, computational modelling, and product-facing R&D — turning imaging, prototypes, and frameworks into usable healthcare technology systems.'
+  },
+  strategy:{
+    className:'Research-to-Market Strategist',
+    defaultSubclass:'Deep-Tech Translation Operator',
+    summary:'Sai combines medical imaging R&D with IP awareness, valorisation, and startup-facing technical translation — connecting research, product framing, and venture strategy.'
+  },
+  research:{
+    className:'Computational Medical Imaging Researcher',
+    defaultSubclass:'Multiphysics & Validation Systems Specialist',
+    summary:'Sai works across simulation, medical imaging, phantom validation, and translational research — building ground-truth systems and analytical tools for collaborative scientific work.'
+  }
+};
+
+function toast(msg){
+  questToast.textContent = msg;
+  questToast.classList.add('show');
+  setTimeout(() => questToast.classList.remove('show'), 1250);
 }
 
-function setStage(n){
-  currentStage = n;
+function setSync(value){
+  sync = Math.max(0, Math.min(100, value));
+  syncFill.style.width = sync + '%';
+  syncScore.textContent = sync + '%';
+}
+
+function addSync(points, msg){
+  setSync(sync + points);
+  if(msg) toast(msg + ' · +' + points + ' sync');
+}
+
+function unlockFragment(name){
+  const el = document.querySelector(`.fragment[data-fragment="${name}"]`);
+  if(el && !el.classList.contains('unlocked')) el.classList.add('unlocked');
+}
+
+function goStage(n){
+  stage = n;
   stages.forEach(s => s.classList.toggle('active', Number(s.dataset.stage) === n));
-  const visibleStep = Math.min(n,5);
-  gameCounter.textContent = n === 0 ? '00 / 05' : (n >= 6 ? '05 / 05' : `0${visibleStep} / 05`);
-  gameProgress.style.width = n === 0 ? '0%' : `${Math.min(100, (visibleStep / 5) * 100)}%`;
-  gameStatus.textContent = n === 6 ? 'PROFILE RECONSTRUCTION COMPLETE' : `ANIMUS MINI-SEQUENCE: STAGE ${String(n).padStart(2,'0')}`;
+  const labels = ['Quest Map','Origin Gate','The Dōjō','The Arsenal','The Forge','Scroll Chamber','The Crossroads','Profile Complete'];
+  questStatus.textContent = 'ANIMUS QUEST: ' + labels[n];
 }
 
-function openGame(){
-  game.classList.add('open');
-  game.setAttribute('aria-hidden','false');
+function resetQuest(){
+  stage = 0;
+  sync = 0;
+  routeStep = 1;
+  selectedRoute = '';
+  selectedCaps = [];
+  bonusRelics = [];
+  selectedRelic = null;
+  matchedCount = 0;
+  setSync(0);
+  document.querySelectorAll('.unlocked,.selected,.matched,.decoded').forEach(el => el.classList.remove('unlocked','selected','matched','decoded'));
+  document.querySelectorAll('.next-quest').forEach(btn => btn.disabled = true);
+  document.querySelectorAll('.loadout-slot').forEach((slot,i) => {
+    slot.textContent = 'Slot ' + ['I','II','III'][i];
+    slot.classList.remove('filled');
+  });
+  document.querySelectorAll('.project-emblem-desc').forEach(desc => desc.textContent = desc.textContent);
+  document.getElementById('finalBonus').textContent = 'None recovered';
+  goStage(0);
+}
+
+function openQuest(){
+  quest.classList.add('open');
+  quest.setAttribute('aria-hidden','false');
   document.body.style.overflow = 'hidden';
-  resetGame();
+  resetQuest();
 }
-
-function closeGameOverlay(){
-  game.classList.remove('open');
-  game.setAttribute('aria-hidden','true');
+function closeQuest(){
+  quest.classList.remove('open');
+  quest.setAttribute('aria-hidden','true');
   document.body.style.overflow = '';
 }
 
-function resetGame(){
-  document.querySelectorAll('.selected,.unlocked,.active').forEach(el => {
-    if(!el.classList.contains('game-stage')) el.classList.remove('selected','unlocked','active');
+playQuest.addEventListener('click', openQuest);
+exitQuest.addEventListener('click', closeQuest);
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && quest.classList.contains('open')) closeQuest();
+});
+document.getElementById('startQuest').addEventListener('click', () => goStage(1));
+replayQuest.addEventListener('click', resetQuest);
+
+document.querySelectorAll('.next-quest').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if(stage === 1){ unlockFragment('origin'); addSync(15,'Origin fragment recovered'); goStage(2); }
+    else if(stage === 2){ unlockFragment('dojo'); addSync(15,'Training fragment recovered'); goStage(3); }
+    else if(stage === 3){ unlockFragment('arsenal'); addSync(20,'Arsenal fragment recovered'); goStage(4); }
+    else if(stage === 4){ unlockFragment('forge'); addSync(20,'Project ecosystem recovered'); goStage(5); }
+    else if(stage === 5){ unlockFragment('scrolls'); addSync(15,'Research trace recovered'); goStage(6); }
+    else if(stage === 6){ unlockFragment('crossroads'); addSync(15,'Final path selected'); buildFinalProfile(); goStage(7); }
   });
-  document.querySelectorAll('.game-action.next-stage').forEach(btn => btn.disabled = true);
-  originStep = 1;
-  selectedDirection = 'clinical';
-  setStage(0);
+});
+
+/* Quest 1 */
+document.querySelectorAll('.route-node').forEach(node => {
+  node.addEventListener('click', () => {
+    const order = Number(node.dataset.order);
+    if(order === routeStep){
+      node.classList.add('unlocked');
+      routeStep++;
+      toast('Route gate synchronized');
+      if(routeStep > 3) document.querySelector('[data-stage="1"] .next-quest').disabled = false;
+    } else {
+      toast('Route unstable — trace the path in order');
+      setSync(sync - 2);
+    }
+  });
+});
+
+/* Quest 2 */
+document.querySelectorAll('.blade-piece').forEach(piece => {
+  piece.addEventListener('click', () => {
+    piece.classList.add('selected');
+    const count = document.querySelectorAll('.blade-piece.selected').length;
+    toast(`${count}/3 blade layers recovered`);
+    if(count >= 3) document.querySelector('[data-stage="2"] .next-quest').disabled = false;
+  });
+});
+
+/* Quest 3 */
+function updateLoadout(){
+  const slots = document.querySelectorAll('.loadout-slot');
+  slots.forEach((slot,i) => {
+    if(selectedCaps[i]){
+      slot.textContent = capLabels[selectedCaps[i]];
+      slot.classList.add('filled');
+    } else {
+      slot.textContent = 'Slot ' + ['I','II','III'][i];
+      slot.classList.remove('filled');
+    }
+  });
+  document.querySelector('[data-stage="3"] .next-quest').disabled = selectedCaps.length < 3;
+}
+document.querySelectorAll('.arsenal-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const cap = item.dataset.cap;
+    if(item.classList.contains('selected')){
+      item.classList.remove('selected');
+      selectedCaps = selectedCaps.filter(c => c !== cap);
+    } else {
+      if(selectedCaps.length >= 3){
+        toast('Loadout full — deselect one first');
+        return;
+      }
+      item.classList.add('selected');
+      selectedCaps.push(cap);
+    }
+    updateLoadout();
+  });
+});
+
+/* Quest 4: match relics to types */
+document.querySelectorAll('.match-relic').forEach(relic => {
+  relic.addEventListener('click', () => {
+    if(relic.classList.contains('matched')) return;
+    document.querySelectorAll('.match-relic').forEach(r => r.classList.remove('selected'));
+    relic.classList.add('selected');
+    selectedRelic = relic;
+  });
+});
+document.querySelectorAll('.match-type').forEach(type => {
+  type.addEventListener('click', () => {
+    if(type.classList.contains('matched')) return;
+    if(!selectedRelic){
+      toast('Select a relic first');
+      return;
+    }
+    if(selectedRelic.dataset.match === type.dataset.match){
+      selectedRelic.classList.add('matched');
+      selectedRelic.classList.remove('selected');
+      type.classList.add('matched');
+      matchedCount++;
+      selectedRelic = null;
+      toast('Relic awakened');
+      if(matchedCount >= 3) document.querySelector('[data-stage="4"] .next-quest').disabled = false;
+    } else {
+      toast('Mismatch — relic rejects the seal');
+      setSync(sync - 2);
+    }
+  });
+});
+document.querySelectorAll('.side-relic').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if(btn.classList.contains('unlocked')) return;
+    btn.classList.add('unlocked');
+    bonusRelics.push(btn.textContent.trim());
+    addSync(2,'Bonus relic recovered');
+  });
+});
+
+/* Quest 5 */
+document.querySelectorAll('.scroll-crystal').forEach(crystal => {
+  crystal.addEventListener('click', () => {
+    crystal.classList.add('decoded');
+    const count = document.querySelectorAll('.scroll-crystal.decoded').length;
+    toast(`${count}/4 research traces decoded`);
+    if(count >= 4) document.querySelector('[data-stage="5"] .next-quest').disabled = false;
+  });
+});
+
+/* Quest 6 */
+document.querySelectorAll('.crossroad-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.crossroad-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedRoute = card.dataset.route;
+    document.querySelector('[data-stage="6"] .next-quest').disabled = false;
+    toast(card.querySelector('.cross-title').textContent + ' route selected');
+  });
+});
+
+function getRank(score){
+  if(score >= 90) return 'Full Synchronization';
+  if(score >= 70) return 'Stable Synchronization';
+  if(score >= 50) return 'Partial Synchronization';
+  return 'Fragmented Memory';
 }
 
-playGame.addEventListener('click', openGame);
-closeGame.addEventListener('click', closeGameOverlay);
-document.getElementById('beginGame').addEventListener('click', () => setStage(1));
-replayGame.addEventListener('click', resetGame);
+function getSubclass(profile){
+  const caps = selectedCaps.join('|');
+  if(selectedCaps.includes('imaging') && selectedCaps.includes('experimental')) return 'Validation Systems Specialist';
+  if(selectedCaps.includes('design') && selectedCaps.includes('imaging')) return 'Prototype-to-Clinic Builder';
+  if(selectedCaps.includes('modelling') && selectedCaps.includes('systems')) return 'Systems Modelling Engineer';
+  if(selectedCaps.includes('modelling') && selectedCaps.includes('imaging')) return 'Quantitative Imaging Builder';
+  return profile.defaultSubclass;
+}
 
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape' && game.classList.contains('open')) closeGameOverlay();
-});
-
-document.querySelectorAll('.next-stage').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if(currentStage === 5){
-      const summaries = {
-        clinical: 'Sai is a medical imaging researcher building translational systems between scanner, code, and clinic — with a strong focus on PET/CT validation, image quality, and clinical research workflows.',
-        medtech: 'Sai works at the intersection of clinical needs, computational modelling, and product-facing R&D — building toolsets, prototypes, and frameworks that move research toward usable MedTech systems.',
-        strategy: 'Sai combines medical imaging R&D with IP awareness, valorisation, and startup-facing technical translation — connecting research, product thinking, and venture strategy.'
-      };
-      resultSummary.textContent = summaries[selectedDirection] || summaries.clinical;
-      setStage(6);
-    } else {
-      setStage(currentStage + 1);
-    }
-  });
-});
-
-/* Stage 1: origin sequence */
-let originStep = 1;
-const originNodes = document.querySelectorAll('.origin-node');
-originNodes.forEach(node => {
-  node.addEventListener('click', () => {
-    if(Number(node.dataset.order) === originStep){
-      node.classList.add('unlocked');
-      showToast(`${node.dataset.place.toUpperCase()} MEMORY UNLOCKED`);
-      originStep++;
-      if(originStep > 3){
-        document.querySelector('[data-stage="1"] .next-stage').disabled = false;
-      }
-    } else {
-      showToast('Sequence mismatch — follow the route');
-    }
-  });
-});
-
-/* Stage 2: training */
-const trainingCards = document.querySelectorAll('.training-card');
-trainingCards.forEach(card => {
-  card.addEventListener('click', () => {
-    card.classList.toggle('selected');
-    const count = document.querySelectorAll('.training-card.selected').length;
-    document.querySelector('[data-stage="2"] .next-stage').disabled = count < 3;
-    if(count <= 3) showToast(`${count}/3 training fragments selected`);
-  });
-});
-
-/* Stage 3: capability choice */
-const capTiles = document.querySelectorAll('.capability-tile');
-capTiles.forEach(tile => {
-  tile.addEventListener('click', () => {
-    tile.classList.toggle('selected');
-    const count = document.querySelectorAll('.capability-tile.selected').length;
-    document.querySelector('[data-stage="3"] .next-stage').disabled = count < 3;
-    showToast(`${Math.min(count,3)}/3 capabilities synchronized`);
-  });
-});
-
-/* Stage 4: project forge */
-const projectEmblems = document.querySelectorAll('.project-emblem');
-const projectText = {
-  '3DynaPET':'Physical PET/CT validation system',
-  'MuPET':'Synthetic PET data generation toolset',
-  'CASSOULET':'Ground-truth multimodal imaging framework'
-};
-projectEmblems.forEach(emblem => {
-  emblem.addEventListener('click', () => {
-    emblem.classList.add('unlocked');
-    const name = emblem.dataset.project;
-    emblem.querySelector('.project-emblem-desc').textContent = projectText[name];
-    const count = document.querySelectorAll('.project-emblem.unlocked').length;
-    document.querySelector('[data-stage="4"] .next-stage').disabled = count < 3;
-    showToast(`${name} unlocked`);
-  });
-});
-
-/* Stage 5: future direction */
-const directionCards = document.querySelectorAll('.direction-card');
-directionCards.forEach(card => {
-  card.addEventListener('click', () => {
-    directionCards.forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    selectedDirection = card.dataset.direction;
-    document.querySelector('[data-stage="5"] .next-stage').disabled = false;
-    showToast(`${card.querySelector('.direction-title').textContent} selected`);
-  });
-});
+function buildFinalProfile(){
+  const profile = routeProfiles[selectedRoute] || routeProfiles.clinical;
+  const subclass = getSubclass(profile);
+  document.getElementById('finalSync').textContent = sync + '%';
+  document.getElementById('finalRank').textContent = getRank(sync);
+  document.getElementById('finalClass').innerHTML = '<strong>' + profile.className + '</strong>';
+  document.getElementById('finalSubclass').innerHTML = '<strong>' + subclass + '</strong>';
+  document.getElementById('finalSummary').textContent = profile.summary;
+  document.getElementById('finalLoadout').textContent = selectedCaps.map(c => capLabels[c]).join(' · ') || 'Not selected';
+  document.getElementById('finalBonus').textContent = bonusRelics.length ? bonusRelics.join(' · ') : 'None recovered';
+}
 </script>
 
 </body>
