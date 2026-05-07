@@ -428,9 +428,31 @@
   .archive-grid{grid-template-columns:1fr}
   .path-track{grid-template-columns:1fr 1fr}
 }
+
+/* Projects page readability: keep the forge theme, reduce the background mark behind cards */
+.projects-page .bg-kanji{
+  opacity:0.025;
+  filter:blur(2.5px);
+  transform:translateY(-50%) scale(1.08);
+}
+.projects-page .content-section{
+  background:
+    radial-gradient(circle at 78% 18%, rgba(139,26,26,0.045), transparent 26%),
+    linear-gradient(180deg, rgba(10,10,11,0.15), rgba(10,10,11,0.65));
+}
+.projects-page .forge-shell{
+  position:relative;
+  z-index:2;
+}
+.projects-page .forge-dashboard,
+.projects-page .forge-path,
+.projects-page .artifact-card{
+  backdrop-filter: blur(2px);
+}
+
 </style>
 </head>
-<body>
+<body class="projects-page">
 
 <!-- AC Transition Overlay -->
 <div class="ac-transition">
@@ -479,14 +501,14 @@
     </div>
 
     <div class="forge-dashboard stagger">
-      <div class="forge-stat"><div class="forge-stat-num">09</div><div class="forge-stat-label">Forge Records</div></div>
-      <div class="forge-stat"><div class="forge-stat-num">05</div><div class="forge-stat-label">Artifact Types</div></div>
-      <div class="forge-stat"><div class="forge-stat-num">03</div><div class="forge-stat-label">Featured Systems</div></div>
+      <div class="forge-stat"><div class="forge-stat-num">09</div><div class="forge-stat-label">Project Records</div></div>
+      <div class="forge-stat"><div class="forge-stat-num">05</div><div class="forge-stat-label">Project Types</div></div>
+      <div class="forge-stat"><div class="forge-stat-num">03</div><div class="forge-stat-label">Featured Projects</div></div>
       <div class="forge-stat"><div class="forge-stat-num">06</div><div class="forge-stat-label">Research Outputs</div></div>
     </div>
 
     <div class="forge-filters reveal" aria-label="Project filters">
-      <button class="forge-filter active" data-filter="all">All Artifacts</button>
+      <button class="forge-filter active" data-filter="all">All Projects</button>
       <button class="forge-filter" data-filter="toolset">Toolset</button>
       <button class="forge-filter" data-filter="framework">Framework</button>
       <button class="forge-filter" data-filter="design">Design</button>
@@ -506,7 +528,7 @@
       </div>
     </div>
 
-    <div class="forge-section-label reveal">Featured Records</div>
+    <div class="forge-section-label reveal">Featured Projects</div>
     <div class="featured-grid stagger">
       <article class="artifact-card featured" data-type="design">
       <div class="artifact-visual"><div class="visual-grid"></div></div>
@@ -588,7 +610,7 @@
     </article>
     </div>
 
-    <div class="forge-section-label reveal">Archive Grid</div>
+    <div class="forge-section-label reveal">Project Archive</div>
     <div class="archive-grid stagger">
       <article class="artifact-card " data-type="toolset">
       
