@@ -129,7 +129,7 @@
 
 
 
-/* ── HOVER MAPS: TECHNICAL ARSENAL + FIELD COMPETENCIES ───── */
+/* ── HOVER MAP: TECHNICAL ARSENAL ───── */
 .map-section { margin-bottom: 4.5rem; }
 .map-note {
   border:1px solid var(--ghost-line);
@@ -165,7 +165,6 @@
   overflow:visible;
   margin-bottom:2rem;
 }
-.hover-map.compact { min-height:520px; margin-bottom:0; }
 
 .hover-map::before {
   content:'';
@@ -287,12 +286,6 @@
 .map-node.pos-left { left:54px; top:242px; }
 .map-node.pos-bottom-left { left:calc(50% - 245px); bottom:62px; }
 .map-node.pos-right-bottom { right:68px; bottom:84px; }
-
-.hover-map.compact .map-node.pos-top { top:38px; }
-.hover-map.compact .map-node.pos-right-top { top:96px; }
-.hover-map.compact .map-node.pos-left { top:210px; }
-.hover-map.compact .map-node.pos-bottom-left { bottom:48px; }
-.hover-map.compact .map-node.pos-right-bottom { bottom:62px; }
 
 .node-top {
   display:flex;
@@ -480,8 +473,7 @@
 }
 
 @media(max-width:980px){
-  .hover-map,
-  .hover-map.compact {
+  .hover-map {
     min-height:auto;
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -523,9 +515,170 @@
   .map-node:hover .map-popup { display:none; }
 }
 @media(max-width:680px){
-  .hover-map,
-  .hover-map.compact { grid-template-columns:1fr; }
+  .hover-map { grid-template-columns:1fr; }
 }
+
+
+/* ── RADAR: FIELD COMPETENCIES ─────────────── */
+.radar-section {
+  width:100%;
+  border:1px solid var(--ghost-line);
+  background:
+    radial-gradient(circle at 50% 46%, rgba(139,26,26,0.06) 0%, transparent 38%),
+    linear-gradient(135deg, rgba(139,26,26,0.03) 0%, transparent 42%),
+    var(--ghost);
+  position:relative;
+  overflow:visible;
+  display:grid;
+  grid-template-columns:1fr 340px;
+  min-height:540px;
+}
+.radar-section::after {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(to right, transparent, var(--blood), transparent);
+  opacity:0.35;
+}
+
+.radar-visual {
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2.5rem;
+}
+.radar-svg-wrap {
+  position:relative;
+  width:100%;
+  max-width:460px;
+  aspect-ratio:1;
+}
+.radar-svg-wrap svg { width:100%; height:100%; }
+
+.radar-panel {
+  border-left:1px solid var(--ghost-line);
+  padding:2.4rem 2rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+}
+
+.rpanel-kanji {
+  font-family:'Noto Serif JP',serif;
+  font-size:3.5rem;
+  line-height:1;
+  color:rgba(139,26,26,0.18);
+  margin-bottom:1rem;
+  transition:color 0.4s;
+}
+.rpanel-kanji.active { color:rgba(139,26,26,0.42); }
+
+.rpanel-title {
+  font-family:'Zen Antique',serif;
+  font-size:1.35rem;
+  line-height:1.3;
+  color:var(--paper);
+  margin-bottom:0.5rem;
+}
+
+.rpanel-level {
+  display:inline-block;
+  font-family:'Space Mono',monospace;
+  font-size:0.47rem;
+  text-transform:uppercase;
+  letter-spacing:0.14em;
+  color:var(--blood-glow);
+  border:1px solid rgba(139,26,26,0.25);
+  padding:0.3rem 0.55rem;
+  margin-bottom:1.2rem;
+}
+
+.rpanel-scope {
+  font-size:0.85rem;
+  color:var(--mist);
+  line-height:1.75;
+  font-weight:300;
+  max-width:300px;
+}
+
+.rpanel-hint {
+  font-family:'Space Mono',monospace;
+  font-size:0.44rem;
+  text-transform:uppercase;
+  letter-spacing:0.16em;
+  color:var(--steel);
+  margin-top:1.5rem;
+  opacity:1;
+  transition:opacity 0.3s;
+}
+.rpanel-hint.hidden { opacity:0; }
+
+.radar-legend {
+  position:absolute;
+  bottom:1.8rem;
+  left:2rem;
+  right:2rem;
+  display:flex;
+  gap:1.2rem;
+  align-items:center;
+}
+.legend-item {
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  font-family:'Space Mono',monospace;
+  font-size:0.42rem;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--steel);
+}
+.legend-dot { width:6px; height:6px; border-radius:50%; }
+.legend-dot.ld-core { background:var(--blood-glow); }
+.legend-dot.ld-advanced { background:rgba(194,60,60,0.6); }
+.legend-dot.ld-strong { background:rgba(194,60,60,0.35); }
+.legend-dot.ld-emerging { background:rgba(194,60,60,0.18); }
+
+/* SVG radar internals */
+.r-ring { fill:none; stroke:var(--ghost-line); stroke-width:0.8; }
+.r-axis { stroke:rgba(240,235,227,0.05); stroke-width:0.5; }
+.r-fill { fill:rgba(139,26,26,0.14); stroke:var(--blood); stroke-width:1.5; transition:all 0.4s cubic-bezier(0.4,0,0.2,1); }
+.r-fill-inner { fill:rgba(139,26,26,0.08); stroke:rgba(139,26,26,0.35); stroke-width:0.8; }
+.r-vertex { cursor:pointer; }
+.r-vertex:hover .r-dot { r:6; fill:var(--blood-glow); }
+.r-vertex:hover .r-ring-pulse { opacity:1; }
+.r-vertex:hover .r-kanji { fill:rgba(139,26,26,0.65); }
+.r-vertex:hover .r-label { fill:var(--paper); }
+.r-dot { fill:var(--blood); stroke:var(--ink); stroke-width:2; r:4.5; transition:all 0.3s; }
+.r-ring-pulse { fill:none; stroke:var(--blood-glow); stroke-width:0.6; opacity:0; transition:opacity 0.3s; }
+.r-kanji { font-family:'Noto Serif JP',serif; font-size:22px; font-weight:900; fill:rgba(139,26,26,0.28); text-anchor:middle; dominant-baseline:central; transition:fill 0.3s; pointer-events:none; }
+.r-label { font-family:'Space Mono',monospace; font-size:7.5px; fill:var(--mist); text-anchor:middle; text-transform:uppercase; letter-spacing:0.08em; transition:fill 0.3s; pointer-events:none; }
+.r-badge { font-family:'Space Mono',monospace; font-size:5.5px; fill:var(--blood-glow); text-anchor:middle; text-transform:uppercase; letter-spacing:0.12em; pointer-events:none; }
+
+.radar-scan-line {
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(to right, transparent, var(--blood), transparent);
+  animation:scanPulse 3.5s ease-in-out infinite;
+  pointer-events:none;
+}
+
+.r-corner { position:absolute; width:10px; height:10px; border-color:rgba(139,26,26,0.2); border-style:solid; pointer-events:none; }
+.r-corner.tl{ top:6px; left:6px; border-width:1px 0 0 1px; }
+.r-corner.tr{ top:6px; right:6px; border-width:1px 1px 0 0; }
+.r-corner.bl{ bottom:6px; left:6px; border-width:0 0 1px 1px; }
+.r-corner.br{ bottom:6px; right:6px; border-width:0 1px 1px 0; }
+
+@media(max-width:860px){
+  .radar-section { grid-template-columns:1fr; min-height:auto; }
+  .radar-visual { padding:2rem 1.5rem; }
+  .radar-panel { border-left:none; border-top:1px solid var(--ghost-line); padding:2rem 1.5rem; min-height:200px; }
+  .radar-legend { position:relative; bottom:auto; left:auto; right:auto; margin-top:1.5rem; flex-wrap:wrap; }
+}
+
 
 /* ── VOLUNTEERING ──────────────────────────── */
 .vol-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ghost-line); border: 1px solid var(--ghost-line); margin-bottom: 2rem; }
@@ -795,8 +948,8 @@
 
     <section class="map-section stagger">
       <div class="map-note">
-        <div class="map-kicker">Two separate maps — same hover interaction</div>
-        <p><strong>Technical Arsenal</strong> shows the actual tools and methods. <strong>Field Competencies</strong> shows the domains where those skills are applied.</p>
+        <div class="map-kicker">Two formats — one deep, one at a glance</div>
+        <p><strong>Technical Arsenal</strong> maps the actual tools and methods via hover. <strong>Field Competencies</strong> renders domain depth as a radar profile.</p>
       </div>
 
       <div class="map-subdivider">01 — Technical Arsenal</div>
@@ -874,55 +1027,37 @@
         </div>
       </div>
 
+      <!-- ══════════════════════════════════════════
+           02 — FIELD COMPETENCIES (RADAR CHART)
+           ══════════════════════════════════════════ -->
       <div class="map-subdivider">02 — Field Competencies</div>
-      <div class="hover-map compact">
-        <div class="map-line top"></div>
-        <div class="map-line right-top"></div>
-        <div class="map-line left"></div>
-        <div class="map-line bottom-left"></div>
-        <div class="map-line right-bottom"></div>
+      <div class="radar-section">
+        <div class="radar-scan-line"></div>
+        <div class="r-corner tl"></div><div class="r-corner tr"></div>
+        <div class="r-corner bl"></div><div class="r-corner br"></div>
 
-        <div class="map-core">
-          <div class="map-core-kanji">領</div>
-          <div class="map-core-title">Applied Fields</div>
-          <div class="map-core-sub">Where the technical toolkit transfers into real-world domains.</div>
+        <div class="radar-visual">
+          <div class="radar-svg-wrap">
+            <svg id="radarSvg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
         </div>
 
-        <div class="map-node pos-top" tabindex="0">
-          <div class="node-top"><div class="node-title">MedTech Translation</div><div class="node-kanji">医</div></div>
-          <span class="node-level">Core</span>
-          <div class="node-hint">Hover for scope</div>
-          <div class="map-popup up"><div class="popup-label">Scope</div><div class="popup-brief">Clinical needs, translational research, product-facing R&amp;D, IP and valorisation thinking.</div></div>
-        </div>
+        <div class="radar-panel">
+          <div class="rpanel-kanji" id="rpKanji">領</div>
+          <div class="rpanel-title" id="rpTitle">Applied Fields</div>
+          <div class="rpanel-level" id="rpLevel" style="display:none"></div>
+          <div class="rpanel-scope" id="rpScope">Where the technical toolkit transfers into real-world domains. Hover a vertex to inspect.</div>
+          <div class="rpanel-hint" id="rpHint">← Hover a point on the radar</div>
 
-        <div class="map-node pos-right-top" tabindex="0">
-          <div class="node-top"><div class="node-title">Numerical Modelling</div><div class="node-kanji">算</div></div>
-          <span class="node-level">Advanced</span>
-          <div class="node-hint">Hover for scope</div>
-          <div class="map-popup right"><div class="popup-label">Scope</div><div class="popup-brief">Simulation-driven reasoning across biomedical, fluid-system, and engineering analysis problems.</div></div>
-        </div>
-
-        <div class="map-node pos-left" tabindex="0">
-          <div class="node-top"><div class="node-title">Clinical Imaging Research</div><div class="node-kanji">診</div></div>
-          <span class="node-level">Strong</span>
-          <div class="node-hint">Hover for scope</div>
-          <div class="map-popup left"><div class="popup-label">Scope</div><div class="popup-brief">Medical imaging analysis, quality control awareness, and retrospective clinical evaluation.</div></div>
-        </div>
-
-        <div class="map-node pos-bottom-left" tabindex="0">
-          <div class="node-top"><div class="node-title">Experimental Systems</div><div class="node-kanji">試</div></div>
-          <span class="node-level">Strong</span>
-          <div class="node-hint">Hover for scope</div>
-          <div class="map-popup down"><div class="popup-label">Scope</div><div class="popup-brief">Protocol design, validation logic, measurement workflows, and reproducible interpretation.</div></div>
-        </div>
-
-        <div class="map-node pos-right-bottom" tabindex="0">
-          <div class="node-top"><div class="node-title">Defense / Robotics</div><div class="node-kanji">海</div></div>
-          <span class="node-level">Emerging</span>
-          <div class="node-hint">Hover for scope</div>
-          <div class="map-popup right"><div class="popup-label">Scope</div><div class="popup-brief">AUV-based systems thinking with transfer potential to mission-driven and dual-use technology contexts.</div></div>
+          <div class="radar-legend">
+            <div class="legend-item"><div class="legend-dot ld-core"></div>Core</div>
+            <div class="legend-item"><div class="legend-dot ld-advanced"></div>Advanced</div>
+            <div class="legend-item"><div class="legend-dot ld-strong"></div>Strong</div>
+            <div class="legend-item"><div class="legend-dot ld-emerging"></div>Emerging</div>
+          </div>
         </div>
       </div>
+
     </section>
 
 
@@ -944,6 +1079,7 @@
 
 <script src="transitions.js"></script>
 <script>
+/* ── Accordion ── */
 document.querySelectorAll('.acc-header').forEach(header => {
   header.addEventListener('click', function() {
     const item = this.closest('.acc-item');
@@ -956,6 +1092,7 @@ document.querySelectorAll('.acc-header').forEach(header => {
   });
 });
 
+/* ── Hover-map mobile tap ── */
 const mapNodes = document.querySelectorAll('.map-node');
 mapNodes.forEach(node => {
   node.addEventListener('click', function() {
@@ -965,13 +1102,127 @@ mapNodes.forEach(node => {
     if (!wasActive) this.classList.add('active');
   });
 });
-
 document.addEventListener('click', function(e) {
   if (window.innerWidth > 980) return;
   if (!e.target.closest('.map-node')) {
     mapNodes.forEach(n => n.classList.remove('active'));
   }
 });
+
+/* ══════════════════════════════════════════
+   RADAR CHART — Field Competencies
+   ══════════════════════════════════════════ */
+(function() {
+  const DATA = [
+    { label:'MedTech\nTranslation',  kanji:'医', level:'Core',     value:0.92, scope:'Clinical needs, translational research, product-facing R&D, IP and valorisation thinking.' },
+    { label:'Numerical\nModelling',  kanji:'算', level:'Advanced', value:0.78, scope:'Simulation-driven reasoning across biomedical, fluid-system, and engineering analysis problems.' },
+    { label:'Clinical\nImaging',     kanji:'診', level:'Strong',   value:0.64, scope:'Medical imaging analysis, quality control awareness, and retrospective clinical evaluation.' },
+    { label:'Experimental\nSystems', kanji:'試', level:'Strong',   value:0.64, scope:'Protocol design, validation logic, measurement workflows, and reproducible interpretation.' },
+    { label:'Defense /\nRobotics',   kanji:'海', level:'Emerging', value:0.38, scope:'AUV-based systems thinking with transfer potential to mission-driven and dual-use technology contexts.' },
+  ];
+
+  const CX = 200, CY = 195, R = 145, N = DATA.length;
+  const RINGS = [0.25, 0.5, 0.75, 1.0];
+  const svg = document.getElementById('radarSvg');
+  if (!svg) return;
+
+  const ns = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs) {
+    const e = document.createElementNS(ns, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function polar(i, scale) {
+    const a = (2 * Math.PI * i) / N - Math.PI / 2;
+    return { x: CX + R * scale * Math.cos(a), y: CY + R * scale * Math.sin(a) };
+  }
+  function pts(scale) {
+    return DATA.map((_, i) => { const p = polar(i, scale); return `${p.x},${p.y}`; }).join(' ');
+  }
+
+  // rings
+  RINGS.forEach(r => svg.appendChild(el('polygon', { points: pts(r), class: 'r-ring' })));
+
+  // axes
+  for (let i = 0; i < N; i++) {
+    const p = polar(i, 1);
+    svg.appendChild(el('line', { x1: CX, y1: CY, x2: p.x, y2: p.y, class: 'r-axis' }));
+  }
+
+  // inner glow polygon
+  const innerPts = DATA.map((d, i) => { const p = polar(i, d.value * 0.6); return `${p.x},${p.y}`; }).join(' ');
+  svg.appendChild(el('polygon', { points: innerPts, class: 'r-fill-inner' }));
+
+  // data polygon
+  const dataPts = DATA.map((d, i) => { const p = polar(i, d.value); return `${p.x},${p.y}`; }).join(' ');
+  svg.appendChild(el('polygon', { points: dataPts, class: 'r-fill' }));
+
+  // panel refs
+  const rpK = document.getElementById('rpKanji');
+  const rpT = document.getElementById('rpTitle');
+  const rpL = document.getElementById('rpLevel');
+  const rpS = document.getElementById('rpScope');
+  const rpH = document.getElementById('rpHint');
+
+  function showDefault() {
+    rpK.textContent = '領'; rpK.classList.remove('active');
+    rpT.textContent = 'Applied Fields';
+    rpL.style.display = 'none';
+    rpS.textContent = 'Where the technical toolkit transfers into real-world domains. Hover a vertex to inspect.';
+    rpH.classList.remove('hidden');
+  }
+  function showVertex(d) {
+    rpK.textContent = d.kanji; rpK.classList.add('active');
+    rpT.textContent = d.label.replace('\n', ' ');
+    rpL.textContent = d.level; rpL.style.display = 'inline-block';
+    rpS.textContent = d.scope;
+    rpH.classList.add('hidden');
+  }
+
+  // vertices
+  DATA.forEach((d, i) => {
+    const p = polar(i, d.value);
+    const kp = polar(i, 1.13);
+    const lp = polar(i, 1.27);
+
+    const g = el('g', { class: 'r-vertex' });
+
+    // hit area
+    g.appendChild(el('circle', { cx: p.x, cy: p.y, r: 22, fill: 'transparent' }));
+    // ring pulse
+    g.appendChild(el('circle', { cx: p.x, cy: p.y, r: 12, class: 'r-ring-pulse' }));
+    // dot
+    g.appendChild(el('circle', { cx: p.x, cy: p.y, class: 'r-dot' }));
+
+    // kanji
+    const kt = el('text', { x: kp.x, y: kp.y, class: 'r-kanji' });
+    kt.textContent = d.kanji;
+    g.appendChild(kt);
+
+    // label lines
+    const lines = d.label.split('\n');
+    lines.forEach((ln, li) => {
+      const t = el('text', { x: lp.x, y: lp.y + li * 10, class: 'r-label' });
+      t.textContent = ln;
+      g.appendChild(t);
+    });
+
+    // level badge
+    const bp = polar(i, 1.27);
+    const badge = el('text', { x: bp.x, y: bp.y + lines.length * 10 + 2, class: 'r-badge' });
+    badge.textContent = d.level;
+    g.appendChild(badge);
+
+    g.addEventListener('mouseenter', () => showVertex(d));
+    g.addEventListener('mouseleave', () => showDefault());
+    g.addEventListener('click', () => showVertex(d));
+
+    svg.appendChild(g);
+  });
+
+  // center dot
+  svg.appendChild(el('circle', { cx: CX, cy: CY, r: 2, fill: 'rgba(139,26,26,0.3)' }));
+})();
 </script>
 </body>
 </html>
