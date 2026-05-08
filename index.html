@@ -189,6 +189,117 @@
   box-shadow:inset 0 0 18px rgba(194,59,59,.18);
 }
 
+
+/* PATCH V4: clearer mini-games, no overflow, DNA visible after placement */
+.game-log{
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.mini-area{
+  overflow:hidden;
+  max-width:100%;
+}
+.node-grid{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(42px, 1fr));
+  gap:.45rem;
+  max-width:100%;
+}
+.path-node{
+  width:100%;
+  min-width:0;
+  height:42px;
+}
+.path-node:after{
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+}
+.dna-board{
+  position:relative;
+  height:210px;
+  border:1px solid rgba(240,235,227,.08);
+  overflow:hidden;
+}
+.dna-target{
+  position:absolute;
+  left:50%;
+  top:56%;
+  width:270px;
+  height:92px;
+  transform:translate(-50%,-50%);
+  border:1px dashed rgba(194,59,59,.55);
+  border-radius:48px;
+  background:rgba(139,26,26,.035);
+  z-index:1;
+}
+.dna-target::after{
+  content:'DROP / CLICK HERE';
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  font-family:'Space Mono',monospace;
+  font-size:.42rem;
+  letter-spacing:.12em;
+  color:rgba(240,235,227,.28);
+  white-space:nowrap;
+}
+.dna-target.ready::after{
+  content:'STRAND ASSEMBLED';
+  color:rgba(194,59,59,.8);
+}
+.dna-piece{
+  z-index:3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:82px;
+  height:42px;
+  border:1px solid rgba(240,235,227,.16);
+  border-radius:24px;
+  background:rgba(139,26,26,.12);
+  cursor:grab;
+  box-shadow:0 0 12px rgba(0,0,0,.25);
+}
+.dna-piece:before{
+  display:none;
+}
+.dna-piece:after{
+  content:'';
+  width:52px;
+  height:22px;
+  border-top:2px solid rgba(240,235,227,.62);
+  border-bottom:2px solid rgba(194,59,59,.55);
+  border-radius:50%;
+  transform:skewX(-18deg);
+}
+.dna-piece.done{
+  z-index:4;
+  border-color:rgba(194,59,59,.72);
+  background:rgba(139,26,26,.30);
+  cursor:default;
+}
+.dna-piece.selected{
+  outline:2px solid rgba(194,59,59,.75);
+  box-shadow:0 0 20px rgba(194,59,59,.30);
+}
+.symbol-lock{
+  margin-top:.45rem;
+}
+.timer.safe{
+  color:var(--mist);
+}
+.hit-btn.locked-ready{
+  border-color:rgba(194,59,59,.7);
+  background:rgba(139,26,26,.16);
+}
+@media(max-width:720px){
+  .node-grid{grid-template-columns:repeat(3, minmax(42px, 1fr));}
+  .path-node{height:40px}
+  .dna-target{width:220px}
+}
+
 </style>
 </head>
 <body>
@@ -389,11 +500,195 @@ document.querySelectorAll('.backWorld').forEach(b=>b.addEventListener('click',()
 function loadCity2(id){current2=id;const d=data2[id];cityGot2[id]=cityGot2[id]||new Set();document.getElementById('cityKicker2').textContent=d.kicker;document.getElementById('cityTitle2').textContent=d.title;document.getElementById('cityIntro2').textContent='Recover encrypted Codex fragments. The final reveal unlocks after required Codex are recovered.';document.getElementById('completeCity2').disabled=true;document.getElementById('cityReveal2').innerHTML='';const map=document.getElementById('cityMap2');map.querySelectorAll('.codex-node').forEach(n=>n.remove());const pos=[[18,25],[58,20],[35,60],[70,62],[10,66]];[...d.codex].sort(()=>Math.random()-.5).forEach((c,i)=>{const n=document.createElement('div');n.className='codex-node';n.style.left=pos[i][0]+'%';n.style.top=pos[i][1]+'%';n.dataset.codex=c[0];n.innerHTML='<b>Codex '+c[0]+'</b><span>'+(c[2]==='optional'?'Optional encrypted':'Encrypted')+'</span>';if(cityGot2[id].has(c[0]))n.classList.add('done');n.onclick=()=>selectCodex2(c,n);map.appendChild(n)});document.getElementById('avatar2').style.left='8%';document.getElementById('avatar2').style.top='78%';document.getElementById('miniTitle2').textContent='Select a Codex';document.getElementById('miniText2').textContent='Pick a Codex fragment. A visual lock will open.';document.getElementById('miniArea2').innerHTML='<div class="mini-title">Codex locked</div>';updateCity2();screen2('city')}
 function selectCodex2(c,node){if(node.classList.contains('done')){t2('Codex already recovered');return}document.querySelectorAll('.codex-node').forEach(n=>n.classList.remove('current'));node.classList.add('current');document.getElementById('avatar2').style.left=node.style.left;document.getElementById('avatar2').style.top=node.style.top;document.getElementById('miniTitle2').textContent='Codex '+c[0]+' Security';document.getElementById('miniText2').textContent='Follow the hint. Then press HIT to lock the recovered Codex.';renderMini2(c,node)}
 function hitGate(doneFn){const row=document.createElement('div');row.className='hit-row';const b=document.createElement('button');b.className='hit-btn';b.textContent='HIT / lock recovered Codex';b.onclick=()=>{b.disabled=true;doneFn()};row.appendChild(b);return row}
-function renderMini2(c,node){const type=c[1],area=document.getElementById('miniArea2');area.innerHTML='<div class="mini-title">'+(type==='lock'?'Symbol lock':type==='dna'?'DNA assembly':'Security node bypass')+'</div>';let solved=false;const complete=()=>{if(!solved)return;node.classList.add('done');cityGot2[current2].add(c[0]);document.getElementById('miniText2').textContent='Codex recovered. Contents remain encrypted until city sync.';t2('Codex '+c[0]+' recovered');updateCity2()};
- if(type==='lock'){let time=30;const timer=document.createElement('div');timer.className='timer';timer.textContent='Timer: '+time+'s';area.appendChild(timer);area.innerHTML+='<div class="hint">Click each ring until all symbols match the target: 鷹. Then press HIT. Timer resets rings if it reaches zero.</div>';const wrap=document.createElement('div');wrap.className='symbol-lock';let states=[0,1,2,3],symbols=['鷹','影','刃','浪'];states.forEach((s,i)=>{const w=document.createElement('div');w.className='lock-wheel';w.textContent=symbols[s];w.onclick=()=>{states[i]=(states[i]+1)%symbols.length;w.textContent=symbols[states[i]];w.style.transform='rotate('+(states[i]*90)+'deg)';if(states.every(x=>x===0)){solved=true;wrap.querySelectorAll('.lock-wheel').forEach(x=>x.classList.add('locked'));t2('Symbol lock aligned')}};wrap.appendChild(w)});area.appendChild(wrap);area.appendChild(hitGate(complete));const int=setInterval(()=>{if(!document.body.contains(area)||solved){clearInterval(int);return}time--;timer.textContent='Timer: '+time+'s';if(time<=0){time=30;states=[0,1,2,3];wrap.querySelectorAll('.lock-wheel').forEach((w,i)=>{w.textContent=symbols[states[i]];w.classList.remove('locked');w.style.transform='rotate(0deg)'});t2('Timer expired — lock reset')}},1000)}
- if(type==='dna'){area.innerHTML+='<div class="hint">Drag each DNA fragment into the dashed capsule. If drag does not work on your browser, click a fragment and then click the capsule. When all four fragments are inside, press HIT.</div>';const board=document.createElement('div');board.className='dna-board';board.innerHTML='<div class="dna-target" id="dnaTarget2"></div>';let placed=0;let selected=null;const placePiece=(p)=>{if(!p||p.classList.contains('done'))return;p.classList.remove('selected');p.classList.add('done');p.style.left=(285+placed*25)+'px';p.style.top=(75+(placed%2)*20)+'px';placed++;if(placed>=4){solved=true;board.querySelector('.dna-target').classList.add('ready');t2('DNA strand assembled')}};for(let i=0;i<4;i++){const p=document.createElement('div');p.className='dna-piece';p.draggable=true;p.style.left=(20+i*88)+'px';p.style.top=(20+(i%2)*104)+'px';p.dataset.id=i;p.ondragstart=e=>{selected=p;e.dataTransfer.setData('text/plain',i)};p.onclick=()=>{if(p.classList.contains('done'))return;if(selected)selected.classList.remove('selected');selected=p;p.classList.add('selected');t2('DNA fragment selected — click the capsule')};board.appendChild(p)}const target=board.querySelector('.dna-target');target.ondragover=e=>e.preventDefault();target.ondrop=e=>{e.preventDefault();const id=e.dataTransfer.getData('text/plain');placePiece(board.querySelector('[data-id="'+id+'"]'))};target.onclick=()=>placePiece(selected);area.appendChild(board);area.appendChild(hitGate(complete))}
- if(type==='nodes'){area.innerHTML+='<div class="hint">Bypass security by connecting 5 safe nodes. Some nodes are mines and reset the path. Press HIT after 5 safe nodes.</div>';const grid=document.createElement('div');grid.className='node-grid';let safeCount=0;const mines=new Set([Math.floor(Math.random()*20),Math.floor(Math.random()*20),Math.floor(Math.random()*20)]);for(let i=0;i<20;i++){const n=document.createElement('button');n.className='path-node';n.onclick=()=>{if(mines.has(i)){safeCount=0;grid.querySelectorAll('.path-node').forEach(x=>x.classList.remove('safe'));n.classList.add('mine');setTimeout(()=>n.classList.remove('mine'),500);t2('Mine node hit — path reset')}else if(!n.classList.contains('safe')){n.classList.add('safe');safeCount++;if(safeCount>=5){solved=true;t2('Security route bypassed')}}};grid.appendChild(n)}area.appendChild(grid);area.appendChild(hitGate(complete))}
+
+function renderMini2(c,node){
+  const type=c[1],area=document.getElementById('miniArea2');
+  area.innerHTML='<div class="mini-title">'+(type==='lock'?'Symbol lock':type==='dna'?'DNA assembly':'Security node bypass')+'</div>';
+  let solved=false;
+
+  const complete=()=>{
+    if(!solved){t2('Solve the lock first, then HIT');return;}
+    node.classList.add('done');
+    cityGot2[current2].add(c[0]);
+    document.getElementById('miniText2').textContent='Codex recovered. Contents remain encrypted until city sync.';
+    t2('Codex '+c[0]+' recovered');
+    updateCity2();
+  };
+
+  const addHit=(label='HIT / lock recovered Codex')=>{
+    const row=document.createElement('div');
+    row.className='hit-row';
+    const b=document.createElement('button');
+    b.className='hit-btn';
+    b.textContent=label;
+    b.onclick=()=>{ if(solved){b.disabled=true; complete();} else {t2('Security not cleared yet');} };
+    row.appendChild(b);
+    return {row,b};
+  };
+
+  if(type==='lock'){
+    let time=45;
+    const timer=document.createElement('div');
+    timer.className='timer safe';
+    timer.textContent='Timer: '+time+'s';
+    area.appendChild(timer);
+
+    const hint=document.createElement('div');
+    hint.className='hint';
+    hint.textContent='Click each ring until every symbol is 鷹. You have 45 seconds. When all four match, press HIT.';
+    area.appendChild(hint);
+
+    const wrap=document.createElement('div');
+    wrap.className='symbol-lock';
+    let states=[0,1,2,3], symbols=['鷹','影','刃','浪'];
+    states.forEach((s,i)=>{
+      const w=document.createElement('div');
+      w.className='lock-wheel';
+      w.textContent=symbols[s];
+      w.onclick=()=>{
+        if(solved)return;
+        states[i]=(states[i]+1)%symbols.length;
+        w.textContent=symbols[states[i]];
+        w.style.transform='rotate('+(states[i]*90)+'deg)';
+        if(states.every(x=>x===0)){
+          solved=true;
+          wrap.querySelectorAll('.lock-wheel').forEach(x=>x.classList.add('locked'));
+          hit.b.classList.add('locked-ready');
+          t2('Symbol lock aligned — press HIT');
+        }
+      };
+      wrap.appendChild(w);
+    });
+    area.appendChild(wrap);
+    const hit=addHit();
+    area.appendChild(hit.row);
+
+    const int=setInterval(()=>{
+      if(!document.body.contains(area)||!area.isConnected||solved){clearInterval(int);return}
+      time--;
+      timer.textContent='Timer: '+time+'s';
+      if(time<=0){
+        time=45;
+        states=[0,1,2,3];
+        wrap.querySelectorAll('.lock-wheel').forEach((w,i)=>{
+          w.textContent=symbols[states[i]];
+          w.classList.remove('locked');
+          w.style.transform='rotate(0deg)';
+        });
+        t2('Timer expired — symbol lock reset');
+      }
+    },1000);
+  }
+
+  if(type==='dna'){
+    const hint=document.createElement('div');
+    hint.className='hint';
+    hint.textContent='Assemble the visual DNA strand: drag each curved fragment into the dashed capsule. If drag fails, click a fragment, then click the capsule. No timer here.';
+    area.appendChild(hint);
+
+    const board=document.createElement('div');
+    board.className='dna-board';
+    board.innerHTML='<div class="dna-target" id="dnaTarget2"></div>';
+    let placed=0;
+    let selected=null;
+
+    const placePiece=(p)=>{
+      if(!p||p.classList.contains('done'))return;
+      p.classList.remove('selected');
+      p.classList.add('done');
+      p.draggable=false;
+      const slots=[
+        [78,78], [130,104], [182,78], [234,104]
+      ];
+      const s=slots[placed] || [120+placed*30,90];
+      p.style.left=s[0]+'px';
+      p.style.top=s[1]+'px';
+      placed++;
+      selected=null;
+      if(placed>=4){
+        solved=true;
+        board.querySelector('.dna-target').classList.add('ready');
+        hit.b.classList.add('locked-ready');
+        t2('DNA strand assembled — press HIT');
+      }
+    };
+
+    for(let i=0;i<4;i++){
+      const p=document.createElement('div');
+      p.className='dna-piece';
+      p.draggable=true;
+      p.style.left=(18+i*88)+'px';
+      p.style.top=(22+(i%2)*118)+'px';
+      p.dataset.id=i;
+      p.ondragstart=e=>{
+        selected=p;
+        e.dataTransfer.setData('text/plain',i);
+      };
+      p.onclick=()=>{
+        if(p.classList.contains('done'))return;
+        if(selected)selected.classList.remove('selected');
+        selected=p;
+        p.classList.add('selected');
+        t2('Fragment selected — click capsule');
+      };
+      board.appendChild(p);
+    }
+
+    const target=board.querySelector('.dna-target');
+    target.ondragover=e=>e.preventDefault();
+    target.ondrop=e=>{
+      e.preventDefault();
+      const id=e.dataTransfer.getData('text/plain');
+      placePiece(board.querySelector('[data-id="'+id+'"]'));
+    };
+    target.onclick=()=>placePiece(selected);
+
+    area.appendChild(board);
+    const hit=addHit();
+    area.appendChild(hit.row);
+  }
+
+  if(type==='nodes'){
+    const hint=document.createElement('div');
+    hint.className='hint';
+    hint.textContent='Bypass security: click 5 safe nodes. Three hidden mines reset the path. Safe nodes stay lit. Press HIT after 5 safe nodes.';
+    area.appendChild(hint);
+
+    const grid=document.createElement('div');
+    grid.className='node-grid';
+    let safeCount=0;
+    const mines=new Set();
+    while(mines.size<3){ mines.add(Math.floor(Math.random()*16)); }
+
+    for(let i=0;i<16;i++){
+      const n=document.createElement('button');
+      n.className='path-node';
+      n.onclick=()=>{
+        if(solved)return;
+        if(mines.has(i)){
+          safeCount=0;
+          grid.querySelectorAll('.path-node').forEach(x=>x.classList.remove('safe'));
+          n.classList.add('mine');
+          setTimeout(()=>n.classList.remove('mine'),500);
+          t2('Mine node hit — path reset');
+        }else if(!n.classList.contains('safe')){
+          n.classList.add('safe');
+          safeCount++;
+          if(safeCount>=5){
+            solved=true;
+            hit.b.classList.add('locked-ready');
+            t2('Security route bypassed — press HIT');
+          }
+        }
+      };
+      grid.appendChild(n);
+    }
+    area.appendChild(grid);
+    const hit=addHit();
+    area.appendChild(hit.row);
+  }
 }
+
 function updateCity2(){const d=data2[current2],required=d.codex.filter(x=>x[2]!=='optional').map(x=>x[0]),got=cityGot2[current2]||new Set(),count=required.filter(x=>got.has(x)).length;document.getElementById('cityProgress2').textContent=count+' / '+required.length+' required Codex recovered';if(count>=required.length){document.getElementById('completeCity2').disabled=false;document.getElementById('cityReveal2').innerHTML='<div class="reveal-box">City reveal ready. Synchronize city memory to unlock recovered intel.</div>'}}
 document.getElementById('returnRegion2').addEventListener('click',()=>screen2(data2[current2].region));
 document.getElementById('completeCity2').addEventListener('click',()=>{const d=data2[current2],got=cityGot2[current2]||new Set();if(!done2.has(current2)){done2.add(current2);document.querySelector('[data-frag="'+d.frag+'"]').classList.add('done');let opt=d.codex.filter(x=>x[2]==='optional'&&got.has(x[0])).length;if(opt){side2.push(d.title+' optional Codex');document.querySelector('[data-frag="side"]').classList.add('done');addSync2(5,'Optional Codex recovered')}addSync2(d.points,d.title+' synchronized');alert(d.title+' memory synchronized:\\n\\n'+d.intel)}screen2(d.region);updateObj2()});
