@@ -897,7 +897,7 @@
 <script src="transitions.js"></script>
 
 <script>
-const g2=document.getElementById('ac2'),play2=document.getElementById('playAC2'),exit2=document.getElementById('ac2Exit'),screens2=[...document.querySelectorAll('.ac2-screen')],status2=document.getElementById('ac2Status'),fill2=document.getElementById('ac2Fill'),num2=document.getElementById('ac2Num'),toast2=document.getElementById('toast2');
+const g2=document.getElementById('ac2'),play2=document.getElementById('playAC2')||document.getElementById('playCodexGame')||document.getElementById('playWorldAnimus'),exit2=document.getElementById('ac2Exit'),screens2=[...document.querySelectorAll('.ac2-screen')],status2=document.getElementById('ac2Status'),fill2=document.getElementById('ac2Fill'),num2=document.getElementById('ac2Num'),toast2=document.getElementById('toast2');
 let sync2=0,world2=false,ind2=false,fr2=false,done2=new Set(),current2=null,side2=[],signal2=false,cityGot2={},personal2=new Set();
 const data2={
  hyderabad:{region:'india',frag:'hyderabad',title:'Hyderabad',kicker:'City Memory: The First Forge',points:16,intel:'Mechanical engineering roots, early design/build mindset, and AUV systems-thinking seed recovered.',codex:[['I','symbol'],['II','circuit'],['III','balance']]},
