@@ -56,627 +56,41 @@
 @media(max-width:900px){.nav-grid{grid-template-columns:1fr 1fr}.philosophy{grid-template-columns:1fr;gap:2rem}.intro-inner{grid-template-columns:1fr;gap:2rem}.hero-btns{flex-direction:column;align-items:center}}
 @media(max-width:500px){.nav-grid{grid-template-columns:1fr}}
 
-
-/* ═══════════════════════════════════════════
-   ANIMUS CONTRACT V2 — AC MISSION GAME
-   ═══════════════════════════════════════════ */
-.hero-game-note{
-  margin-top:1rem;
-  font-family:'Space Mono',monospace;
-  font-size:.52rem;
-  text-transform:uppercase;
-  letter-spacing:.16em;
-  color:var(--steel);
-}
-.btn-game{
-  border-color:rgba(139,26,26,.55);
-  color:var(--paper);
-  background:rgba(139,26,26,.06);
-}
+/* ANIMUS WORLD MAP — AC-STYLE EXPLORATION */
+.hero-game-note{margin-top:1rem;font-family:'Space Mono',monospace;font-size:.52rem;text-transform:uppercase;letter-spacing:.16em;color:var(--steel)}
+.btn-game{border-color:rgba(139,26,26,.55);color:var(--paper);background:rgba(139,26,26,.06)}
 .btn-game::before{background:rgba(139,26,26,.18)}
-.btn-game .game-glyph{
-  font-family:'Noto Serif JP',serif;
-  font-size:.85rem;
-  color:var(--blood-glow);
-}
-
-.animus-mission{
-  position:fixed;
-  inset:0;
-  z-index:5000;
-  display:none;
-  background:
-    radial-gradient(circle at 50% 34%, rgba(139,26,26,.20), transparent 34%),
-    radial-gradient(circle at 80% 14%, rgba(194,59,59,.07), transparent 24%),
-    linear-gradient(180deg, rgba(10,10,11,.985), rgba(10,10,11,1));
-  color:var(--paper);
-  padding:1.1rem;
-  overflow:hidden;
-}
-.animus-mission.open{display:block}
-.animus-mission::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(90deg, rgba(240,235,227,.024) 1px, transparent 1px),
-    linear-gradient(rgba(240,235,227,.024) 1px, transparent 1px);
-  background-size:34px 34px;
-  pointer-events:none;
-}
-.animus-mission::after{
-  content:'';
-  position:absolute;
-  left:0;right:0;top:0;height:1px;
-  background:linear-gradient(to right, transparent, var(--blood), transparent);
-  animation:missionScan 5s ease-in-out infinite;
-  opacity:.55;
-}
-@keyframes missionScan{
-  0%{top:0;opacity:.04}
-  45%{opacity:.72}
-  100%{top:100%;opacity:.04}
-}
-.mission-shell{
-  position:relative;
-  z-index:2;
-  height:calc(100vh - 2.2rem);
-  max-width:1260px;
-  margin:0 auto;
-  border:1px solid rgba(240,235,227,.08);
-  background:linear-gradient(135deg, rgba(139,26,26,.06), transparent 44%), rgba(10,10,11,.86);
-  box-shadow:0 34px 100px rgba(0,0,0,.64);
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-.mission-corner{
-  position:absolute;
-  width:18px;height:18px;
-  border-style:solid;
-  border-color:rgba(139,26,26,.46);
-  z-index:5;
-  pointer-events:none;
-}
-.mission-corner.tl{top:12px;left:12px;border-width:1px 0 0 1px}
-.mission-corner.tr{top:12px;right:12px;border-width:1px 1px 0 0}
-.mission-corner.bl{bottom:12px;left:12px;border-width:0 0 1px 1px}
-.mission-corner.br{bottom:12px;right:12px;border-width:0 1px 1px 0}
-
-.mission-topbar{
-  flex:0 0 auto;
-  display:grid;
-  grid-template-columns:1fr auto auto;
-  gap:1rem;
-  align-items:center;
-  min-height:68px;
-  padding:1rem 1.4rem;
-  border-bottom:1px solid var(--ghost-line);
-}
-.mission-status{
-  font-family:'Space Mono',monospace;
-  font-size:.52rem;
-  text-transform:uppercase;
-  letter-spacing:.18em;
-  color:var(--blood-glow);
-}
-.mission-sync{
-  min-width:265px;
-  display:flex;
-  align-items:center;
-  gap:.65rem;
-}
-.mission-sync-label{
-  font-family:'Space Mono',monospace;
-  font-size:.48rem;
-  text-transform:uppercase;
-  letter-spacing:.14em;
-  color:var(--steel);
-}
-.mission-sync-track{
-  flex:1;height:5px;background:rgba(240,235,227,.06);overflow:hidden;
-}
-.mission-sync-fill{
-  height:100%;width:0%;
-  background:linear-gradient(90deg,var(--blood),var(--blood-glow));
-  transition:width .5s cubic-bezier(.2,.8,.2,1);
-}
-.mission-sync-score{
-  width:38px;
-  text-align:right;
-  font-family:'Space Mono',monospace;
-  font-size:.52rem;
-  color:var(--paper);
-}
-.mission-exit{
-  font-family:'Space Mono',monospace;
-  font-size:.5rem;
-  text-transform:uppercase;
-  letter-spacing:.14em;
-  color:var(--mist);
-  background:transparent;
-  border:1px solid var(--ghost-line);
-  padding:.6rem .8rem;
-  cursor:pointer;
-}
-.mission-exit:hover{color:var(--paper);border-color:rgba(139,26,26,.45);background:rgba(139,26,26,.08)}
-
-.intel-strip{
-  flex:0 0 auto;
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:1px;
-  background:var(--ghost-line);
-  border-bottom:1px solid var(--ghost-line);
-}
-.intel-frag{
-  background:rgba(10,10,11,.86);
-  padding:.65rem .5rem;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:.45rem;
-  color:var(--steel);
-  font-family:'Space Mono',monospace;
-  font-size:.43rem;
-  text-transform:uppercase;
-  letter-spacing:.1em;
-  transition:all .3s;
-}
-.intel-frag span{
-  width:8px;height:8px;border:1px solid rgba(139,26,26,.35);transform:rotate(45deg);
-}
-.intel-frag.complete{color:var(--mist);background:rgba(139,26,26,.055)}
-.intel-frag.complete span{background:var(--blood-glow);box-shadow:0 0 10px rgba(194,59,59,.45)}
-
-.mission-screen{
-  flex:1;
-  display:none;
-  overflow:auto;
-  padding:2rem;
-}
-.mission-screen.active{display:block}
-
-.mission-kicker{
-  font-family:'Space Mono',monospace;
-  font-size:.52rem;
-  text-transform:uppercase;
-  letter-spacing:.22em;
-  color:rgba(139,26,26,.65);
-  margin-bottom:1rem;
-}
-.mission-title-main{
-  font-family:'Zen Antique',serif;
-  font-size:clamp(2.2rem,4vw,3.8rem);
-  line-height:1.08;
-  margin-bottom:1rem;
-}
-.mission-desc{
-  color:var(--mist);
-  line-height:1.8;
-  font-weight:300;
-  font-size:.95rem;
-  max-width:570px;
-}
-.mission-action{
-  display:inline-flex;
-  align-items:center;
-  gap:.65rem;
-  margin-top:1.35rem;
-  font-family:'Space Mono',monospace;
-  font-size:.54rem;
-  text-transform:uppercase;
-  letter-spacing:.15em;
-  color:var(--paper);
-  background:transparent;
-  border:1px solid rgba(139,26,26,.42);
-  padding:.85rem 1.05rem;
-  cursor:pointer;
-  transition:all .3s;
-}
-.mission-action:hover{background:rgba(139,26,26,.1);transform:translateY(-2px)}
-.mission-action:disabled{opacity:.35;cursor:not-allowed;transform:none;background:transparent}
-
-.guide-box{
-  margin-top:1.2rem;
-  border:1px solid var(--ghost-line);
-  background:rgba(10,10,11,.58);
-  padding:1rem;
-  max-width:570px;
-}
-.guide-label{
-  font-family:'Space Mono',monospace;
-  font-size:.45rem;
-  text-transform:uppercase;
-  letter-spacing:.16em;
-  color:var(--blood-glow);
-  margin-bottom:.45rem;
-}
-.guide-text{
-  font-size:.8rem;
-  line-height:1.65;
-  color:var(--mist);
-  font-weight:300;
-}
-
-.mission-grid{
-  min-height:100%;
-  display:grid;
-  grid-template-columns:.86fr 1.14fr;
-  gap:2rem;
-  align-items:center;
-}
-.holo-panel{
-  min-height:500px;
-  border:1px solid var(--ghost-line);
-  background:linear-gradient(135deg, rgba(139,26,26,.045), transparent 45%), rgba(240,235,227,.025);
-  position:relative;
-  overflow:hidden;
-  transform:perspective(1100px) rotateX(6deg) rotateY(-4deg);
-  transform-style:preserve-3d;
-}
-.holo-panel::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(90deg, rgba(240,235,227,.025) 1px, transparent 1px),
-    linear-gradient(rgba(240,235,227,.025) 1px, transparent 1px);
-  background-size:28px 28px;
-  pointer-events:none;
-}
-.holo-scan{
-  position:absolute;
-  left:0;right:0;top:0;height:1px;
-  background:linear-gradient(to right,transparent,var(--blood),transparent);
-  animation:holoScanV2 3.8s ease-in-out infinite;
-  opacity:.55;
-}
-@keyframes holoScanV2{
-  0%{top:0;opacity:.06}
-  52%{opacity:.68}
-  100%{top:100%;opacity:.06}
-}
-
-/* World map + Eagle Vision */
-.world-map{
-  position:absolute;
-  inset:1.5rem;
-  perspective:1200px;
-}
-.map-plane{
-  position:absolute;
-  left:50%;
-  top:54%;
-  width:84%;
-  height:72%;
-  transform:translate(-50%,-50%) rotateX(58deg) rotateZ(-6deg);
-  transform-style:preserve-3d;
-  border:1px solid rgba(139,26,26,.24);
-  background:
-    radial-gradient(circle at 22% 54%, rgba(240,235,227,.08), transparent 2%),
-    radial-gradient(circle at 46% 38%, rgba(240,235,227,.08), transparent 2%),
-    radial-gradient(circle at 57% 44%, rgba(240,235,227,.08), transparent 2%),
-    radial-gradient(circle at 65% 36%, rgba(240,235,227,.08), transparent 2%),
-    linear-gradient(90deg, rgba(240,235,227,.035) 1px, transparent 1px),
-    linear-gradient(rgba(240,235,227,.035) 1px, transparent 1px),
-    rgba(10,10,11,.44);
-  background-size:auto,auto,auto,auto,44px 44px,44px 44px,auto;
-  box-shadow:0 35px 70px rgba(0,0,0,.45);
-}
-.eagle-pulse{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:0;
-  height:0;
-  border:1px solid rgba(194,59,59,.55);
-  border-radius:50%;
-  transform:translate(-50%,-50%) translateZ(10px);
-  opacity:0;
-}
-.eagle-active .eagle-pulse{
-  animation:eaglePulse 1.7s ease-out forwards;
-}
-@keyframes eaglePulse{
-  0%{width:0;height:0;opacity:.9}
-  100%{width:760px;height:760px;opacity:0}
-}
-.map-node{
-  position:absolute;
-  width:150px;
-  border:1px solid var(--ghost-line);
-  background:rgba(10,10,11,.84);
-  padding:.8rem;
-  cursor:pointer;
-  transform:translateZ(32px);
-  transition:all .3s;
-  opacity:0;
-  pointer-events:none;
-}
-.eagle-active .map-node{
-  opacity:1;
-  pointer-events:auto;
-}
-.map-node:hover,.map-node.scanned{
-  transform:translateY(-6px) translateZ(58px);
-  border-color:rgba(139,26,26,.52);
-  background:rgba(139,26,26,.09);
-  box-shadow:0 22px 45px rgba(0,0,0,.42);
-}
-.map-node.hyderabad{left:20%;top:52%}
-.map-node.paris{left:43%;top:28%}
-.map-node.toulouse{left:54%;top:39%}
-.map-node.iuct{left:61%;top:45%}
-.map-node.hepta{left:51%;top:23%}
-.map-node.ladhyx{left:39%;top:33%}
-.map-node.manitty{left:48%;top:49%}
-.node-title{font-family:'Zen Antique',serif;font-size:.92rem;line-height:1.25}
-.node-code{font-family:'Space Mono',monospace;font-size:.42rem;text-transform:uppercase;letter-spacing:.1em;color:var(--steel);margin-top:.35rem;line-height:1.45}
-.node-reveal{display:none;color:var(--mist);font-size:.72rem;line-height:1.5;margin-top:.5rem}
-.map-node.scanned .node-reveal{display:block}
-
-/* Mission board */
-.board-wrap{
-  position:absolute;
-  inset:1.5rem;
-  perspective:1200px;
-}
-.board-plane{
-  position:absolute;
-  left:50%;
-  top:51%;
-  width:80%;
-  height:74%;
-  transform:translate(-50%,-50%) rotateX(58deg) rotateZ(-7deg);
-  transform-style:preserve-3d;
-  border:1px solid rgba(139,26,26,.24);
-  background:
-    linear-gradient(90deg, rgba(240,235,227,.035) 1px, transparent 1px),
-    linear-gradient(rgba(240,235,227,.035) 1px, transparent 1px),
-    rgba(10,10,11,.44);
-  background-size:44px 44px;
-  box-shadow:0 35px 70px rgba(0,0,0,.45);
-}
-.board-tile{
-  position:absolute;
-  width:180px;
-  min-height:108px;
-  border:1px solid var(--ghost-line);
-  background:rgba(10,10,11,.82);
-  padding:.85rem;
-  cursor:pointer;
-  transform:translateZ(28px);
-  transform-style:preserve-3d;
-  transition:all .3s;
-}
-.board-tile::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  border-bottom:4px solid rgba(0,0,0,.35);
-  pointer-events:none;
-}
-.board-tile.open:hover{
-  transform:translateZ(56px) translateY(-8px);
-  border-color:rgba(139,26,26,.5);
-  background:rgba(139,26,26,.09);
-  box-shadow:0 22px 45px rgba(0,0,0,.42);
-}
-.board-tile.locked{opacity:.45;cursor:not-allowed;filter:grayscale(.35)}
-.board-tile.complete{border-color:rgba(194,59,59,.4);background:rgba(139,26,26,.08)}
-.board-tile.bureau{left:9%;top:12%}
-.board-tile.arsenal{right:11%;top:10%}
-.board-tile.builds{left:38%;top:38%}
-.board-tile.eavesdrop{left:10%;bottom:12%}
-.board-tile.lens{right:12%;bottom:15%}
-.board-title{font-family:'Zen Antique',serif;font-size:.95rem;line-height:1.25}
-.board-state{font-family:'Space Mono',monospace;font-size:.42rem;text-transform:uppercase;letter-spacing:.11em;color:var(--blood-glow);margin-top:.45rem}
-.board-clue{font-size:.68rem;line-height:1.45;color:var(--steel);margin-top:.5rem}
-
-/* Cards */
-.evidence-grid{
-  position:absolute;
-  inset:1.4rem;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1rem;
-}
-.evidence-grid.wide{grid-template-columns:repeat(4,1fr)}
-.evidence-card{
-  border:1px solid var(--ghost-line);
-  background:rgba(10,10,11,.75);
-  padding:1rem;
-  cursor:pointer;
-  transition:all .3s;
-  transform:translateZ(24px);
-  position:relative;
-  overflow:hidden;
-}
-.evidence-card::after{
-  content:'';
-  position:absolute;
-  left:0;right:0;bottom:0;height:2px;
-  background:var(--blood);
-  transform:scaleX(0);
-  transform-origin:left;
-  transition:transform .3s;
-}
-.evidence-card:hover,.evidence-card.scanned,.evidence-card.selected,.evidence-card.pinned{
-  border-color:rgba(139,26,26,.52);
-  background:rgba(139,26,26,.08);
-  transform:translateY(-5px) translateZ(38px);
-  box-shadow:0 18px 40px rgba(0,0,0,.32);
-}
-.evidence-card.scanned::after,.evidence-card.selected::after,.evidence-card.pinned::after{transform:scaleX(1)}
-.evidence-title{font-family:'Zen Antique',serif;font-size:1rem;margin-bottom:.42rem;line-height:1.3}
-.evidence-code{font-family:'Space Mono',monospace;font-size:.43rem;text-transform:uppercase;letter-spacing:.1em;color:var(--steel);line-height:1.55}
-.evidence-reveal{font-size:.78rem;line-height:1.55;color:var(--mist);margin-top:.65rem;display:none}
-.evidence-card.scanned .evidence-reveal,.evidence-card.selected .evidence-reveal,.evidence-card.pinned .evidence-reveal{display:block}
-.recon-strip{
-  position:absolute;
-  left:1.4rem;right:1.4rem;bottom:1.4rem;
-  border:1px solid rgba(139,26,26,.25);
-  background:rgba(10,10,11,.76);
-  padding:1rem;
-  font-family:'Space Mono',monospace;
-  font-size:.48rem;
-  text-transform:uppercase;
-  letter-spacing:.1em;
-  color:var(--steel);
-  line-height:1.8;
-}
-.recon-strip.ready{color:var(--mist);background:rgba(139,26,26,.07)}
-
-.pin-board{
-  position:absolute;
-  left:1.4rem;right:1.4rem;bottom:1.4rem;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:.5rem;
-}
-.pin-slot{
-  min-height:64px;
-  border:1px dashed rgba(139,26,26,.35);
-  background:rgba(10,10,11,.45);
-  padding:.5rem;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-family:'Space Mono',monospace;
-  font-size:.42rem;
-  text-transform:uppercase;
-  letter-spacing:.09em;
-  color:var(--steel);
-}
-.pin-slot.filled{border-style:solid;color:var(--mist);background:rgba(139,26,26,.07)}
-
-.loadout-readout{
-  position:absolute;
-  left:1.4rem;right:1.4rem;bottom:1.4rem;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:.7rem;
-}
-.loadout-slot{
-  min-height:58px;
-  border:1px solid var(--ghost-line);
-  background:rgba(10,10,11,.56);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-family:'Space Mono',monospace;
-  font-size:.44rem;
-  text-transform:uppercase;
-  letter-spacing:.09em;
-  color:var(--steel);
-  padding:.5rem;
-}
-.loadout-slot.filled{color:var(--mist);border-color:rgba(139,26,26,.35);background:rgba(139,26,26,.06)}
-
-.side-relics{
-  position:absolute;
-  left:1.4rem;right:1.4rem;bottom:1.1rem;
-  display:flex;
-  flex-wrap:wrap;
-  gap:.5rem;
-}
-.side-relic{
-  font-family:'Space Mono',monospace;
-  font-size:.42rem;
-  text-transform:uppercase;
-  letter-spacing:.1em;
-  color:var(--steel);
-  border:1px solid var(--ghost-line);
-  background:rgba(10,10,11,.55);
-  padding:.48rem .6rem;
-  cursor:pointer;
-}
-.side-relic.scanned{color:var(--mist);border-color:rgba(139,26,26,.4);background:rgba(139,26,26,.07)}
-
-.final-dossier{
-  max-width:1000px;
-  margin:0 auto;
-  border:1px solid rgba(139,26,26,.32);
-  background:linear-gradient(135deg, rgba(139,26,26,.08), transparent 48%), rgba(10,10,11,.82);
-  padding:1.8rem;
-}
-.final-top{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:1rem;
-  border-bottom:1px solid var(--ghost-line);
-  padding-bottom:1.2rem;
-  margin-bottom:1.2rem;
-}
-.final-title{font-family:'Zen Antique',serif;font-size:clamp(2rem,4vw,3rem);margin-bottom:.45rem}
-.final-sync{text-align:right;font-family:'Space Mono',monospace}
-.final-sync-num{font-size:2rem;color:var(--blood-glow)}
-.final-rank{font-size:.48rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mist)}
-.final-summary{color:var(--mist);line-height:1.75;font-size:.96rem;font-weight:300;margin-bottom:1.3rem}
-.final-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ghost-line);margin:1.3rem 0}
-.final-cell{background:rgba(10,10,11,.86);padding:1rem}
-.final-key{font-family:'Space Mono',monospace;font-size:.45rem;text-transform:uppercase;letter-spacing:.15em;color:rgba(139,26,26,.5);margin-bottom:.45rem}
-.final-val{color:var(--mist);line-height:1.65;font-size:.86rem;font-weight:300}
-.final-val strong{color:var(--paper);font-weight:500}
-.final-actions{display:flex;flex-wrap:wrap;gap:.75rem}
-.final-actions a,.final-actions button{
-  font-family:'Space Mono',monospace;
-  font-size:.52rem;
-  text-transform:uppercase;
-  letter-spacing:.14em;
-  color:var(--paper);
-  text-decoration:none;
-  border:1px solid rgba(139,26,26,.42);
-  background:transparent;
-  padding:.8rem .95rem;
-  cursor:pointer;
-}
-.final-actions a:hover,.final-actions button:hover{background:rgba(139,26,26,.1)}
-
-.mission-toast{
-  position:absolute;
-  left:50%;
-  bottom:1rem;
-  transform:translateX(-50%);
-  font-family:'Space Mono',monospace;
-  font-size:.49rem;
-  text-transform:uppercase;
-  letter-spacing:.14em;
-  color:var(--blood-glow);
-  border:1px solid rgba(139,26,26,.24);
-  background:rgba(10,10,11,.88);
-  padding:.7rem .95rem;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .3s, transform .3s;
-  z-index:9;
-}
-.mission-toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
-
-@media(max-width:1050px){
-  .mission-topbar{grid-template-columns:1fr;gap:.8rem}
-  .mission-sync{width:100%}
-  .mission-grid{grid-template-columns:1fr}
-  .holo-panel{transform:none;min-height:620px}
-  .map-plane,.board-plane{transform:none;position:relative;left:auto;top:auto;width:auto;height:auto;display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1rem}
-  .world-map,.board-wrap{position:absolute;inset:1rem}
-  .map-node,.board-tile{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:auto;opacity:1;pointer-events:auto}
-  .evidence-grid,.evidence-grid.wide{grid-template-columns:1fr 1fr}
-}
-@media(max-width:720px){
-  .animus-mission{padding:.5rem}
-  .mission-shell{height:calc(100vh - 1rem)}
-  .mission-screen{padding:1rem}
-  .intel-strip{grid-template-columns:repeat(2,1fr)}
-  .holo-panel{min-height:790px}
-  .map-plane,.board-plane,.evidence-grid,.evidence-grid.wide,.final-grid,.loadout-readout,.pin-board{grid-template-columns:1fr}
-  .evidence-grid,.evidence-grid.wide,.recon-strip,.loadout-readout,.side-relics,.pin-board{position:relative;left:auto;right:auto;bottom:auto;top:auto;inset:auto;margin:1rem}
-  .final-top{grid-template-columns:1fr}
-  .final-sync{text-align:left}
-}
+.btn-game .game-glyph{font-family:'Noto Serif JP',serif;font-size:.85rem;color:var(--blood-glow)}
+.animus-world{position:fixed;inset:0;z-index:5000;display:none;background:radial-gradient(circle at 50% 36%,rgba(139,26,26,.20),transparent 35%),linear-gradient(180deg,rgba(10,10,11,.985),rgba(10,10,11,1));color:var(--paper);padding:1.1rem;overflow:hidden}
+.animus-world.open{display:block}
+.animus-world::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(240,235,227,.024) 1px,transparent 1px),linear-gradient(rgba(240,235,227,.024) 1px,transparent 1px);background-size:34px 34px;pointer-events:none}
+.animus-world::after{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(to right,transparent,var(--blood),transparent);animation:worldScan 5s ease-in-out infinite;opacity:.55}
+@keyframes worldScan{0%{top:0;opacity:.04}45%{opacity:.72}100%{top:100%;opacity:.04}}
+.world-shell{position:relative;z-index:2;height:calc(100vh - 2.2rem);max-width:1260px;margin:0 auto;border:1px solid rgba(240,235,227,.08);background:linear-gradient(135deg,rgba(139,26,26,.06),transparent 44%),rgba(10,10,11,.86);box-shadow:0 34px 100px rgba(0,0,0,.64);display:flex;flex-direction:column;overflow:hidden}
+.world-corner{position:absolute;width:18px;height:18px;border-style:solid;border-color:rgba(139,26,26,.46);z-index:5;pointer-events:none}
+.world-corner.tl{top:12px;left:12px;border-width:1px 0 0 1px}.world-corner.tr{top:12px;right:12px;border-width:1px 1px 0 0}.world-corner.bl{bottom:12px;left:12px;border-width:0 0 1px 1px}.world-corner.br{bottom:12px;right:12px;border-width:0 1px 1px 0}
+.world-topbar{display:grid;grid-template-columns:1fr auto auto;gap:1rem;align-items:center;min-height:68px;padding:1rem 1.4rem;border-bottom:1px solid var(--ghost-line)}
+.world-status{font-family:'Space Mono',monospace;font-size:.52rem;text-transform:uppercase;letter-spacing:.18em;color:var(--blood-glow)}
+.world-sync{min-width:265px;display:flex;align-items:center;gap:.65rem}.world-sync-label{font-family:'Space Mono',monospace;font-size:.48rem;text-transform:uppercase;letter-spacing:.14em;color:var(--steel)}.world-sync-track{flex:1;height:5px;background:rgba(240,235,227,.06);overflow:hidden}.world-sync-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blood),var(--blood-glow));transition:width .5s}.world-sync-score{width:38px;text-align:right;font-family:'Space Mono',monospace;font-size:.52rem;color:var(--paper)}
+.world-exit{font-family:'Space Mono',monospace;font-size:.5rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mist);background:transparent;border:1px solid var(--ghost-line);padding:.6rem .8rem;cursor:pointer}.world-exit:hover{color:var(--paper);border-color:rgba(139,26,26,.45);background:rgba(139,26,26,.08)}
+.memory-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--ghost-line);border-bottom:1px solid var(--ghost-line)}
+.memory-frag{background:rgba(10,10,11,.86);padding:.65rem .5rem;display:flex;justify-content:center;align-items:center;gap:.45rem;color:var(--steel);font-family:'Space Mono',monospace;font-size:.42rem;text-transform:uppercase;letter-spacing:.09em;transition:all .3s}.memory-frag span{width:8px;height:8px;border:1px solid rgba(139,26,26,.35);transform:rotate(45deg)}.memory-frag.complete{color:var(--mist);background:rgba(139,26,26,.055)}.memory-frag.complete span{background:var(--blood-glow);box-shadow:0 0 10px rgba(194,59,59,.45)}
+.world-screen{flex:1;display:none;overflow:auto;padding:2rem}.world-screen.active{display:block}
+.world-grid{min-height:100%;display:grid;grid-template-columns:.82fr 1.18fr;gap:2rem;align-items:center}.world-copy{max-width:560px}.world-kicker{font-family:'Space Mono',monospace;font-size:.52rem;text-transform:uppercase;letter-spacing:.22em;color:rgba(139,26,26,.65);margin-bottom:1rem}.world-title{font-family:'Zen Antique',serif;font-size:clamp(2.2rem,4vw,3.8rem);line-height:1.08;margin-bottom:1rem}.world-desc{color:var(--mist);line-height:1.8;font-weight:300;font-size:.95rem;max-width:570px}
+.guide-box{margin-top:1.2rem;border:1px solid var(--ghost-line);background:rgba(10,10,11,.58);padding:1rem;max-width:570px}.guide-label{font-family:'Space Mono',monospace;font-size:.45rem;text-transform:uppercase;letter-spacing:.16em;color:var(--blood-glow);margin-bottom:.45rem}.guide-text{font-size:.8rem;line-height:1.65;color:var(--mist);font-weight:300}
+.world-action{display:inline-flex;align-items:center;gap:.65rem;margin-top:1.35rem;font-family:'Space Mono',monospace;font-size:.54rem;text-transform:uppercase;letter-spacing:.15em;color:var(--paper);background:transparent;border:1px solid rgba(139,26,26,.42);padding:.85rem 1.05rem;cursor:pointer;transition:all .3s}.world-action:hover{background:rgba(139,26,26,.1);transform:translateY(-2px)}.world-action:disabled{opacity:.35;cursor:not-allowed;transform:none;background:transparent}
+.map-panel{min-height:540px;border:1px solid var(--ghost-line);background:linear-gradient(135deg,rgba(139,26,26,.045),transparent 45%),rgba(240,235,227,.025);position:relative;overflow:hidden;transform:perspective(1150px) rotateX(6deg) rotateY(-4deg);transform-style:preserve-3d}.map-panel::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(240,235,227,.025) 1px,transparent 1px),linear-gradient(rgba(240,235,227,.025) 1px,transparent 1px);background-size:28px 28px;pointer-events:none}.map-scan{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(to right,transparent,var(--blood),transparent);animation:mapScanAnim 3.8s ease-in-out infinite;opacity:.55}@keyframes mapScanAnim{0%{top:0;opacity:.06}52%{opacity:.68}100%{top:100%;opacity:.06}}
+.iso-map-wrap{position:absolute;inset:1.4rem;perspective:1200px}.iso-map{position:absolute;left:50%;top:53%;width:82%;height:74%;transform:translate(-50%,-50%) rotateX(58deg) rotateZ(-7deg);transform-style:preserve-3d;border:1px solid rgba(139,26,26,.24);background:linear-gradient(90deg,rgba(240,235,227,.035) 1px,transparent 1px),linear-gradient(rgba(240,235,227,.035) 1px,transparent 1px),rgba(10,10,11,.44);background-size:44px 44px;box-shadow:0 35px 70px rgba(0,0,0,.45)}
+.map-pulse{position:absolute;left:50%;top:50%;width:0;height:0;border:1px solid rgba(194,59,59,.65);border-radius:50%;transform:translate(-50%,-50%) translateZ(20px);opacity:0}.sync-active .map-pulse,.eagle-active .map-pulse{animation:mapPulse 1.8s ease-out forwards}@keyframes mapPulse{0%{width:0;height:0;opacity:.85}100%{width:760px;height:760px;opacity:0}}
+.region-node,.city-node,.memory-node{position:absolute;width:170px;min-height:100px;border:1px solid var(--ghost-line);background:rgba(10,10,11,.84);padding:.85rem;cursor:pointer;transform:translateZ(30px);transition:all .3s;opacity:0;pointer-events:none}.sync-active .region-node,.eagle-active .city-node,.memory-open .memory-node{opacity:1;pointer-events:auto}.region-node:hover,.region-node.complete,.city-node:hover,.city-node.complete,.memory-node:hover,.memory-node.scanned{transform:translateY(-8px) translateZ(58px);border-color:rgba(139,26,26,.52);background:rgba(139,26,26,.09);box-shadow:0 22px 45px rgba(0,0,0,.42)}
+.region-node.india{left:22%;top:47%}.region-node.france{left:55%;top:30%}.city-node.hyderabad{left:22%;top:44%}.city-node.paris{left:42%;top:28%}.city-node.toulouse{left:60%;top:42%}.city-node.hepta{left:51%;top:19%}.city-node.manitty{left:49%;top:54%}
+.node-title{font-family:'Zen Antique',serif;font-size:.95rem;line-height:1.25}.node-code{font-family:'Space Mono',monospace;font-size:.42rem;text-transform:uppercase;letter-spacing:.1em;color:var(--steel);margin-top:.38rem;line-height:1.45}.node-reveal{display:none;color:var(--mist);font-size:.72rem;line-height:1.5;margin-top:.55rem}.region-node.complete .node-reveal,.city-node.complete .node-reveal,.memory-node.scanned .node-reveal{display:block}
+.memory-field{position:absolute;inset:1.4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.memory-field.four{grid-template-columns:repeat(4,1fr)}.memory-node{position:relative;width:auto;min-height:190px;opacity:1;pointer-events:auto;transform:translateZ(24px)}.memory-node::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--blood);transform:scaleX(0);transform-origin:left;transition:transform .3s}.memory-node.scanned::after{transform:scaleX(1)}
+.mission-recon{position:absolute;left:1.4rem;right:1.4rem;bottom:1.4rem;border:1px solid rgba(139,26,26,.25);background:rgba(10,10,11,.76);padding:1rem;font-family:'Space Mono',monospace;font-size:.48rem;text-transform:uppercase;letter-spacing:.1em;color:var(--steel);line-height:1.8}.mission-recon.ready{color:var(--mist);background:rgba(139,26,26,.07)}
+.final-dossier{max-width:1000px;margin:0 auto;border:1px solid rgba(139,26,26,.32);background:linear-gradient(135deg,rgba(139,26,26,.08),transparent 48%),rgba(10,10,11,.82);padding:1.8rem}.final-top{display:grid;grid-template-columns:1fr auto;gap:1rem;border-bottom:1px solid var(--ghost-line);padding-bottom:1.2rem;margin-bottom:1.2rem}.final-title{font-family:'Zen Antique',serif;font-size:clamp(2rem,4vw,3rem);margin-bottom:.45rem}.final-sync{text-align:right;font-family:'Space Mono',monospace}.final-sync-num{font-size:2rem;color:var(--blood-glow)}.final-rank{font-size:.48rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mist)}.final-summary{color:var(--mist);line-height:1.75;font-size:.96rem;font-weight:300;margin-bottom:1.3rem}.final-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ghost-line);margin:1.3rem 0}.final-cell{background:rgba(10,10,11,.86);padding:1rem}.final-key{font-family:'Space Mono',monospace;font-size:.45rem;text-transform:uppercase;letter-spacing:.15em;color:rgba(139,26,26,.5);margin-bottom:.45rem}.final-val{color:var(--mist);line-height:1.65;font-size:.86rem;font-weight:300}.final-val strong{color:var(--paper);font-weight:500}.final-actions{display:flex;flex-wrap:wrap;gap:.75rem}.final-actions a,.final-actions button{font-family:'Space Mono',monospace;font-size:.52rem;text-transform:uppercase;letter-spacing:.14em;color:var(--paper);text-decoration:none;border:1px solid rgba(139,26,26,.42);background:transparent;padding:.8rem .95rem;cursor:pointer}.final-actions a:hover,.final-actions button:hover{background:rgba(139,26,26,.1)}
+.world-toast{position:absolute;left:50%;bottom:1rem;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:.49rem;text-transform:uppercase;letter-spacing:.14em;color:var(--blood-glow);border:1px solid rgba(139,26,26,.24);background:rgba(10,10,11,.88);padding:.7rem .95rem;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:9}.world-toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+@media(max-width:1050px){.world-topbar{grid-template-columns:1fr;gap:.8rem}.world-sync{width:100%}.world-grid{grid-template-columns:1fr}.map-panel{transform:none;min-height:620px}.iso-map{transform:none;position:relative;left:auto;top:auto;width:auto;height:auto;display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1rem}.iso-map-wrap{position:absolute;inset:1rem}.region-node,.city-node{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:auto;opacity:1;pointer-events:auto}.memory-field,.memory-field.four{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.animus-world{padding:.5rem}.world-shell{height:calc(100vh - 1rem)}.world-screen{padding:1rem}.memory-strip{grid-template-columns:repeat(2,1fr)}.map-panel{min-height:760px}.iso-map,.memory-field,.memory-field.four,.final-grid{grid-template-columns:1fr}.memory-field,.memory-field.four,.mission-recon{position:relative;inset:auto;left:auto;right:auto;bottom:auto;margin:1rem}.final-top{grid-template-columns:1fr}.final-sync{text-align:left}}
 
 </style>
 </head>
@@ -690,269 +104,68 @@
 </div>
 
 
-<div class="animus-mission" id="animusMission" aria-hidden="true">
-  <div class="mission-shell">
-    <div class="mission-corner tl"></div><div class="mission-corner tr"></div><div class="mission-corner bl"></div><div class="mission-corner br"></div>
-
-    <div class="mission-topbar">
-      <div class="mission-status" id="missionStatus">ANIMUS MISSION: STANDBY</div>
-      <div class="mission-sync">
-        <div class="mission-sync-label">Sync</div>
-        <div class="mission-sync-track"><div class="mission-sync-fill" id="missionSyncFill"></div></div>
-        <div class="mission-sync-score" id="missionSyncScore">0%</div>
-      </div>
-      <button type="button" class="mission-exit" id="exitMission">Exit</button>
+<div class="animus-world" id="animusWorld" aria-hidden="true">
+  <div class="world-shell">
+    <div class="world-corner tl"></div><div class="world-corner tr"></div><div class="world-corner bl"></div><div class="world-corner br"></div>
+    <div class="world-topbar">
+      <div class="world-status" id="worldStatus">ANIMUS WORLD MAP: STANDBY</div>
+      <div class="world-sync"><div class="world-sync-label">Sync</div><div class="world-sync-track"><div class="world-sync-fill" id="worldSyncFill"></div></div><div class="world-sync-score" id="worldSyncScore">0%</div></div>
+      <button type="button" class="world-exit" id="exitWorldAnimus">Exit</button>
+    </div>
+    <div class="memory-strip">
+      <div class="memory-frag" data-frag="world"><span></span>World</div><div class="memory-frag" data-frag="hyderabad"><span></span>Hyderabad</div><div class="memory-frag" data-frag="paris"><span></span>Paris</div><div class="memory-frag" data-frag="toulouse"><span></span>Toulouse</div><div class="memory-frag" data-frag="side"><span></span>Side Intel</div><div class="memory-frag" data-frag="signal"><span></span>Signal</div>
     </div>
 
-    <div class="intel-strip">
-      <div class="intel-frag" data-frag="network"><span></span>Network</div>
-      <div class="intel-frag" data-frag="bureau"><span></span>Bureau</div>
-      <div class="intel-frag" data-frag="arsenal"><span></span>Arsenal</div>
-      <div class="intel-frag" data-frag="viewpoint"><span></span>Builds</div>
-      <div class="intel-frag" data-frag="signals"><span></span>Signals</div>
-      <div class="intel-frag" data-frag="lens"><span></span>Lens</div>
-    </div>
-
-    <section class="mission-screen active" data-screen="briefing">
-      <div class="mission-grid">
-        <div>
-          <div class="mission-kicker">Animus Mission Brief</div>
-          <h2 class="mission-title-main">Identify the researcher known as Sai Nalla.</h2>
-          <p class="mission-desc">This is an AC-style profile mission. Activate Eagle Vision, investigate the Bureau board, recover the arsenal, synchronize the build viewpoint, eavesdrop on motivation signals, then generate the final dossier.</p>
-          <div class="guide-box">
-            <div class="guide-label">Mission Rule</div>
-            <div class="guide-text">You do not need prior knowledge. Each mission reveals intel first. Your job is to scan, collect, and reconstruct the profile.</div>
-          </div>
-          <button type="button" class="mission-action" id="startEagleVision">Start: Activate Eagle Vision <span>→</span></button>
-        </div>
-        <div class="holo-panel eagle-world">
-          <div class="holo-scan"></div>
-          <div class="world-map">
-            <div class="map-plane">
-              <div class="eagle-pulse"></div>
-              <div class="map-node hyderabad"><div class="node-title">Coordinate 01</div><div class="node-code">Mechanical origin detected</div><div class="node-reveal">Hyderabad / Mahindra University — early engineering record.</div></div>
-              <div class="map-node paris"><div class="node-title">Coordinate 02</div><div class="node-code">Biomedical training detected</div><div class="node-reveal">Palaiseau / Paris — École Polytechnique and biomedical engineering.</div></div>
-              <div class="map-node toulouse"><div class="node-title">Coordinate 03</div><div class="node-code">Radiophysics research detected</div><div class="node-reveal">Toulouse — University of Toulouse and PET/CT radiophysics PhD.</div></div>
-            </div>
-          </div>
-        </div>
+    <section class="world-screen active" data-screen="briefing">
+      <div class="world-grid">
+        <div class="world-copy"><div class="world-kicker">Animus Memory Sequence</div><h2 class="world-title">Synchronize the world map.</h2><p class="world-desc">The target trace is unstable. Begin with the world map. Synchronize the viewpoint to reveal known regions. Enter each region, activate Eagle Vision, then recover city memories.</p><div class="guide-box"><div class="guide-label">Mission Rule</div><div class="guide-text">This is not a quiz. You explore regions and cities. The map reveals the story as you scan memory objects.</div></div><button type="button" class="world-action" id="openWorldMap">Open World Map <span>→</span></button></div>
+        <div class="map-panel"><div class="map-scan"></div><div class="iso-map-wrap"><div class="iso-map"><div class="map-pulse"></div><div class="region-node india"><div class="node-title">Region Locked</div><div class="node-code">Unknown trace</div></div><div class="region-node france"><div class="node-title">Region Locked</div><div class="node-code">Unknown trace</div></div></div></div></div>
       </div>
     </section>
 
-    <section class="mission-screen" data-screen="network">
-      <div class="mission-grid">
-        <div>
-          <div class="mission-kicker">Mission 01 — Eagle Vision</div>
-          <h2 class="mission-title-main">Reveal the network.</h2>
-          <p class="mission-desc">Activate Eagle Vision to reveal locations, universities, labs, hospitals, and companies connected to the profile. Click glowing coordinates to scan them.</p>
-          <div class="guide-box"><div class="guide-label">Eagle Signal</div><div class="guide-text">This mission teaches the map of Sai’s path: where he trained, researched, and worked.</div></div>
-          <button type="button" class="mission-action" id="activateEagleVision">Activate Eagle Vision</button>
-          <button type="button" class="mission-action complete-mission" data-complete="network" disabled>Archive Network Intel <span>→</span></button>
-        </div>
-        <div class="holo-panel eagle-world" id="networkPanel">
-          <div class="holo-scan"></div>
-          <div class="world-map">
-            <div class="map-plane">
-              <div class="eagle-pulse"></div>
-              <div class="map-node hyderabad scan-network"><div class="node-title">Hyderabad</div><div class="node-code">Location · university</div><div class="node-reveal">Mahindra University — mechanical engineering roots, design, fluids, systems.</div></div>
-              <div class="map-node paris scan-network"><div class="node-title">Palaiseau / Paris</div><div class="node-code">University · lab network</div><div class="node-reveal">École Polytechnique and LadHyX — biomedical engineering, biomechanics, soft-matter experiments.</div></div>
-              <div class="map-node toulouse scan-network"><div class="node-title">Toulouse</div><div class="node-code">PhD · hospital ecosystem</div><div class="node-reveal">University of Toulouse and IUCT Oncopole — medical imaging, radiophysics, PET/CT validation.</div></div>
-              <div class="map-node iuct scan-network"><div class="node-title">IUCT Oncopole</div><div class="node-code">Clinical research partner</div><div class="node-reveal">Oncology imaging environment for translational PET/CT research.</div></div>
-              <div class="map-node hepta scan-network"><div class="node-title">Hepta Medical</div><div class="node-code">Company · startup R&D</div><div class="node-reveal">Cancer ablation visualization and product-facing MedTech work.</div></div>
-              <div class="map-node ladhyx scan-network"><div class="node-title">LadHyX</div><div class="node-code">Research lab</div><div class="node-reveal">Soft matter, experimental methods, and biomedical engineering research environment.</div></div>
-              <div class="map-node manitty scan-network"><div class="node-title">Manitty</div><div class="node-code">Company · design project</div><div class="node-reveal">Flexible dry electrode technologies and biomedical device assessment.</div></div>
-            </div>
-          </div>
-        </div>
+    <section class="world-screen" data-screen="world">
+      <div class="world-grid">
+        <div class="world-copy"><div class="world-kicker">World Map</div><h2 class="world-title">Reveal known regions.</h2><p class="world-desc">The map starts encrypted. Synchronize the viewpoint to reveal the regions connected to Sai’s profile.</p><div class="guide-box"><div class="guide-label">Current Objective</div><div class="guide-text" id="worldObjective">Synchronize viewpoint. Then enter India and France to recover core memories.</div></div><button type="button" class="world-action" id="syncWorld">Synchronize Viewpoint</button><button type="button" class="world-action" id="generateWorldDossier" disabled>Final Dossier Locked</button></div>
+        <div class="map-panel" id="worldMapPanel"><div class="map-scan"></div><div class="iso-map-wrap"><div class="iso-map"><div class="map-pulse"></div><div class="region-node india" data-region="india"><div class="node-title">India</div><div class="node-code">Region memory</div><div class="node-reveal">Hyderabad memory available.</div></div><div class="region-node france" data-region="france"><div class="node-title">France</div><div class="node-code">Region memory</div><div class="node-reveal">Palaiseau / Paris, Toulouse, and optional side memories available.</div></div></div></div></div>
       </div>
     </section>
 
-    <section class="mission-screen" data-screen="board">
-      <div class="mission-grid">
-        <div>
-          <div class="mission-kicker">Mission Board</div>
-          <h2 class="mission-title-main">Choose the next operation.</h2>
-          <p class="mission-desc">The network is revealed. Continue in any order. Some missions unlock after enough intel is archived.</p>
-          <div class="guide-box"><div class="guide-label">Current Objective</div><div class="guide-text" id="missionObjective">Complete the Bureau Investigation or recover the Arsenal to unlock the Viewpoint mission.</div></div>
-          <button type="button" class="mission-action" id="generateFinal" disabled>Final Dossier Locked</button>
-        </div>
-        <div class="holo-panel">
-          <div class="holo-scan"></div>
-          <div class="board-wrap">
-            <div class="board-plane" id="boardPlane">
-              <div class="board-tile bureau" data-mission="bureau"><div class="board-title">Bureau Investigation</div><div class="board-state">Open</div><div class="board-clue">Pin institutions into the dossier.</div></div>
-              <div class="board-tile arsenal" data-mission="arsenal"><div class="board-title">Pickpocket Arsenal</div><div class="board-state">Open</div><div class="board-clue">Recover tools and methods.</div></div>
-              <div class="board-tile builds" data-mission="viewpoint"><div class="board-title">Synchronize Viewpoint</div><div class="board-state">Locked</div><div class="board-clue">Requires 2 intel files.</div></div>
-              <div class="board-tile eavesdrop" data-mission="signals"><div class="board-title">Eavesdrop Signals</div><div class="board-state">Locked</div><div class="board-clue">Requires 3 intel files.</div></div>
-              <div class="board-tile lens" data-mission="lens"><div class="board-title">Final Intel Lens</div><div class="board-state">Locked</div><div class="board-clue">Requires 5 intel files.</div></div>
-            </div>
-          </div>
-        </div>
+    <section class="world-screen" data-screen="india">
+      <div class="world-grid">
+        <div class="world-copy"><div class="world-kicker">Region: India</div><h2 class="world-title">Activate Eagle Vision.</h2><p class="world-desc">The India region is unstable. Eagle Vision reveals the city memory connected to the beginning of the route.</p><div class="guide-box"><div class="guide-label">Region Intel</div><div class="guide-text">This region contains the engineering origin memory.</div></div><button type="button" class="world-action" id="eagleIndia">Activate Eagle Vision</button><button type="button" class="world-action region-back">Return to World Map</button></div>
+        <div class="map-panel" id="indiaPanel"><div class="map-scan"></div><div class="iso-map-wrap"><div class="iso-map"><div class="map-pulse"></div><div class="city-node hyderabad" data-city="hyderabad"><div class="node-title">Hyderabad</div><div class="node-code">City memory detected</div><div class="node-reveal">Mission: The First Forge.</div></div></div></div></div>
       </div>
     </section>
 
-    <section class="mission-screen" data-screen="bureau">
-      <div class="mission-grid">
-        <div>
-          <div class="mission-kicker">Mission 02 — Bureau Investigation</div>
-          <h2 class="mission-title-main">Build the institutional dossier.</h2>
-          <p class="mission-desc">Click files to pin them to the dossier board. The goal is not to guess — it is to understand how training, research, industry, and clinical environments connect.</p>
-          <button type="button" class="mission-action complete-mission" data-complete="bureau" disabled>Archive Bureau Intel <span>→</span></button>
-          <button type="button" class="mission-action return-board">Return to Mission Board</button>
-        </div>
-        <div class="holo-panel">
-          <div class="holo-scan"></div>
-          <div class="evidence-grid wide" style="bottom:120px;">
-            <div class="evidence-card bureau-file" data-pin="Training"><div class="evidence-title">Mahindra University</div><div class="evidence-code">Training</div><div class="evidence-reveal">Mechanical engineering foundation.</div></div>
-            <div class="evidence-card bureau-file" data-pin="Training"><div class="evidence-title">École Polytechnique</div><div class="evidence-code">Training / Research</div><div class="evidence-reveal">Biomedical engineering formation and research environment.</div></div>
-            <div class="evidence-card bureau-file" data-pin="Clinical"><div class="evidence-title">IUCT Oncopole</div><div class="evidence-code">Clinical research</div><div class="evidence-reveal">Oncology imaging and PET/CT validation ecosystem.</div></div>
-            <div class="evidence-card bureau-file" data-pin="Industry"><div class="evidence-title">Hepta Medical</div><div class="evidence-code">Industry R&D</div><div class="evidence-reveal">Cancer ablation visualization and startup-facing R&D.</div></div>
-          </div>
-          <div class="pin-board">
-            <div class="pin-slot">Training</div>
-            <div class="pin-slot">Research</div>
-            <div class="pin-slot">Clinical</div>
-            <div class="pin-slot">Industry</div>
-            <div class="pin-slot">Collaboration</div>
-          </div>
-        </div>
+    <section class="world-screen" data-screen="france">
+      <div class="world-grid">
+        <div class="world-copy"><div class="world-kicker">Region: France</div><h2 class="world-title">Activate Eagle Vision.</h2><p class="world-desc">France contains training, research, clinical, and industry memories. Eagle Vision reveals cities and side memories.</p><div class="guide-box"><div class="guide-label">Region Intel</div><div class="guide-text">Complete Paris and Toulouse for core reconstruction. Optional side missions increase sync.</div></div><button type="button" class="world-action" id="eagleFrance">Activate Eagle Vision</button><button type="button" class="world-action region-back">Return to World Map</button></div>
+        <div class="map-panel" id="francePanel"><div class="map-scan"></div><div class="iso-map-wrap"><div class="iso-map"><div class="map-pulse"></div><div class="city-node paris" data-city="paris"><div class="node-title">Palaiseau / Paris</div><div class="node-code">Training memory detected</div><div class="node-reveal">Mission: The Dōjō.</div></div><div class="city-node toulouse" data-city="toulouse"><div class="node-title">Toulouse</div><div class="node-code">Research memory detected</div><div class="node-reveal">Mission: The Scanner Shrine.</div></div><div class="city-node hepta" data-city="hepta"><div class="node-title">Hepta Medical</div><div class="node-code">Optional side memory</div><div class="node-reveal">Mission: The MedTech Bureau.</div></div><div class="city-node manitty" data-city="manitty"><div class="node-title">Manitty / Device Work</div><div class="node-code">Optional side memory</div><div class="node-reveal">Mission: The Device Workshop.</div></div></div></div></div>
       </div>
     </section>
 
-    <section class="mission-screen" data-screen="arsenal">
-      <div class="mission-grid">
-        <div>
-          <div class="mission-kicker">Mission 03 — Pickpocket Arsenal</div>
-          <h2 class="mission-title-main">Recover tools from the field.</h2>
-          <p class="mission-desc">Pickpocket the tool relics. Recover at least four to build the technical arsenal. The final subclass is influenced by what you collect.</p>
-          <button type="button" class="mission-action complete-mission" data-complete="arsenal" disabled>Archive Arsenal Intel <span>→</span></button>
-          <button type="button" class="mission-action return-board">Return to Mission Board</button>
-        </div>
-        <div class="holo-panel">
-          <div class="holo-scan"></div>
-          <div class="evidence-grid wide" style="bottom:120px;">
-            <div class="evidence-card tool-card" data-tool="COMSOL"><div class="evidence-title">COMSOL</div><div class="evidence-code">Numerical modelling</div><div class="evidence-reveal">Multiphysics, CFD, transport modelling.</div></div>
-            <div class="evidence-card tool-card" data-tool="MATLAB"><div class="evidence-title">MATLAB</div><div class="evidence-code">Analysis / automation</div><div class="evidence-reveal">Image/data analysis pipelines.</div></div>
-            <div class="evidence-card tool-card" data-tool="Python"><div class="evidence-title">Python</div><div class="evidence-code">Tooling / data</div><div class="evidence-reveal">Research tools and synthetic data workflows.</div></div>
-            <div class="evidence-card tool-card" data-tool="Fusion 360"><div class="evidence-title">Fusion 360</div><div class="evidence-code">Product design</div><div class="evidence-reveal">CAD and prototype design.</div></div>
-            <div class="evidence-card tool-card" data-tool="ImageJ"><div class="evidence-title">ImageJ / Fiji</div><div class="evidence-code">Medical imaging</div><div class="evidence-reveal">Image analysis and quality control.</div></div>
-            <div class="evidence-card tool-card" data-tool="JASP"><div class="evidence-title">JASP</div><div class="evidence-code">Statistics</div><div class="evidence-reveal">Experimental and clinical data evaluation.</div></div>
-            <div class="evidence-card tool-card" data-tool="Cura"><div class="evidence-title">Ultimaker Cura</div><div class="evidence-code">3D printing</div><div class="evidence-reveal">Prototype and phantom fabrication workflow.</div></div>
-            <div class="evidence-card tool-card" data-tool="OpenCV"><div class="evidence-title">OpenCV</div><div class="evidence-code">AUV / systems</div><div class="evidence-reveal">Object recognition and systems engineering work.</div></div>
-          </div>
-          <div class="loadout-readout">
-            <div class="loadout-slot">Tool I</div><div class="loadout-slot">Tool II</div><div class="loadout-slot">Tool III</div><div class="loadout-slot">Tool IV</div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="world-screen" data-screen="hyderabad"><div class="world-grid"><div class="world-copy"><div class="world-kicker">City Mission: Hyderabad</div><h2 class="world-title">The First Forge.</h2><p class="world-desc">Recover the origin memory. Scan the three objects to reconstruct the early engineering layer.</p><button type="button" class="world-action complete-city" data-city-complete="hyderabad" disabled>Synchronize Hyderabad Memory <span>→</span></button><button type="button" class="world-action" data-go-region="india">Return to India Map</button></div><div class="map-panel memory-open"><div class="map-scan"></div><div class="memory-field"><div class="memory-node scan-city" data-city-frag="hyderabad"><div class="node-title">Engineering Foundation</div><div class="node-code">Mechanical roots</div><div class="node-reveal">Mechanical engineering foundation with systems, mechanics, and design thinking.</div></div><div class="memory-node scan-city" data-city-frag="hyderabad"><div class="node-title">Build Culture</div><div class="node-code">Design / systems</div><div class="node-reveal">Early exposure to building, iterating, and thinking in physical systems.</div></div><div class="memory-node scan-city" data-city-frag="hyderabad"><div class="node-title">AUV Seed</div><div class="node-code">Systems mission</div><div class="node-reveal">AUV work planted systems-engineering, CFD, object recognition, and mission-design thinking.</div></div></div><div class="mission-recon" id="hyderabadRecon">Origin memory pending. Scan all objects.</div></div></div></section>
 
-    <section class="mission-screen" data-screen="viewpoint">
-      <div class="mission-grid">
-        <div>
-          <div class="mission-kicker">Mission 04 — Synchronize Viewpoint</div>
-          <h2 class="mission-title-main">Reveal the build landscape.</h2>
-          <p class="mission-desc">Click Synchronize Viewpoint. Project towers appear. Scan three flagship towers and optional side towers for bonus sync.</p>
-          <button type="button" class="mission-action" id="syncViewpoint">Synchronize Viewpoint</button>
-          <button type="button" class="mission-action complete-mission" data-complete="viewpoint" disabled>Archive Build Intel <span>→</span></button>
-          <button type="button" class="mission-action return-board">Return to Mission Board</button>
-        </div>
-        <div class="holo-panel" id="viewpointPanel">
-          <div class="holo-scan"></div>
-          <div class="evidence-grid" style="bottom:90px;">
-            <div class="evidence-card build-card"><div class="evidence-title">3DynaPET</div><div class="evidence-code">Physical validation system</div><div class="evidence-reveal">3D-printed Dynamic PET/CT validation system.</div></div>
-            <div class="evidence-card build-card"><div class="evidence-title">MuPET</div><div class="evidence-code">Synthetic data toolset</div><div class="evidence-reveal">Multiphysics PET synthetic data generation.</div></div>
-            <div class="evidence-card build-card"><div class="evidence-title">CASSOULET</div><div class="evidence-code">Ground-truth framework</div><div class="evidence-reveal">Multimodal imaging cohort framework with lesion ground truth.</div></div>
-          </div>
-          <div class="side-relics">
-            <button type="button" class="side-relic">Real-time Ablation Visualization</button>
-            <button type="button" class="side-relic">4D TEVAR</button>
-            <button type="button" class="side-relic">RBC Drug Delivery</button>
-            <button type="button" class="side-relic">AUV Systems</button>
-            <button type="button" class="side-relic">Flexible Electrodes</button>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="world-screen" data-screen="paris"><div class="world-grid"><div class="world-copy"><div class="world-kicker">City Mission: Palaiseau / Paris</div><h2 class="world-title">The Dōjō.</h2><p class="world-desc">Recover the biomedical training memory. This mission explains the transition from mechanical systems into body-scale engineering and lab research.</p><button type="button" class="world-action complete-city" data-city-complete="paris" disabled>Synchronize Paris Memory <span>→</span></button><button type="button" class="world-action" data-go-region="france">Return to France Map</button></div><div class="map-panel memory-open"><div class="map-scan"></div><div class="memory-field"><div class="memory-node scan-city" data-city-frag="paris"><div class="node-title">École Polytechnique</div><div class="node-code">Biomedical training</div><div class="node-reveal">Biomedical engineering formation: biomechanics, modelling, clinical problems.</div></div><div class="memory-node scan-city" data-city-frag="paris"><div class="node-title">LadHyX</div><div class="node-code">Research lab</div><div class="node-reveal">Experimental methods, soft matter, flow-resistance studies, and image tracking.</div></div><div class="memory-node scan-city" data-city-frag="paris"><div class="node-title">4D / Vascular Work</div><div class="node-code">Clinical modelling</div><div class="node-reveal">Patient-specific modelling and translation of imaging data into simulation workflows.</div></div></div><div class="mission-recon" id="parisRecon">Training memory pending. Scan all objects.</div></div></div></section>
 
-    <section class="mission-screen" data-screen="signals">
-      <div class="mission-grid">
-        <div>
-          <div class="mission-kicker">Mission 05 — Eavesdrop</div>
-          <h2 class="mission-title-main">Decode personal-professional signals.</h2>
-          <p class="mission-desc">Eavesdrop on the signals to understand not just what Sai did, but why the path fits him.</p>
-          <button type="button" class="mission-action complete-mission" data-complete="signals" disabled>Archive Signal Intel <span>→</span></button>
-          <button type="button" class="mission-action return-board">Return to Mission Board</button>
-        </div>
-        <div class="holo-panel">
-          <div class="holo-scan"></div>
-          <div class="evidence-grid wide">
-            <div class="evidence-card signal-card"><div class="evidence-title">Clinic Signal</div><div class="evidence-code">Eavesdrop channel</div><div class="evidence-reveal">Motivation: build tools that survive real clinical workflows.</div></div>
-            <div class="evidence-card signal-card"><div class="evidence-title">Research Signal</div><div class="evidence-code">Eavesdrop channel</div><div class="evidence-reveal">Preference: ground-truth systems and validation over black-box analysis.</div></div>
-            <div class="evidence-card signal-card"><div class="evidence-title">Venture Signal</div><div class="evidence-code">Eavesdrop channel</div><div class="evidence-reveal">Interest: how research becomes products, IP, and strategy.</div></div>
-            <div class="evidence-card signal-card"><div class="evidence-title">Personal Signal</div><div class="evidence-code">Eavesdrop channel</div><div class="evidence-reveal">Operating style: curious, systems-oriented, independent, and comfortable between lab, clinic, and product contexts.</div></div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="world-screen" data-screen="toulouse"><div class="world-grid"><div class="world-copy"><div class="world-kicker">City Mission: Toulouse</div><h2 class="world-title">The Scanner Shrine.</h2><p class="world-desc">Recover the current research memory: medical imaging, PET/CT validation, and the flagship project ecosystem.</p><button type="button" class="world-action complete-city" data-city-complete="toulouse" disabled>Synchronize Toulouse Memory <span>→</span></button><button type="button" class="world-action" data-go-region="france">Return to France Map</button></div><div class="map-panel memory-open"><div class="map-scan"></div><div class="memory-field four"><div class="memory-node scan-city" data-city-frag="toulouse"><div class="node-title">University of Toulouse</div><div class="node-code">PhD memory</div><div class="node-reveal">PhD in medical imaging and radiophysics.</div></div><div class="memory-node scan-city" data-city-frag="toulouse"><div class="node-title">IUCT Oncopole</div><div class="node-code">Clinical imaging</div><div class="node-reveal">Oncology imaging environment and translational PET/CT research.</div></div><div class="memory-node scan-city" data-city-frag="toulouse"><div class="node-title">3DynaPET</div><div class="node-code">Validation system</div><div class="node-reveal">3D-printed Dynamic PET/CT validation system.</div></div><div class="memory-node scan-city" data-city-frag="toulouse"><div class="node-title">MuPET / CASSOULET</div><div class="node-code">Toolset + framework</div><div class="node-reveal">Synthetic PET data generation and multimodal lesion ground-truth framework.</div></div></div><div class="mission-recon" id="toulouseRecon">Research memory pending. Scan all objects.</div></div></div></section>
 
-    <section class="mission-screen" data-screen="lens">
-      <div class="mission-grid">
-        <div>
-          <div class="mission-kicker">Mission 06 — Final Intel Lens</div>
-          <h2 class="mission-title-main">Choose dossier perspective.</h2>
-          <p class="mission-desc">Choose the lens that matters to you. This changes the final class. Your recovered arsenal influences the subclass.</p>
-          <button type="button" class="mission-action complete-mission" data-complete="lens" disabled>Archive Lens Intel <span>→</span></button>
-          <button type="button" class="mission-action return-board">Return to Mission Board</button>
-        </div>
-        <div class="holo-panel">
-          <div class="holo-scan"></div>
-          <div class="evidence-grid wide">
-            <div class="evidence-card route-card" data-route="clinical"><div class="evidence-title">Clinical Translation</div><div class="evidence-code">Scanner-side validation · clinical workflows</div><div class="evidence-reveal">Class emphasizes clinical imaging translation.</div></div>
-            <div class="evidence-card route-card" data-route="medtech"><div class="evidence-title">MedTech / Deep Tech</div><div class="evidence-code">Prototype · toolset · product-facing R&D</div><div class="evidence-reveal">Class emphasizes healthcare technology building.</div></div>
-            <div class="evidence-card route-card" data-route="strategy"><div class="evidence-title">Strategy / Ventures</div><div class="evidence-code">IP · valorisation · research-to-market</div><div class="evidence-reveal">Class emphasizes translation strategy.</div></div>
-            <div class="evidence-card route-card" data-route="research"><div class="evidence-title">Research Collaboration</div><div class="evidence-code">Simulation · imaging · validation systems</div><div class="evidence-reveal">Class emphasizes collaborative research capability.</div></div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="world-screen" data-screen="hepta"><div class="world-grid"><div class="world-copy"><div class="world-kicker">Side Mission: Hepta Medical</div><h2 class="world-title">The MedTech Bureau.</h2><p class="world-desc">Optional industry memory. Scan records to recover product-facing R&D and clinical visualization intel.</p><button type="button" class="world-action complete-city" data-city-complete="hepta" disabled>Synchronize Hepta Memory <span>→</span></button><button type="button" class="world-action" data-go-region="france">Return to France Map</button></div><div class="map-panel memory-open"><div class="map-scan"></div><div class="memory-field"><div class="memory-node scan-city" data-city-frag="hepta"><div class="node-title">Cancer Ablation</div><div class="node-code">Clinical visualization</div><div class="node-reveal">Real-time cancer ablation visualization and interpretation tools.</div></div><div class="memory-node scan-city" data-city-frag="hepta"><div class="node-title">Startup R&D</div><div class="node-code">MedTech context</div><div class="node-reveal">Product-facing work connecting technical outputs to clinical and investor discussions.</div></div><div class="memory-node scan-city" data-city-frag="hepta"><div class="node-title">Translation Signal</div><div class="node-code">Applied research</div><div class="node-reveal">Interest in tools that move from research environment toward usable healthcare systems.</div></div></div><div class="mission-recon" id="heptaRecon">Side memory pending. Scan all objects.</div></div></div></section>
 
-    <section class="mission-screen" data-screen="final">
+    <section class="world-screen" data-screen="manitty"><div class="world-grid"><div class="world-copy"><div class="world-kicker">Side Mission: Device Workshop</div><h2 class="world-title">The Device Workshop.</h2><p class="world-desc">Optional device/design memory. Scan records to recover biomedical device and experimental assessment intel.</p><button type="button" class="world-action complete-city" data-city-complete="manitty" disabled>Synchronize Device Memory <span>→</span></button><button type="button" class="world-action" data-go-region="france">Return to France Map</button></div><div class="map-panel memory-open"><div class="map-scan"></div><div class="memory-field"><div class="memory-node scan-city" data-city-frag="manitty"><div class="node-title">Flexible Electrodes</div><div class="node-code">Biomedical device</div><div class="node-reveal">3D-printed flexible dry electrode design and characterization.</div></div><div class="memory-node scan-city" data-city-frag="manitty"><div class="node-title">Experimental Methods</div><div class="node-code">AFM / impedance</div><div class="node-reveal">Material and device characterization through experimental methods.</div></div><div class="memory-node scan-city" data-city-frag="manitty"><div class="node-title">Market-Science Signal</div><div class="node-code">Assessment</div><div class="node-reveal">Scientific and market assessment of wearable biomedical device technologies.</div></div></div><div class="mission-recon" id="manittyRecon">Side memory pending. Scan all objects.</div></div></div></section>
+
+    <section class="world-screen" data-screen="signal"><div class="world-grid"><div class="world-copy"><div class="world-kicker">Eavesdrop Mission</div><h2 class="world-title">Decode the personal signal.</h2><p class="world-desc">After core memories are recovered, eavesdrop on the signal layer: the motivations behind the path.</p><button type="button" class="world-action complete-city" data-city-complete="signal" disabled>Synchronize Personal Signal <span>→</span></button><button type="button" class="world-action region-back">Return to World Map</button></div><div class="map-panel memory-open"><div class="map-scan"></div><div class="memory-field four"><div class="memory-node scan-city" data-city-frag="signal"><div class="node-title">Clinic Signal</div><div class="node-code">Eavesdrop</div><div class="node-reveal">Motivation: build tools that survive real clinical workflows.</div></div><div class="memory-node scan-city" data-city-frag="signal"><div class="node-title">Research Signal</div><div class="node-code">Eavesdrop</div><div class="node-reveal">Preference: ground-truth systems and validation over black-box analysis.</div></div><div class="memory-node scan-city" data-city-frag="signal"><div class="node-title">Venture Signal</div><div class="node-code">Eavesdrop</div><div class="node-reveal">Interest: how research becomes products, IP, and strategy.</div></div><div class="memory-node scan-city" data-city-frag="signal"><div class="node-title">Personal Signal</div><div class="node-code">Eavesdrop</div><div class="node-reveal">Operating style: curious, systems-oriented, independent, and comfortable between lab, clinic, and product contexts.</div></div></div><div class="mission-recon" id="signalRecon">Personal signal pending. Scan at least three signals.</div></div></div></section>
+
+    <section class="world-screen" data-screen="final">
       <div class="final-dossier">
-        <div class="final-top">
-          <div>
-            <div class="mission-kicker">Dossier Complete</div>
-            <h2 class="final-title">Profile Reconstructed</h2>
-            <div class="evidence-code">Sai Kiran Kumar Nalla</div>
-          </div>
-          <div class="final-sync">
-            <div class="final-sync-num" id="finalSyncMission">0%</div>
-            <div class="final-rank" id="finalRankMission">Calculating</div>
-          </div>
-        </div>
-        <p class="final-summary" id="finalSummaryMission"></p>
-        <div class="final-grid">
-          <div class="final-cell"><div class="final-key">Class</div><div class="final-val" id="finalClassMission"></div></div>
-          <div class="final-cell"><div class="final-key">Subclass</div><div class="final-val" id="finalSubclassMission"></div></div>
-          <div class="final-cell"><div class="final-key">Network</div><div class="final-val" id="finalNetworkMission"></div></div>
-          <div class="final-cell"><div class="final-key">Institutional Arc</div><div class="final-val" id="finalBureauMission"></div></div>
-          <div class="final-cell"><div class="final-key">Recovered Arsenal</div><div class="final-val" id="finalArsenalMission"></div></div>
-          <div class="final-cell"><div class="final-key">Signature Builds</div><div class="final-val" id="finalBuildsMission"></div></div>
-          <div class="final-cell"><div class="final-key">Personal Signal</div><div class="final-val" id="finalSignalMission"></div></div>
-          <div class="final-cell"><div class="final-key">Optional Relics</div><div class="final-val" id="finalBonusMission">None recovered</div></div>
-        </div>
-        <div class="final-actions">
-          <a href="projects.html">View Projects</a>
-          <a href="experience.html">View Experience</a>
-          <a href="papers.html">View Publications</a>
-          <a href="contact.html">Contact</a>
-          <a href="Assets/Sai_Nalla_CV.pdf" target="_blank">Download CV</a>
-          <button type="button" id="replayMission">Replay Mission</button>
-        </div>
+        <div class="final-top"><div><div class="world-kicker">Dossier Complete</div><h2 class="final-title">Profile Reconstructed</h2><div class="node-code">Sai Kiran Kumar Nalla</div></div><div class="final-sync"><div class="final-sync-num" id="finalWorldSync">0%</div><div class="final-rank" id="finalWorldRank">Calculating</div></div></div>
+        <p class="final-summary" id="finalWorldSummary"></p>
+        <div class="final-grid"><div class="final-cell"><div class="final-key">Class</div><div class="final-val" id="finalWorldClass"></div></div><div class="final-cell"><div class="final-key">Subclass</div><div class="final-val" id="finalWorldSubclass"></div></div><div class="final-cell"><div class="final-key">Route</div><div class="final-val" id="finalWorldRoute"></div></div><div class="final-cell"><div class="final-key">Core Memories</div><div class="final-val" id="finalWorldCore"></div></div><div class="final-cell"><div class="final-key">Build Intel</div><div class="final-val" id="finalWorldBuilds"></div></div><div class="final-cell"><div class="final-key">Optional Side Intel</div><div class="final-val" id="finalWorldSide">None recovered</div></div><div class="final-cell"><div class="final-key">Personal Signal</div><div class="final-val" id="finalWorldSignal">Encrypted if sync is low</div></div><div class="final-cell"><div class="final-key">Best Next Step</div><div class="final-val">Projects · Experience · Publications · Contact</div></div></div>
+        <div class="final-actions"><a href="projects.html">View Projects</a><a href="experience.html">View Experience</a><a href="papers.html">View Publications</a><a href="contact.html">Contact</a><a href="Assets/Sai_Nalla_CV.pdf" target="_blank">Download CV</a><button type="button" id="replayWorldAnimus">Replay Memory Map</button></div>
       </div>
     </section>
 
-    <div class="mission-toast" id="missionToast">Intel recovered</div>
+    <div class="world-toast" id="worldToast">Memory synchronized</div>
   </div>
 </div>
 
@@ -1016,10 +229,10 @@
     
     <div class="hero-btns">
       <a href="about.html" class="btn">Explore Portfolio<span class="arrow">→</span></a>
-      <button type="button" class="btn btn-game" id="playMission"><span class="game-glyph">鷹</span>Play Animus Mission<span class="arrow">→</span></button>
+      <button type="button" class="btn btn-game" id="playWorldAnimus"><span class="game-glyph">鷹</span>Play Animus Memory Map<span class="arrow">→</span></button>
       <a href="Assets/Sai_Nalla_CV.pdf" target="_blank" class="btn btn-cv"><span class="cv-glyph">伝</span>View CV<span class="arrow">→</span></a>
     </div>
-    <div class="hero-game-note">AC-style profile mission · Eagle Vision, Pickpocket, Viewpoint, Eavesdrop · exit anytime</div>
+    <div class="hero-game-note">World map → Eagle Vision → city memories · AC-style profile exploration · exit anytime</div>
   </div>
 </section>
 
@@ -1085,300 +298,29 @@
 <script src="transitions.js"></script>
 
 <script>
-const mission = document.getElementById('animusMission');
-const playMission = document.getElementById('playMission');
-const exitMission = document.getElementById('exitMission');
-const missionScreens = [...document.querySelectorAll('.mission-screen')];
-const missionStatus = document.getElementById('missionStatus');
-const missionSyncFill = document.getElementById('missionSyncFill');
-const missionSyncScore = document.getElementById('missionSyncScore');
-const missionToast = document.getElementById('missionToast');
-const missionObjective = document.getElementById('missionObjective');
-const generateFinal = document.getElementById('generateFinal');
-
-let missionSync = 0;
-let completeIntel = new Set();
-let recoveredTools = [];
-let bonusRelics = [];
-let selectedRoute = '';
-let viewpointActive = false;
-
-const routeProfiles = {
-  clinical:{
-    className:'Clinical Translation Researcher',
-    defaultSubclass:'Medical Imaging Systems Builder',
-    summary:'Sai is a medical imaging researcher building translational systems between scanner, code, and clinic — with emphasis on PET/CT validation, image quality, and clinical research workflows.'
-  },
-  medtech:{
-    className:'MedTech R&D Builder',
-    defaultSubclass:'Prototype-to-Product Translator',
-    summary:'Sai works at the intersection of clinical needs, computational modelling, and product-facing R&D — turning imaging, prototypes, and frameworks into usable healthcare technology systems.'
-  },
-  strategy:{
-    className:'Research-to-Market Strategist',
-    defaultSubclass:'Deep-Tech Translation Operator',
-    summary:'Sai combines medical imaging R&D with IP awareness, valorisation, and startup-facing technical translation — connecting research, product framing, and venture strategy.'
-  },
-  research:{
-    className:'Computational Medical Imaging Researcher',
-    defaultSubclass:'Multiphysics & Validation Systems Specialist',
-    summary:'Sai works across simulation, medical imaging, phantom validation, and translational research — building ground-truth systems and analytical tools for collaborative scientific work.'
-  }
-};
-
-function toast(msg){
-  missionToast.textContent = msg;
-  missionToast.classList.add('show');
-  setTimeout(()=>missionToast.classList.remove('show'), 1250);
-}
-function setSync(v){
-  missionSync = Math.max(0, Math.min(100, v));
-  missionSyncFill.style.width = missionSync + '%';
-  missionSyncScore.textContent = missionSync + '%';
-}
-function addSync(points, msg){
-  setSync(missionSync + points);
-  if(msg) toast(msg + ' · +' + points + ' sync');
-}
-function showMissionScreen(name){
-  missionScreens.forEach(s => s.classList.toggle('active', s.dataset.screen === name));
-  missionStatus.textContent = 'ANIMUS MISSION: ' + name.toUpperCase();
-  if(name === 'board') updateBoard();
-}
-function resetMission(){
-  missionSync = 0;
-  completeIntel = new Set();
-  recoveredTools = [];
-  bonusRelics = [];
-  selectedRoute = '';
-  viewpointActive = false;
-  setSync(0);
-  mission.querySelectorAll('.complete,.scanned,.selected,.pinned,.filled,.open,.locked,.ready,.eagle-active').forEach(el => {
-    if(!el.classList.contains('animus-mission')) el.classList.remove('complete','scanned','selected','pinned','filled','open','locked','ready','eagle-active');
-  });
-  mission.querySelectorAll('.complete-mission').forEach(btn => btn.disabled = true);
-  mission.querySelectorAll('.loadout-slot').forEach((slot,i)=>{slot.textContent = 'Tool ' + ['I','II','III','IV'][i]; slot.classList.remove('filled');});
-  mission.querySelectorAll('.pin-slot').forEach(slot=>{slot.classList.remove('filled');});
-  document.getElementById('generateFinal').disabled = true;
-  document.getElementById('generateFinal').textContent = 'Final Dossier Locked';
-  showMissionScreen('briefing');
-}
-function openMission(){
-  mission.classList.add('open');
-  mission.setAttribute('aria-hidden','false');
-  document.body.style.overflow = 'hidden';
-  resetMission();
-}
-function closeMission(){
-  mission.classList.remove('open');
-  mission.setAttribute('aria-hidden','true');
-  document.body.style.overflow = '';
-}
-
-playMission.addEventListener('click', openMission);
-exitMission.addEventListener('click', closeMission);
-document.getElementById('startEagleVision').addEventListener('click', () => showMissionScreen('network'));
-document.getElementById('replayMission').addEventListener('click', resetMission);
-document.querySelectorAll('.return-board').forEach(btn => btn.addEventListener('click', () => showMissionScreen('board')));
-document.addEventListener('keydown', e => { if(e.key === 'Escape' && mission.classList.contains('open')) closeMission(); });
-
-function updateBoard(){
-  const count = completeIntel.size;
-  document.querySelectorAll('#boardPlane .board-tile').forEach(tile => {
-    const m = tile.dataset.mission;
-    let req = 0;
-    if(m === 'viewpoint') req = 2;
-    if(m === 'signals') req = 3;
-    if(m === 'lens') req = 5;
-    const state = tile.querySelector('.board-state');
-    tile.classList.remove('open','locked','complete');
-    if(completeIntel.has(m)){
-      tile.classList.add('complete');
-      state.textContent = 'Complete';
-    } else if(count >= req){
-      tile.classList.add('open');
-      state.textContent = 'Open';
-    } else {
-      tile.classList.add('locked');
-      state.textContent = 'Locked';
-    }
-  });
-  if(count >= 6){
-    missionObjective.textContent = 'All mission intel archived. Final dossier generation available.';
-    generateFinal.disabled = false;
-    generateFinal.textContent = 'Generate Final Dossier';
-  } else if(count >= 5){
-    missionObjective.textContent = 'Final Intel Lens is open. Choose the dossier perspective.';
-  } else if(count >= 3){
-    missionObjective.textContent = 'Eavesdrop Signals is open. Decode personal-professional motivation.';
-  } else if(count >= 2){
-    missionObjective.textContent = 'Synchronize Viewpoint is open. Reveal the build landscape.';
-  } else {
-    missionObjective.textContent = 'Complete the Bureau Investigation or recover the Arsenal to unlock the Viewpoint mission.';
-  }
-}
-document.querySelectorAll('#boardPlane .board-tile').forEach(tile => {
-  tile.addEventListener('click', () => {
-    if(tile.classList.contains('locked')){ toast('Mission locked — recover more intel'); return; }
-    showMissionScreen(tile.dataset.mission);
-  });
-});
-
-function completeMission(name, points){
-  if(completeIntel.has(name)) return;
-  completeIntel.add(name);
-  const frag = document.querySelector(`.intel-frag[data-frag="${name}"]`);
-  if(frag) frag.classList.add('complete');
-  addSync(points, name.toUpperCase() + ' intel archived');
-  showMissionScreen('board');
-}
-document.querySelectorAll('.complete-mission').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const pts = {network:18,bureau:15,arsenal:18,viewpoint:20,signals:14,lens:15}[btn.dataset.complete] || 10;
-    completeMission(btn.dataset.complete, pts);
-  });
-});
-
-/* Eagle Vision network */
-document.getElementById('activateEagleVision').addEventListener('click', () => {
-  document.getElementById('networkPanel').classList.add('eagle-active');
-  toast('Eagle Vision activated');
-});
-document.querySelectorAll('.scan-network').forEach(node => {
-  node.addEventListener('click', () => {
-    if(!document.getElementById('networkPanel').classList.contains('eagle-active')){
-      toast('Activate Eagle Vision first');
-      return;
-    }
-    node.classList.add('scanned');
-    const count = document.querySelectorAll('.scan-network.scanned').length;
-    toast(`${count}/7 network coordinates scanned`);
-    if(count >= 5) document.querySelector('[data-complete="network"]').disabled = false;
-  });
-});
-
-/* Bureau investigation */
-document.querySelectorAll('.bureau-file').forEach(file => {
-  file.addEventListener('click', () => {
-    file.classList.add('pinned');
-    const pins = [...document.querySelectorAll('.bureau-file.pinned')].map(f=>f.dataset.pin);
-    document.querySelectorAll('.pin-slot').forEach(slot => {
-      const key = slot.textContent.trim();
-      if(pins.includes(key) || (key === 'Research' && pins.includes('Training')) || (key === 'Collaboration' && pins.length >= 3)){
-        slot.classList.add('filled');
-      }
-    });
-    const count = document.querySelectorAll('.bureau-file.pinned').length;
-    toast(`${count}/4 files pinned to dossier`);
-    if(count >= 4) document.querySelector('[data-complete="bureau"]').disabled = false;
-  });
-});
-
-/* Pickpocket Arsenal */
-document.querySelectorAll('.tool-card').forEach(card => {
-  card.addEventListener('click', () => {
-    if(card.classList.contains('scanned')) return;
-    card.classList.add('scanned');
-    recoveredTools.push(card.dataset.tool);
-    const slots = document.querySelectorAll('.loadout-slot');
-    for(const slot of slots){
-      if(!slot.classList.contains('filled')){
-        slot.textContent = card.dataset.tool;
-        slot.classList.add('filled');
-        break;
-      }
-    }
-    toast(`${recoveredTools.length}/4 minimum tools recovered`);
-    if(recoveredTools.length >= 4) document.querySelector('[data-complete="arsenal"]').disabled = false;
-  });
-});
-
-/* Viewpoint */
-document.getElementById('syncViewpoint').addEventListener('click', () => {
-  viewpointActive = true;
-  document.getElementById('viewpointPanel').classList.add('eagle-active');
-  toast('Viewpoint synchronized — towers revealed');
-});
-document.querySelectorAll('.build-card').forEach(card => {
-  card.addEventListener('click', () => {
-    if(!viewpointActive){ toast('Synchronize Viewpoint first'); return; }
-    card.classList.add('scanned');
-    const count = document.querySelectorAll('.build-card.scanned').length;
-    toast(`${count}/3 signature builds scanned`);
-    if(count >= 3) document.querySelector('[data-complete="viewpoint"]').disabled = false;
-  });
-});
-document.querySelectorAll('.side-relic').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if(btn.classList.contains('scanned')) return;
-    btn.classList.add('scanned');
-    bonusRelics.push(btn.textContent.trim());
-    addSync(2, 'Side tower scanned');
-  });
-});
-
-/* Eavesdrop */
-document.querySelectorAll('.signal-card').forEach(card => {
-  card.addEventListener('click', () => {
-    card.classList.add('scanned');
-    const count = document.querySelectorAll('.signal-card.scanned').length;
-    toast(`${count}/4 signals decoded`);
-    if(count >= 3) document.querySelector('[data-complete="signals"]').disabled = false;
-  });
-});
-
-/* Lens */
-document.querySelectorAll('.route-card').forEach(card => {
-  card.addEventListener('click', () => {
-    document.querySelectorAll('.route-card').forEach(c=>c.classList.remove('selected'));
-    card.classList.add('selected','scanned');
-    selectedRoute = card.dataset.route;
-    document.querySelector('[data-complete="lens"]').disabled = false;
-    toast(card.querySelector('.evidence-title').textContent + ' lens selected');
-  });
-});
-
-generateFinal.addEventListener('click', () => {
-  if(completeIntel.size >= 6){
-    buildFinalMission();
-    showMissionScreen('final');
-  }
-});
-
-function rank(score){
-  if(score >= 90) return 'Full Synchronization';
-  if(score >= 70) return 'Stable Synchronization';
-  if(score >= 50) return 'Partial Synchronization';
-  return 'Fragmented Memory';
-}
-const profiles = {
-  clinical:{className:'Clinical Translation Researcher',summary:'Sai is a medical imaging researcher building translational systems between scanner, code, and clinic — with emphasis on PET/CT validation, image quality, and clinical research workflows.'},
-  medtech:{className:'MedTech R&D Builder',summary:'Sai works at the intersection of clinical needs, computational modelling, and product-facing R&D — turning imaging, prototypes, and frameworks into usable healthcare technology systems.'},
-  strategy:{className:'Research-to-Market Strategist',summary:'Sai combines medical imaging R&D with IP awareness, valorisation, and startup-facing technical translation — connecting research, product framing, and venture strategy.'},
-  research:{className:'Computational Medical Imaging Researcher',summary:'Sai works across simulation, medical imaging, phantom validation, and translational research — building ground-truth systems and analytical tools for collaborative scientific work.'}
-};
-function subclass(){
-  const tools = recoveredTools.join('|');
-  if(tools.includes('ImageJ') && tools.includes('JASP')) return 'Validation Systems Specialist';
-  if(tools.includes('Fusion 360') && tools.includes('Cura')) return 'Prototype-to-Clinic Builder';
-  if(tools.includes('COMSOL') && tools.includes('OpenCV')) return 'Systems Modelling Engineer';
-  if(tools.includes('COMSOL') && tools.includes('Python')) return 'Quantitative Imaging Builder';
-  return 'Translational R&D Builder';
-}
-function buildFinalMission(){
-  const profile = profiles[selectedRoute] || profiles.clinical;
-  document.getElementById('finalSyncMission').textContent = missionSync + '%';
-  document.getElementById('finalRankMission').textContent = rank(missionSync);
-  document.getElementById('finalClassMission').innerHTML = '<strong>' + profile.className + '</strong>';
-  document.getElementById('finalSubclassMission').innerHTML = '<strong>' + subclass() + '</strong>';
-  document.getElementById('finalSummaryMission').textContent = profile.summary;
-  document.getElementById('finalNetworkMission').textContent = missionSync >= 50 ? 'Hyderabad · Palaiseau / Paris · Toulouse · IUCT Oncopole · École Polytechnique · Hepta Medical · LadHyX' : 'Partially encrypted';
-  document.getElementById('finalBureauMission').textContent = missionSync >= 60 ? 'Training → Research → Clinical ecosystem → Industry R&D → Collaboration network' : 'Partially encrypted';
-  document.getElementById('finalArsenalMission').textContent = recoveredTools.length ? recoveredTools.join(' · ') : 'Not recovered';
-  document.getElementById('finalBuildsMission').textContent = missionSync >= 70 ? '3DynaPET · MuPET · CASSOULET' : 'Some build records encrypted';
-  document.getElementById('finalSignalMission').textContent = missionSync >= 75 ? 'Systems thinker · translational builder · curious about clinical impact, deep-tech strategy, and research-to-market paths.' : 'Personal signal partially encrypted';
-  document.getElementById('finalBonusMission').textContent = bonusRelics.length ? bonusRelics.join(' · ') : 'None recovered';
-}
+const animusWorld=document.getElementById('animusWorld'),playWorldAnimus=document.getElementById('playWorldAnimus'),exitWorldAnimus=document.getElementById('exitWorldAnimus'),worldScreens=[...document.querySelectorAll('.world-screen')],worldStatus=document.getElementById('worldStatus'),worldSyncFill=document.getElementById('worldSyncFill'),worldSyncScore=document.getElementById('worldSyncScore'),worldToast=document.getElementById('worldToast'),worldObjective=document.getElementById('worldObjective'),generateWorldDossier=document.getElementById('generateWorldDossier');
+let worldSync=0,worldSynced=false,indiaEagle=false,franceEagle=false,completedMemories=new Set(),sideMemories=[];
+function toastWorld(m){worldToast.textContent=m;worldToast.classList.add('show');setTimeout(()=>worldToast.classList.remove('show'),1250)}
+function setWorldSync(v){worldSync=Math.max(0,Math.min(100,v));worldSyncFill.style.width=worldSync+'%';worldSyncScore.textContent=worldSync+'%'}
+function addWorldSync(p,m){setWorldSync(worldSync+p);if(m)toastWorld(m+' · +'+p+' sync')}
+function showWorldScreen(n){worldScreens.forEach(s=>s.classList.toggle('active',s.dataset.screen===n));worldStatus.textContent='ANIMUS MAP: '+n.toUpperCase();if(n==='world')updateWorldObjective()}
+function resetWorldGame(){worldSync=0;worldSynced=false;indiaEagle=false;franceEagle=false;completedMemories=new Set();sideMemories=[];setWorldSync(0);animusWorld.querySelectorAll('.complete,.scanned,.sync-active,.eagle-active,.ready').forEach(el=>{if(!el.classList.contains('animus-world'))el.classList.remove('complete','scanned','sync-active','eagle-active','ready')});animusWorld.querySelectorAll('.complete-city').forEach(btn=>btn.disabled=true);generateWorldDossier.disabled=true;generateWorldDossier.textContent='Final Dossier Locked';['hyderabad','paris','toulouse','hepta','manitty','signal'].forEach(id=>{const el=document.getElementById(id+'Recon');if(el)el.classList.remove('ready')});const recon={hyderabad:'Origin memory pending. Scan all objects.',paris:'Training memory pending. Scan all objects.',toulouse:'Research memory pending. Scan all objects.',hepta:'Side memory pending. Scan all objects.',manitty:'Side memory pending. Scan all objects.',signal:'Personal signal pending. Scan at least three signals.'};Object.keys(recon).forEach(k=>{const el=document.getElementById(k+'Recon');if(el)el.textContent=recon[k]});const sig=document.getElementById('signalQuick');if(sig)sig.remove();showWorldScreen('briefing')}
+function openWorldGame(){animusWorld.classList.add('open');animusWorld.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';resetWorldGame()}
+function closeWorldGame(){animusWorld.classList.remove('open');animusWorld.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+playWorldAnimus.addEventListener('click',openWorldGame);exitWorldAnimus.addEventListener('click',closeWorldGame);document.getElementById('openWorldMap').addEventListener('click',()=>showWorldScreen('world'));document.getElementById('replayWorldAnimus').addEventListener('click',resetWorldGame);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&animusWorld.classList.contains('open'))closeWorldGame()});
+document.getElementById('syncWorld').addEventListener('click',()=>{worldSynced=true;document.getElementById('worldMapPanel').classList.add('sync-active');if(!completedMemories.has('world')){completedMemories.add('world');document.querySelector('.memory-frag[data-frag="world"]').classList.add('complete');addWorldSync(10,'World map synchronized')}else toastWorld('World map already synchronized');updateWorldObjective()});
+document.querySelectorAll('.region-node').forEach(node=>node.addEventListener('click',()=>{if(!worldSynced){toastWorld('Synchronize viewpoint first');return}node.classList.add('complete');const r=node.dataset.region;if(r==='india')showWorldScreen('india');if(r==='france')showWorldScreen('france')}));
+document.getElementById('eagleIndia').addEventListener('click',()=>{indiaEagle=true;document.getElementById('indiaPanel').classList.add('eagle-active');toastWorld('Eagle Vision activated: Hyderabad revealed')});
+document.getElementById('eagleFrance').addEventListener('click',()=>{franceEagle=true;document.getElementById('francePanel').classList.add('eagle-active');toastWorld('Eagle Vision activated: France memories revealed')});
+document.querySelectorAll('.city-node').forEach(node=>node.addEventListener('click',()=>{const city=node.dataset.city;if(city==='hyderabad'&&!indiaEagle){toastWorld('Activate Eagle Vision first');return}if(city!=='hyderabad'&&!franceEagle){toastWorld('Activate Eagle Vision first');return}node.classList.add('complete');showWorldScreen(city)}));
+document.querySelectorAll('.region-back').forEach(btn=>btn.addEventListener('click',()=>showWorldScreen('world')));document.querySelectorAll('[data-go-region]').forEach(btn=>btn.addEventListener('click',()=>showWorldScreen(btn.dataset.goRegion)));
+document.querySelectorAll('.scan-city').forEach(card=>card.addEventListener('click',()=>{card.classList.add('scanned');const city=card.dataset.cityFrag,total=document.querySelectorAll(`.scan-city[data-city-frag="${city}"]`).length,scanned=document.querySelectorAll(`.scan-city[data-city-frag="${city}"].scanned`).length,required=city==='signal'?3:total;toastWorld(`${scanned}/${required} memory objects scanned`);if(scanned>=required){const recon=document.getElementById(city+'Recon');if(recon){recon.classList.add('ready');recon.textContent=reconstructionText(city)}const btn=document.querySelector(`[data-city-complete="${city}"]`);if(btn)btn.disabled=false}}));
+function reconstructionText(city){return{hyderabad:'Hyderabad reconstructed: mechanical engineering roots, systems thinking, early design/build mindset, and AUV seed memory.',paris:'Palaiseau / Paris reconstructed: biomedical engineering formation, lab research, modelling, and clinical problem framing.',toulouse:'Toulouse reconstructed: PhD in medical imaging and radiophysics, PET/CT validation, 3DynaPET, MuPET, and CASSOULET.',hepta:'Hepta memory reconstructed: MedTech R&D, cancer ablation visualization, clinical/product-facing translation.',manitty:'Device Workshop reconstructed: flexible electrodes, experimental characterization, biomedical device assessment.',signal:'Personal signal reconstructed: systems thinker, translational builder, curious about clinical impact, validation, deep-tech strategy, and research-to-market paths.'}[city]||'Memory reconstructed.'}
+document.querySelectorAll('.complete-city').forEach(btn=>btn.addEventListener('click',()=>{const city=btn.dataset.cityComplete;if(completedMemories.has(city)){showWorldScreen(city==='hyderabad'?'india':'france');return}completedMemories.add(city);if(city==='hyderabad')document.querySelector('.memory-frag[data-frag="hyderabad"]').classList.add('complete');if(city==='paris')document.querySelector('.memory-frag[data-frag="paris"]').classList.add('complete');if(city==='toulouse')document.querySelector('.memory-frag[data-frag="toulouse"]').classList.add('complete');if(city==='signal')document.querySelector('.memory-frag[data-frag="signal"]').classList.add('complete');if(city==='hepta'||city==='manitty'){document.querySelector('.memory-frag[data-frag="side"]').classList.add('complete');sideMemories.push(city==='hepta'?'Hepta Medical / MedTech Bureau':'Manitty / Device Workshop')}const points={hyderabad:15,paris:15,toulouse:22,hepta:8,manitty:8,signal:12}[city]||8;addWorldSync(points,city.toUpperCase()+' memory synchronized');if(city==='hyderabad')showWorldScreen('india');else if(city==='signal')showWorldScreen('world');else showWorldScreen('france');updateWorldObjective()}));
+function updateWorldObjective(){const coreDone=completedMemories.has('hyderabad')&&completedMemories.has('paris')&&completedMemories.has('toulouse');if(!worldSynced)worldObjective.textContent='Synchronize viewpoint to reveal India and France.';else if(!completedMemories.has('hyderabad'))worldObjective.textContent='Enter India and recover the Hyderabad origin memory.';else if(!completedMemories.has('paris')||!completedMemories.has('toulouse'))worldObjective.textContent='Enter France and recover Palaiseau / Paris and Toulouse memories.';else if(!completedMemories.has('signal'))worldObjective.textContent='Core route reconstructed. Eavesdrop personal signal or generate final dossier.';else worldObjective.textContent='All core memories and personal signal recovered. Final dossier available.';if(coreDone){generateWorldDossier.disabled=false;generateWorldDossier.textContent=completedMemories.has('signal')?'Generate Final Dossier':'Generate Dossier / Optional Signal Available';if(!document.getElementById('signalQuick')){const b=document.createElement('button');b.type='button';b.className='world-action';b.id='signalQuick';b.textContent='Eavesdrop Personal Signal';b.addEventListener('click',()=>showWorldScreen('signal'));document.querySelector('[data-screen="world"] .world-copy').appendChild(b)}}else{generateWorldDossier.disabled=true;generateWorldDossier.textContent='Final Dossier Locked'}}
+generateWorldDossier.addEventListener('click',()=>{buildWorldDossier();showWorldScreen('final')});
+function rank(score){if(score>=80)return'Full Synchronization';if(score>=60)return'Stable Synchronization';if(score>=40)return'Partial Synchronization';return'Fragmented Memory'}
+function buildWorldDossier(){const score=worldSync;document.getElementById('finalWorldSync').textContent=score+'%';document.getElementById('finalWorldRank').textContent=rank(score);document.getElementById('finalWorldClass').innerHTML='<strong>Computational Medical Imaging Researcher</strong>';let subclass='PET/CT Validation Systems Builder';if(sideMemories.length>=2)subclass='Translational MedTech Systems Builder';if(completedMemories.has('signal'))subclass='Clinical Translation & Deep-Tech Strategy Builder';document.getElementById('finalWorldSubclass').innerHTML='<strong>'+subclass+'</strong>';document.getElementById('finalWorldSummary').textContent='Sai’s profile reconstructs as an India-to-France engineering and medical imaging trajectory: mechanical systems roots, biomedical engineering formation, and current PET/CT radiophysics research focused on validation, synthetic data, and translational tools.';document.getElementById('finalWorldRoute').textContent='Hyderabad → Palaiseau / Paris → Toulouse';document.getElementById('finalWorldCore').textContent='Mechanical Engineering · Biomedical Engineering · Medical Imaging & Radiophysics';document.getElementById('finalWorldBuilds').textContent=score>=55?'3DynaPET · MuPET · CASSOULET':'Some build intel encrypted';document.getElementById('finalWorldSide').textContent=sideMemories.length?sideMemories.join(' · '):'None recovered';document.getElementById('finalWorldSignal').textContent=completedMemories.has('signal')?'Systems thinker · translational builder · values clinical utility, validation, and research-to-market paths.':'Optional personal signal not recovered'}
 </script>
 
 </body>
