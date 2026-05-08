@@ -1029,5 +1029,75 @@ function buildFinal2(){
 document.getElementById('ac2Final').addEventListener('click',()=>{buildFinal2();screen2('final')});
 </script>
 
+
+<script>
+(function(){
+  function bootAnimusLauncher(){
+    var game = document.getElementById('ac2');
+    var buttons = [
+      document.getElementById('playAC2'),
+      document.getElementById('playCodexGame'),
+      document.getElementById('playWorldAnimus')
+    ].filter(Boolean);
+
+    // Also catch the visible button by text if the id was changed.
+    document.querySelectorAll('button, a').forEach(function(el){
+      if ((el.textContent || '').toLowerCase().includes('play animus')) {
+        if (!buttons.includes(el)) buttons.push(el);
+      }
+    });
+
+    function showScreen(name){
+      document.querySelectorAll('.ac2-screen').forEach(function(s){
+        s.classList.toggle('active', s.getAttribute('data-screen') === name);
+      });
+      var status = document.getElementById('ac2Status');
+      if (status) status.textContent = 'ANIMUS CODEX: ' + name.toUpperCase();
+    }
+
+    function openGame(e){
+      if (e) e.preventDefault();
+      if (!game) {
+        alert('Animus overlay not found on this page.');
+        return;
+      }
+      game.classList.add('open');
+      game.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      showScreen('brief');
+    }
+
+    function closeGame(){
+      if (!game) return;
+      game.classList.remove('open');
+      game.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+
+    buttons.forEach(function(btn){
+      btn.addEventListener('click', openGame);
+      btn.style.pointerEvents = 'auto';
+      btn.disabled = false;
+    });
+
+    var exit = document.getElementById('ac2Exit');
+    if (exit) exit.addEventListener('click', closeGame);
+
+    var openMap = document.getElementById('ac2Open');
+    if (openMap) openMap.addEventListener('click', function(){ showScreen('world'); });
+
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeGame();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootAnimusLauncher);
+  } else {
+    bootAnimusLauncher();
+  }
+})();
+</script>
+
 </body>
 </html>
