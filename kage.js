@@ -1,4 +1,4 @@
-// KAGE v4 — with error handling and safe Three.js patterns
+// KAGE v5 — fixed hat framing + katana hand alignment
 (function(){
 'use strict';
 
@@ -10,7 +10,7 @@ function boot(){
 function go(){
   // CSS
   var s=document.createElement('style');
-  s.textContent='.kage-wrap{position:fixed;bottom:4px;right:4px;z-index:900;opacity:0;transform:translateY(12px);transition:opacity .8s,transform .8s;pointer-events:none}.kage-wrap.visible{opacity:1;transform:translateY(0);pointer-events:auto}.kage-stage{width:80px;height:110px;cursor:pointer;overflow:visible}.kage-stage canvas{display:block}.kage-tooltip{position:absolute;bottom:100%;right:50px;width:185px;border:1px solid rgba(139,26,26,.2);background:rgba(10,10,11,.94);backdrop-filter:blur(12px);padding:.7rem;opacity:0;visibility:hidden;transform:translate(8px,8px) scale(.95);transform-origin:bottom right;transition:all .3s;pointer-events:none;z-index:901}.kage-tooltip.show{opacity:1;visibility:visible;transform:translate(0,0) scale(1);pointer-events:auto}.kt-h{display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem;padding-bottom:.35rem;border-bottom:1px solid rgba(240,235,227,.06)}.kt-h b{font-family:serif;font-size:1.1rem;color:rgba(139,26,26,.35)}.kt-h em{font-family:serif;font-size:.75rem;color:#f0ebe3;font-style:normal}.kt-s{font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#c23b3b;margin-bottom:4px}.kt-d{font-size:11px;color:#c4bfb6;line-height:1.5}.kt-f{font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#4a4a4a;margin-top:6px}';
+  s.textContent='.kage-wrap{position:fixed;bottom:4px;right:4px;z-index:900;opacity:0;transform:translateY(12px);transition:opacity .8s,transform .8s;pointer-events:none}.kage-wrap.visible{opacity:1;transform:translateY(0);pointer-events:auto}.kage-stage{width:96px;height:140px;cursor:pointer;overflow:visible}.kage-stage canvas{display:block}.kage-tooltip{position:absolute;bottom:100%;right:50px;width:185px;border:1px solid rgba(139,26,26,.2);background:rgba(10,10,11,.94);backdrop-filter:blur(12px);padding:.7rem;opacity:0;visibility:hidden;transform:translate(8px,8px) scale(.95);transform-origin:bottom right;transition:all .3s;pointer-events:none;z-index:901}.kage-tooltip.show{opacity:1;visibility:visible;transform:translate(0,0) scale(1);pointer-events:auto}.kt-h{display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem;padding-bottom:.35rem;border-bottom:1px solid rgba(240,235,227,.06)}.kt-h b{font-family:serif;font-size:1.1rem;color:rgba(139,26,26,.35)}.kt-h em{font-family:serif;font-size:.75rem;color:#f0ebe3;font-style:normal}.kt-s{font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#c23b3b;margin-bottom:4px}.kt-d{font-size:11px;color:#c4bfb6;line-height:1.5}.kt-f{font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#4a4a4a;margin-top:6px}';
   document.head.appendChild(s);
 
   // DOM
@@ -29,7 +29,7 @@ function go(){
   document.body.appendChild(wrap);
 
   // Three.js
-  var W=80,H=110;
+  var W=96,H=140;
   var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
   renderer.setSize(W,H);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
@@ -37,16 +37,19 @@ function go(){
 
   var scene=new THREE.Scene();
   var camera=new THREE.PerspectiveCamera(26,W/H,0.1,50);
-  camera.position.set(1.8,1.7,5.2);
-  camera.lookAt(new THREE.Vector3(0,1.05,0));
+  camera.position.set(1.8,1.72,6.2);
+  camera.lookAt(new THREE.Vector3(0,1.15,0));
 
   scene.add(new THREE.AmbientLight(0x888888,0.9));
+
   var dl=new THREE.DirectionalLight(0xfff5e8,1.1);
   dl.position.set(4,7,5);
   scene.add(dl);
+
   var rl=new THREE.DirectionalLight(0x8b1a1a,0.3);
   rl.position.set(-3,2,-2);
   scene.add(rl);
+
   var fl=new THREE.PointLight(0xffe8cc,0.35,6);
   fl.position.set(0,2.3,3);
   scene.add(fl);
@@ -65,7 +68,6 @@ function go(){
   var mHat=new THREE.MeshLambertMaterial({color:0xb09565,flatShading:true});
   var mHatD=new THREE.MeshLambertMaterial({color:0x8e7548,flatShading:true});
 
-  // Helper: create and position a mesh safely
   function box(gx,gy,gz,mat,px,py,pz,parent){
     var m=new THREE.Mesh(new THREE.BoxGeometry(gx,gy,gz),mat);
     m.position.set(px||0,py||0,pz||0);
@@ -79,37 +81,31 @@ function go(){
   var head=new THREE.Group();
   head.position.set(0,2.08,0);
 
-  // Face
   box(.42,.40,.38,mSkin,0,0,0,head);
-  // Chin (U shape)
   box(.30,.11,.26,mSkin,0,-.23,.02,head);
-  // Jaw sides
   box(.06,.13,.26,mSkinD,-.17,-.17,.02,head);
   box(.06,.13,.26,mSkinD,.17,-.17,.02,head);
 
-  // Eyes
   var eyeL=box(.09,.04,.02,mEye.clone(),-.1,.04,.2,head);
   var eyeR=box(.09,.04,.02,mEye.clone(),.1,.04,.2,head);
 
-  // Eyebrows
   var browL=box(.12,.025,.03,mBrow,-.1,.1,.19,head);
   browL.rotation.z=0.1;
   var browR=box(.12,.025,.03,mBrow,.1,.1,.19,head);
   browR.rotation.z=-0.1;
 
-  // Kasa (straw hat) — cone + bottom disc
-  var kasa=new THREE.Mesh(new THREE.ConeGeometry(.75,.4,12),mHat);
-  kasa.position.set(0,.36,0);
+  // Kasa — adjusted to read as a visible shallow cone
+  var kasa=new THREE.Mesh(new THREE.ConeGeometry(.82,.34,16),mHat);
+  kasa.position.set(0,.34,0);
   head.add(kasa);
 
-  var kasaBot=new THREE.Mesh(new THREE.CircleGeometry(.75,12),mHatD);
+  var kasaBot=new THREE.Mesh(new THREE.CircleGeometry(.66,16),mHatD);
   kasaBot.rotation.x=Math.PI/2;
-  kasaBot.position.set(0,.16,0);
+  kasaBot.position.set(0,.18,0);
   head.add(kasaBot);
 
-  // Hat tip
   var kasaTip=new THREE.Mesh(new THREE.ConeGeometry(.06,.12,4),mCrim);
-  kasaTip.position.set(0,.57,0);
+  kasaTip.position.set(0,.56,0);
   kasaTip.rotation.y=Math.PI/4;
   head.add(kasaTip);
 
@@ -120,15 +116,12 @@ function go(){
   torso.position.set(0,1.45,0);
   box(.48,.62,.28,mBody,0,0,0,torso);
 
-  // Sash
   var sash=box(.055,.66,.29,mCrim,.04,0,.003,torso);
   sash.rotation.z=-.35;
 
-  // Knot
   var kn=box(.07,.07,.04,mSteel,-.14,-.12,.15,torso);
   kn.rotation.z=Math.PI/4;
 
-  // Shoulder plate
   var sode=box(.18,.05,.26,mCrim,-.28,.26,0,torso);
   sode.rotation.z=.18;
 
@@ -149,7 +142,7 @@ function go(){
   kg.add(armL);
 
   var armR=new THREE.Group();
-  armR.position.set(.32,1.32,0);
+  armR.position.set(.36,1.32,.06);
   box(.12,.26,.12,mBody,0,0,0,armR);
   box(.1,.22,.1,mCloth,0,-.24,0,armR);
   box(.08,.08,.08,mSkin,0,-.38,0,armR);
@@ -160,6 +153,7 @@ function go(){
   hak.position.set(0,.66,0);
   hak.rotation.y=Math.PI/4;
   kg.add(hak);
+
   box(.5,.07,.3,mAccent,0,1.02,0,kg);
 
   // ── FEET ──
@@ -168,32 +162,48 @@ function go(){
 
   // ── KATANA ──
   var katana=new THREE.Group();
-  // Blade
+
   box(.022,.82,.01,mBlade,0,0,0,katana);
-  // Glow
-  var bladeGlow=box(.03,.82,.003,new THREE.MeshBasicMaterial({color:0xf5f0e8,transparent:true,opacity:.12}),0,0,.008,katana);
-  // Tsuba
+
+  var bladeGlow=box(
+    .03,
+    .82,
+    .003,
+    new THREE.MeshBasicMaterial({color:0xf5f0e8,transparent:true,opacity:.12}),
+    0,
+    0,
+    .008,
+    katana
+  );
+
   var tsu=box(.09,.01,.09,mSteel,0,.42,0,katana);
   tsu.rotation.y=Math.PI/4;
-  // Handle
+
   box(.03,.18,.03,mCrim,0,.52,0,katana);
-  // Pommel
   box(.035,.02,.035,mSteel,0,.62,0,katana);
 
-  // Back position
   katana.position.set(.1,1.55,-.18);
   katana.rotation.set(.1,0,-.45);
   kg.add(katana);
 
   var katBack={px:.1,py:1.55,pz:-.18,rx:.1,ry:0,rz:-.45};
-  var katReady={px:.44,py:1.0,pz:.12,rx:-.25,ry:0,rz:.75};
+
+  // Fixed: the handle is offset upward inside the katana group,
+  // so the group itself needs a much lower y-position.
+  var katReady={px:.31,py:.43,pz:.10,rx:-.25,ry:0,rz:.75};
 
   // ── PLATFORM ──
-  var plat=new THREE.Mesh(new THREE.CylinderGeometry(.38,.42,.035,8),new THREE.MeshLambertMaterial({color:0x0e0e10,flatShading:true}));
+  var plat=new THREE.Mesh(
+    new THREE.CylinderGeometry(.38,.42,.035,8),
+    new THREE.MeshLambertMaterial({color:0x0e0e10,flatShading:true})
+  );
   plat.position.y=-.018;
   scene.add(plat);
 
-  var ring=new THREE.Mesh(new THREE.RingGeometry(.36,.42,8),new THREE.MeshBasicMaterial({color:0x8b1a1a,side:THREE.DoubleSide,transparent:true,opacity:.18}));
+  var ring=new THREE.Mesh(
+    new THREE.RingGeometry(.36,.42,8),
+    new THREE.MeshBasicMaterial({color:0x8b1a1a,side:THREE.DoubleSide,transparent:true,opacity:.18})
+  );
   ring.rotation.x=-Math.PI/2;
   ring.position.y=.002;
   scene.add(ring);
@@ -203,22 +213,28 @@ function go(){
   var pGeo=new THREE.BufferGeometry();
   var pArr=new Float32Array(PC*3);
   var pVel=[];
+
   for(var i=0;i<PC;i++){
     pArr[i*3]=(Math.random()-.5)*.7;
     pArr[i*3+1]=Math.random()*2;
     pArr[i*3+2]=(Math.random()-.5)*.7;
     pVel.push(.002+Math.random()*.004);
   }
+
   pGeo.setAttribute('position',new THREE.BufferAttribute(pArr,3));
-  var pts=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xc23b3b,size:.02,transparent:true,opacity:.25}));
+
+  var pts=new THREE.Points(
+    pGeo,
+    new THREE.PointsMaterial({color:0xc23b3b,size:.02,transparent:true,opacity:.25})
+  );
   scene.add(pts);
 
-  // Diagonal stance
-  kg.rotation.y=.35;
+  kg.rotation.y=.48;
   scene.add(kg);
 
   // ── ANIMATE ──
-  var t=0,hov=false,tgtR=.35,curR=.35,kL=0;
+  var t=0,hov=false,tgtR=.48,curR=.48,kL=0;
+
   function lerp(a,b,f){return a+(b-a)*f;}
 
   function animate(){
@@ -228,25 +244,34 @@ function go(){
     torso.scale.y=1+Math.sin(t*1.4)*.01;
     head.position.y=2.08+Math.sin(t*1.4)*.003;
 
-    var sw=hov?tgtR:.35+Math.sin(t*.4)*.06;
+    var sw=hov?tgtR:.48+Math.sin(t*.4)*.06;
     curR+=(sw-curR)*.04;
     kg.rotation.y=curR;
 
     coatL.rotation.x=Math.sin(t*1.8)*.025;
     coatR.rotation.x=Math.sin(t*1.8+.8)*.025;
     armL.rotation.x=Math.sin(t*.8)*.02;
-    armR.rotation.x=hov?-.3:Math.sin(t*.8+Math.PI)*.02;
+    armR.rotation.x=hov?-.22:Math.sin(t*.8+Math.PI)*.02;
 
     var ei=hov?1:.5+Math.sin(t*2.2)*.35;
     var ec=new THREE.Color(ei*.86,ei*.27,ei*.27);
     eyeL.material.color.copy(ec);
     eyeR.material.color.copy(ec);
 
-    // Katana lerp: back ↔ ready
     var kt=hov?1:0;
     kL+=(kt-kL)*.06;
-    katana.position.set(lerp(katBack.px,katReady.px,kL),lerp(katBack.py,katReady.py,kL),lerp(katBack.pz,katReady.pz,kL));
-    katana.rotation.set(lerp(katBack.rx,katReady.rx,kL),lerp(katBack.ry,katReady.ry,kL),lerp(katBack.rz,katReady.rz,kL));
+
+    katana.position.set(
+      lerp(katBack.px,katReady.px,kL),
+      lerp(katBack.py,katReady.py,kL),
+      lerp(katBack.pz,katReady.pz,kL)
+    );
+
+    katana.rotation.set(
+      lerp(katBack.rx,katReady.rx,kL),
+      lerp(katBack.ry,katReady.ry,kL),
+      lerp(katBack.rz,katReady.rz,kL)
+    );
 
     head.rotation.x=hov?.12:Math.sin(t*.6)*.015;
     ring.rotation.z+=.003;
@@ -255,13 +280,18 @@ function go(){
     var pp=pts.geometry.attributes.position.array;
     for(var i=0;i<PC;i++){
       pp[i*3+1]+=pVel[i];
-      if(pp[i*3+1]>2.2){pp[i*3+1]=0;pp[i*3]=(Math.random()-.5)*.6;pp[i*3+2]=(Math.random()-.5)*.6;}
+      if(pp[i*3+1]>2.2){
+        pp[i*3+1]=0;
+        pp[i*3]=(Math.random()-.5)*.6;
+        pp[i*3+2]=(Math.random()-.5)*.6;
+      }
     }
     pts.geometry.attributes.position.needsUpdate=true;
 
     fl.intensity=hov?.5:.35;
     renderer.render(scene,camera);
   }
+
   animate();
 
   // ── VISIBILITY ──
@@ -270,7 +300,7 @@ function go(){
     wrap.style.display=(a&&a.classList.contains('open'))?'none':'';
   },500);
 
-  // Entrance — 2s delay then fade in + bow
+  // Entrance
   setTimeout(function(){
     wrap.classList.add('visible');
     setTimeout(function(){
@@ -278,35 +308,49 @@ function go(){
       var iv=setInterval(function(){
         v+=.03;
         head.rotation.x=Math.sin(v*Math.PI)*.2;
-        if(v>=1){clearInterval(iv);head.rotation.x=0;}
+        if(v>=1){
+          clearInterval(iv);
+          head.rotation.x=0;
+        }
       },16);
     },300);
   },2000);
 
   // ── INTERACTIONS ──
   stage.addEventListener('mouseenter',function(){hov=true;});
-  stage.addEventListener('mouseleave',function(){hov=false;tgtR=.35;});
+  stage.addEventListener('mouseleave',function(){hov=false;tgtR=.48;});
+
   stage.addEventListener('mousemove',function(e){
     if(!hov)return;
     var r=stage.getBoundingClientRect();
-    tgtR=.35+((e.clientX-r.left)/r.width-.5)*.5;
+    tgtR=.48+((e.clientX-r.left)/r.width-.5)*.5;
   });
+
   stage.addEventListener('touchstart',function(){hov=true;},{passive:true});
-  stage.addEventListener('touchend',function(){setTimeout(function(){hov=false;tgtR=.35;},1500);},{passive:true});
+
+  stage.addEventListener('touchend',function(){
+    setTimeout(function(){hov=false;tgtR=.48;},1500);
+  },{passive:true});
 
   var ttOpen=false;
+
   stage.addEventListener('click',function(e){
     e.stopPropagation();
     ttOpen=!ttOpen;
     tip.classList.toggle('show',ttOpen);
   });
+
   document.addEventListener('click',function(){
-    if(ttOpen){ttOpen=false;tip.classList.remove('show');}
+    if(ttOpen){
+      ttOpen=false;
+      tip.classList.remove('show');
+    }
   });
 
-  console.log('Kage loaded successfully');
+  console.log('Kage v5 loaded successfully');
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);
 else boot();
+
 })();
