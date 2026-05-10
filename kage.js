@@ -1,4 +1,4 @@
-// KAGE v7 — fixed hover katana using separate hand sword
+// KAGE v8 — corrected resting back katana + hover hand katana
 (function(){
 'use strict';
 
@@ -16,6 +16,7 @@ function boot(){
 }
 
 function go(){
+  // Prevent duplicate Kage instances during reload/dev injection
   var old=document.querySelector('.kage-wrap');
   if(old && old.kageDispose){
     old.kageDispose();
@@ -23,10 +24,12 @@ function go(){
     old.remove();
   }
 
+  // CSS
   var s=document.createElement('style');
   s.textContent='.kage-wrap{position:fixed;bottom:4px;right:4px;z-index:900;opacity:0;transform:translateY(12px);transition:opacity .8s,transform .8s;pointer-events:none}.kage-wrap.visible{opacity:1;transform:translateY(0);pointer-events:auto}.kage-stage{width:96px;height:140px;cursor:pointer;overflow:visible}.kage-stage canvas{display:block}.kage-tooltip{position:absolute;bottom:100%;right:50px;width:185px;border:1px solid rgba(139,26,26,.2);background:rgba(10,10,11,.94);backdrop-filter:blur(12px);padding:.7rem;opacity:0;visibility:hidden;transform:translate(8px,8px) scale(.95);transform-origin:bottom right;transition:all .3s;pointer-events:none;z-index:901}.kage-tooltip.show{opacity:1;visibility:visible;transform:translate(0,0) scale(1);pointer-events:auto}.kt-h{display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem;padding-bottom:.35rem;border-bottom:1px solid rgba(240,235,227,.06)}.kt-h b{font-family:serif;font-size:1.1rem;color:rgba(139,26,26,.35)}.kt-h em{font-family:serif;font-size:.75rem;color:#f0ebe3;font-style:normal}.kt-s{font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#c23b3b;margin-bottom:4px}.kt-d{font-size:11px;color:#c4bfb6;line-height:1.5}.kt-f{font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#4a4a4a;margin-top:6px}';
   document.head.appendChild(s);
 
+  // DOM
   var wrap=document.createElement('div');
   wrap.className='kage-wrap';
 
@@ -41,6 +44,7 @@ function go(){
   wrap.appendChild(stage);
   document.body.appendChild(wrap);
 
+  // Three.js
   var W=96;
   var H=140;
 
@@ -73,6 +77,7 @@ function go(){
   fl.position.set(0,2.3,3);
   scene.add(fl);
 
+  // Materials
   var mBody=new THREE.MeshLambertMaterial({color:0x2e2a38,flatShading:true});
   var mCloth=new THREE.MeshLambertMaterial({color:0x22202c,flatShading:true});
   var mCrim=new THREE.MeshLambertMaterial({color:0xa52525,flatShading:true});
@@ -113,6 +118,7 @@ function go(){
   var browR=box(.12,.025,.03,mBrow,.1,.1,.19,head);
   browR.rotation.z=-0.1;
 
+  // Kasa hat — framed and conical
   var kasa=new THREE.Mesh(new THREE.ConeGeometry(.82,.34,16),mHat);
   kasa.position.set(0,.34,0);
   head.add(kasa);
@@ -184,12 +190,9 @@ function go(){
   box(.1,.04,.16,mCloth,-.11,.02,.02,kg);
   box(.1,.04,.16,mCloth,.11,.02,.02,kg);
 
-  // ── KATANA ──
-  // This version uses two katana objects:
-  // katBackMesh: normal resting katana.
-  // katHand: hover katana positioned directly at the right hand.
-
-  function makeKatana(){
+  // ── KATANA HELPERS ──
+  // Hand katana: pivot/guard is at the grip point.
+  function makeHandKatana(){
     var g=new THREE.Group();
 
     var guard=box(.09,.012,.09,mSteel,0,0,0,g);
@@ -219,19 +222,47 @@ function go(){
     return g;
   }
 
-  var katBackMesh=makeKatana();
-  katBackMesh.position.set(.12,1.48,-.22);
-  katBackMesh.rotation.set(.1,0,-.48);
+  // Back katana: reversed so the handle sits near shoulder and blade goes downward.
+  function makeBackKatana(){
+    var g=new THREE.Group();
+
+    box(.024,.86,.012,mBlade,0,-.43,0,g);
+
+    var glow=box(
+      .034,
+      .86,
+      .004,
+      new THREE.MeshBasicMaterial({
+        color:0xf5f0e8,
+        transparent:true,
+        opacity:.12
+      }),
+      0,
+      -.43,
+      .01,
+      g
+    );
+
+    var guard=box(.09,.012,.09,mSteel,0,.02,0,g);
+    guard.rotation.y=Math.PI/4;
+
+    box(.035,.20,.035,mCrim,0,.15,0,g);
+    box(.04,.025,.04,mSteel,0,.27,0,g);
+
+    g.userData.glow=glow;
+    return g;
+  }
+
+  // Resting back katana
+  var katBackMesh=makeBackKatana();
+  katBackMesh.position.set(.47,1.50,-.20);
+  katBackMesh.rotation.set(.08,0,-.55);
   kg.add(katBackMesh);
 
-  var katHand=makeKatana();
-
-  // Hand position. Tune this only if needed.
+  // Hover hand katana
+  var katHand=makeHandKatana();
   katHand.position.set(.50,.86,.20);
-
-  // Blade points down/right on hover while grip stays near hand.
   katHand.rotation.set(0,0,-2.35);
-
   katHand.visible=false;
   kg.add(katHand);
 
@@ -288,6 +319,7 @@ function go(){
 
   scene.add(pts);
 
+  // Diagonal stance
   kg.rotation.y=.48;
   scene.add(kg);
 
@@ -318,6 +350,7 @@ function go(){
     coatR.rotation.x=Math.sin(t*1.8+.8)*.025;
 
     armL.rotation.x=Math.sin(t*.8)*.02;
+
     armR.rotation.x=hov ? -.18 : Math.sin(t*.8+Math.PI)*.02;
     armR.rotation.z=hov ? -.12 : 0;
 
@@ -327,8 +360,8 @@ function go(){
     eyeL.material.color.copy(ec);
     eyeR.material.color.copy(ec);
 
-    // Katana visibility swap.
-    // Back katana fades out, hand katana appears near the hand.
+    // Katana state swap:
+    // initial = back katana, hover = hand katana.
     var kt=hov ? 1 : 0;
     kL+=(kt-kL)*.12;
 
@@ -380,7 +413,7 @@ function go(){
     wrap.style.display=shouldHide ? 'none' : '';
   },500);
 
-  // Entrance
+  // Entrance — 2s delay then fade in + bow
   setTimeout(function(){
     wrap.classList.add('visible');
 
@@ -443,6 +476,7 @@ function go(){
     }
   });
 
+  // Cleanup helper for dev reloads
   wrap.kageDispose=function(){
     clearInterval(visTimer);
 
@@ -475,7 +509,7 @@ function go(){
     wrap.remove();
   };
 
-  console.log('Kage v7 loaded successfully');
+  console.log('Kage v8 loaded successfully');
 }
 
 if(document.readyState==='loading'){
