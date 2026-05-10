@@ -22,140 +22,87 @@
 }
 
 /* ── LIGHT THEME ──────────────────────────────── */
-/* html prefix ensures higher specificity than :root */
 html[data-theme="light"] {
-  --ink: #f0ebe3;
-  --paper: #1a1a1c;
-  --blood: #8b1a1a;
-  --blood-glow: #9a2222;
-  --blood-dim: rgba(139,26,26,0.35);
-  --steel: #7a756e;
-  --mist: #4a4540;
-  --smoke: #e8e3db;
-  --ash: #ddd8d0;
-  --ghost: rgba(26,26,28,0.04);
-  --ghost-line: rgba(26,26,28,0.1);
-  --kanji-opacity: 0.04;
+  --ink: #f0ebe3 !important;
+  --paper: #1a1a1c !important;
+  --blood: #8b1a1a !important;
+  --blood-glow: #9a2222 !important;
+  --steel: #7a756e !important;
+  --mist: #4a4540 !important;
+  --smoke: #e8e3db !important;
+  --ash: #ddd8d0 !important;
+  --ghost: rgba(26,26,28,0.04) !important;
+  --ghost-line: rgba(26,26,28,0.1) !important;
 }
+html[data-theme="light"] body { background-color: #f0ebe3 !important; color: #1a1a1c !important; }
+html[data-theme="light"] h1,html[data-theme="light"] h2,html[data-theme="light"] h3,html[data-theme="light"] h4 { color: #1a1a1c !important; }
+html[data-theme="light"] nav { background: rgba(218,212,202,0.95) !important; border-bottom: 1px solid rgba(26,26,28,0.12) !important; }
+html[data-theme="light"] .nav-links a { color: #3a3530 !important; }
+html[data-theme="light"] .nav-links a:hover,html[data-theme="light"] .nav-links a.active { color: #8b1a1a !important; }
+html[data-theme="light"] .nav-mark { color: #1a1a1c !important; }
+html[data-theme="light"] .nav-mark span { color: #8b1a1a !important; }
+html[data-theme="light"] .nav-brand svg rect { fill: #f0ebe3 !important; }
+html[data-theme="light"] .hero-name { color: #1a1a1c !important; }
+html[data-theme="light"] .hero-name .stroke { -webkit-text-stroke-color: #1a1a1c !important; }
+html[data-theme="light"] .hero-title { color: #5a554e !important; }
+html[data-theme="light"] .hero-desc { color: #5a554e !important; }
+html[data-theme="light"] .hero-name-pre { color: rgba(139,26,26,0.45) !important; }
+html[data-theme="light"] .btn { border-color: rgba(26,26,28,0.18) !important; color: #1a1a1c !important; }
+html[data-theme="light"] .bg-kanji { color: rgba(26,26,28,0.03) !important; }
+html[data-theme="light"] .v-accent { background: rgba(139,26,26,0.06) !important; }
+html[data-theme="light"] .bg-smoke,html[data-theme="light"] .intro-strip { background: #e8e3db !important; }
+html[data-theme="light"] .intro-text strong { color: #1a1a1c !important; }
+html[data-theme="light"] .about-intro p { color: #4a4540 !important; }
+html[data-theme="light"] .about-intro p strong { color: #1a1a1c !important; }
+html[data-theme="light"] .page-tag { color: #5a554e !important; }
+html[data-theme="light"] .page-title { color: #1a1a1c !important; }
+html[data-theme="light"] .page-subtitle { color: #5a554e !important; }
+html[data-theme="light"] .page-title-jp { color: rgba(139,26,26,0.4) !important; }
+html[data-theme="light"] .section-title { color: #1a1a1c !important; }
+html[data-theme="light"] .section-num { color: rgba(139,26,26,0.35) !important; }
+html[data-theme="light"] .intro-stat,html[data-theme="light"] .exp-stat,html[data-theme="light"] .forge-stat,html[data-theme="light"] .p-stat,html[data-theme="light"] .stat,html[data-theme="light"] .vol-card { background: #e8e3db !important; }
+html[data-theme="light"] .stat-label,html[data-theme="light"] .intro-stat-label,html[data-theme="light"] .exp-stat-label,html[data-theme="light"] .forge-stat-label,html[data-theme="light"] .p-stat-label { color: #5a554e !important; }
+html[data-theme="light"] .edu-card,html[data-theme="light"] .paper-card,html[data-theme="light"] .persona-card,html[data-theme="light"] .skill-card,html[data-theme="light"] .extra-card,html[data-theme="light"] .blog-card,html[data-theme="light"] .contact-card,html[data-theme="light"] .artifact-card { background: rgba(26,26,28,0.025) !important; border-color: rgba(26,26,28,0.08) !important; }
+html[data-theme="light"] .nav-card { background: transparent !important; border-color: rgba(26,26,28,0.08) !important; }
+html[data-theme="light"] .nav-card-label { color: #1a1a1c !important; }
+html[data-theme="light"] .nav-card-sub { color: #5a554e !important; }
+html[data-theme="light"] .acc-header { background: #ebe6de !important; }
+html[data-theme="light"] .acc-item.open .acc-header { background: rgba(139,26,26,0.06) !important; }
+html[data-theme="light"] .acc-content { background: #f5f0e8 !important; }
+html[data-theme="light"] .acc-role { color: #1a1a1c !important; }
+html[data-theme="light"] .acc-mission { color: #4a4540 !important; }
+html[data-theme="light"] .hover-map,html[data-theme="light"] .radar-section { background: rgba(26,26,28,0.02) !important; }
+html[data-theme="light"] .map-core,html[data-theme="light"] .map-node { background: rgba(240,235,227,0.95) !important; }
+html[data-theme="light"] .map-popup { background: rgba(240,235,227,0.97) !important; }
+html[data-theme="light"] .node-title,html[data-theme="light"] .map-core-title { color: #1a1a1c !important; }
+html[data-theme="light"] .quote-strip { background: #e8e3db !important; border-color: rgba(26,26,28,0.06) !important; }
+html[data-theme="light"] .quote-strip-item { color: #5a554e !important; }
+html[data-theme="light"] footer { background: #e0dbd3 !important; }
+html[data-theme="light"] .footer-text { color: #5a554e !important; }
+html[data-theme="light"] .paper-title,html[data-theme="light"] .artifact-title,html[data-theme="light"] .edu-degree,html[data-theme="light"] .persona-title,html[data-theme="light"] .blog-title { color: #1a1a1c !important; }
+html[data-theme="light"] .paper-journal,html[data-theme="light"] .artifact-brief,html[data-theme="light"] .persona-desc,html[data-theme="light"] .skill-items { color: #4a4540 !important; }
+html[data-theme="light"] .contact-heading { color: #1a1a1c !important; }
+html[data-theme="light"] .contact-desc { color: #5a554e !important; }
+html[data-theme="light"] .contact-card-label { color: #1a1a1c !important; }
+html[data-theme="light"] .ac-transition { background: #f0ebe3 !important; }
+html[data-theme="light"] .philosophy-text h3 { color: #1a1a1c !important; }
+html[data-theme="light"] .philosophy-text p { color: #4a4540 !important; }
+html[data-theme="light"] .journey-text { color: #4a4540 !important; }
+html[data-theme="light"] .journey-text strong { color: #1a1a1c !important; }
+html[data-theme="light"] .edu-school { color: #9a2222 !important; }
+html[data-theme="light"] .edu-note { color: #5a554e !important; }
+html[data-theme="light"] .forge-path { background: rgba(26,26,28,0.02) !important; }
+html[data-theme="light"] .mono { color: #5a554e !important; }
+body,nav,footer,.content-section,.bg-smoke,.intro-strip,.nav-card,.stat,.acc-header,.acc-content,.edu-card,.paper-card,.persona-card,.skill-card,.contact-card,.blog-card,.extra-card,.vol-card{transition:background-color .4s ease,color .4s ease,border-color .4s ease}
+.theme-toggle{width:30px;height:30px;background:0;border:1px solid var(--ghost-line);color:var(--steel);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.78rem;transition:all .3s;margin-left:.8rem;flex-shrink:0;padding:0;line-height:1}
+.theme-toggle:hover{border-color:rgba(139,26,26,.4);color:var(--paper)}
+.theme-toggle .icon-sun{display:none}
+html[data-theme="light"] .theme-toggle{border-color:rgba(26,26,28,.25)!important;color:#3a3530!important;background:rgba(26,26,28,.05)!important}
+html[data-theme="light"] .theme-toggle:hover{border-color:#8b1a1a!important;color:#1a1a1c!important}
+html[data-theme="light"] .theme-toggle .icon-moon{display:none!important}
+html[data-theme="light"] .theme-toggle .icon-sun{display:inline!important}
 
-html[data-theme="light"] body {
-  background: #f0ebe3;
-  color: #1a1a1c;
-}
 
-/* Nav — clearly distinct in light mode */
-html[data-theme="light"] nav {
-  background: rgba(220,214,204,0.95);
-  border-bottom: 1px solid rgba(26,26,28,0.1);
-  backdrop-filter: blur(12px);
-}
-html[data-theme="light"] .nav-links a { color: #3a3530; }
-html[data-theme="light"] .nav-links a:hover,
-html[data-theme="light"] .nav-links a.active { color: #8b1a1a; }
-html[data-theme="light"] .nav-mark { color: #1a1a1c; }
-html[data-theme="light"] .nav-mark span { color: #8b1a1a; }
-html[data-theme="light"] .nav-brand svg rect { fill: #f0ebe3; }
-
-/* Hero */
-html[data-theme="light"] .hero-name { color: #1a1a1c; }
-html[data-theme="light"] .hero-name .stroke { -webkit-text-stroke-color: #1a1a1c; color: transparent; }
-html[data-theme="light"] .hero-title { color: #4a4540; }
-html[data-theme="light"] .hero-desc { color: #5a554e; }
-html[data-theme="light"] .hero-name-pre { color: rgba(139,26,26,0.5); }
-
-/* Buttons */
-html[data-theme="light"] .btn { border-color: rgba(26,26,28,0.15); color: #1a1a1c; }
-html[data-theme="light"] .btn:hover { border-color: rgba(139,26,26,0.4); }
-
-/* Background elements */
-html[data-theme="light"] .bg-kanji { color: rgba(26,26,28,0.03); }
-html[data-theme="light"] .bg-katana path,
-html[data-theme="light"] .bg-katana-dual path { fill: #1a1a1c; opacity: 0.03; }
-html[data-theme="light"] .v-accent { background: rgba(139,26,26,0.08); }
-
-/* Sections */
-html[data-theme="light"] .bg-smoke { background: #e8e3db; }
-html[data-theme="light"] .content-section { background: transparent; }
-html[data-theme="light"] .page-hero { border-bottom-color: rgba(26,26,28,0.08); }
-html[data-theme="light"] .page-tag { color: #5a554e; }
-html[data-theme="light"] .page-title { color: #1a1a1c; }
-html[data-theme="light"] .page-subtitle { color: #5a554e; }
-html[data-theme="light"] .page-title-jp { color: rgba(139,26,26,0.4); }
-html[data-theme="light"] .section-title { color: #1a1a1c; }
-html[data-theme="light"] .section-num { color: rgba(139,26,26,0.35); }
-html[data-theme="light"] .section-line { background: rgba(26,26,28,0.1); }
-
-/* Cards */
-html[data-theme="light"] .intro-stat, html[data-theme="light"] .exp-stat,
-html[data-theme="light"] .forge-stat, html[data-theme="light"] .p-stat,
-html[data-theme="light"] .stat { background: #e8e3db; }
-html[data-theme="light"] .edu-card, html[data-theme="light"] .paper-card,
-html[data-theme="light"] .persona-card, html[data-theme="light"] .skill-card,
-html[data-theme="light"] .extra-card, html[data-theme="light"] .blog-card,
-html[data-theme="light"] .contact-card { background: rgba(26,26,28,0.03); }
-html[data-theme="light"] .vol-card { background: #e8e3db; }
-html[data-theme="light"] .nav-card { background: transparent; border-color: rgba(26,26,28,0.08); }
-html[data-theme="light"] .nav-card-label { color: #1a1a1c; }
-
-/* Accordion */
-html[data-theme="light"] .acc-header { background: #ebe6de; }
-html[data-theme="light"] .acc-item.open .acc-header { background: rgba(139,26,26,0.06); }
-html[data-theme="light"] .acc-content { background: linear-gradient(135deg, rgba(139,26,26,0.04) 0%, transparent 28%), #f5f0e8; }
-html[data-theme="light"] .acc-role { color: #1a1a1c; }
-
-/* Maps & radar */
-html[data-theme="light"] .hover-map, html[data-theme="light"] .radar-section { background: rgba(26,26,28,0.02); }
-html[data-theme="light"] .map-core, html[data-theme="light"] .map-node,
-html[data-theme="light"] .map-popup { background: rgba(240,235,227,0.95); }
-
-/* Quote strip */
-html[data-theme="light"] .quote-strip { background: #e8e3db; border-color: rgba(26,26,28,0.08); }
-html[data-theme="light"] .quote-strip-item { color: #5a554e; }
-
-/* Footer */
-html[data-theme="light"] footer { background: #e0dbd3; }
-html[data-theme="light"] .footer-text { color: #5a554e; }
-
-/* AC Transition */
-html[data-theme="light"] .ac-transition { background: #f0ebe3; }
-
-/* Forge / projects */
-html[data-theme="light"] .artifact-card { background: rgba(26,26,28,0.02); }
-html[data-theme="light"] .forge-path { background: rgba(26,26,28,0.02); }
-html[data-theme="light"] .artifact-title { color: #1a1a1c; }
-
-/* Intro */
-html[data-theme="light"] .intro-strip { background: #e8e3db; }
-html[data-theme="light"] .intro-text strong { color: #1a1a1c; }
-
-/* Smooth transitions */
-body, nav, footer, .content-section, .bg-smoke,
-.intro-strip, .nav-card, .stat, .acc-header, .acc-content,
-.edu-card, .paper-card, .persona-card, .skill-card,
-.contact-card, .blog-card, .extra-card, .vol-card {
-  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
-}
-
-/* ── THEME TOGGLE BUTTON ── */
-.theme-toggle {
-  width: 30px; height: 30px;
-  background: transparent;
-  border: 1px solid var(--ghost-line);
-  color: var(--steel);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.78rem;
-  transition: all 0.3s;
-  margin-left: 0.8rem;
-  flex-shrink: 0;
-  padding: 0; line-height: 1;
-}
-.theme-toggle:hover { border-color: rgba(139,26,26,0.4); color: var(--paper); }
-.theme-toggle .icon-sun { display: none; }
-html[data-theme="light"] .theme-toggle { border-color: rgba(26,26,28,0.2); color: #3a3530; }
-html[data-theme="light"] .theme-toggle:hover { border-color: #8b1a1a; color: #1a1a1c; }
-html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
-html[data-theme="light"] .theme-toggle .icon-sun { display: inline; }
 
 html { scroll-behavior: smooth; }
 
