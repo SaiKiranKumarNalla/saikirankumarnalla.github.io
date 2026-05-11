@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shāpanang — Locked Story Preview</title>
+<link rel="stylesheet" href="styles.css">
+<meta name="description" content="A locked preview of Shāpanang, a fictional cinematic story by Sai Kiran Kumar Nalla.">
+<style>
+.story-page{min-height:100vh;padding:2rem 2rem 5rem;position:relative;z-index:1}
+.story-top{max-width:1260px;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.story-brand{display:flex;align-items:center;gap:.8rem;text-decoration:none;color:var(--paper)}
+.story-brand-mark{font-family:'Zen Antique',serif;font-size:1.2rem;letter-spacing:.08em}.story-brand-mark span{color:var(--blood-glow)}
+.story-home{font-family:'Space Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.18em;text-decoration:none;color:var(--mist);border:1px solid var(--ghost-line);padding:.75rem 1.1rem;transition:all .3s}.story-home:hover{color:var(--paper);border-color:rgba(139,26,26,.4);background:rgba(139,26,26,.08)}
+.story-hero{max-width:1260px;margin:0 auto 2rem;border:1px solid var(--ghost-line);background:linear-gradient(135deg,rgba(139,26,26,.08) 0%,transparent 48%),var(--ghost);padding:2.4rem;display:grid;grid-template-columns:210px 1fr;gap:2rem;align-items:center;position:relative;overflow:hidden}.story-hero::after{content:'書';position:absolute;right:2rem;bottom:-2rem;font-family:'Noto Serif JP',serif;font-size:10rem;color:rgba(139,26,26,.06);font-weight:900;pointer-events:none}
+.cover-frame{width:210px;aspect-ratio:3/4;border:1px solid rgba(240,235,227,.14);background:#080809;box-shadow:0 20px 60px rgba(0,0,0,.45);overflow:hidden}.story-cover{width:100%;height:100%;object-fit:cover;display:block}
+.story-kicker{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.2em;color:var(--blood-glow);margin-bottom:.8rem}.story-title{font-family:'Zen Antique',serif;font-size:clamp(2.7rem,5.5vw,5.2rem);line-height:.95;margin-bottom:.7rem}.story-title-sub{font-family:'Noto Serif JP',serif;color:rgba(139,26,26,.55);font-size:1.1rem;margin-bottom:1rem}.story-desc{max-width:780px;font-size:.95rem;line-height:1.9;color:var(--mist);font-weight:300}.story-note{margin-top:1rem;max-width:780px;font-size:.78rem;line-height:1.75;color:var(--steel);font-weight:300}.story-note strong{color:var(--mist);font-weight:500}.story-meta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.4rem}.story-chip{font-family:'Space Mono',monospace;font-size:.53rem;text-transform:uppercase;letter-spacing:.12em;color:var(--steel);border:1px solid var(--ghost-line);padding:.45rem .75rem}
+.cinema{max-width:1260px;margin:0 auto;border:1px solid var(--ghost-line);background:#050506;box-shadow:0 28px 90px rgba(0,0,0,.55);position:relative;overflow:hidden}.cinema-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.2rem;border-bottom:1px solid var(--ghost-line);background:rgba(10,10,11,.9)}.cinema-label{font-family:'Space Mono',monospace;font-size:.55rem;text-transform:uppercase;letter-spacing:.22em;color:var(--blood-glow)}.cinema-count{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:var(--steel)}
+.screen{min-height:74vh;display:flex;align-items:center;justify-content:center;padding:1.4rem;background:radial-gradient(circle at 50% 18%,rgba(139,26,26,.12),transparent 35%),#070708;position:relative}.screen::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(240,235,227,.025) 1px,transparent 1px),linear-gradient(rgba(240,235,227,.02) 1px,transparent 1px);background-size:36px 36px;pointer-events:none;opacity:.35}.story-page-img{position:relative;z-index:1;max-width:100%;max-height:74vh;object-fit:contain;border:1px solid rgba(240,235,227,.08);box-shadow:0 20px 60px rgba(0,0,0,.65);background:#050506}.story-cover-screen{max-height:72vh;max-width:min(520px,100%);object-fit:contain;background:#050506}
+.locked-panel{display:none;position:relative;z-index:2;max-width:650px;text-align:center;padding:3rem 2rem;border:1px solid rgba(139,26,26,.32);background:linear-gradient(135deg,rgba(139,26,26,.08),rgba(10,10,11,.96));box-shadow:0 20px 80px rgba(0,0,0,.55)}.locked-panel.show{display:block}.locked-kanji{font-family:'Noto Serif JP',serif;font-size:4rem;color:rgba(139,26,26,.35);margin-bottom:.8rem}.locked-title{font-family:'Zen Antique',serif;font-size:1.7rem;margin-bottom:.8rem}.locked-text{font-size:.9rem;color:var(--mist);line-height:1.85;margin-bottom:1.4rem}.locked-actions{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap}.story-btn{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.13em;color:var(--paper);background:transparent;border:1px solid rgba(139,26,26,.45);padding:.8rem 1rem;cursor:pointer;text-decoration:none;transition:all .3s}.story-btn:hover{background:rgba(139,26,26,.12);border-color:var(--blood-glow)}
+.controls{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.2rem;border-top:1px solid var(--ghost-line);background:rgba(10,10,11,.92)}.control-group{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap}.nav-btn{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mist);background:rgba(240,235,227,.03);border:1px solid var(--ghost-line);padding:.75rem 1rem;cursor:pointer;transition:all .3s}.nav-btn:hover:not(:disabled){color:var(--paper);border-color:rgba(139,26,26,.4);background:rgba(139,26,26,.08)}.nav-btn:disabled{opacity:.35;cursor:not-allowed}.progress{flex:1;height:3px;background:rgba(240,235,227,.06);max-width:420px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--blood),var(--blood-glow));transition:width .3s}
+.kage-summary{max-width:1260px;margin:1.5rem auto 0;border:1px solid var(--ghost-line);background:var(--ghost);padding:1.5rem 1.7rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem}.kage-summary p{font-size:.9rem;line-height:1.8;color:var(--mist);font-weight:300;max-width:860px}.kage-summary strong{color:var(--paper)}
+@media(max-width:800px){.story-page{padding:1rem 1rem 4rem}.story-hero{grid-template-columns:1fr;text-align:center;padding:1.5rem}.cover-frame{margin:0 auto}.story-meta{justify-content:center}.screen{min-height:55vh;padding:.8rem}.story-page-img{max-height:58vh}.controls{flex-direction:column}.kage-summary{flex-direction:column;text-align:center}.story-top{padding-top:1rem}}
+</style>
+</head>
+<body>
+<div class="v-accent"></div>
+<div class="bg-kanji">物語</div>
+<main class="story-page">
+  <div class="story-top">
+    <a class="story-brand" href="index.html" aria-label="Return to home">
+      <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><rect y="3" width="32" height="6" fill="#0a0a0b" stroke="#8b1a1a" stroke-width="0.8"/><circle cx="16" cy="6" r="2.5" fill="none" stroke="#8b1a1a" stroke-width="0.6"/></svg>
+      <span class="story-brand-mark">NALLA<span>.</span></span>
+    </a>
+    <a class="story-home" href="index.html">← Back Home</a>
+  </div>
+
+  <section class="story-hero reveal">
+    <div class="cover-frame"><img class="story-cover" src="story-assets/cover.png" onerror="this.src='story-assets/shapanang-preview-01.webp'" alt="Cover of Shāpanang by Sai Kiran Kumar Nalla"></div>
+    <div>
+      <div class="story-kicker">Locked Fiction Archive</div>
+      <h1 class="story-title">Shāpanang</h1>
+      <div class="story-title-sub">The Library of Shāpanang</div>
+      <p class="story-desc">A cinematic fiction fragment archive by Sai Kiran Kumar Nalla. The cover names its promise plainly: <strong>“A curse. A library. A truth that should stay buried.”</strong> This page shows selected story fragments rather than the complete sequence. The full story stays locked unless Sai chooses to share access.</p>
+      <p class="story-note"><strong>Visual disclaimer:</strong> the comic-style visuals in this preview are AI-generated / AI-assisted artwork used for storytelling presentation. The story concept, world, and archive experience belong to Sai.</p>
+      <div class="story-meta"><span class="story-chip">Mystery</span><span class="story-chip">Himalayan folklore</span><span class="story-chip">Cinematic comic</span><span class="story-chip">Fragment preview</span><span class="story-chip">AI-assisted visuals</span></div>
+    </div>
+  </section>
+
+  <section class="cinema reveal" aria-label="Shāpanang preview reader">
+    <div class="cinema-top"><div class="cinema-label">Selected Memory Fragments</div><div class="cinema-count" id="pageCount">Cover</div></div>
+    <div class="screen">
+      <img id="storyImage" class="story-page-img story-cover-screen" src="story-assets/cover.png" onerror="this.src='story-assets/shapanang-preview-01.webp'" alt="Shāpanang cover preview">
+      <div id="lockedPanel" class="locked-panel" aria-live="polite">
+        <div class="locked-kanji">封</div>
+        <div class="locked-title">The remaining pages are sealed</div>
+        <p class="locked-text">This is only a curated public fragment preview. The full PDF is not served here, and the complete sequence remains sealed. To read the complete Shāpanang archive, contact Sensei Sai and request access.</p>
+        <div class="locked-actions"><a class="story-btn" href="contact.html">Contact Sai</a><button class="story-btn" id="askKageBtn2">Ask Kage for Summary</button></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="control-group"><button class="nav-btn" id="prevBtn">← Previous</button><button class="nav-btn" id="nextBtn">Next →</button></div>
+      <div class="progress" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="control-group"><button class="nav-btn" id="coverBtn">Cover</button><button class="nav-btn" id="lockBtn">Locked End</button></div>
+    </div>
+  </section>
+
+  <section class="kage-summary reveal">
+    <p><strong>Kage can summarize the plot without revealing the full archive.</strong> Ask for a spoiler-light overview of the curse, the hidden library, and the mountain village atmosphere behind these selected fragments.</p>
+    <button class="story-btn" id="askKageBtn">Ask Kage</button>
+  </section>
+</main>
+<script src="theme.js"></script>
+<script src="transitions.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="kage.js?v=story-summary-visible"></script>
+<script>
+(function(){
+  const pages=[
+    {title:'Opening: The Village', src:'story-assets/shapanang-fragment-02-opening-village.webp'},
+    {title:'The Library', src:'story-assets/shapanang-fragment-08-library-scene.webp'},
+    {title:'The Search', src:'story-assets/shapanang-fragment-13-hidden-book.webp'},
+    {title:'Nangpa Pravesh', src:'story-assets/shapanang-fragment-15-nangpa-pravesh.webp'},
+    {title:'Character Passage', src:'story-assets/shapanang-fragment-17-character-passage.webp'}
+  ];
+  let idx=-1; // -1 cover, 0..pages.length-1 selected fragments, pages.length locked
+  const img=document.getElementById('storyImage');
+  const locked=document.getElementById('lockedPanel');
+  const count=document.getElementById('pageCount');
+  const fill=document.getElementById('progressFill');
+  const prev=document.getElementById('prevBtn');
+  const next=document.getElementById('nextBtn');
+  function render(){
+    const isLocked=idx>=pages.length;
+    img.style.display=isLocked?'none':'block';
+    locked.classList.toggle('show',isLocked);
+    img.classList.toggle('story-cover-screen',idx===-1);
+    if(idx===-1){img.src='story-assets/cover.png'; img.onerror=function(){this.src='story-assets/shapanang-preview-01.webp'}; img.alt='Shāpanang cover preview';}
+    else if(!isLocked){img.onerror=null; img.src=pages[idx].src; img.alt='Shāpanang selected fragment: '+pages[idx].title;}
+    count.textContent=isLocked?'Locked Archive':idx===-1?'Cover':'Memory Fragment '+(idx+1)+' / '+pages.length+' — '+pages[idx].title;
+    fill.style.width=(idx<0?0:Math.min(idx+1,pages.length)/pages.length*100)+'%';
+    prev.disabled=idx===-1;
+    next.textContent=isLocked?'Contact →':'Next →';
+  }
+  prev.addEventListener('click',()=>{if(idx>-1){idx--;render();}});
+  next.addEventListener('click',()=>{if(idx<pages.length){idx++;render();}else{location.href='contact.html';}});
+  document.getElementById('coverBtn').addEventListener('click',()=>{idx=-1;render();});
+  document.getElementById('lockBtn').addEventListener('click',()=>{idx=pages.length;render();});
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next.click(); if(e.key==='ArrowLeft')prev.click();});
+  function askKage(){
+    const prompt='Give me a spoiler-light summary of Shāpanang for a visitor. Mention it is a fictional story by Sensei Sai, centered on a cursed hidden library, a mountain village, and a truth that should stay buried. Mention that only selected memory fragments are open and the full archive is locked. Do not mention AI-generated visuals. Do not reveal unavailable full-page details.';
+    let tries=0;
+    function attempt(){
+      tries++;
+      if(window.KageAsk&&window.KageAsk(prompt))return;
+      const panel=document.getElementById('kPanel');
+      const input=document.getElementById('kIn');
+      const send=document.getElementById('kSnd');
+      if(panel&&input&&send){panel.classList.add('open'); input.value=prompt; send.click(); return;}
+      if(tries<12)setTimeout(attempt,250); else alert('Kage is still loading. Try again in a moment.');
+    }
+    attempt();
+  }
+  document.getElementById('askKageBtn').addEventListener('click',askKage);
+  document.getElementById('askKageBtn2').addEventListener('click',askKage);
+  render();
+})();
+</script>
+</body>
+</html>
