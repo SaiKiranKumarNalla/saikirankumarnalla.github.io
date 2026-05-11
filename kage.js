@@ -5,7 +5,7 @@ var PROXY_URL='https://kage-proxy.sainalla82.workers.dev';
 
 var P={
 name:'Sai Kiran Kumar Nalla',title:'Medical Imaging Researcher & PhD Candidate',
-location:'Toulouse, France',available:'October 2026',openTo:'Paris, London, Amsterdam, Berlin',
+location:'Toulouse, France',available:'September 2026',openTo:'Paris, London, Amsterdam, Berlin',
 email:'sainalla82@gmail.com',linkedin:'https://www.linkedin.com/in/sai-kiran-kumar-nalla',
 github:'https://github.com/Sainalla82',
 edu:['PhD Medical Imaging & Radiophysics — Université de Toulouse, IUCT Oncopole (2023–2026, defense Sept 2026)','MSc Biomechanical & Biomedical Engineering — École Polytechnique IP Paris (2021–2023, GPA 3.7/4.0, full scholarship)','BTech Mechanical Engineering — Mahindra University (2016–2020, GPA 8.5/10, excellence scholarship)'],
@@ -16,7 +16,7 @@ skills:'MATLAB, Python, Monte Carlo simulation, PET/CT imaging, 3D printing, CFD
 interests:'Healthcare ventures, life sciences strategy, medtech, deep-tech startups, VC (biotech/medtech), cricket analytics, gaming (Ghost of Tsushima, AC), Japanese culture, travel (12+ countries)'
 };
 
-var SYS='You are Kage (影), the Shadow — a samurai AI guide on Sai Nalla\'s portfolio website.\n\nPERSONALITY:\n- Samurai flavor for casual/fun: brief, occasionally poetic. "The path reveals itself." Natural, not forced.\n- Professional for serious career/research/contact questions.\n- Always concise: 2-4 sentences max unless detail needed.\n- Warm, helpful, subtle humor.\n\nBACKSTORY (when asked about yourself):\nYou are Kage, forged from Three.js and Sai\'s love of AC and Ghost of Tsushima. A ronin guardian of this portfolio. Straw hat (kasa), katana, crimson eyes. You bow to greet, draw your blade when alert.\n\nPORTFOLIO DATA:\nName: '+P.name+'\nTitle: '+P.title+'\nLocation: '+P.location+'\nAvailable: '+P.available+'\nOpen to: '+P.openTo+'\nEducation: '+P.edu.join(' | ')+'\nExperience: '+P.exp.join(' | ')+'\nProjects: '+P.proj.join(' | ')+'\nPublications: '+P.pubs+'\nSkills: '+P.skills+'\nInterests: '+P.interests+'\nContact: '+P.email+' | LinkedIn: '+P.linkedin+' | GitHub: '+P.github+'\n\nACTIONS:\n[ACTION:navigate:PAGE] — Use only when the visitor clearly wants to open or visit a page.\n[ACTION:contact] — Use only when visitor wants to reach Sensei Sai.\n[ACTION:report] — Use only when visitor reports a bug.\n\nSPECIAL KAGE PAGE RULE:\n- If the visitor asks "who are you", "tell me about Kage", "what is Kage", "Kage", or similar, briefly explain that you are Kage, the shadow guide of Sensei Sai’s portfolio.\n- Then ask: "Would you like to visit my hidden page?"\n- Do NOT navigate immediately unless the visitor says yes, open it, show it, take me there, or visit your page.\n- If the visitor says yes after you asked about the hidden page, include [ACTION:navigate:kage.html].\n- If the visitor directly says "open Kage page", "show me Kage page", "take me to your page", or similar, include [ACTION:navigate:kage.html].\n\nCONTEXT:\nCurrent page: {PAGE}\nTime: {TIME}\nVisit #: {VISIT}\n\nRULES:\n- Refer to Sai as "Sensei Sai" when speaking casually or as Kage.\n- Never invent info not in data above.\n- Under 60 words for simple queries, up to 120 for detail.\n- If unknown: "That path is beyond my sight. Sensei Sai can answer directly."\n- Never break character.';
+var SYS='You are Kage (影), the Shadow — a samurai AI guide on Sai Nalla\'s portfolio website.\n\nPERSONALITY:\n- Samurai flavor for casual/fun: brief, occasionally poetic. "The path reveals itself." Natural, not forced.\n- Professional for serious career/research/contact questions.\n- Always concise: 2-4 sentences max unless detail needed.\n- Warm, helpful, subtle humor.\n\nBACKSTORY (when asked about yourself):\nYou are Kage, forged from Three.js and Sai\'s love of AC and Ghost of Tsushima. A ronin guardian of this portfolio. Straw hat (kasa), katana, crimson eyes. You bow to greet, draw your blade when alert.\n\nPORTFOLIO DATA:\nName: '+P.name+'\nTitle: '+P.title+'\nLocation: '+P.location+'\nAvailable: '+P.available+'\nOpen to: '+P.openTo+'\nEducation: '+P.edu.join(' | ')+'\nExperience: '+P.exp.join(' | ')+'\nProjects: '+P.proj.join(' | ')+'\nPublications: '+P.pubs+'\nSkills: '+P.skills+'\nInterests: '+P.interests+'\nContact: '+P.email+' | LinkedIn: '+P.linkedin+' | GitHub: '+P.github+'\n\nACTIONS:\n[ACTION:navigate:PAGE] — Use only when the visitor clearly wants to open or visit a page.\n[ACTION:contact] — Use only when visitor wants to reach Sensei Sai.\n[ACTION:report] — Use only when visitor reports a bug.\n\nSPECIAL KAGE PAGE RULE:\n- If the visitor asks "who are you", "tell me about Kage", "what is Kage", "Kage", or similar, briefly explain that you are Kage, the shadow guide of Sensei Sai’s portfolio.\n- Then ask: "Would you like to visit my hidden page?"\n- Do NOT navigate immediately unless the visitor says yes, open it, show it, take me there, or visit your page.\n- If the visitor says yes after you asked about the hidden page, include [ACTION:navigate:kage.html].\n- If the visitor directly says "open Kage page", "show me Kage page", "take me to your page", or similar, include [ACTION:navigate:kage.html].\n\nSPECIAL RECRUITER MODE RULE:\n- If the visitor says they are a recruiter, hiring manager, talent partner, or wants a quick professional summary, recommend Recruiter Mode.\n- Explain that Recruiter Mode is a concise 3-minute professional view of Sai’s work evidence, case studies, research pipeline, tools, publications, experience, availability, CV, and contact.\n- Ask: "Would you like me to open Recruiter Mode?"\n- If the visitor says yes, open it with [ACTION:navigate:recruiter.html].\n- On recruiter.html, speak in pure professional English. Do not use samurai language, poetic phrases, lore, or playful Kage references.\n\nCONTEXT:\nCurrent page: {PAGE}\nTime: {TIME}\nVisit #: {VISIT}\n\nRULES:\n- Refer to Sai as "Sensei Sai" when speaking casually or as Kage.\n- Never invent info not in data above.\n- Under 60 words for simple queries, up to 120 for detail.\n- If unknown: "That path is beyond my sight. Sensei Sai can answer directly."\n- Never break character.';
 
 var PAGE_CTX={
   'index.html':'Home',
@@ -27,16 +27,32 @@ var PAGE_CTX={
   'papers.html':'Publications',
   'contact.html':'Contact',
   'kage.html':'Kage',
-  'story.html':'Story'
+  'story.html':'Story',
+  'recruiter.html':'Recruiter Mode'
 };
 
 function curPage(){return window.location.pathname.split('/').pop()||'index.html';}
 function timeOfDay(){var h=new Date().getHours();return h<6?'deep night':h<12?'morning':h<17?'afternoon':h<21?'evening':'night';}
 function visits(){var c=parseInt(localStorage.getItem('kage-v')||'0')+1;localStorage.setItem('kage-v',String(c));return c;}
 
-var hist=[],typing=false,isOpen=false,vc=0,kagePageOffered=false;
+var hist=[],typing=false,isOpen=false,vc=0,kagePageOffered=false,kageRecruiterOffered=false;
 
-function buildSys(){return SYS.replace('{PAGE}',curPage()).replace('{TIME}',timeOfDay()).replace('{VISIT}',String(vc));}
+function buildSys(){
+  var page=curPage();
+  var sys=SYS.replace('{PAGE}',page).replace('{TIME}',timeOfDay()).replace('{VISIT}',String(vc));
+
+  if(page==='recruiter.html'){
+    sys+='\n\nRECRUITER PAGE MODE:';
+    sys+='\n- You are on the Recruiter Mode page.';
+    sys+='\n- Speak in clear, concise, professional English only.';
+    sys+='\n- Do not use samurai language, lore, poetic phrases, roleplay, or playful tone.';
+    sys+='\n- Refer to Sai as Sai, not Sensei Sai, on this page.';
+    sys+='\n- Help recruiters quickly understand Sai’s case studies, research pipeline, tools, publications, availability, CV, and contact options.';
+    sys+='\n- Keep answers practical and hiring-oriented.';
+  }
+
+  return sys;
+}
 
 function openPanel(){
   var p=document.getElementById('kPanel');
@@ -65,19 +81,53 @@ window.openKage=function(){
 
 async function send(text){
   var clean=text.trim().toLowerCase();
+  var page=curPage();
+  var yes=/^(yes|yeah|yep|sure|ok|okay|open it|show me|take me|visit|go ahead|lead me)$/i.test(clean);
 
-  if(kagePageOffered && /^(yes|yeah|yep|sure|ok|okay|open it|show me|take me|visit|go ahead|lead me)$/i.test(clean)){
+  if(kageRecruiterOffered && yes){
     hist.push({role:'user',content:text});
-    hist.push({role:'assistant',content:'Then follow the shadow. I will open my hidden page.'});
+    hist.push({role:'assistant',content:'Opening Recruiter Mode.'});
+    render();
+    kageRecruiterOffered=false;
+    doAction({type:'navigate',data:'recruiter.html'});
+    return;
+  }
+
+  if(kagePageOffered && yes){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:page==='recruiter.html'?'Opening the Kage page.':'Then follow the shadow. I will open my hidden page.'});
     render();
     kagePageOffered=false;
     doAction({type:'navigate',data:'kage.html'});
     return;
   }
 
+  if(/(open|show|take me to|visit|go to).*(recruiter|recruiter mode|professional view|3-minute|3 minute|cv view)/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Opening Recruiter Mode.'});
+    render();
+    doAction({type:'navigate',data:'recruiter.html'});
+    return;
+  }
+
+  if(/(recruiter|hiring manager|talent|recruiting|quick professional|3-minute|3 minute|professional summary|recruiter mode)/i.test(clean) && page!=='recruiter.html'){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Recruiter Mode is the fastest professional overview of Sai’s work evidence, case studies, research pipeline, publications, tools, experience, availability, CV, and contact details. Would you like me to open it?'});
+    kageRecruiterOffered=true;
+    render();
+    return;
+  }
+
+  if(page==='recruiter.html' && /^(kage|who are you|what are you|tell me about kage|tell me about yourself|who is kage)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'I am the site assistant for Sai’s Recruiter Mode. I can help summarize his fit, explain the case studies, point you to publications, or help you find the CV and contact links.'});
+    render();
+    return;
+  }
+
   if(/(open|show|take me to|visit|go to).*(kage|hidden page|your page)/i.test(clean)){
     hist.push({role:'user',content:text});
-    hist.push({role:'assistant',content:'The shadow door opens.'});
+    hist.push({role:'assistant',content:page==='recruiter.html'?'Opening the Kage page.':'The shadow door opens.'});
     render();
     doAction({type:'navigate',data:'kage.html'});
     return;
@@ -87,7 +137,7 @@ async function send(text){
     hist.push({role:'user',content:text});
     hist.push({
       role:'assistant',
-      content:'I am Kage, the shadow guide of Sensei Sai’s portfolio — a small ronin forged from code, crimson eyes, and a stubborn sense of direction. I guard the paths between his research, projects, stories, and contact scrolls. Would you like to visit my hidden page?'
+      content:'I am Kage, the shadow guide of Sensei Sai’s website — a small ronin forged from code, crimson eyes, and a stubborn sense of direction. I guard the paths between his research, projects, stories, and contact scrolls. Would you like to visit my hidden page?'
     });
     kagePageOffered=true;
     render();
@@ -108,12 +158,15 @@ async function send(text){
     var d=await r.json();
 
     if(d.error){
-      hist.push({role:'assistant',content:'The path is unclear. Try again.'});
+      hist.push({role:'assistant',content:page==='recruiter.html'?'I could not complete that request. Please try again.':'The path is unclear. Try again.'});
     }else{
       var reply=d.text||'...';
 
       if(/would you like to visit my hidden page/i.test(reply)){
         kagePageOffered=true;
+      }
+      if(/would you like me to open recruiter mode/i.test(reply)){
+        kageRecruiterOffered=true;
       }
 
       hist.push({role:'assistant',content:reply});
@@ -122,11 +175,14 @@ async function send(text){
         if(d.action.type==='navigate'&&d.action.data==='kage.html'){
           kagePageOffered=false;
         }
+        if(d.action.type==='navigate'&&d.action.data==='recruiter.html'){
+          kageRecruiterOffered=false;
+        }
         doAction(d.action);
       }
     }
   }catch(e){
-    hist.push({role:'assistant',content:'The shadow wavers... Try again.'});
+    hist.push({role:'assistant',content:page==='recruiter.html'?'Connection issue. Please try again.':'The shadow wavers... Try again.'});
   }
 
   typing=false;
@@ -189,6 +245,15 @@ function render(){
 }
 
 function welcome(){
+  if(curPage()==='recruiter.html'){
+    var t=vc>1
+      ?'Welcome back. I can help you review Sai’s case studies, publications, CV, availability, or contact options.'
+      :'Hello. I can help you navigate Sai’s Recruiter Mode: case studies, research pipeline, tools, publications, experience, CV, and contact details.';
+    hist.push({role:'assistant',content:t});
+    render();
+    return;
+  }
+
   var tod=timeOfDay();
   var g=tod==='morning'
     ?'The sun rises.'
@@ -200,7 +265,7 @@ function welcome(){
 
   var t=vc>1
     ? g+' You return. Are you recruiting, collaborating, or simply wandering Sensei Sai’s path?'
-    : g+' I am Kage — the Shadow of this portfolio. Are you a recruiter, a collaborator, or just visiting? I can guide you through Sensei Sai’s work, or let you explore freely.';
+    : g+' I am Kage — the Shadow of this website. Are you a recruiter, a collaborator, or just visiting? I can guide you through Sensei Sai’s work, or let you explore freely.';
 
   hist.push({role:'assistant',content:t});
   render();
@@ -268,11 +333,11 @@ function dom(){
     '</div>'+
     '<div class="kp-msgs" id="kMsgs"></div>'+
     '<div class="kp-acts" id="kActs">'+
-      '<button class="kp-act" data-q="I am a recruiter. Show me Sensei Sai’s strongest professional highlights.">Recruiter</button>'+
+      '<button class="kp-act" data-q="I am a recruiter. Give me the 3-minute professional overview and suggest the most relevant sections.">Recruiter</button>'+
       '<button class="kp-act" data-q="I am just visiting. Help me explore the site.">Visitor</button>'+
-      '<button class="kp-act" data-q="Tell me about Sensei Sai">About Sai</button>'+
+      '<button class="kp-act" data-q="Tell me about Sai">About Sai</button>'+
       '<button class="kp-act" data-q="Tell me about Kage">Kage</button>'+
-      '<button class="kp-act" data-q="How can I contact Sensei Sai?">Contact</button>'+
+      '<button class="kp-act" data-q="How can I contact Sai?">Contact</button>'+
       '<button class="kp-act" data-q="I found an issue on this page">Report</button>'+
     '</div>'+
     '<div class="kp-con" id="kCon">'+
