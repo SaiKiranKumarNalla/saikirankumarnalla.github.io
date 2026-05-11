@@ -33,9 +33,9 @@ async function send(text){
   try{
     var r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:buildSys(),messages:hist.slice(-16)})});
     var d=await r.json();
-    if(d.error){hist.push({role:'assistant',content:'The shadow wavers... Try again.'});}
+    if(d.error){hist.push({role:'assistant',content:'API: '+JSON.stringify(d.error)});}
     else{hist.push({role:'assistant',content:d.text||'...'});if(d.action)doAction(d.action);}
-  }catch(e){hist.push({role:'assistant',content:'A disturbance blocks the path. Try again.'});}
+  }catch(e){hist.push({role:'assistant',content:'ERROR: '+e.message});}
   typing=false;render();
 }
 
