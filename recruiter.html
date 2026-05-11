@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recruiter Mode — Sai Kiran Kumar Nalla</title>
+<meta name="description" content="Recruiter-focused portfolio for Sai Kiran Kumar Nalla: case studies, research pipeline, builder toolkit, publications, and professional profile.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Antique&family=Noto+Serif+JP:wght@400;700;900&family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap');
+
+:root{
+  --bg:#07070a;
+  --ink:#f4eee8;
+  --muted:#a8a0a0;
+  --dim:#6d6464;
+  --red:#b32222;
+  --red2:#f05252;
+  --panel:#121016;
+  --panel2:#1b1424;
+  --line:rgba(244,238,232,.1);
+  --soft:rgba(244,238,232,.045);
+  --glow:rgba(179,34,34,.24);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(179,34,34,.25),transparent 34rem),
+    radial-gradient(circle at 82% 16%,rgba(179,34,34,.12),transparent 32rem),
+    linear-gradient(180deg,#050507,#08070b 42%,#050507);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.32;
+  background-image:
+    linear-gradient(rgba(244,238,232,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(244,238,232,.025) 1px,transparent 1px);
+  background-size:38px 38px;
+  mask-image:linear-gradient(to bottom,#000,transparent 88%);
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+section{padding:7rem 6vw;position:relative}
+.rnav{
+  position:sticky;top:0;z-index:50;height:74px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 4vw;background:rgba(7,7,10,.75);
+  border-bottom:1px solid var(--line);backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:.8rem;font-weight:900;font-size:1.05rem;letter-spacing:.04em}
+.brand b{color:var(--red2)}
+.brand-mark{width:36px;height:10px;border:1px solid var(--red);position:relative}
+.brand-mark:after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;border:1px solid var(--red);transform:translate(-50%,-50%) rotate(45deg)}
+.links{display:flex;gap:1.45rem;align-items:center}
+.links a{font-family:"Space Mono",monospace;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.links a:hover{color:var(--ink)}
+.nav-cta{border:1px solid rgba(179,34,34,.45);padding:.78rem 1rem;color:var(--ink)!important;background:rgba(179,34,34,.08)}
+
+.kicker{
+  text-align:center;font-family:"Space Mono",monospace;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--muted);font-size:.82rem;margin-bottom:.6rem;
+}
+.title{
+  font-family:'Zen Antique',serif;text-align:center;
+  font-size:clamp(3.3rem,7vw,7rem);line-height:.9;
+  letter-spacing:-.07em;font-weight:900;margin-bottom:3.5rem;
+}
+.title:after{content:".";color:var(--red2)}
+.title-left{text-align:left;margin-bottom:2rem}
+.copy{color:#d9d0cc;line-height:1.55;font-weight:700}
+.redline{color:var(--red2)}
+
+.hero{min-height:calc(100vh - 74px);display:grid;grid-template-columns:1.08fr .92fr;gap:4rem;align-items:center;padding:7rem 6vw 6rem}
+.hero small{font-family:"Space Mono",monospace;color:var(--red2);letter-spacing:.22em;text-transform:uppercase;font-size:.75rem}
+.hero h1{font-family:'Zen Antique',serif;font-size:clamp(4.2rem,10vw,9.4rem);line-height:.86;letter-spacing:-.095em;font-weight:900;margin:1rem 0 1.4rem}
+.hero h1 .outline{color:transparent;-webkit-text-stroke:1.5px rgba(244,238,232,.86)}
+.hero-sub{max-width:780px;font-size:clamp(1.15rem,1.7vw,1.55rem);line-height:1.45;color:#ded6d2;font-weight:700}
+.hero-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem}
+.btn{
+  border:1px solid var(--line);background:rgba(244,238,232,.04);padding:1rem 1.25rem;
+  font-family:"Space Mono",monospace;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  display:inline-flex;transition:.25s;cursor:pointer;
+}
+.btn.primary{border-color:rgba(179,34,34,.55);background:rgba(179,34,34,.15)}
+.btn:hover{transform:translateY(-3px);border-color:var(--red);box-shadow:0 18px 50px rgba(179,34,34,.16)}
+.hero-card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(179,34,34,.14),rgba(244,238,232,.035));border-radius:34px;padding:1.4rem;transform:rotate(2deg);box-shadow:0 40px 100px rgba(0,0,0,.48)}
+.hero-card-inner{border:1px solid rgba(244,238,232,.08);border-radius:26px;min-height:520px;padding:2rem;background:linear-gradient(135deg,rgba(179,34,34,.18),transparent 42%),radial-gradient(circle at 50% 10%,rgba(255,255,255,.08),transparent 22rem),#0d0c11;display:flex;flex-direction:column;justify-content:space-between}
+.big-stat{font-size:clamp(3rem,5vw,4.5rem);line-height:.9;font-weight:900;letter-spacing:-.06em}
+.big-stat small{display:block;margin-top:.7rem;color:var(--muted);font-family:"Space Mono",monospace;font-size:.75rem;letter-spacing:.12em}
+.avail{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.avail div{background:#0c0b10;padding:1.2rem}
+.avail span{display:block;font-family:"Space Mono",monospace;font-size:.62rem;color:var(--dim);text-transform:uppercase;letter-spacing:.16em;margin-bottom:.4rem}
+.avail strong{font-size:1.05rem}
+.hero-tags{display:flex;gap:.6rem;flex-wrap:wrap}
+.tag{font-family:"Space Mono",monospace;font-size:.66rem;border:1px solid rgba(244,238,232,.1);padding:.55rem .7rem;background:rgba(255,255,255,.035)}
+
+.snapshot{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding-top:2rem}
+.snap{min-height:170px;border:1px solid var(--line);border-radius:26px;background:linear-gradient(145deg,rgba(179,34,34,.1),rgba(244,238,232,.035));padding:1.5rem}
+.snap b{font-size:2.6rem;letter-spacing:-.08em}
+.snap span{display:block;font-family:"Space Mono",monospace;color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;margin:.5rem 0}
+.snap p{color:#d7cfcb;font-weight:700;line-height:1.45}
+
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.why-card{
+  border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,#18111f,#0e0d13);
+  padding:1.5rem;min-height:260px;position:relative;overflow:hidden;
+}
+.why-card:before{content:attr(data-num);position:absolute;right:1rem;top:.5rem;font-size:5rem;font-weight:900;color:rgba(179,34,34,.12);letter-spacing:-.08em}
+.why-card .mark{font-size:2.1rem;margin-bottom:1rem}
+.why-card h3{font-size:1.55rem;letter-spacing:-.04em;line-height:1.1;margin-bottom:.8rem}
+.why-card p{color:#cfc7c3;font-weight:700;line-height:1.45}
+
+.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.35rem}
+.case-card{
+  border-radius:30px;background:linear-gradient(160deg,#1b1424,#0f0d14 68%);
+  border:1px solid rgba(244,238,232,.08);padding:1.5rem;min-height:620px;
+  display:flex;flex-direction:column;transform:rotate(var(--rot));transition:.25s;box-shadow:0 24px 70px rgba(0,0,0,.34);
+}
+.case-card:hover{transform:rotate(0) translateY(-8px);border-color:rgba(179,34,34,.55)}
+.case-visual{height:170px;border-radius:20px;margin-bottom:1.5rem;background:radial-gradient(circle at 28% 28%,rgba(228,71,71,.34),transparent 30%),linear-gradient(135deg,rgba(244,238,232,.09),transparent),#0b0b11;border:1px solid rgba(244,238,232,.08);position:relative;overflow:hidden}
+.case-visual:before{content:attr(data-glyph);position:absolute;inset:0;display:grid;place-items:center;font-size:4.8rem;filter:drop-shadow(0 20px 30px rgba(0,0,0,.45))}
+.case-card h3{font-size:clamp(1.7rem,2.3vw,2.5rem);line-height:1.04;letter-spacing:-.055em;margin-bottom:1rem}
+.case-list{display:grid;gap:.75rem;margin-top:.4rem}
+.case-line{border-left:2px solid var(--red);padding-left:.85rem}
+.case-line b{display:block;font-family:"Space Mono",monospace;font-size:.62rem;letter-spacing:.14em;color:var(--red2);text-transform:uppercase;margin-bottom:.25rem}
+.case-line span{color:#d5ccc8;font-weight:700;line-height:1.35}
+.chips{margin-top:auto;display:flex;gap:.5rem;flex-wrap:wrap;padding-top:1.2rem}
+.chip{font-size:.78rem;color:var(--red2);font-weight:900}
+
+.more-builds{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.25rem}
+.build{border:1px solid var(--line);background:var(--soft);border-radius:18px;padding:1.15rem}
+.build b{display:block;font-size:1.08rem;margin-bottom:.4rem}
+.build span{font-family:"Space Mono",monospace;font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+.pipeline{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:28px;overflow:hidden;
+}
+.pipe-step{background:#0e0d13;min-height:220px;padding:1.4rem;position:relative}
+.pipe-step b{font-size:2rem;color:rgba(244,238,232,.18);letter-spacing:-.06em}
+.pipe-step h3{font-size:1.25rem;margin:1rem 0 .6rem;letter-spacing:-.04em}
+.pipe-step p{color:#cfc7c3;font-weight:700;line-height:1.45}
+
+.toolkit-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.toolkit-card{border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,#17111f,#0e0d13);padding:1.5rem}
+.toolkit-card h3{font-size:1.55rem;letter-spacing:-.04em;margin-bottom:1rem}
+.tool-row{display:grid;grid-template-columns:160px 1fr;gap:1rem;padding:.85rem 0;border-top:1px solid rgba(244,238,232,.07)}
+.tool-row:first-of-type{border-top:0}
+.tool-row b{font-family:"Space Mono",monospace;font-size:.76rem;color:var(--red2)}
+.tool-row span{color:#d1c8c4;font-weight:700;line-height:1.4}
+
+.software-strip{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}
+.logo-pill{border:1px solid var(--line);border-radius:999px;padding:.55rem .75rem;background:rgba(244,238,232,.035);font-weight:800;font-size:.85rem}
+.logo-pill img{width:18px;height:18px;vertical-align:-4px;margin-right:.4rem}
+
+.pub-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem}
+.pub-stat{border:1px solid rgba(244,238,232,.1);background:rgba(244,238,232,.035);border-radius:18px;padding:1rem}
+.pub-stat b{font-size:2rem}
+.pub-stat span{display:block;font-family:"Space Mono",monospace;color:var(--muted);font-size:.62rem;text-transform:uppercase;letter-spacing:.12em}
+.pub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.pub{border:1px solid rgba(244,238,232,.1);border-radius:22px;background:linear-gradient(145deg,#191221,#0e0d13);padding:1.25rem;min-height:220px;display:flex;flex-direction:column}
+.pub .status{font-family:"Space Mono",monospace;color:var(--red2);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+.pub h3{font-size:1.18rem;letter-spacing:-.04em;line-height:1.2}
+.pub p{margin-top:auto;color:var(--muted);font-weight:800;font-size:.9rem}
+
+.experience-grid{display:grid;grid-template-columns:370px 1fr;gap:2.2rem;align-items:start}
+.exp-list{display:flex;flex-direction:column;gap:1rem}
+.exp-tab{border:1px solid rgba(244,238,232,.08);background:#14101d;border-radius:18px;padding:1.2rem;display:flex;gap:1rem;align-items:center;cursor:pointer}
+.exp-tab.active{background:#21162d;border-color:rgba(179,34,34,.4)}
+.logo-dot{width:58px;height:58px;border-radius:50%;background:#f4eee8;color:#0a0a0b;display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.exp-tab h4{font-size:1.05rem}
+.exp-tab span{color:var(--muted);font-weight:800}
+.exp-card{border-radius:28px;background:#1b1328;border:1px solid rgba(244,238,232,.08);padding:2.4rem;min-height:420px}
+.exp-card h3{font-size:clamp(2.3rem,4vw,4rem);letter-spacing:-.07em;line-height:.95}
+.exp-card .org{font-size:1.25rem;color:var(--muted);margin:1rem 0}
+.exp-card .date{font-family:"Space Mono",monospace;margin-bottom:1.3rem}
+.bullets{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.bullet{border-left:2px solid var(--red);padding-left:1rem;color:#ddd5d2;line-height:1.45;font-weight:700}
+.exp-category{margin-top:2.5rem}
+.exp-category-title{font-family:"Space Mono",monospace;color:var(--red2);letter-spacing:.16em;text-transform:uppercase;font-size:.7rem;margin:0 0 .75rem .25rem}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.mini-card{border:1px solid rgba(244,238,232,.1);border-radius:22px;background:linear-gradient(145deg,#17111f,#0e0d13);padding:1.15rem;min-height:160px}
+.mini-card b{display:block;font-size:1rem;line-height:1.25;margin-bottom:.45rem}
+.mini-card span{display:block;font-family:"Space Mono",monospace;color:var(--red2);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.55rem}
+.mini-card p{color:var(--muted);font-weight:700;font-size:.88rem;line-height:1.42}
+.vol-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.vol-card{border:1px solid rgba(244,238,232,.1);border-radius:24px;background:linear-gradient(145deg,rgba(179,34,34,.12),rgba(244,238,232,.035));padding:1.3rem;min-height:180px}
+.vol-card .mark{font-size:1.8rem;margin-bottom:.7rem}
+.vol-card h3{font-size:1.05rem;line-height:1.25;margin-bottom:.45rem}
+.vol-card span{font-family:"Space Mono",monospace;color:var(--red2);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase}
+.vol-card p{margin-top:.65rem;color:#cfc7c3;font-weight:700;line-height:1.42;font-size:.9rem}
+
+.edu-band{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:1rem;align-items:stretch}
+.edu-card{border:1px solid rgba(244,238,232,.1);border-radius:26px;background:linear-gradient(145deg,#1a1324,#0e0d13);padding:1.6rem;min-height:230px;display:flex;flex-direction:column}
+.edu-card.primary{min-height:300px}
+.edu-year{font-family:"Space Mono",monospace;color:var(--red2);letter-spacing:.14em;text-transform:uppercase;font-size:.72rem}
+.edu-card h3{font-size:clamp(1.6rem,2.5vw,2.8rem);letter-spacing:-.06em;line-height:1;margin:1.2rem 0}
+.edu-card p{color:#d7cfcb;font-weight:800;margin-top:auto}
+.edu-note{color:var(--muted);font-size:.92rem;margin-top:.7rem}
+
+.languages{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+.lang{border:1px solid var(--line);padding:.7rem .9rem;border-radius:999px;background:var(--soft);font-weight:800}
+
+.contact-panel{max-width:1050px;margin:0 auto;border:1px solid rgba(179,34,34,.3);border-radius:34px;background:linear-gradient(145deg,rgba(179,34,34,.18),rgba(244,238,232,.04));padding:3rem;text-align:center}
+.contact-panel h2{font-family:'Zen Antique',serif;font-size:clamp(3rem,7vw,6rem);letter-spacing:-.08em;line-height:.9;margin-bottom:1rem}
+.contact-panel p{color:#d8d0cc;font-size:1.2rem;font-weight:700;max-width:720px;margin:0 auto 2rem;line-height:1.45}
+
+@media(max-width:1150px){
+  .links{display:none}.hero{grid-template-columns:1fr}.snapshot,.why-grid{grid-template-columns:1fr 1fr}
+  .case-grid,.pub-grid{grid-template-columns:1fr}.case-card{transform:none}
+  .more-builds,.pipeline,.toolkit-grid,.experience-grid,.edu-band{grid-template-columns:1fr}
+  .pub-stats{grid-template-columns:1fr 1fr}.bullets,.mini-grid,.vol-grid{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  section,.hero{padding:5rem 1.2rem}.snapshot,.why-grid,.pub-stats{grid-template-columns:1fr}
+  .hero-card{transform:none}.tool-row{grid-template-columns:1fr}
+}
+
+/* v2 visual density pass */
+.why-card{min-height:220px}
+.why-card p{font-size:.95rem}
+.case-card{min-height:500px}
+.case-list{gap:.55rem}
+.case-line span{font-size:.92rem}
+.pipeline{grid-template-columns:repeat(5,1fr)}
+.pipe-step{min-height:180px}
+.pipe-step p{font-size:.9rem}
+.toolkit-grid.logo-mode{display:grid;grid-template-columns:1fr;gap:2rem}
+.logo-section{border:1px solid var(--line);border-radius:30px;background:linear-gradient(145deg,#17111f,#0e0d13);padding:1.5rem}
+.logo-section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;margin-bottom:1.25rem}
+.logo-section h3{font-size:1.55rem;letter-spacing:-.04em}
+.logo-section p{max-width:620px;color:var(--muted);font-weight:700;line-height:1.4}
+.logo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem}
+.logo-tile{min-height:138px;border:1px solid rgba(244,238,232,.1);background:rgba(244,238,232,.035);border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;position:relative;overflow:hidden}
+.logo-tile:after{content:"";position:absolute;right:-35px;bottom:-45px;width:110px;height:110px;border-radius:50%;background:rgba(179,34,34,.18)}
+.logo-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:#f4eee8;color:#08070b;font-weight:900;font-size:.88rem;position:relative;z-index:1;box-shadow:0 12px 30px rgba(0,0,0,.28);overflow:hidden;padding:9px}
+.logo-icon img{width:100%;height:100%;object-fit:contain}
+.logo-icon.dark{background:#0d0c11;color:#f4eee8;border:1px solid rgba(244,238,232,.18)}
+.logo-icon.red{background:#b32222;color:white}
+.logo-icon.blue{background:#2b76d2;color:white}
+.logo-icon.orange{background:#e97132;color:white}
+.logo-icon.green{background:#1f8a4c;color:white}
+.logo-icon.yellow{background:#f2c94c;color:#111}
+.logo-icon.gray{background:#ded8d0;color:#111}
+.logo-tile b{font-size:.95rem;position:relative;z-index:1}
+.logo-tile small{font-family:"Space Mono",monospace;color:var(--muted);font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;position:relative;z-index:1;text-align:center}
+.lang-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-top:1.5rem}
+.lang-card{border:1px solid var(--line);background:rgba(244,238,232,.035);border-radius:22px;padding:1.2rem;text-align:center;min-height:150px;display:flex;flex-direction:column;justify-content:center}
+.lang-flag{font-size:2.3rem;margin-bottom:.5rem}
+.lang-card b{font-size:1.05rem}
+.lang-card span{font-family:"Space Mono",monospace;color:var(--red2);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;margin-top:.45rem}
+.lang-card small{color:var(--muted);font-weight:700;margin-top:.5rem}
+@media(max-width:1150px){.logo-grid{grid-template-columns:repeat(3,1fr)}.lang-grid{grid-template-columns:1fr 1fr}.pipeline{grid-template-columns:1fr}}
+@media(max-width:650px){.logo-section-head{display:block}.logo-section p{margin-top:.5rem}.logo-grid{grid-template-columns:1fr 1fr}.lang-grid{grid-template-columns:1fr}}
+
+
+/* v3 compact readability pass */
+.exp-card{min-height:360px}
+.mini-card{min-height:130px}
+.mini-card p,.vol-card p{display:none}
+.vol-card{min-height:150px}
+.vol-card h3{font-size:.98rem}
+.edu-card{min-height:200px}
+.edu-card.primary{min-height:240px}
+.lang-grid{grid-template-columns:repeat(4,1fr)}
+.lang-card{min-height:120px;padding:1rem}
+.lang-flag{font-size:2rem}
+.lang-card small{display:none}
+.lang-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.5rem}
+.lang-tab{border:1px solid var(--line);background:rgba(244,238,232,.035);border-radius:22px;padding:1rem;text-align:center;min-height:120px;display:flex;flex-direction:column;justify-content:center}
+.lang-tab .flag{font-size:2rem;margin-bottom:.45rem}
+.lang-tab b{font-size:1rem}
+.lang-tab span{font-family:"Space Mono",monospace;color:var(--red2);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;margin-top:.35rem}
+.pipe-step p{font-size:.85rem}
+@media(max-width:900px){.lang-tabs{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.lang-tabs{grid-template-columns:1fr}}
+
+
+/* v4 overview section */
+.overview-panel{
+  border:1px solid rgba(244,238,232,.1);
+  border-radius:34px;
+  background:linear-gradient(145deg,rgba(179,34,34,.12),rgba(244,238,232,.035));
+  padding:2rem;
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:2rem;
+  align-items:center;
+}
+.overview-intro h2{
+  font-family:'Zen Antique',serif;
+  font-size:clamp(2.6rem,5vw,5rem);
+  line-height:.92;
+  letter-spacing:-.07em;
+  margin-bottom:1rem;
+}
+.overview-intro p{
+  color:#d8d0cc;
+  font-size:1.1rem;
+  line-height:1.5;
+  font-weight:700;
+}
+.overview-list{
+  display:grid;
+  gap:.8rem;
+}
+.overview-item{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  gap:.85rem;
+  align-items:start;
+  border:1px solid rgba(244,238,232,.08);
+  background:rgba(7,7,10,.34);
+  border-radius:18px;
+  padding:1rem;
+}
+.overview-item .dot{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:rgba(179,34,34,.18);
+  border:1px solid rgba(179,34,34,.45);
+  display:grid;
+  place-items:center;
+  color:var(--red2);
+  font-family:"Space Mono",monospace;
+  font-size:.72rem;
+}
+.overview-item b{
+  display:block;
+  margin-bottom:.2rem;
+}
+.overview-item span{
+  color:var(--muted);
+  font-weight:700;
+  line-height:1.42;
+}
+.overview-cta{
+  margin-top:1.25rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.8rem;
+}
+@media(max-width:900px){.overview-panel{grid-template-columns:1fr}}
+
+
+/* v5 business-impact portfolio pass */
+.scan-panel{
+  border:1px solid rgba(179,34,34,.28);
+  border-radius:34px;
+  background:linear-gradient(145deg,rgba(179,34,34,.15),rgba(244,238,232,.035));
+  padding:2rem;
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:2rem;
+  align-items:center;
+}
+.scan-time{
+  font-size:clamp(4rem,8vw,8rem);
+  font-weight:900;
+  letter-spacing:-.09em;
+  line-height:.82;
+}
+.scan-time span{
+  display:block;
+  font-family:"Space Mono",monospace;
+  font-size:.8rem;
+  letter-spacing:.22em;
+  color:var(--red2);
+  text-transform:uppercase;
+  margin-top:1rem;
+}
+.scan-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1rem;
+}
+.scan-card{
+  border:1px solid rgba(244,238,232,.08);
+  border-radius:20px;
+  background:rgba(7,7,10,.35);
+  padding:1rem;
+}
+.scan-card b{display:block;margin-bottom:.35rem}
+.scan-card span{color:var(--muted);font-weight:700;line-height:1.4}
+.case-card{min-height:560px}
+.case-visual{height:145px}
+.case-summary{
+  border:1px solid rgba(179,34,34,.25);
+  background:rgba(179,34,34,.08);
+  border-radius:18px;
+  padding:1rem;
+  margin:.8rem 0 1rem;
+}
+.case-summary b{
+  display:block;
+  font-family:"Space Mono",monospace;
+  color:var(--red2);
+  font-size:.62rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-bottom:.35rem;
+}
+.case-summary span{
+  color:#f0e8e4;
+  font-weight:800;
+  line-height:1.35;
+}
+.case-line b{font-size:.58rem}
+.case-line span{font-size:.88rem}
+.toolkit-grid.logo-mode{gap:1.25rem}
+.logo-section p{font-size:.9rem}
+.logo-grid{grid-template-columns:repeat(6,1fr)}
+.logo-tile{min-height:120px}
+.logo-icon{width:44px;height:44px}
+.proof-note{
+  margin-top:1.2rem;
+  border:1px solid var(--line);
+  background:rgba(244,238,232,.035);
+  border-radius:24px;
+  padding:1.25rem;
+  color:#d7cfcb;
+  font-weight:700;
+  line-height:1.45;
+}
+@media(max-width:900px){.scan-panel{grid-template-columns:1fr}.scan-grid{grid-template-columns:1fr}.logo-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.logo-grid{grid-template-columns:1fr 1fr}}
+
+
+/* v7 clickable publication cards */
+.pub{cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s}
+.pub:hover{transform:translateY(-6px);border-color:rgba(179,34,34,.55);box-shadow:0 20px 60px rgba(179,34,34,.12)}
+.pub .open-link{font-family:"Space Mono",monospace;color:var(--red2);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;margin-top:1rem}
+
+</style>
+</head>
+<body>
+<nav class="rnav">
+  <a class="brand" href="index.html"><span class="brand-mark"></span><span>NALLA<b>.</b></span></a>
+  <div class="links">
+    <a href="#overview">Overview</a>
+    <a href="#scan">3-Min Scan</a><a href="#case-studies">Case Studies</a>
+    <a href="#pipeline">Pipeline</a>
+    <a href="#toolkit">Toolkit</a>
+    <a href="#proof">Proof</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact" class="nav-cta">Contact</a>
+  </div>
+</nav>
+
+<header class="hero" id="overview">
+  <div>
+    <small>Recruiter Mode · portfolio view</small>
+    <h1>Sai Kiran<br><span class="outline">Kumar Nalla.</span></h1>
+    <p class="hero-sub">
+      Medical Imaging PhD candidate building validation tools across <span class="redline">medical imaging</span>,
+      medical devices, 3D printing, simulation, and medtech translation.
+    </p>
+    <div class="hero-actions">
+      <a class="btn primary" href="mailto:sainalla82@gmail.com">Email Sai</a>
+      <a class="btn" href="Assets/Sai_Nalla_CV.pdf" target="_blank" rel="noopener">Download CV</a>
+      <a class="btn" href="https://www.linkedin.com/in/sai-kiran-kumar-nalla" target="_blank">LinkedIn</a>
+      <a class="btn" href="https://github.com/Sainalla82" target="_blank">GitHub</a>
+      <a class="btn" href="index.html">Main Website</a>
+    </div>
+  </div>
+  <aside class="hero-card">
+    <div class="hero-card-inner">
+      <div class="big-stat">2026<small>Available after PhD defense</small></div>
+      <div class="avail">
+        <div><span>Location</span><strong>Toulouse, France</strong></div>
+        <div><span>Open to</span><strong>Paris · London · Amsterdam · Berlin</strong></div>
+        <div><span>Track</span><strong>Imaging · Devices</strong></div>
+        <div><span>Edge</span><strong>Research × Translation</strong></div>
+      </div>
+      <div class="hero-tags">
+        <span class="tag">Medical Imaging</span><span class="tag">Medical Devices</span><span class="tag">3D Printing</span><span class="tag">Simulation</span><span class="tag">Research Translation</span>
+      </div>
+    </div>
+  </aside>
+</header>
+
+<section>
+  <div class="snapshot">
+    <article class="snap"><b>3+</b><span>Years R&D</span><p>Medical imaging, modelling, device workflows, and translational research.</p></article>
+    <article class="snap"><b>6</b><span>Research outputs</span><p>Published articles, under-review work, preprint, and conference poster.</p></article>
+    <article class="snap"><b>4+</b><span>Institutions</span><p>IUCT Oncopole, École Polytechnique, LadHyX, Mahindra, hospital/startup work.</p></article>
+    <article class="snap"><b>2026</b><span>Availability</span><p>Defense planned for September 2026; available from September 2026.</p></article>
+  </div>
+</section>
+
+<section id="quick-overview">
+  <div class="overview-panel">
+    <div class="overview-intro">
+      <div class="kicker" style="text-align:left;margin-bottom:.8rem">Quick overview</div>
+      <h2>Hi, I’m Sai.</h2>
+      <p>
+        I work at the intersection of medical imaging, simulation, physical validation, and medtech translation.
+        This page is the concise recruiter view. The full website has the deeper story, creative archive, expanded project pages, publications, and personal context.
+      </p>
+      <div class="overview-cta">
+        <a class="btn primary" href="index.html">Visit Main Website</a>
+        <a class="btn" href="mailto:sainalla82@gmail.com">Contact Me</a>
+      </div>
+    </div>
+
+    <div class="overview-list">
+      <div class="overview-item">
+        <div class="dot">01</div>
+        <div><b>Looking for opportunities from September 2026</b><span>Open to medical imaging, medtech R&D, life-sciences strategy, healthcare ventures, and translational deep-tech roles.</span></div>
+      </div>
+      <div class="overview-item">
+        <div class="dot">02</div>
+        <div><b>Open to freelance and project-based work</b><span>Available for research support, scientific visualization, data analysis, presentations, and medtech strategy projects when timing fits.</span></div>
+      </div>
+      <div class="overview-item">
+        <div class="dot">03</div>
+        <div><b>Builder + researcher profile</b><span>I frame the question, build the method, validate the output, and communicate the result.</span></div>
+      </div>
+      <div class="overview-item">
+        <div class="dot">04</div>
+        <div><b>Want to know more?</b><span>Visit the main website for the full portfolio, publications, projects, travel diaries, fiction shelf, and expanded personal context.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="scan">
+  <div class="scan-panel">
+    <div>
+      <div class="scan-time">3<span>minute recruiter scan</span></div>
+      <p class="copy" style="margin-top:1.2rem">
+        This page is designed to answer the questions a hiring manager actually has: can I frame the problem, work through messy constraints, communicate the result, and connect it to real impact?
+      </p>
+    </div>
+    <div class="scan-grid">
+      <div class="scan-card"><b>Business / clinical question</b><span>Every case study starts with the decision or validation gap, not the tool.</span></div>
+      <div class="scan-card"><b>Process signal</b><span>Data, assumptions, modelling, prototypes, and validation are summarized clearly.</span></div>
+      <div class="scan-card"><b>Communication</b><span>Outputs become papers, posters, visual tools, demos, or stakeholder-facing artifacts.</span></div>
+      <div class="scan-card"><b>Professional fit</b><span>Research depth plus medtech, strategy, startup, and translation exposure.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="kicker">Why Sai?</div>
+  <h2 class="title">Signal</h2>
+  <div class="why-grid">
+    <article class="why-card" data-num="01"><div class="mark">🩻</div><h3>Research Depth</h3><p>Medical imaging, medical devices, simulation, 3D-printed phantoms, and physical ground truth.</p></article>
+    <article class="why-card" data-num="02"><div class="mark">🛠️</div><h3>Builder Mindset</h3><p>Turns research questions into tools, prototypes, pipelines, visualization workflows, and validation artifacts.</p></article>
+    <article class="why-card" data-num="03"><div class="mark">🏥</div><h3>Translation Lens</h3><p>Experience across hospitals, startups, tech transfer, medtech, and clinical-facing imaging workflows.</p></article>
+    <article class="why-card" data-num="04"><div class="mark">♟️</div><h3>Strategy Curiosity</h3><p>McKinsey Forward, Newtons Foundation VC exposure, IP strategy, market mapping, and venture thinking.</p></article>
+  </div>
+</section>
+
+<section id="case-studies">
+  <div class="kicker">Portfolio evidence</div>
+  <h2 class="title">Case Studies</h2>
+  <div class="case-grid">
+    <article class="case-card" style="--rot:-1.1deg">
+      <div class="case-visual" data-glyph="▦"></div>
+      <h3>3DynaPET</h3>
+      <div class="case-summary"><b>Question</b><span>How can we create trustworthy ground-truth data to validate imaging systems and future AI models before they influence clinical decisions?</span></div>
+      <div class="case-list">
+        <div class="case-line"><b>Context</b><span>AI in medical imaging needs explainable benchmarks, not only black-box performance scores.</span></div>
+        <div class="case-line"><b>Process</b><span>Built a physical phantom workflow where uptake, geometry, and acquisition conditions can be controlled.</span></div>
+        <div class="case-line"><b>Methods</b><span>3D printing, dynamic imaging, MATLAB analysis, quantitative validation, reproducible protocols.</span></div>
+        <div class="case-line"><b>Output</b><span>An AI-ready validation artifact that helps compare algorithms against known physical truth.</span></div>
+      </div>
+      <div class="chips"><span class="chip">#explainable-AI</span><span class="chip">#ground-truth</span><span class="chip">#clinical-validation</span></div>
+    </article>
+
+    <article class="case-card" style="--rot:1.5deg">
+      <div class="case-visual" data-glyph="◎"></div>
+      <h3>CASSOULET / MuPET</h3>
+      <div class="case-summary"><b>Question</b><span>How can synthetic medical-imaging data be generated with known truth so AI models can be tested, explained, and trusted?</span></div>
+      <div class="case-list">
+        <div class="case-line"><b>Context</b><span>Clinical datasets are limited, noisy, and often lack precise lesion-level truth for AI evaluation.</span></div>
+        <div class="case-line"><b>Process</b><span>Modelled controlled lesion cohorts using simulation and physics-inspired transport behaviour.</span></div>
+        <div class="case-line"><b>Methods</b><span>Monte Carlo logic, MATLAB/Python workflows, synthetic data generation, imaging physics.</span></div>
+        <div class="case-line"><b>Output</b><span>A framework direction for explainable AI benchmarking with interpretable synthetic ground truth.</span></div>
+      </div>
+      <div class="chips"><span class="chip">#explainable-AI</span><span class="chip">#synthetic-data</span><span class="chip">#model-validation</span></div>
+    </article>
+
+    <article class="case-card" style="--rot:-.8deg">
+      <div class="case-visual" data-glyph="◫"></div>
+      <h3>Hepta Visualization Tool</h3>
+      <div class="case-summary"><b>Question</b><span>How can predictive cancer-treatment models be made understandable for clinicians, investors, and product teams?</span></div>
+      <div class="case-list">
+        <div class="case-line"><b>Context</b><span>Model value depends on clear interpretation.</span></div>
+        <div class="case-line"><b>Process</b><span>Translated CT/MRI-derived outputs into visual demos.</span></div>
+        <div class="case-line"><b>Tools</b><span>Medical imaging, model outputs, visualization, presentation design.</span></div>
+        <div class="case-line"><b>Output</b><span>Stakeholder-facing product artifact for startup R&D.</span></div>
+      </div>
+      <div class="chips"><span class="chip">#stakeholder-communication</span><span class="chip">#medtech</span><span class="chip">#visualization</span></div>
+    </article>
+  </div>
+
+  <div class="more-builds">
+    <div class="build"><b>MuPET</b><span>Mass transport + PET synthetic data</span></div>
+    <div class="build"><b>TEVAR Simulation</b><span>In-silico haemodynamics</span></div>
+    <div class="build"><b>AUV MEC</b><span>Autonomous underwater vehicle</span></div>
+    <div class="build"><b>Manitty</b><span>Startup exposure · polymer electrodes</span></div>
+  </div>
+</section>
+
+<section id="pipeline">
+  <div class="kicker">How the work gets built</div>
+  <h2 class="title">Pipeline</h2>
+  <div class="pipeline">
+    <div class="pipe-step"><b>01</b><h3>Need</h3><p>Start from a clinical, technical, or translational gap.</p></div>
+    <div class="pipe-step"><b>02</b><h3>Model</h3><p>Build a physical, computational, or analytical model.</p></div>
+    <div class="pipe-step"><b>03</b><h3>Prototype</h3><p>Prototype with code, CAD, simulation, visualization, or fabrication.</p></div>
+    <div class="pipe-step"><b>04</b><h3>Validate</h3><p>Validate with data, metrics, experiments, and stakeholder feedback.</p></div>
+    <div class="pipe-step"><b>05</b><h3>Translate</h3><p>Translate into papers, posters, tools, strategy, or product artifacts.</p></div>
+  </div>
+</section>
+
+<section id="toolkit">
+  <div class="kicker">Tools mapped to work</div>
+  <h2 class="title">Toolkit</h2>
+
+  <div class="toolkit-grid logo-mode">
+    <article class="logo-section">
+      <div class="logo-section-head">
+        <h3>Computing & Analysis</h3>
+        <p>Research coding, modelling, statistics, and reproducible scientific workflows.</p>
+      </div>
+      <div class="logo-grid">
+        <div class="logo-tile"><div class="logo-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"></div><b>Python</b><small>automation</small></div>
+        <div class="logo-tile"><div class="logo-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg" alt="MATLAB"></div><b>MATLAB</b><small>simulation</small></div>
+        <div class="logo-tile"><div class="logo-icon red"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"></div><b>Git</b><small>versioning</small></div>
+        <div class="logo-tile"><div class="logo-icon gray">JASP</div><b>JASP</b><small>statistics</small></div>
+        <div class="logo-tile"><div class="logo-icon dark"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/latex.svg" alt="LaTeX" style="filter:invert(1)"></div><b>LaTeX</b><small>writing</small></div>
+        <div class="logo-tile"><div class="logo-icon green"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/microsoftexcel.svg" alt="Excel" style="filter:invert(1)"></div><b>Excel</b><small>tables</small></div>
+      </div>
+    </article>
+
+    <article class="logo-section">
+      <div class="logo-section-head">
+        <h3>Imaging, Simulation & Fabrication</h3>
+        <p>Medical image workflows, quantitative PET thinking, CAD, simulation, and prototype preparation.</p>
+      </div>
+      <div class="logo-grid">
+        <div class="logo-tile"><div class="logo-icon blue"><img src="https://www.slicer.org/assets/img/3D-Slicer-Mark.svg" alt="3D Slicer"></div><b>3D Slicer</b><small>medical imaging</small></div>
+        <div class="logo-tile"><div class="logo-icon gray">IJ</div><b>ImageJ</b><small>analysis</small></div>
+        <div class="logo-tile"><div class="logo-icon gray">Fiji</div><b>Fiji</b><small>processing</small></div>
+        <div class="logo-tile"><div class="logo-icon red">COM</div><b>COMSOL</b><small>multiphysics</small></div>
+        <div class="logo-tile"><div class="logo-icon orange"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/autodesk.svg" alt="Autodesk" style="filter:invert(1)"></div><b>Fusion 360</b><small>CAD</small></div>
+        <div class="logo-tile"><div class="logo-icon orange">Cura</div><b>Cura</b><small>3D print</small></div>
+      </div>
+    </article>
+
+    <article class="logo-section">
+      <div class="logo-section-head">
+        <h3>Design, Documents & Project Systems</h3>
+        <p>Scientific storytelling, pitch visuals, documentation, references, and project organization.</p>
+      </div>
+      <div class="logo-grid">
+        <div class="logo-tile"><div class="logo-icon blue"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/microsoftword.svg" alt="Word" style="filter:invert(1)"></div><b>Word</b><small>documents</small></div>
+        <div class="logo-tile"><div class="logo-icon orange"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/microsoftpowerpoint.svg" alt="PowerPoint" style="filter:invert(1)"></div><b>PowerPoint</b><small>slides</small></div>
+        <div class="logo-tile"><div class="logo-icon dark"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gimp.svg" alt="GIMP" style="filter:invert(1)"></div><b>GIMP</b><small>graphics</small></div>
+        <div class="logo-tile"><div class="logo-icon blue"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/canva.svg" alt="Canva" style="filter:invert(1)"></div><b>Canva</b><small>visuals</small></div>
+        <div class="logo-tile"><div class="logo-icon yellow"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/miro.svg" alt="Miro"></div><b>Miro</b><small>mapping</small></div>
+        <div class="logo-tile"><div class="logo-icon dark"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/notion.svg" alt="Notion" style="filter:invert(1)"></div><b>Notion</b><small>systems</small></div>
+        <div class="logo-tile"><div class="logo-icon blue"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/trello.svg" alt="Trello" style="filter:invert(1)"></div><b>Trello</b><small>kanban</small></div>
+        <div class="logo-tile"><div class="logo-icon red"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/zotero.svg" alt="Zotero" style="filter:invert(1)"></div><b>Zotero</b><small>references</small></div>
+        <div class="logo-tile"><div class="logo-icon green"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/googledrive.svg" alt="Google Drive" style="filter:invert(1)"></div><b>Drive</b><small>collab</small></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="kicker">Research outputs</div>
+  <h2 class="title">Proof</h2>
+  <div class="pub-stats">
+    <div class="pub-stat"><b>2</b><span>Published</span></div>
+    <div class="pub-stat"><b>2</b><span>Under review</span></div>
+    <div class="pub-stat"><b>1</b><span>Preprint</span></div>
+    <div class="pub-stat"><b>1</b><span>Conference poster</span></div>
+  </div>
+  <div class="pub-grid">
+    <a class="pub" href="https://doi.org/10.1007/s13246-025-01687-y" target="_blank" rel="noopener">
+      <div class="status">2025 · Published</div>
+      <h3>Enhancing PET/CT Target Assessment with Porous 3D Printed Grids</h3>
+      <p>Physical and Engineering Sciences in Medicine</p>
+      <div class="open-link">Open paper →</div>
+    </a>
+
+    <a class="pub" href="https://doi.org/10.1101/2025.05.30.25328639" target="_blank" rel="noopener">
+      <div class="status">2025 · Under Review</div>
+      <h3>From Digital File to Transferable Phantom</h3>
+      <p>Dual-centre PET quantification phantom study</p>
+      <div class="open-link">Open preprint →</div>
+    </a>
+
+    <a class="pub" href="https://doi.org/10.1101/2025.11.26.25341036" target="_blank" rel="noopener">
+      <div class="status">2025 · Under Review</div>
+      <h3>Quantitative Reality</h3>
+      <p>Physical ground truth for heterogeneity in molecular imaging</p>
+      <div class="open-link">Open preprint →</div>
+    </a>
+
+    <a class="pub" href="https://doi.org/10.1101/2025.07.31.25332512" target="_blank" rel="noopener">
+      <div class="status">2025 · Preprint</div>
+      <h3>MuPET</h3>
+      <p>Mass transport physics and synthetic PET data generation</p>
+      <div class="open-link">Open preprint →</div>
+    </a>
+
+    <a class="pub" href="papers.html" target="_self">
+      <div class="status">2025 · Conference</div>
+      <h3>3D Printed PET/CT Phantom with Mixed Target Uptake</h3>
+      <p>EANM Congress · e-Poster EP-0949</p>
+      <div class="open-link">Open publication page →</div>
+    </a>
+
+    <a class="pub" href="https://doi.org/10.1115/1.4054679" target="_blank" rel="noopener">
+      <div class="status">2022 · Published</div>
+      <h3>Effects of Gas Embolism on Pulsatile Flow</h3>
+      <p>Journal of Biomechanical Engineering · ASME</p>
+      <div class="open-link">Open paper →</div>
+    </a>
+  </div>
+
+  <div class="proof-note">
+    Each research output is treated as evidence of a complete work cycle: identifying the question, building the method, validating the result, and communicating it for a scientific or stakeholder audience.
+  </div>
+</section>
+
+<section id="experience">
+  <div class="kicker">Professional journey</div>
+  <h2 class="title">Experience</h2>
+
+  <div class="experience-grid">
+    <div class="exp-list">
+      <div class="exp-tab active"><div class="logo-dot">I</div><div><h4>Doctoral Researcher</h4><span>IUCT Oncopole</span></div></div>
+      <div class="exp-tab"><div class="logo-dot">H</div><div><h4>Researcher & Consultant</h4><span>Hepta Medical</span></div></div>
+      <div class="exp-tab"><div class="logo-dot">S</div><div><h4>Preclinical Intern</h4><span>Hospital Saint Joseph</span></div></div>
+      <div class="exp-tab"><div class="logo-dot">X</div><div><h4>Research Intern</h4><span>LadHyX · École Polytechnique</span></div></div>
+    </div>
+    <article class="exp-card"><h3>Doctoral Researcher</h3><div class="org">IUCT Oncopole · Université de Toulouse</div><div class="date">Oct 2023 — Present · Research contract</div><div class="bullets"><div class="bullet">PET/CT validation and phantom workflows.</div><div class="bullet">Dynamic PET data and validation studies.</div><div class="bullet">Cross-functional academic/industry collaboration.</div><div class="bullet">From code and prototypes to papers.</div></div></article>
+  </div>
+
+  <div class="exp-category">
+    <div class="exp-category-title">Research contracts / professional roles</div>
+    <div class="mini-grid">
+      <article class="mini-card"><span>Oct 2023 — Present</span><b>Doctoral Researcher</b><p>IUCT Oncopole · imaging validation.</p></article>
+      <article class="mini-card"><span>Dec 2022 — Sep 2023</span><b>Researcher & Consultant</b><p>Hepta Medical · models + visualization.</p></article>
+      <article class="mini-card"><span>2023</span><b>Technology Transfer Intern</b><p>Toulouse Tech Transfer · IP + valorisation.</p></article>
+    </div>
+  </div>
+
+  <div class="exp-category">
+    <div class="exp-category-title">Internships / startup exposure</div>
+    <div class="mini-grid">
+      <article class="mini-card"><span>May 2022 — Jul 2022</span><b>Preclinical Intern</b><p>Hospital Saint Joseph · preclinical exposure.</p></article>
+      <article class="mini-card"><span>Mar 2022 — May 2022</span><b>Research Intern</b><p>LadHyX · soft matter + image analysis.</p></article>
+      <article class="mini-card"><span>Polytechnique period</span><b>Manitty</b><p>Polymer electrodes · startup exposure.</p></article>
+    </div>
+  </div>
+
+  <div class="exp-category">
+    <div class="exp-category-title">Volunteering / leadership / strategy programs</div>
+    <div class="vol-grid">
+      <article class="vol-card"><div class="mark">🌊</div><h3>Deputy Team Lead & Mechanical Subdivision Lead</h3><span>AUV MEC · 2019 — 2020</span><p>Technical leadership and operations.</p></article>
+      <article class="vol-card"><div class="mark">🤝</div><h3>Internship & Placement Cell Member</h3><span>Mahindra École Centrale · 2018 — 2020</span><p>Industrial outreach and coordination.</p></article>
+      <article class="vol-card"><div class="mark">♟️</div><h3>McKinsey Forward Program</h3><span>McKinsey & Company · 2023</span><p>Strategy and leadership fundamentals.</p></article>
+      <article class="vol-card"><div class="mark">🚀</div><h3>Newtons Foundation VC Programme</h3><span>Venture exposure</span><p>VC fundamentals and startup evaluation.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="kicker">Academic foundation</div>
+  <h2 class="title">Education</h2>
+  <div class="edu-band">
+    <article class="edu-card primary"><div class="edu-year">2023 — 2026</div><h3>PhD Medical Imaging & Radiophysics</h3><p>Université de Toulouse · IUCT Oncopole</p><div class="edu-note">Defense expected September 2026</div></article>
+    <article class="edu-card"><div class="edu-year">2021 — 2023</div><h3>MSc Biomechanical & Biomedical Engineering</h3><p>École Polytechnique · IP Paris</p><div class="edu-note">GPA 3.7/4.0 · Full scholarship</div></article>
+    <article class="edu-card"><div class="edu-year">2016 — 2020</div><h3>BTech Mechanical Engineering</h3><p>Mahindra University</p><div class="edu-note">GPA 8.5/10 · Excellence scholarship</div></article>
+  </div>
+  <div class="lang-tabs">
+    <article class="lang-tab"><div class="flag">🇬🇧</div><b>English</b><span>Fluent</span></article>
+    <article class="lang-tab"><div class="flag">🇮🇳</div><b>Hindi</b><span>Fluent</span></article>
+    <article class="lang-tab"><div class="flag">🇮🇳</div><b>Telugu</b><span>Native</span></article>
+    <article class="lang-tab"><div class="flag">🇫🇷</div><b>French</b><span>B2</span></article>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-panel">
+    <h2>Let’s talk.</h2>
+    <p>Open to roles in medical imaging, medical devices, medtech R&D, healthcare ventures, life-sciences strategy, translational research, freelance projects, and deep-tech from September 2026.</p>
+    <div class="hero-actions" style="justify-content:center">
+      <a class="btn primary" href="mailto:sainalla82@gmail.com">Email</a>
+      <a class="btn" href="Assets/Sai_Nalla_CV.pdf" target="_blank" rel="noopener">Download CV</a>
+      <a class="btn" href="https://www.linkedin.com/in/sai-kiran-kumar-nalla" target="_blank">LinkedIn</a>
+      <a class="btn" href="index.html">Main Website</a>
+    </div>
+  </div>
+</section>
+
+<script>
+document.querySelectorAll('.exp-tab').forEach((tab,idx)=>{
+  const data=[
+    ['Doctoral Researcher','IUCT Oncopole · Université de Toulouse','Oct 2023 — Present · Research contract',['PET/CT validation and phantom workflows.','Dynamic PET data and validation studies.','Cross-functional academic/industry collaboration.','From code and prototypes to papers.']],
+    ['Researcher & Consultant','Hepta Medical','Dec 2022 — Sep 2023 · Contract / startup R&D',['Predictive models for cancer-treatment R&D.','Clinical/investor-facing visuals.','CT/MRI outputs turned into demos.','Startup R&D at research/product edge.']],
+    ['Preclinical Intern','Hospital Saint Joseph','May 2022 — Jul 2022 · Internship',['Preclinical validation exposure.','Medical workflow context.','Clinical research support.','Biomedical engineering + hospital workflows.']],
+    ['Research Intern','LadHyX · École Polytechnique','Mar 2022 — May 2022 · Internship',['Soft matter and drug delivery.','Image tracking and analysis.','Python/MATLAB research workflows.','Foundation for imaging/modeling work.']]
+  ];
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.exp-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const d=data[idx];
+    document.querySelector('.exp-card').innerHTML=`<h3>${d[0]}</h3><div class="org">${d[1]}</div><div class="date">${d[2]}</div><div class="bullets">${d[3].map(x=>`<div class="bullet">${x}</div>`).join('')}</div>`;
+  });
+});
+</script>
+
+<!-- Professional assistant mode is enabled by kage.js on recruiter.html -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="kage.js?v=recruiter-mode-1"></script>
+</body>
+</html>
