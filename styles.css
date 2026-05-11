@@ -1459,3 +1459,54 @@ html[data-theme="light"] ::selection {
   background: rgba(139, 26, 26, 0.22);
   color: #1a1a1c;
 }
+
+/* ═══════════════════════════════════════════
+   FINAL LIGHT MODE OVERLAY FIX
+   Paste at the VERY BOTTOM of styles.css
+   ═══════════════════════════════════════════ */
+
+/* The transition overlay should be invisible unless page navigation is actively happening */
+.ac-transition {
+  background: transparent !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Only show it during the actual AC page transition */
+body.leaping .ac-transition {
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: #080809 !important;
+}
+
+/* Keep inner transition layers dark/visible during transition */
+body.leaping .ac-transition .eagle-flash {
+  background: radial-gradient(circle at center, rgba(212,175,55,0.4), #080809 85%) !important;
+}
+
+/* If light mode is active, do NOT let the overlay become a pale sheet */
+html[data-theme="light"] .ac-transition {
+  background: transparent !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+html[data-theme="light"] body.leaping .ac-transition {
+  background: #080809 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Safety: make sure page content is visible when not transitioning */
+body:not(.leaping) .page-content,
+body:not(.leaping) nav,
+body:not(.leaping) footer {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+/* Safety: if animation leaves page-content faded, restore it outside transitions */
+body:not(.leaping) .page-content {
+  animation-fill-mode: none !important;
+}
