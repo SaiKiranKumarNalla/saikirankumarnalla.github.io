@@ -1130,3 +1130,332 @@ body.leaping .ac-hud {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+/* ═══════════════════════════════════════════
+   LIGHT MODE FIX — visibility recovery
+   Paste at the VERY BOTTOM of styles.css
+   ═══════════════════════════════════════════ */
+
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background: #f0ebe3 !important;
+  color: #1a1a1c !important;
+}
+
+/* Global text recovery */
+html[data-theme="light"] body,
+html[data-theme="light"] main,
+html[data-theme="light"] section {
+  color: #1a1a1c !important;
+}
+
+html[data-theme="light"] p,
+html[data-theme="light"] li {
+  color: #4a4540 !important;
+}
+
+/* Headings */
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] h5,
+html[data-theme="light"] h6,
+html[data-theme="light"] .page-title,
+html[data-theme="light"] .section-title,
+html[data-theme="light"] .hero-name,
+html[data-theme="light"] .nav-mark,
+html[data-theme="light"] .acc-role,
+html[data-theme="light"] .paper-title,
+html[data-theme="light"] .artifact-title,
+html[data-theme="light"] .edu-degree,
+html[data-theme="light"] .contact-heading,
+html[data-theme="light"] .persona-title,
+html[data-theme="light"] .story-title,
+html[data-theme="light"] .fiction-title {
+  color: #1a1a1c !important;
+}
+
+/* Body/subtext */
+html[data-theme="light"] .hero-desc,
+html[data-theme="light"] .page-subtitle,
+html[data-theme="light"] .intro-text,
+html[data-theme="light"] .journey-text,
+html[data-theme="light"] .persona-desc,
+html[data-theme="light"] .skill-items,
+html[data-theme="light"] .acc-mission,
+html[data-theme="light"] .abstract-text,
+html[data-theme="light"] .contact-desc,
+html[data-theme="light"] .edu-note,
+html[data-theme="light"] .artifact-desc,
+html[data-theme="light"] .blog-card p,
+html[data-theme="light"] .story-desc,
+html[data-theme="light"] .fiction-copy,
+html[data-theme="light"] .story-copy,
+html[data-theme="light"] .story-reader p {
+  color: #4a4540 !important;
+}
+
+/* Muted labels */
+html[data-theme="light"] .hero-title,
+html[data-theme="light"] .page-tag,
+html[data-theme="light"] .nav-card-sub,
+html[data-theme="light"] .acc-dates,
+html[data-theme="light"] .acc-location,
+html[data-theme="light"] .paper-journal,
+html[data-theme="light"] .forge-stat-label,
+html[data-theme="light"] .intro-stat-label,
+html[data-theme="light"] .p-stat-label,
+html[data-theme="light"] .story-kicker,
+html[data-theme="light"] .fiction-label,
+html[data-theme="light"] .path-name,
+html[data-theme="light"] .legend-item,
+html[data-theme="light"] .open-text {
+  color: #6d655c !important;
+}
+
+/* Red accents */
+html[data-theme="light"] .nav-mark span,
+html[data-theme="light"] .page-title-jp,
+html[data-theme="light"] .section-num,
+html[data-theme="light"] .paper-link,
+html[data-theme="light"] .edu-school,
+html[data-theme="light"] .acc-org,
+html[data-theme="light"] .forge-section-label,
+html[data-theme="light"] .story-accent,
+html[data-theme="light"] .fiction-label,
+html[data-theme="light"] .contact-sub-jp,
+html[data-theme="light"] .skill-label,
+html[data-theme="light"] .journey-era,
+html[data-theme="light"] .paper-status span {
+  color: #8b1a1a !important;
+}
+
+/* Navigation */
+html[data-theme="light"] nav {
+  background: rgba(240, 235, 227, 0.96) !important;
+  border-bottom: 1px solid rgba(26, 26, 28, 0.14) !important;
+}
+
+html[data-theme="light"] .nav-links a {
+  color: #2a2622 !important;
+}
+
+html[data-theme="light"] .nav-links a:hover,
+html[data-theme="light"] .nav-links a.active {
+  color: #8b1a1a !important;
+}
+
+html[data-theme="light"] .nav-divider {
+  background: rgba(26, 26, 28, 0.16) !important;
+}
+
+/* Main panels/cards */
+html[data-theme="light"] .intro-stat,
+html[data-theme="light"] .exp-stat,
+html[data-theme="light"] .forge-stat,
+html[data-theme="light"] .p-stat,
+html[data-theme="light"] .stat,
+html[data-theme="light"] .vol-card,
+html[data-theme="light"] .edu-card,
+html[data-theme="light"] .paper-card,
+html[data-theme="light"] .persona-card,
+html[data-theme="light"] .skill-card,
+html[data-theme="light"] .extra-card,
+html[data-theme="light"] .blog-card,
+html[data-theme="light"] .contact-card,
+html[data-theme="light"] .artifact-card,
+html[data-theme="light"] .acc-header,
+html[data-theme="light"] .acc-content,
+html[data-theme="light"] .abstract-body,
+html[data-theme="light"] .story-hero,
+html[data-theme="light"] .story-reader,
+html[data-theme="light"] .fiction-shelf,
+html[data-theme="light"] .travel-cta-inner,
+html[data-theme="light"] .forge-path,
+html[data-theme="light"] .travel-map-wrap,
+html[data-theme="light"] .personal-stats,
+html[data-theme="light"] .exp-stats,
+html[data-theme="light"] .forge-dashboard,
+html[data-theme="light"] .intro-stats {
+  background: rgba(26, 26, 28, 0.035) !important;
+  border-color: rgba(26, 26, 28, 0.12) !important;
+}
+
+/* Accordion/content panels */
+html[data-theme="light"] .acc-header {
+  background: rgba(26, 26, 28, 0.04) !important;
+}
+
+html[data-theme="light"] .acc-item.open .acc-header {
+  background: rgba(139, 26, 26, 0.07) !important;
+}
+
+html[data-theme="light"] .acc-content {
+  background: rgba(26, 26, 28, 0.025) !important;
+}
+
+/* Home/nav cards */
+html[data-theme="light"] .nav-card {
+  background: rgba(26, 26, 28, 0.025) !important;
+  border-color: rgba(26, 26, 28, 0.1) !important;
+}
+
+html[data-theme="light"] .nav-card-label {
+  color: #1a1a1c !important;
+}
+
+html[data-theme="light"] .nav-card-sub {
+  color: #6d655c !important;
+}
+
+/* Large sections */
+html[data-theme="light"] .bg-smoke,
+html[data-theme="light"] .intro-strip,
+html[data-theme="light"] .quote-strip,
+html[data-theme="light"] .nav-grid,
+html[data-theme="light"] .philosophy,
+html[data-theme="light"] .section {
+  background-color: transparent !important;
+}
+
+/* Buttons and controls */
+html[data-theme="light"] .btn,
+html[data-theme="light"] button,
+html[data-theme="light"] .forge-filter,
+html[data-theme="light"] .paper-link,
+html[data-theme="light"] .story-btn,
+html[data-theme="light"] .kp-act,
+html[data-theme="light"] .contact-card {
+  color: #1a1a1c !important;
+  border-color: rgba(26, 26, 28, 0.18) !important;
+}
+
+html[data-theme="light"] .btn:hover,
+html[data-theme="light"] button:hover,
+html[data-theme="light"] .forge-filter:hover,
+html[data-theme="light"] .forge-filter.active,
+html[data-theme="light"] .story-btn:hover {
+  color: #8b1a1a !important;
+  border-color: rgba(139, 26, 26, 0.45) !important;
+  background: rgba(139, 26, 26, 0.06) !important;
+}
+
+/* Inputs */
+html[data-theme="light"] input,
+html[data-theme="light"] textarea,
+html[data-theme="light"] select {
+  background: rgba(26, 26, 28, 0.04) !important;
+  color: #1a1a1c !important;
+  border-color: rgba(26, 26, 28, 0.14) !important;
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+  color: #7a756e !important;
+}
+
+/* Decorative backgrounds should not overpower light mode */
+html[data-theme="light"] .bg-kanji,
+html[data-theme="light"] .bg-katana,
+html[data-theme="light"] .v-accent,
+html[data-theme="light"] .persona-kanji,
+html[data-theme="light"] .journey-era-kanji,
+html[data-theme="light"] .edu-kanji,
+html[data-theme="light"] .contact-kanji-big,
+html[data-theme="light"] .philosophy-kanji {
+  opacity: 0.08 !important;
+}
+
+/* Borders / divider lines */
+html[data-theme="light"] .quote-strip,
+html[data-theme="light"] .intro-strip,
+html[data-theme="light"] .journey-chapter,
+html[data-theme="light"] .acc-item,
+html[data-theme="light"] .paper-card,
+html[data-theme="light"] .artifact-card,
+html[data-theme="light"] .edu-card,
+html[data-theme="light"] .contact-card,
+html[data-theme="light"] .persona-card,
+html[data-theme="light"] .skill-card {
+  border-color: rgba(26, 26, 28, 0.12) !important;
+}
+
+/* Links */
+html[data-theme="light"] a {
+  color: inherit;
+}
+
+html[data-theme="light"] a:hover {
+  color: #8b1a1a !important;
+}
+
+/* Story page */
+html[data-theme="light"] .story-screen,
+html[data-theme="light"] .story-frame,
+html[data-theme="light"] .story-lock,
+html[data-theme="light"] .story-toolbar {
+  background: rgba(26, 26, 28, 0.035) !important;
+  border-color: rgba(26, 26, 28, 0.12) !important;
+  color: #1a1a1c !important;
+}
+
+html[data-theme="light"] .story-screen img,
+html[data-theme="light"] .fiction-cover img {
+  box-shadow: 0 20px 60px rgba(26, 26, 28, 0.18) !important;
+}
+
+/* Kage panel light mode */
+html[data-theme="light"] .kp {
+  background: rgba(240, 235, 227, 0.98) !important;
+  color: #1a1a1c !important;
+  border-color: rgba(26, 26, 28, 0.16) !important;
+}
+
+html[data-theme="light"] .kp-id span {
+  color: #1a1a1c !important;
+}
+
+html[data-theme="light"] .kp-msg.kage {
+  background: rgba(139, 26, 26, 0.06) !important;
+  color: #2a2622 !important;
+}
+
+html[data-theme="light"] .kp-msg.user {
+  background: rgba(26, 26, 28, 0.06) !important;
+  color: #1a1a1c !important;
+}
+
+html[data-theme="light"] .kp-in {
+  color: #1a1a1c !important;
+}
+
+html[data-theme="light"] .kp-in::placeholder {
+  color: #7a756e !important;
+}
+
+html[data-theme="light"] .kp-hd,
+html[data-theme="light"] .kp-iw,
+html[data-theme="light"] .kp-acts,
+html[data-theme="light"] .kp-con,
+html[data-theme="light"] .kp-rep {
+  border-color: rgba(26, 26, 28, 0.12) !important;
+}
+
+/* Transition overlay should stay dark even in light mode */
+html[data-theme="light"] .ac-transition {
+  background: #080809 !important;
+  color: #f0ebe3 !important;
+}
+
+/* Focus */
+html[data-theme="light"] :focus-visible {
+  outline: 2px solid #8b1a1a !important;
+  outline-offset: 4px !important;
+}
+
+/* Text selection */
+html[data-theme="light"] ::selection {
+  background: rgba(139, 26, 26, 0.22);
+  color: #1a1a1c;
+}
