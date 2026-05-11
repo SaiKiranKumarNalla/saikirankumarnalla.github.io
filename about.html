@@ -86,6 +86,22 @@
   .journey-era,.journey-era-kanji{text-align:left}
   .travel-cta-inner{flex-direction:column;text-align:center;gap:1.2rem;padding:2rem 1.5rem}
 }
+
+/* ── FICTION SHELF CTA ── */
+.fiction-intro{max-width:880px;margin:2.4rem 0 1.2rem;font-size:.95rem;line-height:1.9;color:var(--mist);font-weight:300}.fiction-intro strong{color:var(--paper);font-weight:500}
+.story-cta{margin-top:1.2rem}
+.story-cta-inner{display:grid;grid-template-columns:140px 1fr auto;gap:1.6rem;align-items:center;text-decoration:none;color:var(--paper);border:1px solid var(--ghost-line);background:linear-gradient(135deg,rgba(139,26,26,.07),transparent 42%),var(--ghost);padding:1.4rem;position:relative;overflow:hidden;transition:all .35s}
+.story-cta-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--blood),transparent);opacity:.45}
+.story-cta-inner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blood);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.story-cta-inner:hover{border-color:rgba(139,26,26,.35);background:linear-gradient(135deg,rgba(139,26,26,.11),transparent 46%),var(--ghost);transform:translateY(-2px)}
+.story-cta-inner:hover::after{transform:scaleX(1)}
+.story-cover{width:140px;aspect-ratio:3/4;object-fit:cover;border:1px solid rgba(240,235,227,.13);box-shadow:0 12px 36px rgba(0,0,0,.35);background:#080809}
+.story-label{font-family:'Space Mono',monospace;font-size:.55rem;text-transform:uppercase;letter-spacing:.18em;color:var(--blood-glow);margin-bottom:.45rem}
+.story-title{font-family:'Zen Antique',serif;font-size:1.25rem;margin-bottom:.45rem;color:var(--paper)}
+.story-desc{font-size:.88rem;line-height:1.75;color:var(--mist);font-weight:300;max-width:720px}.story-desc strong{color:var(--paper);font-weight:500}
+.story-lock{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mist);white-space:nowrap;border:1px solid rgba(139,26,26,.35);padding:.75rem 1rem;background:rgba(139,26,26,.06)}
+@media(max-width:760px){.story-cta-inner{grid-template-columns:1fr;text-align:center}.story-cover{margin:0 auto}.story-lock{white-space:normal}}
+
 </style>
 </head>
 <body>
@@ -264,6 +280,23 @@
         <div class="cta-sub">Synchronize Memory — Coming Soon</div>
       </div>
     </div>
+  </div>
+
+  <!-- Fiction writing / Story Preview CTA -->
+  <div class="fiction-intro reveal">
+    <strong>I am also interested in writing fiction.</strong> Beyond research and travel, I like building worlds through mystery, myth, atmosphere, and places that feel half-remembered. This shelf is where I keep previews from that creative side — a growing collection, not a single finished archive.
+  </div>
+
+  <div class="story-cta reveal">
+    <a class="story-cta-inner" href="story.html" aria-label="Open fiction story preview archive">
+      <img class="story-cover" src="story-assets/cover.png" onerror="this.src='story-assets/shapanang-preview-01.webp'" alt="Cover preview from Sai Kiran Kumar Nalla's fiction shelf">
+      <div class="story-copy">
+        <div class="story-label">Fiction Shelf</div>
+        <div class="story-title">Current locked preview</div>
+        <div class="story-desc">A selected story preview from my fiction collection. Only a few pages are open; the rest stays sealed unless I choose to share access.</div>
+      </div>
+      <div class="story-lock">Preview Locked Archive →</div>
+    </a>
   </div>
 </section>
 
