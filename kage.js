@@ -84,6 +84,83 @@ async function send(text){
   var page=curPage();
   var yes=/^(yes|yeah|yep|sure|ok|okay|open it|show me|take me|visit|go ahead|lead me)$/i.test(clean);
 
+
+  if(/^(open recruiter mode|recruiter mode|recruiter)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:page==='recruiter.html'
+      ? 'You are already in Recruiter Mode. Ask me for Sai’s pitch, best fit, projects, publications, CV, or contact details.'
+      : 'Opening Recruiter Mode — the concise professional view of Sai’s work evidence, case studies, publications, CV, and contact.'});
+    render();
+    if(page!=='recruiter.html')doAction({type:'navigate',data:'recruiter.html'});
+    return;
+  }
+
+  if(/help me navigate|just visiting|explore the site|where should i start/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:page==='recruiter.html'
+      ? 'Start with Case Studies for work evidence, Proof for publications, and Contact for next steps. If you want depth, open the main website.'
+      : 'I am AI-enabled: ask me questions, or use me to navigate. Start with About for the human story, Projects for work evidence, Publications for research proof, or Recruiter Mode for the fastest professional overview.'});
+    render();
+    return;
+  }
+
+  if(/^(about|open about|go to about|about page)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Opening About.'});
+    render();
+    doAction({type:'navigate',data:'about.html'});
+    return;
+  }
+
+  if(/^(projects|open projects|go to projects|project page)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Opening Projects.'});
+    render();
+    doAction({type:'navigate',data:'projects.html'});
+    return;
+  }
+
+  if(/^(publications|papers|open publications|go to papers|publication page)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Opening Publications.'});
+    render();
+    doAction({type:'navigate',data:'papers.html'});
+    return;
+  }
+
+  if(/^(experience|open experience|go to experience)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Opening Experience.'});
+    render();
+    doAction({type:'navigate',data:'experience.html'});
+    return;
+  }
+
+  if(/^(education|open education|go to education)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Opening Education.'});
+    render();
+    doAction({type:'navigate',data:'education.html'});
+    return;
+  }
+
+  if(/^(contact|open contact|go to contact|reach out)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:page==='recruiter.html'?'Sai can be reached by email, LinkedIn, or GitHub. I will show the contact links.':'You can reach Sensei Sai by email, LinkedIn, or GitHub. I will show the contact links.'});
+    render();
+    doAction({type:'contact'});
+    return;
+  }
+
+  if(/issue|bug|report/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Please describe the issue below. I will record it locally for Sai to review.'});
+    render();
+    doAction({type:'report'});
+    return;
+  }
+
+
   if(kageRecruiterOffered && yes){
     hist.push({role:'user',content:text});
     hist.push({role:'assistant',content:'Opening Recruiter Mode.'});
@@ -278,7 +355,7 @@ function welcome(){
   if(curPage()==='recruiter.html'){
     var t=vc>1
       ?'Welcome back. I can help you review Sai’s case studies, publications, CV, availability, or contact options.'
-      :'Hello. Ask me for Sai’s 30-second pitch, strongest role fit, project evidence, publications summary, CV, or contact details.';
+      :'Hello. I am an AI-enabled professional assistant. Ask me for Sai’s 30-second pitch, strongest role fit, project evidence, publications summary, CV, or contact details.';
     hist.push({role:'assistant',content:t});
     render();
     return;
@@ -294,8 +371,8 @@ function welcome(){
         :'The day is bright.';
 
   var t=vc>1
-    ? g+' You return. Ask me about Sensei Sai’s fit, projects, publications, research, or the best path through this website.'
-    : g+' I am Kage — Ask me about Sensei Sai’s work, projects, publications, role fit, or research story. I can answer first, then guide you if a page helps.';
+    ? g+' You return. I am AI-enabled — ask me about Sensei Sai’s fit, projects, publications, research, or the best path through this website.'
+    : g+' I am Kage — an AI-enabled assistant. Ask me about Sensei Sai’s work, projects, publications, role fit, or research story. I can answer first, then guide you if a page helps.';
 
   hist.push({role:'assistant',content:t});
   render();
@@ -350,8 +427,8 @@ function dom(){
   var recruiterMode=curPage()==='recruiter.html';
 
   var mainActions=
-      '<button class="kp-act" data-q="I am a recruiter. Give me the 3-minute professional overview and suggest the most relevant sections.">Recruiter</button>'+
-      '<button class="kp-act" data-q="I am just visiting. Help me explore the site.">Visitor</button>'+
+      '<button class="kp-act" data-q="Open Recruiter Mode.">Recruiter</button>'+
+      '<button class="kp-act" data-q="Help me navigate the website.">Visitor</button>'+
       '<button class="kp-act" data-q="Tell me about Sai">About Sai</button>'+
       '<button class="kp-act" data-q="Tell me about Kage">Kage</button>'+
       '<button class="kp-act" data-q="How can I contact Sai?">Contact</button>'+
@@ -887,7 +964,7 @@ function init(){
       },3500);
     }
 
-    console.log('Kage v10 loaded — AI-enabled assistant notice added');
+    console.log('Kage v11 loaded — AI notice and reliable navigation enabled');
   }catch(e){
     console.error('Kage:',e);
   }
