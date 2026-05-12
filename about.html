@@ -102,6 +102,34 @@
 .story-lock{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mist);white-space:nowrap;border:1px solid rgba(139,26,26,.35);padding:.75rem 1rem;background:rgba(139,26,26,.06)}
 @media(max-width:760px){.story-cta-inner{grid-template-columns:1fr;text-align:center}.story-cover{margin:0 auto}.story-lock{white-space:normal}}
 
+/* ── BEYOND THE BLADE EXPANDED ── */
+.beyond-copy{max-width:880px;font-size:.95rem;line-height:1.9;color:var(--mist);font-weight:300;margin:0 0 2rem}
+.beyond-copy strong{color:var(--paper);font-weight:500}
+.beyond-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.3rem;margin-top:2rem}
+.beyond-card{border:1px solid var(--ghost-line);background:linear-gradient(135deg,rgba(139,26,26,.06),transparent 44%),var(--ghost);padding:1.5rem;position:relative;overflow:hidden;transition:all .35s}
+.beyond-card:hover{border-color:rgba(139,26,26,.35);transform:translateY(-3px);background:rgba(139,26,26,.045)}
+.beyond-card::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--blood);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.beyond-card:hover::after{transform:scaleX(1)}
+.beyond-kanji{font-family:'Noto Serif JP',serif;font-size:2.2rem;color:rgba(139,26,26,.22);line-height:1;margin-bottom:.6rem}
+.beyond-label{font-family:'Space Mono',monospace;font-size:.54rem;text-transform:uppercase;letter-spacing:.17em;color:var(--blood-glow);margin-bottom:.55rem}
+.beyond-title{font-family:'Zen Antique',serif;font-size:1.12rem;margin-bottom:.55rem;color:var(--paper)}
+.beyond-desc{font-size:.84rem;line-height:1.75;color:var(--mist);font-weight:300;margin-bottom:1rem}
+.cover-shelf{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:1rem}
+.cover-slot{aspect-ratio:3/4;border:1px dashed rgba(240,235,227,.14);background:rgba(10,10,11,.38);display:flex;align-items:center;justify-content:center;color:var(--steel);font-family:'Space Mono',monospace;font-size:.48rem;text-transform:uppercase;letter-spacing:.12em;text-align:center;padding:.45rem}
+.cover-slot.board{aspect-ratio:1/1}
+.beyond-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.8rem}
+.beyond-btn{font-family:'Space Mono',monospace;font-size:.56rem;text-transform:uppercase;letter-spacing:.12em;text-decoration:none;color:var(--blood-glow);border:1px solid rgba(139,26,26,.35);padding:.65rem .85rem;background:rgba(139,26,26,.05);transition:all .25s}
+.beyond-btn:hover{color:var(--paper);border-color:rgba(194,59,59,.65);background:rgba(139,26,26,.14)}
+.beyond-btn.disabled{pointer-events:none;opacity:.45;color:var(--steel);border-color:var(--ghost-line);background:rgba(240,235,227,.025)}
+.beyond-note{font-family:'Space Mono',monospace;font-size:.5rem;text-transform:uppercase;letter-spacing:.12em;color:var(--steel);margin-top:.8rem}
+html[data-theme="light"] .beyond-copy,
+html[data-theme="light"] .beyond-desc{color:#4a4540!important}
+html[data-theme="light"] .beyond-title{color:#1a1a1c!important}
+html[data-theme="light"] .beyond-card,
+html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;border-color:rgba(26,26,28,.12)!important}
+@media(max-width:850px){.beyond-grid{grid-template-columns:1fr}.cover-shelf{grid-template-columns:repeat(2,1fr)}}
+
+
 </style>
 </head>
 <body>
@@ -300,23 +328,6 @@
   </div>
 </section>
 
-<!-- ── THE TOOLKIT ── -->
-<section class="content-section bg-smoke">
-  <div class="section-header reveal">
-    <span class="section-num">技</span>
-    <h2 class="section-title">The Toolkit</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="skills-grid stagger">
-    <div class="skill-card"><div class="skill-label">Imaging & Simulation</div><div class="skill-items">PET/CT, OSEM/BSREM Reconstruction, PETSTEP Framework, Monte Carlo Methods, 3D Phantom Design</div></div>
-    <div class="skill-card"><div class="skill-label">Computational</div><div class="skill-items">MATLAB, Python, Computational Fluid Dynamics, Finite Element Analysis, Image Processing</div></div>
-    <div class="skill-card"><div class="skill-label">Engineering</div><div class="skill-items">3D Printing, CAD (SolidWorks, Fusion 360), Rapid Prototyping, Microscopy, Spectroscopy</div></div>
-    <div class="skill-card"><div class="skill-label">Research</div><div class="skill-items">Clinical Trial Design, Data Analysis, Scientific Writing, IP Strategy, Technology Transfer</div></div>
-    <div class="skill-card"><div class="skill-label">Strategy</div><div class="skill-items">McKinsey Forward, Market Mapping, Venture Capital Fundamentals, Competitive Analysis, Financial Modelling</div></div>
-    <div class="skill-card"><div class="skill-label">Languages</div><div class="skill-items">English (Native), Hindi (Native), Telugu (Native), French (B2), Japanese (Learning)</div></div>
-  </div>
-</section>
-
 <!-- ── BEYOND THE BLADE ── -->
 <section class="content-section">
   <div class="section-header reveal">
@@ -324,6 +335,11 @@
     <h2 class="section-title">Beyond the Blade</h2>
     <div class="section-line"></div>
   </div>
+
+  <p class="beyond-copy reveal">
+    <strong>Not everything I build starts inside a thesis.</strong> Some ideas come from games, cricket, cooking, fiction, travel, startup curiosity, and the habit of turning observations into systems or stories. This is the shelf for the interests that sit outside research, but still shape how I think.
+  </p>
+
   <div class="interests-row stagger">
     <span class="interest-tag">Healthcare Ventures</span>
     <span class="interest-tag">Biotech VC</span>
@@ -332,9 +348,65 @@
     <span class="interest-tag">AI in Oncology</span>
     <span class="interest-tag">Deep-Tech Startups</span>
     <span class="interest-tag">Medtech Innovation</span>
-    <span class="interest-tag">Ghost of Tsushima</span>
-    <span class="interest-tag">Assassin's Creed</span>
+    <span class="interest-tag">PS4 Gaming</span>
+    <span class="interest-tag">Board Games</span>
+    <span class="interest-tag">Cricket Analytics</span>
+    <span class="interest-tag">Cooking</span>
     <span class="interest-tag">Samurai Culture</span>
+  </div>
+
+  <div class="beyond-grid stagger">
+
+    <article class="beyond-card">
+      <div class="beyond-kanji">遊</div>
+      <div class="beyond-label">PS4 Shelf</div>
+      <h3 class="beyond-title">Games that shaped how I think</h3>
+      <p class="beyond-desc">I am drawn to games with atmosphere, systems, exploration, and strong visual worlds. I will add selected PS4 game covers here as a small personal archive.</p>
+      <div class="cover-shelf" aria-label="Placeholder PS4 game cover shelf">
+        <div class="cover-slot">Game Cover</div>
+        <div class="cover-slot">Game Cover</div>
+        <div class="cover-slot">Game Cover</div>
+        <div class="cover-slot">Game Cover</div>
+      </div>
+      <div class="beyond-note">Cover shelf coming soon</div>
+    </article>
+
+    <article class="beyond-card">
+      <div class="beyond-kanji">盤</div>
+      <div class="beyond-label">Board Games</div>
+      <h3 class="beyond-title">Strategy away from the screen</h3>
+      <p class="beyond-desc">Board games are another way I enjoy systems: rules, incentives, negotiation, uncertainty, and pattern recognition. I will add favorite board-game covers here later.</p>
+      <div class="cover-shelf" aria-label="Placeholder board game cover shelf">
+        <div class="cover-slot board">Board Game</div>
+        <div class="cover-slot board">Board Game</div>
+        <div class="cover-slot board">Board Game</div>
+        <div class="cover-slot board">Board Game</div>
+      </div>
+      <div class="beyond-note">Board-game shelf coming soon</div>
+    </article>
+
+    <article class="beyond-card">
+      <div class="beyond-kanji">球</div>
+      <div class="beyond-label">Cricket Analytics</div>
+      <h3 class="beyond-title">Interested in cricket analytics</h3>
+      <p class="beyond-desc">Cricket is one of the cleanest places to see strategy, uncertainty, role selection, and data storytelling. I am interested in building a separate cricket analytics page later.</p>
+      <div class="beyond-actions">
+        <span class="beyond-btn disabled" aria-disabled="true">Cricket Analytics — Coming Soon</span>
+      </div>
+      <div class="beyond-note">Page disabled for now</div>
+    </article>
+
+    <article class="beyond-card">
+      <div class="beyond-kanji">食</div>
+      <div class="beyond-label">Cooking</div>
+      <h3 class="beyond-title">Recipes, experiments, and comfort food</h3>
+      <p class="beyond-desc">Cooking is another kind of prototyping: ingredients, timing, iteration, and taste. I will add recipes and small food notes here once the archive is ready.</p>
+      <div class="beyond-actions">
+        <span class="beyond-btn disabled" aria-disabled="true">Recipes — Coming Soon</span>
+      </div>
+      <div class="beyond-note">Recipe archive coming later</div>
+    </article>
+
   </div>
 </section>
 
