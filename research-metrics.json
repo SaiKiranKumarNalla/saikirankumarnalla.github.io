@@ -1,0 +1,41 @@
+{
+  "updated": "May 2026",
+  "googleScholar": {
+    "profile": "https://scholar.google.com/citations?hl=en&user=vwCkGDgAAAAJ",
+    "citations": 11,
+    "hIndex": 3,
+    "i10Index": 0,
+    "sinceYear": 2021,
+    "sinceCitations": 11,
+    "sinceHIndex": 3,
+    "sinceI10Index": 0,
+    "yearlyCitations": [
+      {
+        "year": "2025",
+        "value": 8
+      },
+      {
+        "year": "2026",
+        "value": 3
+      }
+    ]
+  },
+  "researchGate": {
+    "profile": "https://www.researchgate.net/profile/Sai-Nalla-3",
+    "researchInterestScore": 5.3,
+    "reads": 145,
+    "readsDelta": 2,
+    "citations": 3,
+    "recommendations": 0,
+    "fullTextReads": 25,
+    "otherReads": 120,
+    "higherThanAllMembersPercent": 19,
+    "higherThanFirstPubYearPercent": 29,
+    "firstPublicationYear": 2021
+  },
+  "orcid": {
+    "profile": "https://orcid.org/0000-0002-8044-6330",
+    "id": "0000-0002-8044-6330",
+    "name": "Sai Kiran Kumar Nalla"
+  }
+}
