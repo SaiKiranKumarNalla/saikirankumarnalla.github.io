@@ -117,6 +117,12 @@
 .cover-shelf{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:1rem}
 .cover-slot{aspect-ratio:3/4;border:1px dashed rgba(240,235,227,.14);background:rgba(10,10,11,.38);display:flex;align-items:center;justify-content:center;color:var(--steel);font-family:'Space Mono',monospace;font-size:.48rem;text-transform:uppercase;letter-spacing:.12em;text-align:center;padding:.45rem}
 .cover-slot.board{aspect-ratio:1/1}
+.cover-art{position:relative;display:block;aspect-ratio:3/4;border:1px solid rgba(240,235,227,.14);background:#080809;overflow:hidden;text-decoration:none;color:var(--paper);box-shadow:0 14px 32px rgba(0,0,0,.28);transition:transform .3s,border-color .3s,box-shadow .3s}
+.cover-art:hover{transform:translateY(-3px);border-color:rgba(194,59,59,.55);box-shadow:0 18px 42px rgba(0,0,0,.42)}
+.cover-art img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.92) contrast(1.04);transition:transform .35s,filter .35s}
+.cover-art:hover img{transform:scale(1.045);filter:saturate(1.08) contrast(1.08)}
+.cover-art span{position:absolute;left:0;right:0;bottom:0;padding:.55rem .45rem;background:linear-gradient(to top,rgba(0,0,0,.82),rgba(0,0,0,.08));font-family:'Space Mono',monospace;font-size:.48rem;text-transform:uppercase;letter-spacing:.1em;text-align:center;color:rgba(240,235,227,.86)}
+html[data-theme="light"] .cover-art{border-color:rgba(26,26,28,.14)!important;background:rgba(26,26,28,.04)!important}
 .beyond-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.8rem}
 .beyond-btn{font-family:'Space Mono',monospace;font-size:.56rem;text-transform:uppercase;letter-spacing:.12em;text-decoration:none;color:var(--blood-glow);border:1px solid rgba(139,26,26,.35);padding:.65rem .85rem;background:rgba(139,26,26,.05);transition:all .25s}
 .beyond-btn:hover{color:var(--paper);border-color:rgba(194,59,59,.65);background:rgba(139,26,26,.14)}
@@ -362,13 +368,25 @@ html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;bo
       <div class="beyond-label">PS4 Shelf</div>
       <h3 class="beyond-title">Games that shaped how I think</h3>
       <p class="beyond-desc">I am drawn to games with atmosphere, systems, exploration, and strong visual worlds. I will add selected PS4 game covers here as a small personal archive.</p>
-      <div class="cover-shelf" aria-label="Placeholder PS4 game cover shelf">
-        <div class="cover-slot">Game Cover</div>
-        <div class="cover-slot">Game Cover</div>
-        <div class="cover-slot">Game Cover</div>
-        <div class="cover-slot">Game Cover</div>
+      <div class="cover-shelf" aria-label="PS4 and gaming cover shelf">
+        <a class="cover-art" href="#" aria-label="Ghost of Tsushima cover">
+          <img src="Assets/covers/GOT.png.webp" alt="Ghost of Tsushima cover">
+          <span>Ghost of Tsushima</span>
+        </a>
+        <a class="cover-art" href="#" aria-label="Detroit: Become Human cover">
+          <img src="Assets/covers/detroit.jpeg" alt="Detroit: Become Human cover">
+          <span>Detroit</span>
+        </a>
+        <a class="cover-art" href="#" aria-label="Cricket 26 cover">
+          <img src="Assets/covers/cricket26.png" alt="Cricket 26 cover">
+          <span>Cricket 26</span>
+        </a>
+        <a class="cover-art" href="#" aria-label="Assetto Corsa EVO cover">
+          <img src="Assets/covers/ACET.png.avif" alt="Assetto Corsa EVO cover">
+          <span>Assetto Corsa</span>
+        </a>
       </div>
-      <div class="beyond-note">Cover shelf coming soon</div>
+      <div class="beyond-note">Selected gaming shelf</div>
     </article>
 
     <article class="beyond-card">
