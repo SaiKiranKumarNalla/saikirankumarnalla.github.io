@@ -311,7 +311,8 @@ function css(){
 .kage-stage canvas{display:block}\
 .kp{position:absolute;bottom:0;right:100px;width:310px;max-height:470px;border:1px solid rgba(139,26,26,.2);background:rgba(10,10,11,.96);backdrop-filter:blur(16px);display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateX(12px) scale(.96);transform-origin:bottom right;transition:all .3s;pointer-events:none;overflow:hidden}\
 .kp.open{opacity:1;visibility:visible;transform:translateX(0) scale(1);pointer-events:auto}\
-.kp-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(240,235,227,.06);flex-shrink:0}\
+.kp-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid rgba(240,235,227,.06);flex-shrink:0}\
+.kp-note{padding:8px 12px;border-bottom:1px solid rgba(240,235,227,.045);font-size:10px;line-height:1.45;color:#8f8880;background:rgba(240,235,227,.025)}\
 .kp-id{display:flex;align-items:center;gap:8px}.kp-id b{font-family:serif;font-size:1.1rem;color:rgba(139,26,26,.4)}.kp-id span{font-family:serif;font-size:.8rem;color:#f0ebe3}\
 .kp-st{font-family:monospace;font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#c23b3b;display:flex;align-items:center;gap:4px}\
 .kp-st::before{content:"";width:5px;height:5px;background:#c23b3b;border-radius:50%;animation:kPulse 2s infinite}@keyframes kPulse{0%,100%{opacity:.3}50%{opacity:1}}\
@@ -338,6 +339,7 @@ html[data-theme="light"] .kp-msg.kage{background:rgba(139,26,26,.05)!important;c
 html[data-theme="light"] .kp-msg.user{background:rgba(26,26,28,.04)!important;color:#1a1a1c!important}\
 html[data-theme="light"] .kp-in{color:#1a1a1c!important}\
 html[data-theme="light"] .kp-act{color:#4a4540!important;background:rgba(26,26,28,.03)!important}\
+html[data-theme="light"] .kp-note{color:#5d5650!important;background:rgba(26,26,28,.025)!important;border-bottom-color:rgba(26,26,28,.08)!important}\
 @media(max-width:600px){.kage-stage{width:76px;height:106px}.kp{width:260px;right:84px;max-height:380px}}\
 ';
 
@@ -368,6 +370,10 @@ function dom(){
     ? 'Ask Kage about Sai, projects, fit, publications...'
     : 'Ask Kage anything...';
 
+  var assistantNote=recruiterMode
+    ? 'AI-enabled professional assistant. Ask for fit, projects, publications, CV, or contact details.'
+    : 'AI-enabled assistant. Ask about Sai’s work, use it to navigate, or discuss projects and publications.';
+
   var w=document.createElement('div');
   w.className='kage-wrap';
   w.id='kageWrap';
@@ -378,12 +384,13 @@ function dom(){
 
   p.innerHTML=
     '<div class="kp-hd">'+
-      '<div class="kp-id"><b>影</b><span>Kage</span></div>'+
+      '<div class="kp-id"><b>影</b><span>'+(recruiterMode?'Ask Kage':'Kage')+'</span></div>'+
       '<div style="display:flex;align-items:center;gap:8px">'+
         '<div class="kp-st">Active</div>'+
         '<button class="kp-x" id="kX">✕</button>'+
       '</div>'+
     '</div>'+
+    '<div class="kp-note">'+assistantNote+'</div>'+
     '<div class="kp-msgs" id="kMsgs"></div>'+
     '<div class="kp-acts" id="kActs">'+
       actionButtons+
@@ -880,7 +887,7 @@ function init(){
       },3500);
     }
 
-    console.log('Kage v9 loaded — Ask Kage intelligence enabled');
+    console.log('Kage v10 loaded — AI-enabled assistant notice added');
   }catch(e){
     console.error('Kage:',e);
   }
