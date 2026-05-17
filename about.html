@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Ronin — Sai Nalla</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="preload" as="image" href="story-assets/shapanang-preview-01.webp">
 <style>
 .about-intro{max-width:720px}
 .about-intro p{font-size:1.05rem;line-height:2;color:var(--mist);font-weight:300;margin-bottom:1.5rem}
@@ -323,7 +324,7 @@ html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;bo
 
   <div class="story-cta reveal">
     <a class="story-cta-inner" href="story.html" aria-label="Open fiction story preview archive">
-      <img class="story-cover" src="story-assets/cover.png" onerror="this.src='story-assets/shapanang-preview-01.webp'" alt="Cover preview from Sai Kiran Kumar Nalla's fiction shelf">
+      <img class="story-cover" src="story-assets/shapanang-preview-01.webp" data-full="story-assets/cover.png" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='story-assets/cover.png'" alt="Cover preview from Sai Kiran Kumar Nalla's fiction shelf">
       <div class="story-copy">
         <div class="story-label">Fiction Shelf</div>
         <div class="story-title">Current locked preview</div>
@@ -434,6 +435,27 @@ html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;bo
   <div class="footer-text">浪人 — The Ronin</div>
 </footer>
 
+
+<script>
+(function(){
+  function upgradeShapanangCover(){
+    var img=document.querySelector('.story-cover[data-full]');
+    if(!img)return;
+    var full=img.getAttribute('data-full');
+    if(!full)return;
+    var load=function(){
+      var im=new Image();
+      im.decoding='async';
+      im.onload=function(){img.src=full;};
+      im.src=full;
+    };
+    if('requestIdleCallback' in window)requestIdleCallback(load,{timeout:3000});
+    else window.addEventListener('load',function(){setTimeout(load,800);},{once:true});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',upgradeShapanangCover);
+  else upgradeShapanangCover();
+})();
+</script>
 <script src="theme.js"></script>
 <script src="transitions.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
