@@ -489,6 +489,7 @@ function css(){
 .kage-stage{width:112px;height:150px;cursor:pointer;overflow:visible;filter:drop-shadow(0 18px 34px rgba(0,0,0,.42));position:relative;z-index:2}\
 .kage-stage canvas,.kage-stage-canvas{display:block;width:100%!important;height:100%!important}\
 .kage-stage{background:radial-gradient(circle at 50% 70%,rgba(139,26,26,.18),transparent 62%);border-radius:22px}\
+.kage-fallback{width:100%;height:100%;display:grid;place-items:center;font-family:serif;font-size:44px;color:#c23b3b;border:1px solid rgba(194,59,59,.22);border-radius:22px;background:rgba(139,26,26,.10)}\
 .kage-stage::after{content:"";position:absolute;left:18px;right:18px;bottom:7px;height:12px;border:1px solid rgba(139,26,26,.22);transform:rotate(45deg);background:rgba(139,26,26,.04);z-index:-1}\
 .kp-head-avatar{width:54px;height:66px;flex:0 0 54px;margin:-18px 0 -18px -6px;position:relative;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35))}\
 .kp-head-avatar canvas{display:block;width:100%!important;height:100%!important}\
@@ -756,13 +757,22 @@ function build3D(el){
   canvas.className='kage-stage-canvas';
   canvas.setAttribute('aria-label','Kage assistant render');
   el.appendChild(canvas);
+  var mountStarted=Date.now();
   function mount(){
     if(window.KageV43 && window.KageV43.create){
-      window.__kageBot3D=window.KageV43.create(canvas,{mini:true,interactive:true});
-      var hc=document.getElementById('kageHeaderCanvas');
-      if(hc && !window.__kageHeader3D) window.__kageHeader3D=window.KageV43.create(hc,{mini:true});
-      setKageBotState(kageTimeState());
-      setInterval(function(){ if(!isOpen && !typing) setKageBotState(kageTimeState()); }, 60000);
+      try{
+        window.__kageBot3D=window.KageV43.create(canvas,{mini:true,interactive:true});
+        var hc=document.getElementById('kageHeaderCanvas');
+        if(hc && !window.__kageHeader3D) window.__kageHeader3D=window.KageV43.create(hc,{mini:true});
+        setKageBotState(kageTimeState());
+        setInterval(function(){ if(!isOpen && !typing) setKageBotState(kageTimeState()); }, 60000);
+        return;
+      }catch(err){
+        console.error('Kage renderer failed:',err);
+      }
+    }
+    if(Date.now()-mountStarted>3500 && !el.querySelector('.kage-fallback')){
+      el.innerHTML='<div class="kage-fallback">影</div>';
       return;
     }
     setTimeout(mount,80);
@@ -826,8 +836,8 @@ html[data-theme="light"] .kage-choice-copy,html[data-theme="light"] .kage-tour-t
 
 function showRecruiterChoice(){
   if(curPage()!=='index.html') return;
-  if(sessionStorage.getItem('kage-path-choice-seen')) return;
-  sessionStorage.setItem('kage-path-choice-seen','1');
+  if(sessionStorage.getItem('kage-path-choice-seen-v4')) return;
+  sessionStorage.setItem('kage-path-choice-seen-v4','1');
   tourCss();
   var ov=document.createElement('div');
   ov.className='kage-choice show';
@@ -844,7 +854,7 @@ function showRecruiterChoice(){
   document.body.appendChild(ov);
   document.getElementById('kChoiceRecruiter').onclick=function(){ sessionStorage.setItem('kage-start-recruiter-tour','1'); window.location.href='recruiter.html#overview'; };
   document.getElementById('kChoiceRecruiterPage').onclick=function(){ window.location.href='recruiter.html'; };
-  document.getElementById('kChoiceMainTour').onclick=function(){ sessionStorage.setItem('kage-main-tour-index','0'); ov.classList.remove('show'); setTimeout(function(){ if(ov.parentNode)ov.parentNode.removeChild(ov); startMainSiteTour(); },220); };
+  document.getElementById('kChoiceMainTour').onclick=function(){ sessionStorage.setItem('kage-main-tour-active','1'); sessionStorage.setItem('kage-main-tour-index','0'); ov.classList.remove('show'); setTimeout(function(){ if(ov.parentNode)ov.parentNode.removeChild(ov); startMainSiteTour(); },220); };
   document.getElementById('kChoiceStay').onclick=function(){ ov.classList.remove('show'); setTimeout(function(){ if(ov.parentNode)ov.parentNode.removeChild(ov);},220); };
 }
 
@@ -1024,30 +1034,25 @@ function init(){
     bind(d);
     build3D(d.st);
 
+    if(curPage()==='index.html' && sessionStorage.getItem('kage-main-tour-active')!=='1'){ sessionStorage.removeItem('kage-main-tour-index'); }
     showRecruiterChoice();
     if(curPage()==='recruiter.html' && (sessionStorage.getItem('kage-start-recruiter-tour') || location.hash==='#tour')){
       setTimeout(startRecruiterGuidedTour,900);
     }
-    if(sessionStorage.getItem('kage-main-tour-index')!==null){
+    if(sessionStorage.getItem('kage-main-tour-active')==='1'){
       setTimeout(startMainSiteTour,900);
+    }else{
+      sessionStorage.removeItem('kage-main-tour-index');
     }
 
     setTimeout(function(){
       d.w.classList.add('visible');
-    },2000);
+    },450);
 
-    if(!sessionStorage.getItem('kage-auto-opened-session')){
-      sessionStorage.setItem('kage-auto-opened-session','1');
+    /* Do not auto-open the chat. The first thing on the home page should be the path-choice popup,
+       and the bottom-right Kage should stay available without interrupting the page. */
 
-      setTimeout(function(){
-        isOpen=true;
-        d.p.classList.add('open');
-
-        if(hist.length===0)welcome();
-      },3500);
-    }
-
-    console.log('Kage v13 loaded — polished chat UI');
+    console.log('Kage v14 loaded — stable path popup + visible bot');
   }catch(e){
     console.error('Kage:',e);
   }
