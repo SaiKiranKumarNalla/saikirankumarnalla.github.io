@@ -522,7 +522,7 @@ function css(){
 .kp-rep button{font-family:monospace;font-size:8px;text-transform:uppercase;background:rgba(139,26,26,.18);border:1px solid rgba(194,59,59,.35);color:#e05252;padding:8px 10px;cursor:pointer;border-radius:9px}\
 .kp-iw{display:flex;margin:0 12px 12px;border:1px solid rgba(240,235,227,.085);border-radius:14px;background:rgba(240,235,227,.035);flex-shrink:0;overflow:hidden}\
 .kp-in{flex:1;background:0;border:0;color:#f0ebe3;font-size:12.5px;padding:12px 12px;outline:0;font-family:inherit}.kp-in::placeholder{color:#7d756e}\
-.kp-mic,.kp-snd{background:rgba(139,26,26,.12);border:0;border-left:1px solid rgba(240,235,227,.075);color:#c23b3b;cursor:pointer;padding:10px 11px;font-size:14px;transition:all .2s}.kp-mic:hover,.kp-snd:hover{color:#fff;background:rgba(139,26,26,.28)}.kp-mic.listening{color:#fff;background:rgba(139,26,26,.38);box-shadow:0 0 18px rgba(194,59,59,.28) inset}\
+.kp-quick,.kp-snd{background:rgba(139,26,26,.12);border:0;border-left:1px solid rgba(240,235,227,.075);color:#c23b3b;cursor:pointer;padding:10px 11px;font-size:14px;transition:all .2s}.kp-quick:hover,.kp-snd:hover{color:#fff;background:rgba(139,26,26,.28)}.kp-quick.active{color:#fff;background:rgba(139,26,26,.32);box-shadow:0 0 16px rgba(194,59,59,.18) inset}\
 html[data-theme="light"] .kp{background:linear-gradient(180deg,rgba(248,245,239,.98),rgba(240,235,227,.98))!important;border-color:rgba(26,26,28,.11)!important;box-shadow:0 28px 80px rgba(0,0,0,.18)!important}\
 html[data-theme="light"] .kp-hd{background:linear-gradient(90deg,rgba(139,26,26,.07),transparent 65%)!important;border-bottom-color:rgba(26,26,28,.08)!important}\
 html[data-theme="light"] .kp-id span{color:#1a1a1c!important}\
@@ -546,7 +546,7 @@ function dom(){
       '<button class="kp-act" data-q="Open Recruiter Mode.">Recruiter</button>'+
       '<button class="kp-act" data-q="Give me a 3-minute profile.">3-min Profile</button>'+
       '<button class="kp-act" data-q="Help me on this page.">Page Help</button>'+
-      '<button class="kp-act" data-q="Start site tour.">Tour</button>'+
+      '<button class="kp-act" data-q="Start main site tour.">Tour</button>'+
       '<button class="kp-act" data-q="Tell me about Kage">Kage</button>'+
       '<button class="kp-act" data-q="How can I contact Sai?">Contact</button>'+
       '<button class="kp-act" data-q="I found an issue on this page">Report</button>';
@@ -557,7 +557,7 @@ function dom(){
       '<button class="kp-act" data-q="Generate a recruiter packet for this role.">Role Packet</button>'+
       '<button class="kp-act" data-q="Explain Sai’s key projects like case studies, not a list.">Projects</button>'+
       '<button class="kp-act" data-q="Summarize Sai’s publications and what they prove.">Publications</button>'+
-      '<button class="kp-act" data-q="Start site tour.">Tour</button>'+
+      '<button class="kp-act" data-q="Start main site tour.">Tour</button>'+
       '<button class="kp-act" data-q="How can I contact Sai?">Contact</button>';
 
   var actionButtons=recruiterMode?recruiterActions:mainActions;
@@ -602,7 +602,7 @@ function dom(){
     '</div>'+
     '<div class="kp-iw">'+
       '<input class="kp-in" id="kIn" placeholder="'+inputPlaceholder+'" autocomplete="off">'+
-      '<button class="kp-mic" id="kMic" title="Voice input">🎙</button>'+
+      '<button class="kp-quick" id="kQuick" title="Quick actions">⚡</button>'+
       '<button class="kp-snd" id="kSnd">➜</button>'+
     '</div>';
 
@@ -658,21 +658,17 @@ function bind(d){
 
   document.getElementById('kSnd').addEventListener('click',doSend);
 
-  var mic=document.getElementById('kMic');
-  if(mic){
-    var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SR){ mic.title='Voice input is not supported in this browser. Try Chrome/Edge on HTTPS.'; mic.addEventListener('click',function(){ hist.push({role:'assistant',content:'Voice input is not available in this browser. Try Chrome or Edge on HTTPS, or type your question.'}); render(); }); }
-    else{
-      mic.addEventListener('click',function(e){
-        e.stopPropagation();
-        var rec=new SR(); rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=1;
-        mic.classList.add('listening'); setKageBotState('listening');
-        rec.onresult=function(ev){ var tx=ev.results&&ev.results[0]&&ev.results[0][0]?ev.results[0][0].transcript:''; var i=document.getElementById('kIn'); if(i){i.value=tx; i.focus(); if(tx && !typing){ setTimeout(function(){ document.getElementById('kSnd').click(); },120); }} };
-        rec.onend=function(){ mic.classList.remove('listening'); };
-        rec.onerror=function(){ mic.classList.remove('listening'); setKageBotState('error'); hist.push({role:'assistant',content:'I could not hear you. Browser voice input usually needs microphone permission, Chrome/Edge, and HTTPS.'}); render(); };
-        rec.start();
-      });
-    }
+  var quick=document.getElementById('kQuick');
+  if(quick){
+    quick.addEventListener('click',function(e){
+      e.stopPropagation();
+      var acts=document.getElementById('kActs');
+      if(!acts) return;
+      acts.scrollIntoView({behavior:'smooth',block:'nearest'});
+      quick.classList.add('active');
+      setTimeout(function(){ quick.classList.remove('active'); },900);
+      setKageBotState('listening');
+    });
   }
 
   document.getElementById('kIn').addEventListener('keydown',function(e){
@@ -798,10 +794,10 @@ function tourCss(){
 .kage-choice-btn{border:1px solid rgba(240,235,227,.11);background:rgba(240,235,227,.045);color:#f0ebe3;padding:12px 14px;border-radius:999px;cursor:pointer;font-family:monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;transition:.2s}\
 .kage-choice-btn.primary{border-color:rgba(194,59,59,.5);background:rgba(139,26,26,.22)}\
 .kage-choice-btn:hover{transform:translateY(-2px);border-color:#c23b3b}\
-.kage-tour-card{position:fixed;right:22px;bottom:22px;width:min(390px,calc(100vw - 32px));z-index:1190;border:1px solid rgba(194,59,59,.35);background:linear-gradient(180deg,rgba(14,13,15,.98),rgba(8,8,10,.98));box-shadow:0 28px 90px rgba(0,0,0,.55);border-radius:20px;padding:16px;display:none}\
+.kage-tour-card{position:fixed;right:22px;bottom:22px;width:min(430px,calc(100vw - 32px));z-index:1190;border:1px solid rgba(194,59,59,.35);background:linear-gradient(180deg,rgba(14,13,15,.98),rgba(8,8,10,.98));box-shadow:0 28px 90px rgba(0,0,0,.55);border-radius:20px;padding:16px;display:none}\
 .kage-tour-card.show{display:block}\
 .kage-tour-step{font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:#c23b3b;margin-bottom:8px}\
-.kage-tour-title{font-family:serif;font-size:20px;color:#f0ebe3;margin-bottom:7px}\
+.kage-tour-head{display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:center;margin-bottom:8px}.kage-tour-avatar{width:76px;height:96px;border:1px solid rgba(240,235,227,.08);border-radius:16px;background:radial-gradient(circle at 50% 72%,rgba(139,26,26,.18),transparent 65%),rgba(240,235,227,.025);overflow:hidden}.kage-tour-avatar canvas{width:100%;height:100%;display:block}.kage-tour-title{font-family:serif;font-size:20px;color:#f0ebe3;margin-bottom:7px}\
 .kage-tour-text{font-size:13px;line-height:1.55;color:#c8c0b7;margin-bottom:13px}\
 .kage-tour-actions{display:flex;justify-content:space-between;gap:8px}\
 .kage-tour-actions button{border:1px solid rgba(240,235,227,.10);background:rgba(240,235,227,.045);color:#f0ebe3;padding:9px 11px;border-radius:999px;cursor:pointer;font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em}\
@@ -809,7 +805,7 @@ function tourCss(){
 .kage-tour-highlight{outline:2px solid rgba(194,59,59,.82)!important;outline-offset:8px!important;box-shadow:0 0 0 9999px rgba(0,0,0,.34),0 0 40px rgba(194,59,59,.22)!important;position:relative;z-index:20}\
 html[data-theme="light"] .kage-choice-card,html[data-theme="light"] .kage-tour-card{background:linear-gradient(180deg,rgba(248,245,239,.98),rgba(240,235,227,.98))!important;color:#1a1a1c!important}\
 html[data-theme="light"] .kage-choice-title,html[data-theme="light"] .kage-tour-title{color:#1a1a1c!important}\
-html[data-theme="light"] .kage-choice-copy,html[data-theme="light"] .kage-tour-text{color:#4a4540!important}\
+html[data-theme="light"] .kage-choice-copy,html[data-theme="light"] .kage-tour-text{color:#4a4540!important}html[data-theme="light"] .kage-tour-avatar{border-color:rgba(26,26,28,.08);background:radial-gradient(circle at 50% 72%,rgba(139,26,26,.10),transparent 65%),rgba(26,26,28,.025)}\
 @media(max-width:700px){.kage-tour-card{right:10px;bottom:10px}.kage-tour-highlight{outline-offset:4px!important}}\
 ';
   document.head.appendChild(st);
@@ -830,14 +826,87 @@ function showRecruiterChoice(){
     '<div class="kage-choice-actions">'+
       '<button class="kage-choice-btn primary" id="kChoiceRecruiter">Recruiter Mode Tour</button>'+ 
       '<button class="kage-choice-btn" id="kChoiceRecruiterPage">Just open Recruiter Mode</button>'+ 
-      '<button class="kage-choice-btn" id="kChoiceStay">Continue Current Site</button>'+ 
+      '<button class="kage-choice-btn" id="kChoiceMainTour">Main Site Tour</button>'+ '<button class="kage-choice-btn" id="kChoiceStay">Continue Current Site</button>'+ 
     '</div></div>';
   document.body.appendChild(ov);
   document.getElementById('kChoiceRecruiter').onclick=function(){ sessionStorage.setItem('kage-start-recruiter-tour','1'); window.location.href='recruiter.html#overview'; };
   document.getElementById('kChoiceRecruiterPage').onclick=function(){ window.location.href='recruiter.html'; };
+  document.getElementById('kChoiceMainTour').onclick=function(){ sessionStorage.setItem('kage-main-tour-index','0'); ov.classList.remove('show'); setTimeout(function(){ if(ov.parentNode)ov.parentNode.removeChild(ov); startMainSiteTour(); },220); };
   document.getElementById('kChoiceStay').onclick=function(){ ov.classList.remove('show'); setTimeout(function(){ if(ov.parentNode)ov.parentNode.removeChild(ov);},220); };
 }
 
+
+var tourKageInst=null;
+function mountTourKage(state){
+  var c=document.getElementById('kTourCanvas');
+  if(!c || tourKageInst || !window.KageV43 || !window.KageV43.create) return;
+  try{ tourKageInst=window.KageV43.create(c,{mini:true}); tourKageInst.setState(state||'guardian'); }catch(e){}
+}
+function setTourKageState(state){
+  if(!tourKageInst) mountTourKage(state);
+  if(tourKageInst && tourKageInst.setState) tourKageInst.setState(state||'guardian');
+}
+function makeTourCard(){
+  tourCss();
+  var card=document.getElementById('kageTourCard');
+  if(!card){
+    card=document.createElement('div');
+    card.id='kageTourCard';
+    card.className='kage-tour-card';
+    card.innerHTML='<div class="kage-tour-head"><div class="kage-tour-avatar"><canvas id="kTourCanvas"></canvas></div><div><div class="kage-tour-step" id="kTourStep"></div><div class="kage-tour-title" id="kTourTitle"></div></div></div><div class="kage-tour-text" id="kTourText"></div><div class="kage-tour-actions"><button id="kTourSkip">End</button><span style="flex:1"></span><button id="kTourPrev">Back</button><button class="primary" id="kTourNext">Next</button></div>';
+    document.body.appendChild(card);
+    setTimeout(function(){ mountTourKage('guardian'); },80);
+  }
+  return card;
+}
+function finishTourMessage(kind){
+  openPanel();
+  if(hist.length===0) welcome();
+  hist.push({role:'assistant',content:(kind==='main'?'Main site tour complete. ':'Recruiter tour complete. ')+'I will be here if you need help — click me at the bottom-right, or summon me with Cmd + K / Ctrl + K.'});
+  render();
+  if(window.__kageBot3D&&window.__kageBot3D.setState) window.__kageBot3D.setState('guardian');
+}
+function startMainSiteTour(){
+  tourCss();
+  var steps=[
+    {page:'index.html', sel:'.home-hero,.hero-center', title:'Home', text:'This is the opening gate: Sai’s identity, portfolio entry points, and the choice between recruiter path and creative site.'},
+    {page:'about.html', sel:'.page-hero,.about-intro', title:'About Sai', text:'This page gives the human story: background, interests, travel, fiction, and the personal thread behind the research.'},
+    {page:'experience.html', sel:'.exp-page,.accordion-list,.page-hero', title:'Experience', text:'Here I show the professional path: research roles, consulting, technology transfer, and applied work.'},
+    {page:'education.html', sel:'.edu-card,.page-hero', title:'Education', text:'This is the training ground: biomedical engineering, mechanical engineering, and the PhD path into medical imaging.'},
+    {page:'projects.html', sel:'.forge-shell,.featured-grid,.archive-grid', title:'Projects', text:'This is the proof through builds: imaging validation, simulation, 3D printing, visualization, and research tools.'},
+    {page:'papers.html', sel:'.papers-grid,.research-presence,.page-hero', title:'Publications', text:'This is the evidence shelf: papers, abstracts, metrics, and research credibility.'},
+    {page:'story.html', sel:'.story-hero,.cinema', title:'Story', text:'This is the creative side: fiction previews and atmosphere beyond the professional archive.'},
+    {page:'kage.html', sel:'#kage3dMount,.kage-viewer,.kage-console', title:'Kage', text:'This is my hidden page: expression controls, full console, and the samurai assistant persona.'},
+    {page:'contact.html', sel:'.contact-hero,.contact-grid', title:'Contact', text:'This is the final path: email, LinkedIn, GitHub, and direct contact.'}
+  ];
+  var idx=parseInt(sessionStorage.getItem('kage-main-tour-index')||'0',10);
+  if(idx<0) idx=0; if(idx>=steps.length) idx=steps.length-1;
+  var current=curPage();
+  var st=steps[idx];
+  if(current!==st.page){ window.location.href=st.page+'#tour'; return; }
+  var card=makeTourCard();
+  function clear(){ document.querySelectorAll('.kage-tour-highlight').forEach(function(x){x.classList.remove('kage-tour-highlight');}); }
+  function show(){
+    clear();
+    st=steps[idx];
+    var el=document.querySelector(st.sel);
+    if(el){ el.classList.add('kage-tour-highlight'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+    document.getElementById('kTourStep').textContent='Main tour — Step '+(idx+1)+' of '+steps.length;
+    document.getElementById('kTourTitle').textContent=st.title;
+    document.getElementById('kTourText').textContent=st.text;
+    document.getElementById('kTourPrev').style.visibility=idx===0?'hidden':'visible';
+    document.getElementById('kTourNext').textContent=idx===steps.length-1?'Finish':'Next page';
+    card.classList.add('show');
+    var pose=idx===0?'bow':(idx===steps.length-1?'guardian':'scout');
+    setTourKageState(pose);
+    if(window.__kageBot3D&&window.__kageBot3D.setState) window.__kageBot3D.setState(pose);
+  }
+  function end(){ clear(); card.classList.remove('show'); sessionStorage.removeItem('kage-main-tour-index'); finishTourMessage('main'); }
+  document.getElementById('kTourSkip').onclick=end;
+  document.getElementById('kTourPrev').onclick=function(){ if(idx>0){ idx--; sessionStorage.setItem('kage-main-tour-index',String(idx)); window.location.href=steps[idx].page+'#tour'; } };
+  document.getElementById('kTourNext').onclick=function(){ if(idx<steps.length-1){ idx++; sessionStorage.setItem('kage-main-tour-index',String(idx)); window.location.href=steps[idx].page+'#tour'; } else end(); };
+  show();
+}
 function startRecruiterGuidedTour(){
   tourCss();
   var steps=[
@@ -848,14 +917,7 @@ function startRecruiterGuidedTour(){
     {sel:'#proof', title:'Publications and proof', text:'This is the evidence layer: publications, research outputs, and credibility signals.'},
     {sel:'#contact', title:'Contact path', text:'This is where recruiters can reach Sai, download/review the CV, and move from browsing to conversation.'}
   ];
-  var i=0, card=document.getElementById('kageTourCard');
-  if(!card){
-    card=document.createElement('div');
-    card.id='kageTourCard';
-    card.className='kage-tour-card';
-    card.innerHTML='<div class="kage-tour-step" id="kTourStep"></div><div class="kage-tour-title" id="kTourTitle"></div><div class="kage-tour-text" id="kTourText"></div><div class="kage-tour-actions"><button id="kTourSkip">End</button><span style="flex:1"></span><button id="kTourPrev">Back</button><button class="primary" id="kTourNext">Next</button></div>';
-    document.body.appendChild(card);
-  }
+  var i=0, card=makeTourCard();
   function clear(){ document.querySelectorAll('.kage-tour-highlight').forEach(function(x){x.classList.remove('kage-tour-highlight');}); }
   function show(){
     clear();
@@ -867,9 +929,9 @@ function startRecruiterGuidedTour(){
     document.getElementById('kTourPrev').style.visibility=i===0?'hidden':'visible';
     document.getElementById('kTourNext').textContent=i===steps.length-1?'Finish':'Next';
     card.classList.add('show');
-    if(window.__kageBot3D&&window.__kageBot3D.setState) window.__kageBot3D.setState(i===0?'bow':(i===steps.length-1?'guardian':'scout'));
+    var pose=i===0?'bow':(i===steps.length-1?'guardian':'scout'); if(window.__kageBot3D&&window.__kageBot3D.setState) window.__kageBot3D.setState(pose); setTourKageState(pose);
   }
-  function end(){ clear(); card.classList.remove('show'); sessionStorage.removeItem('kage-start-recruiter-tour'); if(window.__kageBot3D&&window.__kageBot3D.setState) window.__kageBot3D.setState(kageTimeState()); }
+  function end(){ clear(); card.classList.remove('show'); sessionStorage.removeItem('kage-start-recruiter-tour'); finishTourMessage('recruiter'); }
   document.getElementById('kTourSkip').onclick=end;
   document.getElementById('kTourPrev').onclick=function(){ if(i>0){i--;show();} };
   document.getElementById('kTourNext').onclick=function(){ if(i<steps.length-1){i++;show();} else end(); };
@@ -895,6 +957,9 @@ function init(){
     showRecruiterChoice();
     if(curPage()==='recruiter.html' && (sessionStorage.getItem('kage-start-recruiter-tour') || location.hash==='#tour')){
       setTimeout(startRecruiterGuidedTour,900);
+    }
+    if(sessionStorage.getItem('kage-main-tour-index')!==null){
+      setTimeout(startMainSiteTour,900);
     }
 
     setTimeout(function(){

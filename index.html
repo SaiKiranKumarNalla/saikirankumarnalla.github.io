@@ -57,21 +57,6 @@
 @media(max-width:500px){.nav-grid{grid-template-columns:1fr}}
 
 
-/* ── ENTRY CHOICE MODAL ── */
-.entry-choice{position:fixed;inset:0;z-index:7000;display:none;align-items:center;justify-content:center;padding:1.5rem;background:rgba(5,5,7,.72);backdrop-filter:blur(10px)}
-.entry-choice.open{display:flex}
-.entry-choice-card{width:min(560px,100%);border:1px solid rgba(139,26,26,.38);background:linear-gradient(135deg,rgba(139,26,26,.11),rgba(10,10,11,.96));box-shadow:0 30px 100px rgba(0,0,0,.65);padding:2rem;position:relative;overflow:hidden}
-.entry-choice-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--blood),transparent)}
-.entry-choice-kicker{font-family:'Space Mono',monospace;font-size:.56rem;text-transform:uppercase;letter-spacing:.2em;color:var(--blood-glow);margin-bottom:.75rem}
-.entry-choice-title{font-family:'Zen Antique',serif;font-size:1.55rem;line-height:1.25;margin-bottom:.8rem;color:var(--paper)}
-.entry-choice-copy{font-size:.92rem;line-height:1.75;color:var(--mist);font-weight:300;margin-bottom:1.4rem}
-.entry-choice-actions{display:flex;gap:.8rem;flex-wrap:wrap}.entry-choice-actions .btn{cursor:pointer}
-.entry-choice-close{position:absolute;right:.9rem;top:.8rem;width:32px;height:32px;border:1px solid var(--ghost-line);background:rgba(240,235,227,.03);color:var(--mist);cursor:pointer}
-.entry-choice-close:hover{border-color:var(--blood);color:var(--paper)}
-html[data-theme="light"] .entry-choice{background:rgba(240,235,227,.72)}
-html[data-theme="light"] .entry-choice-card{background:linear-gradient(135deg,rgba(139,26,26,.08),rgba(240,235,227,.96));box-shadow:0 30px 100px rgba(26,26,28,.18)}
-html[data-theme="light"] .entry-choice-title{color:#1a1a1c}
-
 </style>
 </head>
 <body>
@@ -101,19 +86,6 @@ html[data-theme="light"] .entry-choice-title{color:#1a1a1c}
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="icon-moon">🌙</span><span class="icon-sun">☀️</span></button>
   </div>
 </nav>
-
-<div class="entry-choice" id="entryChoice" aria-modal="true" role="dialog" aria-labelledby="entryChoiceTitle">
-  <div class="entry-choice-card">
-    <button class="entry-choice-close" id="entryChoiceClose" aria-label="Close">×</button>
-    <div class="entry-choice-kicker">Choose your path</div>
-    <h2 class="entry-choice-title" id="entryChoiceTitle">Are you here as a recruiter?</h2>
-    <p class="entry-choice-copy">Open the focused Recruiter Mode for a fast overview of role fit, case studies, publications, CV, and contact. Or continue through the full samurai-style portfolio.</p>
-    <div class="entry-choice-actions">
-      <a class="btn btn-cv" href="recruiter.html"><span class="cv-glyph">採</span> Recruiter Mode</a>
-      <button class="btn" id="entryChoiceContinue" type="button">Continue Current Site<span class="arrow">→</span></button>
-    </div>
-  </div>
-</div>
 
 
 <div class="v-accent"></div>
@@ -223,35 +195,6 @@ html[data-theme="light"] .entry-choice-title{color:#1a1a1c}
   <div class="footer-text">鍛えた刀 — A Forged Blade</div>
 </footer>
 
-
-<script>
-(function(){
-  var key='sai-entry-choice-seen';
-  function openChoice(){
-    var modal=document.getElementById('entryChoice');
-    if(modal && !sessionStorage.getItem(key)){
-      modal.classList.add('open');
-      document.body.style.overflow='hidden';
-    }
-  }
-  function closeChoice(){
-    var modal=document.getElementById('entryChoice');
-    if(modal) modal.classList.remove('open');
-    document.body.style.overflow='';
-    sessionStorage.setItem(key,'1');
-  }
-  document.addEventListener('DOMContentLoaded',function(){
-    setTimeout(openChoice,650);
-    var c=document.getElementById('entryChoiceClose');
-    var n=document.getElementById('entryChoiceContinue');
-    var m=document.getElementById('entryChoice');
-    if(c)c.addEventListener('click',closeChoice);
-    if(n)n.addEventListener('click',closeChoice);
-    if(m)m.addEventListener('click',function(e){if(e.target===m)closeChoice();});
-    document.addEventListener('keydown',function(e){if(e.key==='Escape')closeChoice();});
-  });
-})();
-</script>
 
 <script src="theme.js"></script>
 <script src="transitions.js"></script>
