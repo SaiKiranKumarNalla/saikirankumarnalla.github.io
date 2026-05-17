@@ -800,34 +800,34 @@
   <section class="kage-viewer reveal" aria-labelledby="kage3dTitle">
     <div class="kage-viewer-head">
       <div>
-        <h2 id="kage3dTitle">Interactive Kage Figurine</h2>
-        <div class="kage-viewer-note">Drag to rotate · choose a pose · change expression</div>
+        <h2 id="kage3dTitle">Interactive Kage Render</h2>
+        <div class="kage-viewer-note">Drag to rotate · choose Kage expression</div>
       </div>
     </div>
     <div class="kage-3d-layout">
       <div class="kage-3d-stage" id="kage3dMount" role="img" aria-label="A rotatable 3D figurine of Kage with straw hat, katana, red eyes, and expressive mouth.">
         <div class="kage-3d-hint">360° shadow artifact</div>
       </div>
-      <aside class="kage-3d-panel" aria-label="Kage pose and expression controls">
-        <div class="kage-control-label">Memory Poses</div>
-        <div class="kage-control-grid" id="kagePoseControls">
-          <button class="kage-control active" data-pose="guardian">Guardian</button>
-          <button class="kage-control" data-pose="scout">Scout</button>
-          <button class="kage-control" data-pose="oracle">Oracle</button>
-          <button class="kage-control" data-pose="ronin">Ronin</button>
-          <button class="kage-control" data-pose="meditate">Meditating</button>
-          <button class="kage-control" data-pose="sleep">Sleeping</button>
+      <aside class="kage-3d-panel" aria-label="Kage expression controls">
+        <div class="kage-control-label">Kage Expressions</div>
+        <div class="kage-control-grid kage-expression-grid" id="kageStateControls">
+          <button class="kage-control active" data-state="guardian">🗡️ Guardian</button>
+          <button class="kage-control " data-state="meditating">🧘 Meditate</button>
+          <button class="kage-control " data-state="bow">🙇 Bow</button>
+          <button class="kage-control " data-state="listening">👂 Listen</button>
+          <button class="kage-control " data-state="thinking">🌘 Think</button>
+          <button class="kage-control " data-state="speaking">💬 Speak</button>
+          <button class="kage-control " data-state="alert">👁️ Alert</button>
+          <button class="kage-control " data-state="scout">🔭 Scout</button>
+          <button class="kage-control " data-state="shadow">🔴 Shadow Sense</button>
+          <button class="kage-control " data-state="drawn">🗡️ Drawn</button>
+          <button class="kage-control " data-state="fighting">⚔️ Ready</button>
+          <button class="kage-control " data-state="slash">💥 Slash</button>
+          <button class="kage-control " data-state="smirk">😏 Smirk</button>
+          <button class="kage-control " data-state="error">🔥 Error</button>
+          <button class="kage-control " data-state="sleep">💤 Sleep</button>
         </div>
-        <div class="kage-control-label">Expressions</div>
-        <div class="kage-control-grid" id="kageExpressionControls">
-          <button class="kage-control active" data-expression="calm">Calm</button>
-          <button class="kage-control" data-expression="speaking">Speaking</button>
-          <button class="kage-control" data-expression="smirk">Smirk</button>
-          <button class="kage-control" data-expression="focused">Focused</button>
-          <button class="kage-control" data-expression="sleepy">Sleepy</button>
-          <button class="kage-control" data-expression="silent">Silent</button>
-        </div>
-        <p class="kage-status" id="kage3dStatus"><strong>Guardian:</strong> Kage stands watch over Sensei Sai's portfolio, ready to guide recruiters, collaborators, and wanderers.</p>
+        <p class="kage-status" id="kage3dStatus"><strong>Guardian:</strong> Kage stands watch over Sensei Sai's portfolio.</p>
       </aside>
     </div>
   </section>

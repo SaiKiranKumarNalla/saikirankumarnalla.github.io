@@ -80,6 +80,7 @@ window.openKage=function(){
 };
 
 async function send(text){
+  setKageBotState(kageIntentState(text));
   var clean=text.trim().toLowerCase();
   var page=curPage();
   var yes=/^(yes|yeah|yep|sure|ok|okay|open it|show me|take me|visit|go ahead|lead me)$/i.test(clean);
@@ -216,6 +217,7 @@ async function send(text){
 
   hist.push({role:'user',content:text});
   typing=true;
+  setKageBotState('thinking');
   render();
 
   try{
@@ -240,6 +242,7 @@ async function send(text){
       }
 
       hist.push({role:'assistant',content:reply});
+      setKageBotState('speaking');
 
       if(d.action){
         if(d.action.type==='navigate'&&d.action.data==='kage.html'){
@@ -253,10 +256,12 @@ async function send(text){
     }
   }catch(e){
     hist.push({role:'assistant',content:page==='recruiter.html'?'Connection issue. Please try again.':'The shadow wavers... Try again.'});
+    setKageBotState('error');
   }
 
   typing=false;
   render();
+  setTimeout(function(){ if(!typing) setKageBotState(isOpen?'listening':kageTimeState()); }, 2600);
 }
 
 function doAction(a){
@@ -300,8 +305,15 @@ function render(){
   hist.forEach(function(m){
     var d=document.createElement('div');
     d.className='kp-msg '+(m.role==='user'?'user':'kage');
-    d.textContent=m.content;
-    c.appendChild(d);
+    if(m.role==='kage'){
+      var row=document.createElement('div'); row.className='kp-row kage-row';
+      var av=document.createElement('div'); av.className='kp-mini'; var cv=document.createElement('canvas'); av.appendChild(cv);
+      var bubble=document.createElement('div'); bubble.className=d.className; bubble.textContent=m.content;
+      row.appendChild(av); row.appendChild(bubble); c.appendChild(row);
+      setTimeout(function(canvas,state){ return function(){ if(window.KageV43&&window.KageV43.create){ var inst=window.KageV43.create(canvas,{mini:true}); inst.setState(state||'guardian'); } }; }(cv, window.__kageBotState||kageTimeState()),0);
+    }else{
+      d.textContent=m.content; c.appendChild(d);
+    }
   });
 
   if(typing){
@@ -548,356 +560,54 @@ function bind(d){
   });
 }
 
+function kageTimeState(){
+  if(window.KageV43 && window.KageV43.timeState) return window.KageV43.timeState();
+  var h=new Date().getHours();
+  if(h>=23||h<6)return 'sleep';
+  if(h>=6&&h<9)return 'meditating';
+  if(h>=18&&h<21)return 'scout';
+  if(h>=21)return 'shadow';
+  return 'guardian';
+}
+function kageIntentState(text){
+  text=(text||'').toLowerCase();
+  if(/bug|error|broken|issue/.test(text))return 'error';
+  if(/thank|thanks|cool|great|nice/.test(text))return 'smirk';
+  if(/sleep|tired|night/.test(text))return 'sleep';
+  if(/meditat|calm|focus|breathe/.test(text))return 'meditating';
+  if(/search|find|look|scan|where|navigate|open|visit/.test(text))return 'scout';
+  if(/fight|ready|katana|blade/.test(text))return 'fighting';
+  if(/draw|unsheath/.test(text))return 'drawn';
+  if(/slash|attack|swing/.test(text))return 'slash';
+  if(/shadow|sense/.test(text))return 'shadow';
+  if(/\?/.test(text))return 'thinking';
+  return 'listening';
+}
+function setKageBotState(state){
+  window.__kageBotState=state;
+  if(window.__kageBot3D && window.__kageBot3D.setState) window.__kageBot3D.setState(state);
+}
 function build3D(el){
-  var W=92,H=128;
-
-  var rnd=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  rnd.setSize(W,H);
-  rnd.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  el.appendChild(rnd.domElement);
-
-  var sc=new THREE.Scene();
-  var cam=new THREE.PerspectiveCamera(28,W/H,.1,50);
-
-  cam.position.set(0,1.05,6.4);
-  cam.lookAt(new THREE.Vector3(0,.95,0));
-
-  sc.add(new THREE.AmbientLight(0x888888,.9));
-
-  var dl=new THREE.DirectionalLight(0xfff5e8,1.15);
-  dl.position.set(4,7,5);
-  sc.add(dl);
-
-  var rl=new THREE.DirectionalLight(0x8b1a1a,.32);
-  rl.position.set(-3,2,-2);
-  sc.add(rl);
-
-  var fl=new THREE.PointLight(0xffe8cc,.35,6);
-  fl.position.set(0,2.3,3);
-  sc.add(fl);
-
-  var mB=new THREE.MeshLambertMaterial({color:0x2e2a38,flatShading:true});
-  var mC=new THREE.MeshLambertMaterial({color:0x22202c,flatShading:true});
-  var mR=new THREE.MeshLambertMaterial({color:0xa52525,flatShading:true});
-  var mA=new THREE.MeshLambertMaterial({color:0x701818,flatShading:true});
-  var mS=new THREE.MeshLambertMaterial({color:0xb5ada5,flatShading:true});
-  var mBl=new THREE.MeshLambertMaterial({color:0xf5f0e8,flatShading:true});
-  var mSk=new THREE.MeshLambertMaterial({color:0xc9a87a,flatShading:true});
-  var mSD=new THREE.MeshLambertMaterial({color:0xb09060,flatShading:true});
-  var mE=new THREE.MeshBasicMaterial({color:0xee4444});
-  var mBr=new THREE.MeshLambertMaterial({color:0x3a2a18,flatShading:true});
-
-  function bx(x,y,z,m,px,py,pz,p){
-    var o=new THREE.Mesh(new THREE.BoxGeometry(x,y,z),m);
-    o.position.set(px||0,py||0,pz||0);
-    (p||sc).add(o);
-    return o;
-  }
-
-  var kg=new THREE.Group();
-
-  var hd=new THREE.Group();
-  hd.position.set(0,2.08,0);
-
-  bx(.42,.4,.38,mSk,0,0,0,hd);
-  bx(.3,.11,.26,mSk,0,-.23,.02,hd);
-  bx(.06,.13,.26,mSD,-.17,-.17,.02,hd);
-  bx(.06,.13,.26,mSD,.17,-.17,.02,hd);
-
-  var eL=bx(.09,.04,.02,mE.clone(),-.1,.04,.2,hd);
-  var eR=bx(.09,.04,.02,mE.clone(),.1,.04,.2,hd);
-
-  var brL=bx(.12,.025,.03,mBr,-.1,.1,.19,hd);
-  brL.rotation.z=.1;
-
-  var brR=bx(.12,.025,.03,mBr,.1,.1,.19,hd);
-  brR.rotation.z=-.1;
-
-  var mouth=bx(.12,.025,.025,mR,0,-.09,.205,hd);
-
-  var hat=new THREE.Group();
-
-  var mHatCone=new THREE.MeshLambertMaterial({
-    color:0xd8b866,
-    flatShading:true
-  });
-
-  var mHatBrim=new THREE.MeshLambertMaterial({
-    color:0xb89852,
-    flatShading:true
-  });
-
-  var mHatUnder=new THREE.MeshLambertMaterial({
-    color:0x241a10,
-    flatShading:true
-  });
-
-  var ks=new THREE.Mesh(
-    new THREE.ConeGeometry(.82,.42,48),
-    mHatCone
-  );
-  ks.position.y=.48;
-  ks.rotation.y=Math.PI/4;
-  hat.add(ks);
-
-  var kb=new THREE.Mesh(
-    new THREE.CylinderGeometry(.88,.96,.026,56),
-    mHatBrim
-  );
-  kb.position.y=.255;
-  hat.add(kb);
-
-  var ku=new THREE.Mesh(
-    new THREE.CylinderGeometry(.76,.88,.014,56),
-    mHatUnder
-  );
-  ku.position.y=.232;
-  hat.add(ku);
-
-  var kt2=new THREE.Mesh(
-    new THREE.ConeGeometry(.045,.085,18),
-    mR
-  );
-  kt2.position.y=.735;
-  kt2.rotation.y=Math.PI/4;
-  hat.add(kt2);
-
-  hat.rotation.x=-.02;
-
-  hd.add(hat);
-  kg.add(hd);
-
-  var ts=new THREE.Group();
-  ts.position.set(0,1.45,0);
-
-  bx(.48,.62,.28,mB,0,0,0,ts);
-
-  var sh=bx(.055,.66,.29,mR,.04,0,.003,ts);
-  sh.rotation.z=-.35;
-
-  var kn=bx(.07,.07,.04,mS,-.14,-.12,.15,ts);
-  kn.rotation.z=Math.PI/4;
-
-  var sd=bx(.18,.05,.26,mR,-.28,.26,0,ts);
-  sd.rotation.z=.18;
-
-  kg.add(ts);
-
-  var cL=bx(.03,.5,.2,mC,-.25,1.25,.03,kg);
-  var cR=bx(.03,.5,.2,mC,.25,1.25,.03,kg);
-
-  bx(.14,.28,.03,mC,-.15,.98,-.14,kg);
-  bx(.14,.28,.03,mC,.15,.98,-.14,kg);
-
-  var aL=new THREE.Group();
-  aL.position.set(-.32,1.32,0);
-  bx(.12,.26,.12,mB,0,0,0,aL);
-  bx(.1,.22,.1,mC,0,-.24,0,aL);
-  bx(.08,.08,.08,mSk,0,-.38,0,aL);
-  kg.add(aL);
-
-  var aR=new THREE.Group();
-  aR.position.set(.32,1.32,0);
-  bx(.12,.26,.12,mB,0,0,0,aR);
-  bx(.1,.22,.1,mC,0,-.24,0,aR);
-  bx(.08,.08,.08,mSk,0,-.38,0,aR);
-  kg.add(aR);
-
-  var hk=new THREE.Mesh(new THREE.CylinderGeometry(.18,.33,.68,4),mC);
-  hk.position.set(0,.66,0);
-  hk.rotation.y=Math.PI/4;
-  kg.add(hk);
-
-  bx(.5,.07,.3,mA,0,1.02,0,kg);
-  bx(.1,.04,.16,mC,-.11,.02,.02,kg);
-  bx(.1,.04,.16,mC,.11,.02,.02,kg);
-
-  var kt=new THREE.Group();
-
-  bx(.022,.82,.01,mBl,0,0,0,kt);
-
-  var bg2=bx(
-    .03,.82,.003,
-    new THREE.MeshBasicMaterial({
-      color:0xf5f0e8,
-      transparent:true,
-      opacity:.12
-    }),
-    0,0,.008,kt
-  );
-
-  var tb=bx(.09,.01,.09,mS,0,.42,0,kt);
-  tb.rotation.y=Math.PI/4;
-
-  bx(.03,.18,.03,mR,0,.52,0,kt);
-  bx(.035,.02,.035,mS,0,.62,0,kt);
-
-  kt.position.set(.1,1.55,-.18);
-  kt.rotation.set(.1,0,-.45);
-  kg.add(kt);
-
-  var kBk={px:.1,py:1.55,pz:-.18,rx:.1,ry:0,rz:-.45};
-  var kRd={px:.44,py:1,pz:.12,rx:-.25,ry:0,rz:.75};
-
-  var base=new THREE.Mesh(
-    new THREE.CylinderGeometry(.38,.42,.035,8),
-    new THREE.MeshLambertMaterial({color:0x0e0e10,flatShading:true})
-  );
-  base.position.y=-.018;
-  sc.add(base);
-
-  var rg=new THREE.Mesh(
-    new THREE.RingGeometry(.36,.42,8),
-    new THREE.MeshBasicMaterial({
-      color:0x8b1a1a,
-      side:THREE.DoubleSide,
-      transparent:true,
-      opacity:.18
-    })
-  );
-  rg.rotation.x=-Math.PI/2;
-  rg.position.y=.002;
-  sc.add(rg);
-
-  var PC=8;
-  var pG=new THREE.BufferGeometry();
-  var pA=new Float32Array(PC*3);
-  var pV=[];
-
-  for(var i=0;i<PC;i++){
-    pA[i*3]=(Math.random()-.5)*.7;
-    pA[i*3+1]=Math.random()*2;
-    pA[i*3+2]=(Math.random()-.5)*.7;
-    pV.push(.002+Math.random()*.004);
-  }
-
-  pG.setAttribute('position',new THREE.BufferAttribute(pA,3));
-
-  var pts=new THREE.Points(
-    pG,
-    new THREE.PointsMaterial({
-      color:0xc23b3b,
-      size:.02,
-      transparent:true,
-      opacity:.25
-    })
-  );
-
-  sc.add(pts);
-
-  kg.rotation.y=.35;
-  kg.scale.set(.78,.78,.78);
-  kg.position.y=-.18;
-
-  sc.add(kg);
-
-  var t=0,hov=false,tR=.35,cR2=.35,kL=0;
-
-  function lp(a,b,f){
-    return a+(b-a)*f;
-  }
-
-  function anim(){
-    requestAnimationFrame(anim);
-    t+=.016;
-
-    ts.scale.y=1+Math.sin(t*1.4)*.01;
-    hd.position.y=2.08+Math.sin(t*1.4)*.003;
-
-    var sw=hov?tR:.35+Math.sin(t*.4)*.06;
-    cR2+=(sw-cR2)*.04;
-    kg.rotation.y=cR2;
-
-    cL.rotation.x=Math.sin(t*1.8)*.025;
-    cR.rotation.x=Math.sin(t*1.8+.8)*.025;
-
-    aL.rotation.x=Math.sin(t*.8)*.02;
-    aR.rotation.x=hov?-.3:Math.sin(t*.8+Math.PI)*.02;
-
-    var ei=hov?1:.5+Math.sin(t*2.2)*.35;
-    var ec=new THREE.Color(ei*.86,ei*.27,ei*.27);
-    eL.material.color.copy(ec);
-    eR.material.color.copy(ec);
-
-    if(isOpen){
-      mouth.scale.x=1.25+Math.sin(t*8)*.25;
-      mouth.scale.y=1.1+Math.sin(t*8)*.2;
-    }else{
-      mouth.scale.x=1;
-      mouth.scale.y=1;
+  el.innerHTML='';
+  var canvas=document.createElement('canvas');
+  canvas.className='kage-stage-canvas';
+  canvas.setAttribute('aria-label','Kage assistant render');
+  el.appendChild(canvas);
+  function mount(){
+    if(window.KageV43 && window.KageV43.create){
+      window.__kageBot3D=window.KageV43.create(canvas,{mini:true});
+      setKageBotState(kageTimeState());
+      setInterval(function(){ if(!isOpen && !typing) setKageBotState(kageTimeState()); }, 60000);
+      return;
     }
-
-    var kk=hov||isOpen?1:0;
-    kL+=(kk-kL)*.06;
-
-    kt.position.set(
-      lp(kBk.px,kRd.px,kL),
-      lp(kBk.py,kRd.py,kL),
-      lp(kBk.pz,kRd.pz,kL)
-    );
-
-    kt.rotation.set(
-      lp(kBk.rx,kRd.rx,kL),
-      lp(kBk.ry,kRd.ry,kL),
-      lp(kBk.rz,kRd.rz,kL)
-    );
-
-    hd.rotation.x=hov||isOpen?.12:Math.sin(t*.6)*.015;
-    rg.rotation.z+=.003;
-    bg2.material.opacity=.08+Math.sin(t*1.5)*.05;
-
-    var pp=pts.geometry.attributes.position.array;
-
-    for(var j=0;j<PC;j++){
-      pp[j*3+1]+=pV[j];
-
-      if(pp[j*3+1]>2.2){
-        pp[j*3+1]=0;
-        pp[j*3]=(Math.random()-.5)*.6;
-        pp[j*3+2]=(Math.random()-.5)*.6;
-      }
-    }
-
-    pts.geometry.attributes.position.needsUpdate=true;
-
-    fl.intensity=hov||isOpen?.5:.35;
-
-    rnd.render(sc,cam);
+    setTimeout(mount,80);
   }
-
-  anim();
-
-  el.addEventListener('mouseenter',function(){
-    hov=true;
-  });
-
-  el.addEventListener('mouseleave',function(){
-    hov=false;
-    tR=.35;
-  });
-
-  el.addEventListener('mousemove',function(e){
-    if(!hov)return;
-
-    var r=el.getBoundingClientRect();
-    tR=.35+((e.clientX-r.left)/r.width-.5)*.5;
-  });
-
-  el.addEventListener('touchstart',function(){
-    hov=true;
-  },{passive:true});
-
-  el.addEventListener('touchend',function(){
-    setTimeout(function(){
-      hov=false;
-      tR=.35;
-    },1500);
-  },{passive:true});
-
+  mount();
+  el.addEventListener('mouseenter',function(){ if(!isOpen) setKageBotState('listening'); });
+  el.addEventListener('mouseleave',function(){ if(!isOpen&&!typing) setKageBotState(kageTimeState()); });
   setInterval(function(){
     var a=document.getElementById('ac2');
     var w=document.getElementById('kageWrap');
-
     if(w)w.style.display=(a&&a.classList.contains('open'))?'none':'';
   },500);
 }
