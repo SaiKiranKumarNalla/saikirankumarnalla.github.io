@@ -661,15 +661,15 @@ function bind(d){
   var mic=document.getElementById('kMic');
   if(mic){
     var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SR){ mic.style.display='none'; }
+    if(!SR){ mic.title='Voice input is not supported in this browser. Try Chrome/Edge on HTTPS.'; mic.addEventListener('click',function(){ hist.push({role:'assistant',content:'Voice input is not available in this browser. Try Chrome or Edge on HTTPS, or type your question.'}); render(); }); }
     else{
       mic.addEventListener('click',function(e){
         e.stopPropagation();
         var rec=new SR(); rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=1;
         mic.classList.add('listening'); setKageBotState('listening');
-        rec.onresult=function(ev){ var tx=ev.results&&ev.results[0]&&ev.results[0][0]?ev.results[0][0].transcript:''; var i=document.getElementById('kIn'); if(i){i.value=tx; i.focus();} };
+        rec.onresult=function(ev){ var tx=ev.results&&ev.results[0]&&ev.results[0][0]?ev.results[0][0].transcript:''; var i=document.getElementById('kIn'); if(i){i.value=tx; i.focus(); if(tx && !typing){ setTimeout(function(){ document.getElementById('kSnd').click(); },120); }} };
         rec.onend=function(){ mic.classList.remove('listening'); };
-        rec.onerror=function(){ mic.classList.remove('listening'); setKageBotState('error'); };
+        rec.onerror=function(){ mic.classList.remove('listening'); setKageBotState('error'); hist.push({role:'assistant',content:'I could not hear you. Browser voice input usually needs microphone permission, Chrome/Edge, and HTTPS.'}); render(); };
         rec.start();
       });
     }
@@ -781,6 +781,101 @@ function build3D(el){
   },500);
 }
 
+
+function tourCss(){
+  if(document.getElementById('kageTourCss')) return;
+  var st=document.createElement('style');
+  st.id='kageTourCss';
+  st.textContent='\
+.kage-choice{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(5,5,7,.62);backdrop-filter:blur(12px)}\
+.kage-choice.show{display:flex}\
+.kage-choice-card{width:min(560px,calc(100vw - 32px));border:1px solid rgba(194,59,59,.32);background:linear-gradient(145deg,rgba(22,18,24,.98),rgba(9,9,12,.98));box-shadow:0 35px 120px rgba(0,0,0,.62);border-radius:24px;padding:26px;position:relative;overflow:hidden}\
+.kage-choice-card:before{content:"影";position:absolute;right:22px;bottom:-18px;font-family:serif;font-size:110px;color:rgba(139,26,26,.10);pointer-events:none}\
+.kage-choice-k{font-family:monospace;font-size:10px;text-transform:uppercase;letter-spacing:.22em;color:#c23b3b;margin-bottom:10px}\
+.kage-choice-title{font-family:serif;font-size:30px;line-height:1.05;color:#f0ebe3;margin-bottom:10px}\
+.kage-choice-copy{font-size:14px;line-height:1.7;color:#bfb7ae;margin-bottom:18px;max-width:460px}\
+.kage-choice-actions{display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}\
+.kage-choice-btn{border:1px solid rgba(240,235,227,.11);background:rgba(240,235,227,.045);color:#f0ebe3;padding:12px 14px;border-radius:999px;cursor:pointer;font-family:monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;transition:.2s}\
+.kage-choice-btn.primary{border-color:rgba(194,59,59,.5);background:rgba(139,26,26,.22)}\
+.kage-choice-btn:hover{transform:translateY(-2px);border-color:#c23b3b}\
+.kage-tour-card{position:fixed;right:22px;bottom:22px;width:min(390px,calc(100vw - 32px));z-index:1190;border:1px solid rgba(194,59,59,.35);background:linear-gradient(180deg,rgba(14,13,15,.98),rgba(8,8,10,.98));box-shadow:0 28px 90px rgba(0,0,0,.55);border-radius:20px;padding:16px;display:none}\
+.kage-tour-card.show{display:block}\
+.kage-tour-step{font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:#c23b3b;margin-bottom:8px}\
+.kage-tour-title{font-family:serif;font-size:20px;color:#f0ebe3;margin-bottom:7px}\
+.kage-tour-text{font-size:13px;line-height:1.55;color:#c8c0b7;margin-bottom:13px}\
+.kage-tour-actions{display:flex;justify-content:space-between;gap:8px}\
+.kage-tour-actions button{border:1px solid rgba(240,235,227,.10);background:rgba(240,235,227,.045);color:#f0ebe3;padding:9px 11px;border-radius:999px;cursor:pointer;font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em}\
+.kage-tour-actions .primary{border-color:rgba(194,59,59,.45);background:rgba(139,26,26,.18)}\
+.kage-tour-highlight{outline:2px solid rgba(194,59,59,.82)!important;outline-offset:8px!important;box-shadow:0 0 0 9999px rgba(0,0,0,.34),0 0 40px rgba(194,59,59,.22)!important;position:relative;z-index:20}\
+html[data-theme="light"] .kage-choice-card,html[data-theme="light"] .kage-tour-card{background:linear-gradient(180deg,rgba(248,245,239,.98),rgba(240,235,227,.98))!important;color:#1a1a1c!important}\
+html[data-theme="light"] .kage-choice-title,html[data-theme="light"] .kage-tour-title{color:#1a1a1c!important}\
+html[data-theme="light"] .kage-choice-copy,html[data-theme="light"] .kage-tour-text{color:#4a4540!important}\
+@media(max-width:700px){.kage-tour-card{right:10px;bottom:10px}.kage-tour-highlight{outline-offset:4px!important}}\
+';
+  document.head.appendChild(st);
+}
+
+function showRecruiterChoice(){
+  if(curPage()!=='index.html') return;
+  if(sessionStorage.getItem('kage-path-choice-seen')) return;
+  sessionStorage.setItem('kage-path-choice-seen','1');
+  tourCss();
+  var ov=document.createElement('div');
+  ov.className='kage-choice show';
+  ov.id='kageChoice';
+  ov.innerHTML='<div class="kage-choice-card">'+
+    '<div class="kage-choice-k">Choose your path</div>'+ 
+    '<div class="kage-choice-title">Are you visiting as a recruiter?</div>'+ 
+    '<div class="kage-choice-copy">I can take you through a guided Recruiter Mode tour: 30-second pitch, 3-minute profile, best-fit roles, case studies, proof, CV/contact. Or you can continue through the creative portfolio.</div>'+ 
+    '<div class="kage-choice-actions">'+
+      '<button class="kage-choice-btn primary" id="kChoiceRecruiter">Recruiter Mode Tour</button>'+ 
+      '<button class="kage-choice-btn" id="kChoiceRecruiterPage">Just open Recruiter Mode</button>'+ 
+      '<button class="kage-choice-btn" id="kChoiceStay">Continue Current Site</button>'+ 
+    '</div></div>';
+  document.body.appendChild(ov);
+  document.getElementById('kChoiceRecruiter').onclick=function(){ sessionStorage.setItem('kage-start-recruiter-tour','1'); window.location.href='recruiter.html#overview'; };
+  document.getElementById('kChoiceRecruiterPage').onclick=function(){ window.location.href='recruiter.html'; };
+  document.getElementById('kChoiceStay').onclick=function(){ ov.classList.remove('show'); setTimeout(function(){ if(ov.parentNode)ov.parentNode.removeChild(ov);},220); };
+}
+
+function startRecruiterGuidedTour(){
+  tourCss();
+  var steps=[
+    {sel:'#overview', title:'Overview', text:'This opening section is the fast professional read: Sai’s identity, availability, target locations, and primary recruiter actions.'},
+    {sel:'#quick-overview', title:'3-minute profile', text:'This section gives a quick professional snapshot for recruiters who want the full profile without exploring every page.'},
+    {sel:'#why', title:'Best-fit roles', text:'Here you can frame Sai for medtech, life-sciences strategy, healthcare ventures, imaging validation, and deep-tech roles.'},
+    {sel:'#case-studies', title:'Evidence through case studies', text:'These cards translate projects into proof: problem, method, result, and why the work matters.'},
+    {sel:'#proof', title:'Publications and proof', text:'This is the evidence layer: publications, research outputs, and credibility signals.'},
+    {sel:'#contact', title:'Contact path', text:'This is where recruiters can reach Sai, download/review the CV, and move from browsing to conversation.'}
+  ];
+  var i=0, card=document.getElementById('kageTourCard');
+  if(!card){
+    card=document.createElement('div');
+    card.id='kageTourCard';
+    card.className='kage-tour-card';
+    card.innerHTML='<div class="kage-tour-step" id="kTourStep"></div><div class="kage-tour-title" id="kTourTitle"></div><div class="kage-tour-text" id="kTourText"></div><div class="kage-tour-actions"><button id="kTourSkip">End</button><span style="flex:1"></span><button id="kTourPrev">Back</button><button class="primary" id="kTourNext">Next</button></div>';
+    document.body.appendChild(card);
+  }
+  function clear(){ document.querySelectorAll('.kage-tour-highlight').forEach(function(x){x.classList.remove('kage-tour-highlight');}); }
+  function show(){
+    clear();
+    var st=steps[i], el=document.querySelector(st.sel);
+    if(el){ el.classList.add('kage-tour-highlight'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+    document.getElementById('kTourStep').textContent='Step '+(i+1)+' of '+steps.length;
+    document.getElementById('kTourTitle').textContent=st.title;
+    document.getElementById('kTourText').textContent=st.text;
+    document.getElementById('kTourPrev').style.visibility=i===0?'hidden':'visible';
+    document.getElementById('kTourNext').textContent=i===steps.length-1?'Finish':'Next';
+    card.classList.add('show');
+    if(window.__kageBot3D&&window.__kageBot3D.setState) window.__kageBot3D.setState(i===0?'bow':(i===steps.length-1?'guardian':'scout'));
+  }
+  function end(){ clear(); card.classList.remove('show'); sessionStorage.removeItem('kage-start-recruiter-tour'); if(window.__kageBot3D&&window.__kageBot3D.setState) window.__kageBot3D.setState(kageTimeState()); }
+  document.getElementById('kTourSkip').onclick=end;
+  document.getElementById('kTourPrev').onclick=function(){ if(i>0){i--;show();} };
+  document.getElementById('kTourNext').onclick=function(){ if(i<steps.length-1){i++;show();} else end(); };
+  show();
+}
+
 function init(){
   if(typeof THREE==='undefined'){
     setTimeout(init,100);
@@ -796,6 +891,11 @@ function init(){
 
     bind(d);
     build3D(d.st);
+
+    showRecruiterChoice();
+    if(curPage()==='recruiter.html' && (sessionStorage.getItem('kage-start-recruiter-tour') || location.hash==='#tour')){
+      setTimeout(startRecruiterGuidedTour,900);
+    }
 
     setTimeout(function(){
       d.w.classList.add('visible');
