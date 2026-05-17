@@ -35,11 +35,68 @@ function curPage(){return window.location.pathname.split('/').pop()||'index.html
 function timeOfDay(){var h=new Date().getHours();return h<6?'deep night':h<12?'morning':h<17?'afternoon':h<21?'evening':'night';}
 function visits(){var c=parseInt(localStorage.getItem('kage-v')||'0')+1;localStorage.setItem('kage-v',String(c));return c;}
 
+function saveSessionProfile(){sessionStorage.setItem('kage-session-profile',JSON.stringify(sessionProfile));}
+function rememberFromText(text){
+  var t=(text||'').toLowerCase();
+  if(/recruiter|hiring|talent|hr|manager/.test(t))sessionProfile.visitorType='recruiter';
+  if(/student|phd|researcher|collaborator|founder|investor|vc|consultant/.test(t))sessionProfile.visitorType=sessionProfile.visitorType||RegExp.lastMatch;
+  var m=t.match(/(?:for|hiring for|role in|interested in|looking for)\s+([a-z0-9 +\-/]{3,50})/i);
+  if(m)sessionProfile.role=m[1].replace(/[?.!,]+$/,'');
+  if(/medtech|strategy|product|research|imaging|ai|startup|venture|consulting|biomechanics/.test(t)){
+    sessionProfile.topic=(t.match(/medtech|strategy|product|research|imaging|ai|startup|venture|consulting|biomechanics/)||[''])[0];
+  }
+  saveSessionProfile();
+}
+function pageHint(){
+  var p=curPage();
+  if(p==='index.html')return 'Choose Recruiter Mode for the fast professional path, or continue into the creative portfolio.';
+  if(p==='about.html')return 'On this page I can give the personal story, a recruiter summary, or a short bio.';
+  if(p==='experience.html')return 'On this page I can explain career progression, role fit, or translate the timeline into interview evidence.';
+  if(p==='education.html')return 'On this page I can summarize the training path and why it fits medtech, research, or strategy roles.';
+  if(p==='projects.html')return 'On this page I can turn projects into case studies: problem, method, result, and recruiter proof.';
+  if(p==='papers.html')return 'On this page I can summarize publications by topic, evidence, or practical relevance.';
+  if(p==='contact.html')return 'On this page I can help draft an outreach message or point to email, LinkedIn, and GitHub.';
+  if(p==='recruiter.html')return 'On this page I can create a role-specific profile, summarize case studies, or help contact Sai.';
+  if(p==='kage.html')return 'On this page I can explain my expressions, modes, and hidden site commands.';
+  if(p==='story.html')return 'On this page I can introduce the fiction preview and creative side.';
+  return 'I can help you navigate this page.';
+}
+function recruiterPacket(role){
+  role=(role||sessionProfile.role||sessionProfile.topic||'medtech, life-sciences strategy, research, or product roles');
+  return 'Recruiter packet for '+role+':\n\nPitch: Sai is a Medical Imaging Researcher & PhD Candidate who connects quantitative imaging validation, simulation, 3D-printed phantoms, and clinical-facing communication.\n\nEvidence: 3DynaPET, CASSOULET, MuPET, Hepta Medical visualization, TEVAR simulation, and 6 publication outputs.\n\nBest fit: medtech strategy, life-sciences consulting, imaging AI/product, clinical innovation, deep-tech venture, or translational R&D.\n\nAvailability: September 2026. Locations: Paris, London, Amsterdam, Berlin.';
+}
+function beginTour(){
+  sessionProfile.tourStep=1; saveSessionProfile();
+  return 'Ronin path started. Step 1: open Recruiter Mode for the fastest professional overview. Then continue to Projects, Publications, and Contact. Shall I open Recruiter Mode?';
+}
+function tourNext(){
+  var pages=['recruiter.html','projects.html','papers.html','contact.html'];
+  sessionProfile.tourStep=(sessionProfile.tourStep||0)+1; saveSessionProfile();
+  return pages[Math.min(sessionProfile.tourStep-1,pages.length-1)];
+}
+
 var hist=[],typing=false,isOpen=false,vc=0,kagePageOffered=false,kageRecruiterOffered=false;
+var sessionProfile={visitorType:null,role:null,topic:null,tourStep:0};
 
 function buildSys(){
   var page=curPage();
   var sys=SYS.replace('{PAGE}',page).replace('{TIME}',timeOfDay()).replace('{VISIT}',String(vc));
+
+  var sp=JSON.parse(sessionStorage.getItem('kage-session-profile')||'{}');
+  if(sp.visitorType||sp.role||sp.topic){
+    sys+='\n\nSESSION CONTEXT:';
+    if(sp.visitorType)sys+='\n- Visitor type: '+sp.visitorType;
+    if(sp.role)sys+='\n- Visitor role/goal: '+sp.role;
+    if(sp.topic)sys+='\n- Current interest: '+sp.topic;
+    sys+='\n- Use this only within this browser session; do not claim long-term memory.';
+  }
+  sys+='\n\nPAGE-AWARE HELP:';
+  sys+='\n- On Home, help the visitor choose Recruiter Mode or the creative portfolio.';
+  sys+='\n- On About, offer personal story vs professional summary.';
+  sys+='\n- On Projects, offer clinical impact, technical details, or case studies.';
+  sys+='\n- On Publications, summarize by topic, evidence, or recruiter proof.';
+  sys+='\n- On Contact, help compose outreach or find links.';
+  sys+='\n- On Kage, explain expressions, ask-kage mode, and site guidance.';
 
   if(page==='recruiter.html'){
     sys+='\n\nRECRUITER PAGE MODE:';
@@ -80,11 +137,80 @@ window.openKage=function(){
 };
 
 async function send(text){
+  rememberFromText(text);
   setKageBotState(kageIntentState(text));
   var clean=text.trim().toLowerCase();
   var page=curPage();
   var yes=/^(yes|yeah|yep|sure|ok|okay|open it|show me|take me|visit|go ahead|lead me)$/i.test(clean);
 
+
+  if(/^(3-minute profile|3 minute profile|30-sec pitch|30 second pitch|quick profile|professional pitch)$/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Sai is a Medical Imaging Researcher & PhD Candidate focused on quantitative PET/CT validation, 3D-printed phantoms, simulation, and translational medtech work. He is strongest where research evidence, clinical imaging, technical depth, and strategy communication meet. For proof, open Recruiter Mode, Projects, or Publications.'});
+    render(); return;
+  }
+
+  if(/^(best fit|best-fit roles|role fit|fit|what roles)$/i.test(clean) || /best.*role|suited.*role/.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Best-fit paths: medtech or life-sciences strategy, imaging AI/product, translational R&D, clinical innovation, deep-tech venture roles, and research-facing consulting. The proof is his blend of PET/CT validation, simulation, 3D printing, publications, and stakeholder-facing visualization work.'});
+    render(); return;
+  }
+
+  if(/recruiter packet|targeted profile|smart cv|role-specific|role specific|generate.*fit/.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:recruiterPacket(text)});
+    render(); return;
+  }
+
+  if(/page help|help on this page|what can you do here|guide this page/.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:pageHint()});
+    render(); return;
+  }
+
+  if(/site tour|walk me through|tour mode|ronin path/.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:beginTour()});
+    kageRecruiterOffered=true;
+    render(); return;
+  }
+
+  if(/next step|continue tour|next in tour/.test(clean)){
+    var next=tourNext();
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Opening the next path: '+PAGE_CTX[next]+'.'});
+    render(); doAction({type:'navigate',data:next}); return;
+  }
+
+  if(/shadow sense/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Shadow Sense: Sai’s site has two paths. Recruiters should start with Recruiter Mode, then Projects and Publications for proof. Curious visitors can follow About, Story, and Kage for the human and creative side.'});
+    setKageBotState('shadow'); render(); return;
+  }
+
+  if(/draw blade|serious mode|professional mode/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Blade drawn. Opening the serious professional path: Recruiter Mode.'});
+    setKageBotState('drawn'); render(); doAction({type:'navigate',data:'recruiter.html'}); return;
+  }
+
+  if(/^meditate$|meditation summary|calm summary/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Meditation: Sai’s path moves from mechanical engineering to biomedical engineering, then medical imaging research. The through-line is validation — building trustworthy bridges between simulation, physical phantoms, clinical imaging, and decisions.'});
+    setKageBotState('meditating'); render(); return;
+  }
+
+  if(/unlock story|story page|creative side/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Opening the story shelf — the creative path beyond research.'});
+    render(); doAction({type:'navigate',data:'story.html'}); return;
+  }
+
+  if(/thank|thanks/i.test(clean)){
+    hist.push({role:'user',content:text});
+    hist.push({role:'assistant',content:'Always. I bow, then return to the watch.'});
+    setKageBotState('bow'); render(); setTimeout(function(){setKageBotState(kageTimeState());},2200); return;
+  }
 
   if(/^(open recruiter mode|recruiter mode|recruiter)$/i.test(clean)){
     hist.push({role:'user',content:text});
@@ -347,8 +473,8 @@ function welcome(){
         :'The day is bright.';
 
   var t=vc>1
-    ? g+' You return. I am AI-enabled — ask me about Sensei Sai’s fit, projects, publications, research, or the best path through this website.'
-    : g+' I am Kage — an AI-enabled assistant. Ask me about Sensei Sai’s work, projects, publications, role fit, or research story. I can answer first, then guide you if a page helps.';
+    ? g+' You return. '+pageHint()+' Ask me about Sensei Sai’s fit, projects, publications, research, or the best path through this website.'
+    : g+' I am Kage — an AI-enabled assistant. '+pageHint()+' I can answer first, then guide you if a page helps.';
 
   hist.push({role:'assistant',content:t});
   render();
@@ -396,7 +522,7 @@ function css(){
 .kp-rep button{font-family:monospace;font-size:8px;text-transform:uppercase;background:rgba(139,26,26,.18);border:1px solid rgba(194,59,59,.35);color:#e05252;padding:8px 10px;cursor:pointer;border-radius:9px}\
 .kp-iw{display:flex;margin:0 12px 12px;border:1px solid rgba(240,235,227,.085);border-radius:14px;background:rgba(240,235,227,.035);flex-shrink:0;overflow:hidden}\
 .kp-in{flex:1;background:0;border:0;color:#f0ebe3;font-size:12.5px;padding:12px 12px;outline:0;font-family:inherit}.kp-in::placeholder{color:#7d756e}\
-.kp-snd{background:rgba(139,26,26,.12);border:0;border-left:1px solid rgba(240,235,227,.075);color:#c23b3b;cursor:pointer;padding:10px 14px;font-size:15px;transition:all .2s}.kp-snd:hover{color:#fff;background:rgba(139,26,26,.28)}\
+.kp-mic,.kp-snd{background:rgba(139,26,26,.12);border:0;border-left:1px solid rgba(240,235,227,.075);color:#c23b3b;cursor:pointer;padding:10px 11px;font-size:14px;transition:all .2s}.kp-mic:hover,.kp-snd:hover{color:#fff;background:rgba(139,26,26,.28)}.kp-mic.listening{color:#fff;background:rgba(139,26,26,.38);box-shadow:0 0 18px rgba(194,59,59,.28) inset}\
 html[data-theme="light"] .kp{background:linear-gradient(180deg,rgba(248,245,239,.98),rgba(240,235,227,.98))!important;border-color:rgba(26,26,28,.11)!important;box-shadow:0 28px 80px rgba(0,0,0,.18)!important}\
 html[data-theme="light"] .kp-hd{background:linear-gradient(90deg,rgba(139,26,26,.07),transparent 65%)!important;border-bottom-color:rgba(26,26,28,.08)!important}\
 html[data-theme="light"] .kp-id span{color:#1a1a1c!important}\
@@ -418,8 +544,9 @@ function dom(){
 
   var mainActions=
       '<button class="kp-act" data-q="Open Recruiter Mode.">Recruiter</button>'+
-      '<button class="kp-act" data-q="Help me navigate the website.">Visitor</button>'+
-      '<button class="kp-act" data-q="Tell me about Sai">About Sai</button>'+
+      '<button class="kp-act" data-q="Give me a 3-minute profile.">3-min Profile</button>'+
+      '<button class="kp-act" data-q="Help me on this page.">Page Help</button>'+
+      '<button class="kp-act" data-q="Start site tour.">Tour</button>'+
       '<button class="kp-act" data-q="Tell me about Kage">Kage</button>'+
       '<button class="kp-act" data-q="How can I contact Sai?">Contact</button>'+
       '<button class="kp-act" data-q="I found an issue on this page">Report</button>';
@@ -427,9 +554,10 @@ function dom(){
   var recruiterActions=
       '<button class="kp-act" data-q="Give me a 30-second professional pitch about Sai.">30-sec Pitch</button>'+
       '<button class="kp-act" data-q="What roles or opportunities is Sai best suited for, and why?">Best Fit</button>'+
+      '<button class="kp-act" data-q="Generate a recruiter packet for this role.">Role Packet</button>'+
       '<button class="kp-act" data-q="Explain Sai’s key projects like case studies, not a list.">Projects</button>'+
       '<button class="kp-act" data-q="Summarize Sai’s publications and what they prove.">Publications</button>'+
-      '<button class="kp-act" data-q="Open Recruiter Mode.">Recruiter Mode</button>'+
+      '<button class="kp-act" data-q="Start site tour.">Tour</button>'+
       '<button class="kp-act" data-q="How can I contact Sai?">Contact</button>';
 
   var actionButtons=recruiterMode?recruiterActions:mainActions;
@@ -474,6 +602,7 @@ function dom(){
     '</div>'+
     '<div class="kp-iw">'+
       '<input class="kp-in" id="kIn" placeholder="'+inputPlaceholder+'" autocomplete="off">'+
+      '<button class="kp-mic" id="kMic" title="Voice input">🎙</button>'+
       '<button class="kp-snd" id="kSnd">➜</button>'+
     '</div>';
 
@@ -529,6 +658,23 @@ function bind(d){
 
   document.getElementById('kSnd').addEventListener('click',doSend);
 
+  var mic=document.getElementById('kMic');
+  if(mic){
+    var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){ mic.style.display='none'; }
+    else{
+      mic.addEventListener('click',function(e){
+        e.stopPropagation();
+        var rec=new SR(); rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=1;
+        mic.classList.add('listening'); setKageBotState('listening');
+        rec.onresult=function(ev){ var tx=ev.results&&ev.results[0]&&ev.results[0][0]?ev.results[0][0].transcript:''; var i=document.getElementById('kIn'); if(i){i.value=tx; i.focus();} };
+        rec.onend=function(){ mic.classList.remove('listening'); };
+        rec.onerror=function(){ mic.classList.remove('listening'); setKageBotState('error'); };
+        rec.start();
+      });
+    }
+  }
+
   document.getElementById('kIn').addEventListener('keydown',function(e){
     if(e.key==='Enter')doSend();
   });
@@ -563,6 +709,13 @@ function bind(d){
   });
 
   document.addEventListener('keydown',function(e){
+    var tag=(e.target&&e.target.tagName||'').toLowerCase();
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){
+      e.preventDefault(); openPanel(); isOpen=true; d.p.classList.add('open'); if(hist.length===0)welcome(); var ii=document.getElementById('kIn'); if(ii)ii.focus(); return;
+    }
+    if(e.key==='/' && !isOpen && tag!=='input' && tag!=='textarea'){
+      e.preventDefault(); openPanel(); isOpen=true; d.p.classList.add('open'); if(hist.length===0)welcome(); var jj=document.getElementById('kIn'); if(jj)jj.focus(); return;
+    }
     if(e.key==='Escape'&&isOpen){
       isOpen=false;
       d.p.classList.remove('open');
