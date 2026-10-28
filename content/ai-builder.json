@@ -1,0 +1,13 @@
+{
+  "headline": "I don't just use AI. I build teams of it.",
+  "principles": [
+    {"title": "Constitutions, not prompts", "text": "Every project has an AGENTS.md that fixes canonical physics, keeps originals read-only, puts work in dated session folders, and logs every deviation."},
+    {"title": "Humans hold the gates", "text": "Agents propose; I accept. Anatomy, activity maps and scientific conclusions each pass an explicit human QC gate."},
+    {"title": "Right model for the job", "text": "Claude Code and Codex for engineering, Gemini and Antigravity for coordination, local Llama and Gemma for private, cheap tasks."},
+    {"title": "Evidence over vibes", "text": "Hashes, provenance, failure logs and quantitative reports. A pretty image is never the result."}
+  ],
+  "stack": ["Claude Code", "Codex", "Gemini CLI", "Antigravity", "Ollama (Llama 3.2, Gemma)", "Whisper", "Google Colab GPUs", "Google Flow", "MONAI", "TotalSegmentator"],
+  "builds": ["veritomix-office", "animus", "virtualpet", "cassoulet", "kage"],
+  "roadmap": ["Cassoulet-trained surrogate simulator (NASGM-style)", "Heterogeneous PET synthesis from uniform activity maps (PAD-style)", "Small generative models for PET/CT simulation and dosimetry"],
+  "learning": {"repo": "Medical-AI-self-learning-tasks", "text": "45-day medical-imaging AI apprenticeship with a local Gemma tutor and Codex review."}
+}

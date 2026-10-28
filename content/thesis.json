@@ -1,0 +1,20 @@
+{
+  "title": "Evaluation of medical imaging devices using synthetically modified clinical images and 3D printed phantoms",
+  "university": "Université de Toulouse",
+  "labs": ["IUCT Oncopole, Toulouse", "Rambam Health Care Campus, Haifa"],
+  "supervisors": ["Olivier Caselles, PhD", "John Kennedy, PhD"],
+  "partners": ["eMotion Tech (3D printing)", "GE HealthCare (simulation software)"],
+  "defended": "2026-09",
+  "slides": "Soutenance_SaiNalla.pdf",
+  "eli5": "Hospital scanners give numbers that doctors use to pick treatments. But how do we know those numbers are right? I built pretend tumours: some printed in 3D plastic, some drawn by a computer inside real scans. Because I made them, I know the right answer, so I can check whether the scanner tells the truth.",
+  "abstractShort": "A hybrid framework combining 3D-printed phantoms with synthetic lesion insertion into raw PET data, giving a ground truth that is physically anchored, can represent spatial heterogeneity, and scales to datasets for AI and radiomics.",
+  "chapters": [
+    {"n": 0, "title": "The problem", "eli5": "Scanners have no answer key.", "detail": "Clinical trials lack ground truth; standard phantoms only have uniform spheres; simulations are models, not reality."},
+    {"n": 1, "title": "Sponges that set the brightness", "eli5": "Holes in a printed cube decide how bright it glows.", "detail": "Porosity encodes contrast (solidity 50–75 % → TBR 2.0–4.0). 36-cube phantom on GE DMI: designed contrast held; preparation drove day-to-day change.", "pubs": ["pesm2025", "sfpm2024"]},
+    {"n": 2, "title": "The computer copies the cube", "eli5": "A computer-drawn cube looks just like the printed one.", "detail": "Synthetic insertion (DUETTO) reproduced mean contrast within about 0–6 %; peak values stayed biased.", "pubs": ["ecr2025"]},
+    {"n": 3, "title": "Same recipe, two hospitals", "eli5": "Email the design file and another hospital gets the same answer.", "detail": "Printed at two facilities from shared files, scanned on DMI and OMNI: met ±10 % equivalence bounds.", "pubs": ["dualcentre"]},
+    {"n": 4, "title": "Tumours with patterns inside", "eli5": "Real tumours are patchy, so the printed ones are patchy too.", "detail": "Nested necrosis-like inserts, [18F]FDG and [68Ga]PSMA. Gini index as physical heterogeneity truth; radiomic rank agreement ρ 0.76–0.92. CASSOULET reproduced the trends.", "pubs": ["quantreality", "eanm2025"]},
+    {"n": 5, "title": "Real tumour shapes, twice", "eli5": "Copy real tumour shapes, print them, and also hide them in a healthy scan.", "detail": "8 TCIA lesion geometries, printed and inserted into healthy-volunteer total-body PET. Dice 0.67–0.92, cross-domain difference 0.04 ± 0.03.", "pubs": ["geoanchored"]}
+  ],
+  "takeaway": "Toward ground-truth tools that are physically anchored, anatomically realistic, and scalable for AI."
+}

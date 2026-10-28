@@ -5,9 +5,13 @@ and GitHub. Items marked **CONFIRM** need your check before they go public.
 
 ## 1. Identity & positioning (new)
 - **Headline:** Medical imaging scientist × AI builder. PET/CT simulation, digital twins, agentic research workflows.
-- **Now:** building small-scale generative / foundation models for PET/CT simulation and dosimetry (**CONFIRM**: I found
-  no write-up of this work yet; send 3–5 lines: data, model type, goal, status).
-- **Status:** PhD completed Sept 2026 (defense done, jury questions doc, thesis manuscript final). Update the site from "candidate" to "Dr." **CONFIRM** the title/date to show.
+- **Now:** *From PET/CT to Virtual PET*: a human-in-the-loop agentic framework that turns retrospective PET/CT into
+  auditable patient models (anatomy, functional regions, activity, attenuation), runs CASSOULET simulations, and writes
+  quantitative validation reports. Future branches: a NASGM-style learned simulator (surrogate) and PAD-style heterogeneous
+  PET synthesis. Status (28 Oct 2026): 11-subject DMI/OMNI cohort, 162 functional compartments, 3 cases accepted.
+  Source: `cassoulet_sim/sessions/Study_Design/Agentic_PET_Data_Generation_Overview_2026-10-28/PROJECT_OVERVIEW.md`.
+  **Framing rule:** present it as "building toward" learned generation. Training and validation are not done yet.
+- **Status:** PhD completed Sept 2026 (defense done, jury questions doc, thesis manuscript final). Update the site from "candidate" to "Dr." Display as **Sai Kiran Kumar Nalla, PhD**; use **"SenSai"** as the playful in-theme nickname.
 - **GitHub account is `SaiKiranKumarNalla`.** The old site links to `Sainalla82`, which does not exist on GitHub.
 
 ## 2. PhD thesis: "Evaluation of medical imaging devices using synthetically modified clinical images and 3D-printed phantoms"
@@ -35,8 +39,8 @@ Story arc (ready for the "explained like you're 5" motion piece):
 | 4 | MuPET: mass-transport physics for synthetic PET data | medRxiv 2025 | doi.org/10.1101/2025.07.31.25332512 |
 | 5 | 3D printed PET/CT phantom with mixed target uptake | EANM 2025 e-poster EP-0949 | — |
 | 6 | Gas embolism and pulsatile flow in a human carotid artery | J Biomech Eng 2022 | doi.org/10.1115/1.4054679 |
-| 7 | Geometry-Anchored Dual-Domain Framework for PET lesion ground truth | manuscript (**CONFIRM** if public) | — |
-| 8 | CASSOULET Sim / Virtual PET reference manuscripts (5R/6R, 3D) | drafts, Oct 2026 (**CONFIRM**) | — |
+| 7 | Geometry-Anchored Dual-Domain Framework for PET lesion ground truth | in preparation (approved) | — |
+| 8 | CASSOULET Sim / Virtual PET reference manuscripts (5R/6R, 3D) | in preparation (approved) | — |
 | 9 | ECR 2025 (C-28068), SFPM 2024, GEETS 2026 talk/article | conference | `Downloads/ECR25_C-28068.pdf`, `Article_GEETS_NALLA.pdf` |
 
 ## 4. Projects
@@ -51,7 +55,7 @@ Story arc (ready for the "explained like you're 5" motion piece):
   Screenshot: `VeriTomiX Office.app/Contents/Resources/office.png`.
 - **ANIMUS Jobs (Job agent):** a local-first AI career agent. Multi-source discovery, AI web radar, link
   verification by Claude/Codex, tailored CVs and letters, Fellowship Match, a game layer (XP, rarity tiers), kanban, calendar.
-  Python, v0.6. **CONFIRM** whether it's public and where the repo is.
+  Python, v0.6. **Not public yet** (release soon): show screenshots only, with a "coming soon" repo badge.
 - **Flow Lab:** a parametric pulsatile flow phantom simulator with a GUI. Pulsatile flow, bladder storage, exchanging
   sphere, PET/CT quality. Animated GIF/MP4 outputs are ready to reuse.
 - **Abdominal / human digital twin:** coupled FDG circulation and renal excretion, vascular splines, organ TACs, and a
@@ -71,11 +75,12 @@ Story arc (ready for the "explained like you're 5" motion piece):
 ## 6. Music / "Flow"
 Tracks found: *Sangeethama*, *C'est une grâce*, *Shāpanang Theme (ENG)* with stems, *Vathsalyama*, *With Synth Lead
 Melody* stems, and `shapnang_jukebbox`. Videos: Sangeethama.mp4, Shapnang Theme MP4, plus Google Flow AI clips.
-**CONFIRM:** is "flow music" your AI-made music (Suno/Udio?) shown with Google Flow videos? Which tracks may be public?
+Public playlists on Flow Music: https://www.flowmusic.app/playlist/cb6cb429-cafb-4434-85b5-06bed869db8b and
+https://www.flowmusic.app/playlist/57e341c6-85cd-461c-997d-fe7f3f9a70db (embed or link these; no self-hosted audio needed).
 
 ## 7. GitHub (SaiKiranKumarNalla)
 Public: `Medical-AI-self-learning-tasks`, `saikirankumarnalla.github.io`, `Self_Driving_Car_specialization`.
-Private: `MuPET-Noise-Generator`, `PET-Lesion-Mask-Generator`. **CONFIRM** which to feature.
+Private for now, going public soon: `MuPET-Noise-Generator`, `PET-Lesion-Mask-Generator`. Feature them with a "coming soon" badge.
 
 ## 8. Do NOT publish
 Personal IDs, payslips, housing, visa and bank documents. `office.json` (holds an email and security settings). Local paths and Colab account

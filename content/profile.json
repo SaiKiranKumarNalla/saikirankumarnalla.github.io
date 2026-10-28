@@ -1,0 +1,31 @@
+{
+  "name": "Sai Kiran Kumar Nalla",
+  "displayName": "Sai Kiran Kumar Nalla, PhD",
+  "nickname": "SenSai",
+  "headline": "Medical imaging scientist × AI builder",
+  "tagline": "I build virtual PET scanners, 3D-printed ground truth, and the AI agents that run the research.",
+  "now": "Building an agentic framework that turns PET/CT into auditable virtual patients and simulations, as the foundation for small generative and surrogate models for PET/CT simulation and dosimetry.",
+  "location": "Toulouse, France",
+  "openTo": ["Paris", "London", "Amsterdam", "Berlin", "Remote"],
+  "email": "sainalla82@gmail.com",
+  "links": {
+    "github": "https://github.com/SaiKiranKumarNalla",
+    "linkedin": "https://www.linkedin.com/in/sai-kiran-kumar-nalla",
+    "cv": "Assets/Sai_Nalla_CV.pdf"
+  },
+  "education": [
+    {"degree": "PhD, Medical Imaging & Radiophysics", "school": "Université de Toulouse · IUCT Oncopole", "years": "2023–2026", "note": "Defended September 2026"},
+    {"degree": "MSc, Biomechanical & Biomedical Engineering", "school": "École Polytechnique, IP Paris", "years": "2021–2023", "note": "Full scholarship, PhD Track"},
+    {"degree": "BTech, Mechanical Engineering", "school": "Mahindra École Centrale (Mahindra University)", "years": "2016–2020", "note": "Excellence scholarship"}
+  ],
+  "experience": [
+    {"role": "Doctoral Researcher", "org": "IUCT Oncopole", "years": "2023–2026", "points": ["Built CASSOULET PET/CT simulator and research digital twins (MATLAB, Python, PyTomography, parallelproj) with agentic LLM workflows", "Dynamic total-body PET lesion insertion", "3D-printed PET/CT phantoms and wall-less lesions", "Dual-centre phantom studies for harmonised quantification", "Collaborations with GE HealthCare, eMotion Tech, Rambam, Mahindra University"]},
+    {"role": "Researcher (Consulting)", "org": "Hepta Medical", "years": "2022–2023", "points": ["Predictive models for a minimally invasive cancer-treatment device", "MATLAB CT/MRI segmentation and visualisation toolbox"]},
+    {"role": "Preclinical Intern", "org": "Hôpital Saint Joseph", "years": "2022", "points": ["Patient-specific 3D-printed interventional cardiology bench"]},
+    {"role": "Research Intern", "org": "LadHyX, École Polytechnique", "years": "2022", "points": ["Soft gels and particle suspensions for drug delivery", "Automated image-tracking pipeline"]},
+    {"role": "Research Associate", "org": "Mahindra University", "years": "2020–2021", "points": ["In-silico embolism haemodynamics"]}
+  ],
+  "programmes": ["Nucleate France VC Mentorship (2026)", "McKinsey Forward (2025)", "Newtons Foundation VC Introduction (2025)", "European Cross-Border Doctorial (2025)", "SATT Paris-Saclay × E4H From Research to Market (2023)"],
+  "languages": ["English (C1, TOEIC 945)", "French (B1–B2)", "Hindi (C1)", "Telugu (native)"],
+  "interests": ["Speculative fiction", "Tabletop strategy", "Japanese culture", "Fusion cooking", "Travel", "Strength training"]
+}
