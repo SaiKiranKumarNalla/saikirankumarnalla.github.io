@@ -704,6 +704,225 @@
   .acc-meta { display: none; }
   .acc-content { grid-template-columns: 1fr; }
 }
+
+
+/* ── EDITORIAL EXPERIENCE TIMELINE ─────────────────── */
+.exp-introline {
+  margin: -1.6rem 0 2.4rem;
+  max-width: 760px;
+  color: rgba(240,235,227,.78);
+  font-size: .98rem;
+  line-height: 1.85;
+  font-weight: 300;
+}
+.exp-editorial {
+  display: grid;
+  gap: 1.15rem;
+  margin-bottom: 4.8rem;
+}
+.exp-card-new {
+  position: relative;
+  display: grid;
+  grid-template-columns: 86px 1fr minmax(160px, 230px);
+  gap: 1.6rem;
+  align-items: center;
+  min-height: 152px;
+  padding: 1.35rem 1.45rem;
+  border: 1px solid rgba(240,235,227,.13);
+  background:
+    linear-gradient(135deg, rgba(170,31,31,.085), transparent 38%),
+    rgba(10,10,11,.72);
+  overflow: hidden;
+  transition: transform .35s ease, border-color .35s ease, background .35s ease, box-shadow .35s ease;
+}
+.exp-card-new::before {
+  content: attr(data-index);
+  position: absolute;
+  right: 1.15rem;
+  top: .6rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 3.4rem;
+  letter-spacing: -.08em;
+  color: rgba(240,235,227,.035);
+  pointer-events: none;
+  transition: color .35s ease, transform .35s ease;
+}
+.exp-card-new::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--blood-glow);
+  transform: scaleY(.28);
+  transform-origin: center;
+  opacity: .55;
+  transition: transform .35s ease, opacity .35s ease;
+}
+.exp-card-new:hover,
+.exp-card-new.open {
+  transform: translateY(-3px);
+  border-color: rgba(255,76,76,.42);
+  background:
+    linear-gradient(135deg, rgba(170,31,31,.13), transparent 42%),
+    rgba(12,12,14,.86);
+  box-shadow: 0 24px 70px rgba(0,0,0,.34);
+}
+.exp-card-new:hover::after,
+.exp-card-new.open::after { transform: scaleY(1); opacity: .95; }
+.exp-card-new:hover::before,
+.exp-card-new.open::before { color: rgba(255,76,76,.075); transform: translateX(-8px); }
+.exp-logo-tile {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(240,235,227,.16);
+  background: rgba(255,255,255,.055);
+  position: relative;
+  overflow: hidden;
+}
+.exp-logo-tile::after {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(255,76,76,.18);
+  transform: rotate(45deg);
+}
+.exp-logo-tile img {
+  max-width: 54px;
+  max-height: 54px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+.exp-main-new { min-width: 0; }
+.exp-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(240,235,227,.68);
+  margin-bottom: .5rem;
+}
+.exp-main-new h2 {
+  margin: 0;
+  font-family: 'Zen Antique', serif;
+  font-size: clamp(1.45rem, 2.5vw, 2.05rem);
+  color: var(--paper);
+  line-height: 1.18;
+}
+.exp-company {
+  margin-top: .28rem;
+  color: #ff5555;
+  font-weight: 600;
+  font-size: .95rem;
+}
+.exp-summary {
+  margin-top: .72rem;
+  color: rgba(240,235,227,.78);
+  line-height: 1.72;
+  max-width: 650px;
+  font-size: .9rem;
+}
+.exp-side-new {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .75rem;
+  text-align: right;
+  position: relative;
+  z-index: 1;
+}
+.exp-period {
+  font-family: 'Space Mono', monospace;
+  font-size: .68rem;
+  color: rgba(240,235,227,.78);
+  letter-spacing: .08em;
+}
+.exp-place {
+  font-family: 'Space Mono', monospace;
+  font-size: .57rem;
+  color: rgba(240,235,227,.58);
+  letter-spacing: .08em;
+}
+.exp-chipline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  justify-content: flex-end;
+}
+.exp-chipline span {
+  font-family: 'Space Mono', monospace;
+  font-size: .48rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(240,235,227,.76);
+  border: 1px solid rgba(240,235,227,.15);
+  padding: .24rem .48rem;
+  background: rgba(255,255,255,.025);
+}
+.exp-details-btn {
+  border: 1px solid rgba(255,76,76,.35);
+  background: transparent;
+  color: rgba(240,235,227,.86);
+  font-family: 'Space Mono', monospace;
+  font-size: .55rem;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  padding: .55rem .75rem;
+  cursor: pointer;
+  transition: border-color .25s ease, color .25s ease, background .25s ease;
+}
+.exp-details-btn:hover { border-color: var(--blood-glow); color: var(--paper); background: rgba(170,31,31,.12); }
+.exp-details-new {
+  grid-column: 2 / 4;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .42s ease, opacity .32s ease, margin-top .32s ease;
+  opacity: 0;
+}
+.exp-card-new.open .exp-details-new {
+  max-height: 360px;
+  opacity: 1;
+  margin-top: .2rem;
+}
+.exp-details-new ul {
+  margin: 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid rgba(240,235,227,.1);
+  display: grid;
+  gap: .55rem;
+}
+.exp-details-new li {
+  list-style: none;
+  color: rgba(240,235,227,.76);
+  font-size: .82rem;
+  line-height: 1.62;
+  position: relative;
+  padding-left: 1rem;
+}
+.exp-details-new li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--blood-glow);
+}
+@media (max-width: 900px) {
+  .exp-card-new { grid-template-columns: 64px 1fr; }
+  .exp-side-new { grid-column: 2; align-items: flex-start; text-align: left; }
+  .exp-chipline { justify-content: flex-start; }
+  .exp-details-new { grid-column: 1 / -1; }
+  .exp-logo-tile { width: 58px; height: 58px; }
+  .exp-logo-tile img { max-width: 44px; max-height: 44px; }
+}
+@media (max-width: 640px) {
+  .exp-page { padding: 0 1.1rem 4rem; }
+  .exp-card-new { grid-template-columns: 1fr; gap: 1rem; padding: 1.15rem; }
+  .exp-side-new { grid-column: auto; }
+}
+
 </style>
 </head>
 <body>
@@ -755,195 +974,117 @@
       <div class="exp-stat"><div class="exp-stat-bg"></div><div class="exp-stat-num">3</div><div class="exp-stat-label">Countries</div></div>
     </div>
 
-    <div class="exp-divider reveal">Professional Positions — Click to expand</div>
+    <p class="exp-introline reveal">A selected path through hospitals, startups, labs, and engineering teams — not a dense CV table, but the environments that shaped how I work.</p>
 
-    <!-- ── ACCORDION ── -->
-    <div class="accordion-list stagger" id="accList">
+    <div class="exp-divider reveal">Selected Experience — Click for details</div>
 
-      <div class="acc-item open" data-id="0">
-        <div class="acc-header">
-          <div class="acc-symbol"><span>博</span></div>
-          <div class="acc-info"><div class="acc-role">Doctoral Researcher</div><div class="acc-org">IUCT Oncopole (University Cancer Hospital)</div></div>
-          <div class="acc-meta"><div class="acc-dates">Oct 2023 — Present</div><div class="acc-location">Toulouse, France</div></div>
-          <div class="acc-chevron"></div>
+    <section class="exp-editorial stagger" id="experienceTimeline">
+      <article class="exp-card-new" data-index="01">
+        <div class="exp-logo-tile"><img src="Assets/logos/iuct-oncopole/logo.png" alt="IUCT Oncopole logo"></div>
+        <div class="exp-main-new">
+          <div class="exp-eyebrow">Chapter 01</div>
+          <h2>Doctoral Researcher</h2>
+          <div class="exp-company">IUCT Oncopole</div>
+          <p class="exp-summary">Working across medical imaging validation, simulation, physical phantoms, software tools, and clinical/industrial collaboration.</p>
         </div>
-        <div class="acc-body"><div class="acc-content">
-          <div class="acc-scan"></div><div class="acc-corner tl"></div><div class="acc-corner tr"></div><div class="acc-corner bl"></div><div class="acc-corner br"></div>
-          <div class="acc-left">
-            <div class="acc-label-chronicle">Selected Chronicle</div>
-            <div class="acc-detail-tags"><span class="acc-tag">PET/CT</span><span class="acc-tag">Medical Imaging</span><span class="acc-tag">Simulation</span><span class="acc-tag">Clinical Translation</span><span class="acc-tag">IP Strategy</span></div>
-            <div class="acc-kanji-bg">博</div>
-          </div>
-          <div class="acc-right">
-            <p class="acc-mission">Leading translational PET/CT simulation work across clinical, industrial, and academic collaborators — bridging the gap between the scanner and the code.</p>
-            <div class="acc-hl-label">Highlights</div>
-            <div class="acc-bullets">
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Cross-functional projects with GE Healthcare, eMotion, and Mahindra University</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Computational PET/CT simulation models and 3D-printed heterogeneous phantoms</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Retrospective clinical study on Dynamic PET with expanded data libraries</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>IP strategy and commercial valorisation with Toulouse Tech Transfer</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Project proposals, scientific production, and supervision of interns</span></div>
-            </div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="acc-item" data-id="1">
-        <div class="acc-header">
-          <div class="acc-symbol"><span>医</span></div>
-          <div class="acc-info"><div class="acc-role">Researcher &amp; Consultant</div><div class="acc-org">Hepta Medical (Deep-tech Startup)</div></div>
-          <div class="acc-meta"><div class="acc-dates">Dec 2022 — Sep 2023</div><div class="acc-location">Suresnes, France</div></div>
-          <div class="acc-chevron"></div>
+        <div class="exp-side-new">
+          <div><div class="exp-period">Oct 2023 — Present</div><div class="exp-place">Toulouse, France</div></div>
+          <div class="exp-chipline"><span>Medical Imaging</span><span>Validation</span><span>Simulation</span></div>
+          <button class="exp-details-btn" type="button" aria-expanded="false">View details</button>
         </div>
-        <div class="acc-body"><div class="acc-content">
-          <div class="acc-scan"></div><div class="acc-corner tl"></div><div class="acc-corner tr"></div><div class="acc-corner bl"></div><div class="acc-corner br"></div>
-          <div class="acc-left">
-            <div class="acc-label-chronicle">Selected Chronicle</div>
-            <div class="acc-detail-tags"><span class="acc-tag">MedTech</span><span class="acc-tag">Predictive Modelling</span><span class="acc-tag">Startup R&amp;D</span><span class="acc-tag">Clinical Visualization</span></div>
-            <div class="acc-kanji-bg">医</div>
-          </div>
-          <div class="acc-right">
-            <p class="acc-mission">Translated R&amp;D data into product-facing models and clinical visualizations for a minimally invasive cancer treatment startup.</p>
-            <div class="acc-hl-label">Highlights</div>
-            <div class="acc-bullets">
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Predictive models for a minimally invasive cancer treatment device</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Automated tools translating R&amp;D data into clinical visualizations for investor demos</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Pre-clinical validation and core R&amp;D roadmap support</span></div>
-            </div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="acc-item" data-id="2">
-        <div class="acc-header">
-          <div class="acc-symbol"><span>臨</span></div>
-          <div class="acc-info"><div class="acc-role">Preclinical Intern</div><div class="acc-org">Hospital Saint Joseph</div></div>
-          <div class="acc-meta"><div class="acc-dates">May 2022 — Jul 2022</div><div class="acc-location">Paris, France</div></div>
-          <div class="acc-chevron"></div>
+        <div class="exp-details-new"><ul><li>Developed PET/CT validation workflows using computational simulation and physical phantoms.</li><li>Built tools for lesion modelling, scanner testing, and reproducible analysis.</li><li>Collaborated with clinical and industrial partners including GE Healthcare.</li></ul></div>
+      </article>
+      <article class="exp-card-new" data-index="02">
+        <div class="exp-logo-tile"><img src="Assets/logos/hepta-medical/logo.png" alt="Hepta Medical logo"></div>
+        <div class="exp-main-new">
+          <div class="exp-eyebrow">Chapter 02</div>
+          <h2>Researcher & Consultant</h2>
+          <div class="exp-company">Hepta Medical</div>
+          <p class="exp-summary">Translated technical R&D into product-facing models, clinical visualizations, and clearer startup narratives.</p>
         </div>
-        <div class="acc-body"><div class="acc-content">
-          <div class="acc-scan"></div><div class="acc-corner tl"></div><div class="acc-corner tr"></div><div class="acc-corner bl"></div><div class="acc-corner br"></div>
-          <div class="acc-left">
-            <div class="acc-label-chronicle">Selected Chronicle</div>
-            <div class="acc-detail-tags"><span class="acc-tag">Clinical Prototyping</span><span class="acc-tag">3D Printing</span><span class="acc-tag">Cardiology</span><span class="acc-tag">Workflow Analysis</span></div>
-            <div class="acc-kanji-bg">臨</div>
-          </div>
-          <div class="acc-right">
-            <p class="acc-mission">Worked at the interface of anatomical data, surgical workflows, and patient-specific prototyping inside a live clinical environment.</p>
-            <div class="acc-hl-label">Highlights</div>
-            <div class="acc-bullets">
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Translated anatomical data into 3D-printed patient-specific simulation benches</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Shadowed interventional cardiologists in live surgical procedures</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Identified logistical bottlenecks and unmet clinical needs</span></div>
-            </div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="acc-item" data-id="3">
-        <div class="acc-header">
-          <div class="acc-symbol"><span>流</span></div>
-          <div class="acc-info"><div class="acc-role">Research Intern</div><div class="acc-org">LadHyX — École Polytechnique</div></div>
-          <div class="acc-meta"><div class="acc-dates">Mar 2022 — May 2022</div><div class="acc-location">Palaiseau, France</div></div>
-          <div class="acc-chevron"></div>
+        <div class="exp-side-new">
+          <div><div class="exp-period">Dec 2022 — Sep 2023</div><div class="exp-place">Suresnes, France</div></div>
+          <div class="exp-chipline"><span>MedTech</span><span>Startup</span><span>Strategy</span></div>
+          <button class="exp-details-btn" type="button" aria-expanded="false">View details</button>
         </div>
-        <div class="acc-body"><div class="acc-content">
-          <div class="acc-scan"></div><div class="acc-corner tl"></div><div class="acc-corner tr"></div><div class="acc-corner bl"></div><div class="acc-corner br"></div>
-          <div class="acc-left">
-            <div class="acc-label-chronicle">Selected Chronicle</div>
-            <div class="acc-detail-tags"><span class="acc-tag">Soft Matter</span><span class="acc-tag">Drug Delivery</span><span class="acc-tag">Image Analysis</span><span class="acc-tag">Python / MATLAB</span></div>
-            <div class="acc-kanji-bg">流</div>
-          </div>
-          <div class="acc-right">
-            <p class="acc-mission">Built experimental and computational tools for soft matter systems with relevance to targeted drug delivery.</p>
-            <div class="acc-hl-label">Highlights</div>
-            <div class="acc-bullets">
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Experiments on soft gels and particle suspensions for drug delivery systems</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Automated image tracking and analysis pipelines</span></div>
-            </div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="acc-item" data-id="4">
-        <div class="acc-header">
-          <div class="acc-symbol"><span>創</span></div>
-          <div class="acc-info"><div class="acc-role">Design Project Associate</div><div class="acc-org">Manitty (Deep-tech Startup)</div></div>
-          <div class="acc-meta"><div class="acc-dates">Nov 2021 — Sep 2022</div><div class="acc-location">Palaiseau, France</div></div>
-          <div class="acc-chevron"></div>
+        <div class="exp-details-new"><ul><li>Built predictive models for a minimally invasive cancer treatment device.</li><li>Automated tools that turned R&D data into clinical and investor-facing visualizations.</li><li>Supported pre-clinical validation and R&D roadmap decisions.</li></ul></div>
+      </article>
+      <article class="exp-card-new" data-index="03">
+        <div class="exp-logo-tile"><img src="Assets/logos/hospital-saint-joseph/logo.png" alt="Hospital Saint Joseph logo"></div>
+        <div class="exp-main-new">
+          <div class="exp-eyebrow">Chapter 03</div>
+          <h2>Preclinical Intern</h2>
+          <div class="exp-company">Hospital Saint Joseph</div>
+          <p class="exp-summary">Worked inside a clinical environment, connecting anatomical data, surgical workflows, and patient-specific prototyping.</p>
         </div>
-        <div class="acc-body"><div class="acc-content">
-          <div class="acc-scan"></div><div class="acc-corner tl"></div><div class="acc-corner tr"></div><div class="acc-corner bl"></div><div class="acc-corner br"></div>
-          <div class="acc-left">
-            <div class="acc-label-chronicle">Selected Chronicle</div>
-            <div class="acc-detail-tags"><span class="acc-tag">Deep-Tech</span><span class="acc-tag">Market Mapping</span><span class="acc-tag">Electrodes</span><span class="acc-tag">Prototype Assessment</span></div>
-            <div class="acc-kanji-bg">創</div>
-          </div>
-          <div class="acc-right">
-            <p class="acc-mission">Combined technical prototyping with market intelligence for an electrode deep-tech startup — from microscopy benches to CEO briefings.</p>
-            <div class="acc-hl-label">Highlights</div>
-            <div class="acc-bullets">
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Market mapping of electrode technologies with monthly CEO briefings</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Designed and characterized polymer electrodes using advanced microscopy</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Evaluated prototypes on scalability, manufacturing, and cost effectiveness</span></div>
-            </div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="acc-item" data-id="5">
-        <div class="acc-header">
-          <div class="acc-symbol"><span>工</span></div>
-          <div class="acc-info"><div class="acc-role">Project Partner / Associate</div><div class="acc-org">École Polytechnique</div></div>
-          <div class="acc-meta"><div class="acc-dates">Oct 2021 — Jun 2023</div><div class="acc-location">Palaiseau, France</div></div>
-          <div class="acc-chevron"></div>
+        <div class="exp-side-new">
+          <div><div class="exp-period">May 2022 — Jul 2022</div><div class="exp-place">Paris, France</div></div>
+          <div class="exp-chipline"><span>Clinical</span><span>3D Printing</span><span>Workflow</span></div>
+          <button class="exp-details-btn" type="button" aria-expanded="false">View details</button>
         </div>
-        <div class="acc-body"><div class="acc-content">
-          <div class="acc-scan"></div><div class="acc-corner tl"></div><div class="acc-corner tr"></div><div class="acc-corner bl"></div><div class="acc-corner br"></div>
-          <div class="acc-left">
-            <div class="acc-label-chronicle">Selected Chronicle</div>
-            <div class="acc-detail-tags"><span class="acc-tag">4D MRI</span><span class="acc-tag">In-Silico Modelling</span><span class="acc-tag">CFD</span><span class="acc-tag">Biomedical Engineering</span></div>
-            <div class="acc-kanji-bg">工</div>
-          </div>
-          <div class="acc-right">
-            <p class="acc-mission">Translated clinical imaging datasets into simulation-ready models across multiple biomedical engineering projects.</p>
-            <div class="acc-hl-label">Highlights</div>
-            <div class="acc-bullets">
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Clinical 4D MRI datasets converted into high-fidelity in-silico models</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Pharmaceutical simulations on targeted drug delivery carriers</span></div>
-            </div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="acc-item" data-id="6">
-        <div class="acc-header">
-          <div class="acc-symbol"><span>血</span></div>
-          <div class="acc-info"><div class="acc-role">Research Associate</div><div class="acc-org">Mahindra University</div></div>
-          <div class="acc-meta"><div class="acc-dates">Aug 2020 — Sep 2021</div><div class="acc-location">Hyderabad, India</div></div>
-          <div class="acc-chevron"></div>
+        <div class="exp-details-new"><ul><li>Translated anatomical data into 3D-printed patient-specific simulation benches.</li><li>Shadowed interventional cardiologists in live surgical procedures.</li><li>Mapped logistical bottlenecks and unmet clinical needs.</li></ul></div>
+      </article>
+      <article class="exp-card-new" data-index="04">
+        <div class="exp-logo-tile"><img src="Assets/logos/ladhyx/logo.png" alt="LadHyX — École Polytechnique logo"></div>
+        <div class="exp-main-new">
+          <div class="exp-eyebrow">Chapter 04</div>
+          <h2>Research Intern</h2>
+          <div class="exp-company">LadHyX — École Polytechnique</div>
+          <p class="exp-summary">Built experimental and computational tools for soft matter systems with relevance to targeted drug delivery.</p>
         </div>
-        <div class="acc-body"><div class="acc-content">
-          <div class="acc-scan"></div><div class="acc-corner tl"></div><div class="acc-corner tr"></div><div class="acc-corner bl"></div><div class="acc-corner br"></div>
-          <div class="acc-left">
-            <div class="acc-label-chronicle">Selected Chronicle</div>
-            <div class="acc-detail-tags"><span class="acc-tag">Biomechanics</span><span class="acc-tag">CFD</span><span class="acc-tag">Blood Flow</span><span class="acc-tag">Mentorship</span></div>
-            <div class="acc-kanji-bg">血</div>
-          </div>
-          <div class="acc-right">
-            <p class="acc-mission">Computational simulation of embolism behavior in vascular flow — the origin point of a research career.</p>
-            <div class="acc-hl-label">Highlights</div>
-            <div class="acc-bullets">
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Computational simulations on embolism behaviour in blood flow</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Supervised and mentored student groups within technical clubs</span></div>
-              <div class="acc-bullet"><span class="acc-bullet-glyph">斬</span><span>Drafted scientific articles and project proposals</span></div>
-            </div>
-          </div>
-        </div></div>
-      </div>
-
-    </div>
-
+        <div class="exp-side-new">
+          <div><div class="exp-period">Mar 2022 — May 2022</div><div class="exp-place">Palaiseau, France</div></div>
+          <div class="exp-chipline"><span>Soft Matter</span><span>Drug Delivery</span><span>Analysis</span></div>
+          <button class="exp-details-btn" type="button" aria-expanded="false">View details</button>
+        </div>
+        <div class="exp-details-new"><ul><li>Ran experiments on soft gels and particle suspensions for drug delivery systems.</li><li>Built automated image tracking and analysis pipelines.</li><li>Connected experimental observations with computational interpretation.</li></ul></div>
+      </article>
+      <article class="exp-card-new" data-index="05">
+        <div class="exp-logo-tile"><img src="Assets/logos/manitty/logo.png" alt="Manitty logo"></div>
+        <div class="exp-main-new">
+          <div class="exp-eyebrow">Chapter 05</div>
+          <h2>Design Project Associate</h2>
+          <div class="exp-company">Manitty</div>
+          <p class="exp-summary">Combined technical prototyping with market intelligence for a deep-tech startup, from microscopy benches to CEO briefings.</p>
+        </div>
+        <div class="exp-side-new">
+          <div><div class="exp-period">Nov 2021 — Sep 2022</div><div class="exp-place">Palaiseau, France</div></div>
+          <div class="exp-chipline"><span>Deep-Tech</span><span>Design</span><span>Market</span></div>
+          <button class="exp-details-btn" type="button" aria-expanded="false">View details</button>
+        </div>
+        <div class="exp-details-new"><ul><li>Mapped electrode technologies and prepared monthly CEO briefings.</li><li>Designed and characterized polymer electrodes using advanced microscopy.</li><li>Evaluated prototypes on scalability, manufacturing, and cost effectiveness.</li></ul></div>
+      </article>
+      <article class="exp-card-new" data-index="06">
+        <div class="exp-logo-tile"><img src="Assets/logos/ecole-polytechnique/logo.png" alt="École Polytechnique logo"></div>
+        <div class="exp-main-new">
+          <div class="exp-eyebrow">Chapter 06</div>
+          <h2>Project Partner / Associate</h2>
+          <div class="exp-company">École Polytechnique</div>
+          <p class="exp-summary">Translated clinical imaging datasets into simulation-ready models across biomedical engineering projects.</p>
+        </div>
+        <div class="exp-side-new">
+          <div><div class="exp-period">Oct 2021 — Jun 2023</div><div class="exp-place">Palaiseau, France</div></div>
+          <div class="exp-chipline"><span>Biomedical Eng.</span><span>CFD</span><span>4D MRI</span></div>
+          <button class="exp-details-btn" type="button" aria-expanded="false">View details</button>
+        </div>
+        <div class="exp-details-new"><ul><li>Converted clinical 4D MRI datasets into high-fidelity in-silico models.</li><li>Worked on pharmaceutical simulations for targeted drug delivery carriers.</li><li>Built bridges between clinical data, models, and engineering interpretation.</li></ul></div>
+      </article>
+      <article class="exp-card-new" data-index="07">
+        <div class="exp-logo-tile"><img src="Assets/logos/mahindra-university/logo.png" alt="Mahindra University logo"></div>
+        <div class="exp-main-new">
+          <div class="exp-eyebrow">Chapter 07</div>
+          <h2>Research Associate</h2>
+          <div class="exp-company">Mahindra University</div>
+          <p class="exp-summary">Worked on computational simulation of embolism behavior in vascular flow — the origin point of my research career.</p>
+        </div>
+        <div class="exp-side-new">
+          <div><div class="exp-period">Aug 2020 — Sep 2021</div><div class="exp-place">Hyderabad, India</div></div>
+          <div class="exp-chipline"><span>Biomechanics</span><span>CFD</span><span>Mentorship</span></div>
+          <button class="exp-details-btn" type="button" aria-expanded="false">View details</button>
+        </div>
+        <div class="exp-details-new"><ul><li>Ran computational simulations on embolism behaviour in blood flow.</li><li>Mentored student groups within technical clubs.</li><li>Drafted scientific articles and project proposals.</li></ul></div>
+      </article>
+    </section>
 
     <div class="exp-divider reveal">Technical Arsenal &amp; Field Competencies</div>
 
@@ -1084,15 +1225,20 @@
 <script src="kage-3d.js"></script>
 <script src="kage.js"></script>
 <script>
-/* ── Accordion ── */
-document.querySelectorAll('.acc-header').forEach(header => {
-  header.addEventListener('click', function() {
-    const item = this.closest('.acc-item');
-    const wasOpen = item.classList.contains('open');
-    document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+/* ── Editorial experience cards ── */
+document.querySelectorAll('.exp-details-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const card = this.closest('.exp-card-new');
+    const wasOpen = card.classList.contains('open');
+    document.querySelectorAll('.exp-card-new').forEach(c => {
+      c.classList.remove('open');
+      const b = c.querySelector('.exp-details-btn');
+      if (b) { b.setAttribute('aria-expanded', 'false'); b.textContent = 'View details'; }
+    });
     if (!wasOpen) {
-      item.classList.add('open');
-      setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+      card.classList.add('open');
+      this.setAttribute('aria-expanded', 'true');
+      this.textContent = 'Hide details';
     }
   });
 });

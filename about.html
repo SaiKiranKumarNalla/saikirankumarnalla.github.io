@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Ronin — Sai Nalla</title>
 <link rel="stylesheet" href="styles.css">
-<link rel="preload" as="image" href="story-assets/shapanang-preview-01.webp">
+<link rel="preload" as="image" href="story-assets/shapanang/cover.png">
 <style>
 .about-intro{max-width:720px}
 .about-intro p{font-size:1.05rem;line-height:2;color:var(--mist);font-weight:300;margin-bottom:1.5rem}
@@ -91,17 +91,24 @@
 /* ── FICTION SHELF CTA ── */
 .fiction-intro{max-width:880px;margin:2.4rem 0 1.2rem;font-size:.95rem;line-height:1.9;color:var(--mist);font-weight:300}.fiction-intro strong{color:var(--paper);font-weight:500}
 .story-cta{margin-top:1.2rem}
-.story-cta-inner{display:grid;grid-template-columns:140px 1fr auto;gap:1.6rem;align-items:center;text-decoration:none;color:var(--paper);border:1px solid var(--ghost-line);background:linear-gradient(135deg,rgba(139,26,26,.07),transparent 42%),var(--ghost);padding:1.4rem;position:relative;overflow:hidden;transition:all .35s}
+.story-cta-inner{display:grid;grid-template-columns:270px 1fr auto;gap:1.6rem;align-items:center;text-decoration:none;color:var(--paper);border:1px solid var(--ghost-line);background:linear-gradient(135deg,rgba(139,26,26,.07),transparent 42%),var(--ghost);padding:1.4rem;position:relative;overflow:hidden;transition:all .35s}
 .story-cta-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--blood),transparent);opacity:.45}
 .story-cta-inner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blood);transform:scaleX(0);transform-origin:left;transition:transform .35s}
 .story-cta-inner:hover{border-color:rgba(139,26,26,.35);background:linear-gradient(135deg,rgba(139,26,26,.11),transparent 46%),var(--ghost);transform:translateY(-2px)}
 .story-cta-inner:hover::after{transform:scaleX(1)}
-.story-cover{width:140px;aspect-ratio:3/4;object-fit:cover;border:1px solid rgba(240,235,227,.13);box-shadow:0 12px 36px rgba(0,0,0,.35);background:#080809}
+.story-covers{display:grid;grid-template-columns:repeat(3,78px);gap:.55rem;align-items:end}
+.story-cover{width:78px;aspect-ratio:3/4;object-fit:cover;border:1px solid rgba(240,235,227,.13);box-shadow:0 12px 36px rgba(0,0,0,.35);background:#080809;transition:transform .35s, border-color .35s}
+.story-cover:nth-child(2){transform:translateY(10px)}
+.story-cover:nth-child(3){transform:translateY(20px)}
+.story-cta-inner:hover .story-cover{border-color:rgba(139,26,26,.45)}
+.story-cta-inner:hover .story-cover:nth-child(1){transform:translateY(-3px)}
+.story-cta-inner:hover .story-cover:nth-child(2){transform:translateY(7px)}
+.story-cta-inner:hover .story-cover:nth-child(3){transform:translateY(17px)}
 .story-label{font-family:'Space Mono',monospace;font-size:.55rem;text-transform:uppercase;letter-spacing:.18em;color:var(--blood-glow);margin-bottom:.45rem}
 .story-title{font-family:'Zen Antique',serif;font-size:1.25rem;margin-bottom:.45rem;color:var(--paper)}
 .story-desc{font-size:.88rem;line-height:1.75;color:var(--mist);font-weight:300;max-width:720px}.story-desc strong{color:var(--paper);font-weight:500}
 .story-lock{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mist);white-space:nowrap;border:1px solid rgba(139,26,26,.35);padding:.75rem 1rem;background:rgba(139,26,26,.06)}
-@media(max-width:760px){.story-cta-inner{grid-template-columns:1fr;text-align:center}.story-cover{margin:0 auto}.story-lock{white-space:normal}}
+@media(max-width:760px){.story-cta-inner{grid-template-columns:1fr;text-align:center}.story-covers{margin:0 auto;grid-template-columns:repeat(3,70px)}.story-cover{width:70px}.story-lock{white-space:normal}}
 
 /* ── BEYOND THE BLADE EXPANDED ── */
 .beyond-copy{max-width:880px;font-size:.95rem;line-height:1.9;color:var(--mist);font-weight:300;margin:0 0 2rem}
@@ -116,9 +123,11 @@
 .beyond-title{font-family:'Zen Antique',serif;font-size:1.12rem;margin-bottom:.55rem;color:var(--paper)}
 .beyond-desc{font-size:.84rem;line-height:1.75;color:var(--mist);font-weight:300;margin-bottom:1rem}
 .cover-shelf{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:1rem}
+.cover-shelf.board-game-shelf{grid-template-columns:repeat(3,1fr)}
 .cover-slot{aspect-ratio:3/4;border:1px dashed rgba(240,235,227,.14);background:rgba(10,10,11,.38);display:flex;align-items:center;justify-content:center;color:var(--steel);font-family:'Space Mono',monospace;font-size:.48rem;text-transform:uppercase;letter-spacing:.12em;text-align:center;padding:.45rem}
 .cover-slot.board{aspect-ratio:1/1}
 .cover-art{position:relative;display:block;aspect-ratio:3/4;border:1px solid rgba(240,235,227,.14);background:#080809;overflow:hidden;text-decoration:none;color:var(--paper);box-shadow:0 14px 32px rgba(0,0,0,.28);transition:transform .3s,border-color .3s,box-shadow .3s}
+.cover-art.board-game{aspect-ratio:1/1}
 .cover-art:hover{transform:translateY(-3px);border-color:rgba(194,59,59,.55);box-shadow:0 18px 42px rgba(0,0,0,.42)}
 .cover-art img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.92) contrast(1.04);transition:transform .35s,filter .35s}
 .cover-art:hover img{transform:scale(1.045);filter:saturate(1.08) contrast(1.08)}
@@ -134,7 +143,7 @@ html[data-theme="light"] .beyond-desc{color:#4a4540!important}
 html[data-theme="light"] .beyond-title{color:#1a1a1c!important}
 html[data-theme="light"] .beyond-card,
 html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;border-color:rgba(26,26,28,.12)!important}
-@media(max-width:850px){.beyond-grid{grid-template-columns:1fr}.cover-shelf{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:850px){.beyond-grid{grid-template-columns:1fr}.cover-shelf,.cover-shelf.board-game-shelf{grid-template-columns:repeat(2,1fr)}}
 
 
 
@@ -241,28 +250,28 @@ html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;bo
         <div class="journey-era">2016 — 2020</div>
         <div class="journey-era-kanji">始</div>
       </div>
-      <div class="journey-text">It started with movement — fluids, forces, pressure waves. At <strong>Mahindra University</strong>, mechanical engineering pulled me toward biomechanics, arterial flow simulation, my first journal publication, and an autonomous underwater vehicle team that taught me leadership the hard way.</div>
+      <div class="journey-text">I started with machines, movement, and curiosity. At <strong>Mahindra University</strong>, mechanical engineering gave me the language of fluids, forces, pressure, and design — but it also pulled me toward the human body. Biomechanics, arterial flow simulation, my first journal publication, and an autonomous underwater vehicle team shaped those years. It was where I learned that engineering is not only about equations; it is also about patience, people, failure, and figuring things out when nothing works the first time.</div>
     </div>
     <div class="journey-chapter">
       <div>
         <div class="journey-era">2021 — 2023</div>
         <div class="journey-era-kanji">修</div>
       </div>
-      <div class="journey-text">France widened the map. At <strong>École Polytechnique</strong>, I moved through soft matter, drug delivery, hospital shadowing, 3D-printed surgical benches, and startup work. <strong>Hepta Medical</strong> showed me how research becomes a product story — and why I like the space between science and strategy.</div>
+      <div class="journey-text">France widened the map. At <strong>École Polytechnique</strong>, I moved through soft matter, drug delivery, hospital shadowing, 3D-printed surgical benches, and early startup work. I was learning science, but also learning how ideas travel — from a lab bench to a hospital, from a prototype to a pitch, from a technical result to a story people can believe in. <strong>Hepta Medical</strong> made that especially clear. It showed me why I like the space between research, product, and strategy.</div>
     </div>
     <div class="journey-chapter">
       <div>
         <div class="journey-era">2023 — Now</div>
         <div class="journey-era-kanji">博</div>
       </div>
-      <div class="journey-text">My PhD is about making PET/CT imaging more honest: simulations and physical phantoms that test whether scanners and algorithms measure what they claim to. It is code, 3D printing, validation, collaboration with <strong>GE Healthcare</strong>, and papers — with defense planned for <strong>September 2026</strong>.</div>
+      <div class="journey-text">My PhD brought me deeper into medical imaging, but also closer to the messy reality of proving whether a system truly works. I work on PET/CT validation through simulation, physical phantoms, code, 3D printing, and collaboration with clinical and industrial partners including <strong>GE Healthcare</strong>. Some days are technical, some days are logistical, and some days are just me trying to make a stubborn system behave. The goal is simple: make imaging measurements more trustworthy. My defense is planned for <strong>September 2026</strong>.</div>
     </div>
     <div class="journey-chapter">
       <div>
         <div class="journey-era">What's Next</div>
         <div class="journey-era-kanji">先</div>
       </div>
-      <div class="journey-text">Next, I am drawn to roles where technical depth meets decisions: <strong>healthcare ventures, life-sciences strategy, medtech, biotech VC, or translational deep-tech</strong>. I am exploring opportunities in Paris, London, Amsterdam, and Berlin.</div>
+      <div class="journey-text">Next, I want to stay close to problems where technical depth matters, but decisions matter too. I am drawn to <strong>healthcare ventures, life-sciences strategy, medtech, biotech VC, and translational deep-tech</strong> — places where science, business, and human need meet. I am exploring opportunities in Paris, London, Amsterdam, and Berlin, looking for work that is intellectually serious, useful in the real world, and still leaves room for curiosity.</div>
     </div>
   </div>
 </section>
@@ -277,33 +286,33 @@ html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;bo
   </div>
 </section>
 
-<!-- ── PERSONALITY ── -->
+<!-- ── WORKING STYLE ── -->
 <section class="content-section">
   <div class="section-header reveal">
-    <span class="section-num">心</span>
-    <h2 class="section-title">How I Think</h2>
+    <span class="section-num">考</span>
+    <h2 class="section-title">Working Style</h2>
     <div class="section-line"></div>
   </div>
   <div class="persona-grid stagger">
     <div class="persona-card">
-      <div class="persona-kanji">橋</div>
-      <div class="persona-title">The Bridge-Builder</div>
-      <div class="persona-desc">I connect worlds that don't usually talk to each other — physics and oncology, code and clinic, research and commercial strategy. I find the most interesting problems live in the gaps between disciplines.</div>
-    </div>
-    <div class="persona-card">
-      <div class="persona-kanji">匠</div>
-      <div class="persona-title">The Craftsman</div>
-      <div class="persona-desc">I care about doing things properly. Whether it's a MATLAB pipeline, a thesis chapter, or a phantom geometry — I obsess over precision, reproducibility, and getting the details right before moving on.</div>
-    </div>
-    <div class="persona-card">
       <div class="persona-kanji">問</div>
-      <div class="persona-title">The Questioner</div>
-      <div class="persona-desc">I'm not satisfied with "it works" — I want to know why it works, where it breaks, and what happens at the edges. This drives my research but also makes me a better collaborator and problem-solver.</div>
+      <div class="persona-title">Frame the Real Question</div>
+      <div class="persona-desc">Before jumping into tools, I like to slow down and ask what the problem really is. A technical question is often hiding a clinical, strategic, or human question underneath it.</div>
     </div>
     <div class="persona-card">
-      <div class="persona-kanji">動</div>
-      <div class="persona-title">The Builder</div>
-      <div class="persona-desc">I bias toward action. Ideas are interesting, but I want to see the prototype, run the simulation, write the first draft. I learn by making things and iterating — not by waiting for the perfect plan.</div>
+      <div class="persona-kanji">地</div>
+      <div class="persona-title">Map the System</div>
+      <div class="persona-desc">I try to see the full terrain: users, constraints, incentives, evidence, timelines, and failure points. The useful answer is rarely inside one discipline alone.</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-kanji">試</div>
+      <div class="persona-title">Test Small, Learn Fast</div>
+      <div class="persona-desc">I trust prototypes, simulations, sketches, and first drafts. Making a rough version quickly exposes what is vague, what is fragile, and what deserves more effort.</div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-kanji">訳</div>
+      <div class="persona-title">Translate the Work</div>
+      <div class="persona-desc">Good work should travel. I care about turning complex ideas into clear arguments, visuals, papers, pitches, or stories that different people can actually use.</div>
     </div>
   </div>
 </section>
@@ -360,13 +369,17 @@ html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;bo
 
   <div class="story-cta reveal">
     <a class="story-cta-inner" href="story.html" aria-label="Open fiction story preview archive">
-      <img class="story-cover" src="story-assets/shapanang-preview-01.webp" data-full="story-assets/cover.png" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='story-assets/cover.png'" alt="Cover preview from Sai Kiran Kumar Nalla's fiction shelf">
+      <div class="story-covers" aria-label="Fiction shelf book covers">
+        <img class="story-cover" src="story-assets/shapanang/cover.png" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='story-assets/cover.png'" alt="Shāpanang cover preview">
+        <img class="story-cover" src="story-assets/shapanang-ii/cover.png" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='story-assets/shapanang/cover.png'" alt="Shāpanang II cover preview">
+        <img class="story-cover" src="story-assets/up-there/cover.png" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.src='story-assets/shapanang/cover.png'" alt="Up There cover preview">
+      </div>
       <div class="story-copy">
         <div class="story-label">Fiction Shelf</div>
-        <div class="story-title">Current locked preview</div>
-        <div class="story-desc">A selected story preview from my fiction collection. Only a few pages are open; the rest stays sealed unless I choose to share access.</div>
+        <div class="story-title">Fiction Shelf</div>
+        <div class="story-desc">A growing fiction collection with Shāpanang, Shāpanang II, and Up There. Visual archives stay cinematic; prose novels stay book-like.</div>
       </div>
-      <div class="story-lock">Preview Locked Archive →</div>
+      <div class="story-lock">Open Fiction Shelf →</div>
     </a>
   </div>
 </section>
@@ -430,14 +443,34 @@ html[data-theme="light"] .cover-slot{background:rgba(26,26,28,.035)!important;bo
       <div class="beyond-kanji">盤</div>
       <div class="beyond-label">Board Games</div>
       <h3 class="beyond-title">Strategy away from the screen</h3>
-      <p class="beyond-desc">Board games are another way I enjoy systems: rules, incentives, negotiation, uncertainty, and pattern recognition. I will add favorite board-game covers here later.</p>
-      <div class="cover-shelf" aria-label="Placeholder board game cover shelf">
-        <div class="cover-slot board">Board Game</div>
-        <div class="cover-slot board">Board Game</div>
-        <div class="cover-slot board">Board Game</div>
-        <div class="cover-slot board">Board Game</div>
+      <p class="beyond-desc">Board games are another way I enjoy systems: rules, incentives, negotiation, uncertainty, and pattern recognition. This shelf collects the tabletop games I keep coming back to.</p>
+      <div class="cover-shelf board-game-shelf" aria-label="Board game cover shelf">
+        <a class="cover-art board-game" href="#" aria-label="Eclipse board game cover">
+          <img src="Assets/board-games/eclipse/cover.png" alt="Eclipse board game cover">
+          <span class="sr-only">Eclipse</span>
+        </a>
+        <a class="cover-art board-game" href="#" aria-label="Spice board game cover">
+          <img src="Assets/board-games/spice/cover.png" alt="Spice board game cover">
+          <span class="sr-only">Spice</span>
+        </a>
+        <a class="cover-art board-game" href="#" aria-label="Time Bomb board game cover">
+          <img src="Assets/board-games/time-bomb/cover.png" alt="Time Bomb board game cover">
+          <span class="sr-only">Time Bomb</span>
+        </a>
+        <a class="cover-art board-game" href="#" aria-label="Skull board game cover">
+          <img src="Assets/board-games/skull/cover.png" alt="Skull board game cover">
+          <span class="sr-only">Skull</span>
+        </a>
+        <a class="cover-art board-game" href="#" aria-label="Splendour board game cover">
+          <img src="Assets/board-games/splendour/cover.png" alt="Splendour board game cover">
+          <span class="sr-only">Splendour</span>
+        </a>
+        <a class="cover-art board-game" href="#" aria-label="Cosmic Encounters board game cover">
+          <img src="Assets/board-games/cosmic-encounters/cover.png" alt="Cosmic Encounters board game cover">
+          <span class="sr-only">Cosmic Encounters</span>
+        </a>
       </div>
-      <div class="beyond-note">Board-game shelf coming soon</div>
+      <div class="beyond-note">Selected board-game shelf</div>
     </article>
 
     <article class="beyond-card">

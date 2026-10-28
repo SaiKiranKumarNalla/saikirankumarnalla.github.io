@@ -27,7 +27,10 @@ var PAGE_CTX={
   'papers.html':'Publications',
   'contact.html':'Contact',
   'kage.html':'Kage',
-  'story.html':'Story',
+  'story.html':'Fiction Shelf',
+  'shapanang.html':'Shāpanang',
+  'shapanang-ii.html':'Shāpanang II',
+  'up-there.html':'Up There',
   'recruiter.html':'Recruiter Mode'
 };
 
@@ -58,7 +61,10 @@ function pageHint(){
   if(p==='contact.html')return 'On this page I can help draft an outreach message or point to email, LinkedIn, and GitHub.';
   if(p==='recruiter.html')return 'On this page I can create a role-specific profile, summarize case studies, or help contact Sai.';
   if(p==='kage.html')return 'On this page I can explain my expressions, modes, and hidden site commands.';
-  if(p==='story.html')return 'On this page I can introduce the fiction preview and creative side.';
+  if(p==='story.html')return 'On this page I can introduce the fiction shelf: Shāpanang, Shāpanang II, and Up There.';
+  if(p==='shapanang.html')return 'On this page I can introduce the Shāpanang locked visual archive.';
+  if(p==='shapanang-ii.html')return 'On this page I can introduce the Shāpanang II placeholder sequel archive.';
+  if(p==='up-there.html')return 'On this page I can introduce Up There, a prose novel preview rather than a visual archive.';
   return 'I can help you navigate this page.';
 }
 function recruiterPacket(role){
@@ -1006,8 +1012,10 @@ function startMainSiteTour(){
     {page:'projects.html', sel:'.archive-grid,.forge-path', title:'Project archive', text:'The archive expands the range of work: technical systems, visualizations, and research prototypes.', pose:'shadow'},
     {page:'papers.html', sel:'.page-hero,.research-presence', title:'Publications', text:'The Publications page is the proof layer: research presence, papers, and metrics.', pose:'bow'},
     {page:'papers.html', sel:'.papers-grid', title:'Paper scrolls', text:'The paper cards let visitors inspect abstracts and publication status without leaving the site.', pose:'scout'},
-    {page:'story.html', sel:'.story-hero', title:'Story shelf', text:'The Story page shows the creative writing side, with a cinematic locked preview.', pose:'smirk'},
-    {page:'story.html', sel:'.cinema,.screen', title:'Story preview', text:'This area is the reading/viewing frame for fiction previews and atmosphere.', pose:'shadow'},
+    {page:'story.html', sel:'.fiction-hero', title:'Fiction shelf', text:'The Fiction Shelf now gathers Shāpanang, Shāpanang II, and Up There in one place.', pose:'smirk'},
+    {page:'shapanang.html', sel:'.cinema,.screen', title:'Shāpanang preview', text:'This area is the reading/viewing frame for the Shāpanang visual archive.', pose:'shadow'},
+    {page:'shapanang-ii.html', sel:'.cinema,.screen', title:'Shāpanang II preview', text:'This placeholder sequel archive reuses current visuals until the final second-story assets are added.', pose:'shadow'},
+    {page:'up-there.html', sel:'.novel-reader', title:'Up There reader', text:'Up There uses a quiet prose reader for chapter text instead of visual-novel panels.', pose:'bow'},
     {page:'kage.html', sel:'#kage3dMount,.kage-viewer', title:'Kage render', text:'This is my hidden page: the full v43 render with expressions and states.', pose:'guardian'},
     {page:'kage.html', sel:'.kage-console,#kageConsole', title:'Ask Kage console', text:'This is the larger console for deeper questions, recruiter help, creative ideas, and site guidance.', pose:'speaking'},
     {page:'contact.html', sel:'.contact-hero', title:'Contact', text:'The contact page is the final path for reaching Sai directly.', pose:'bow'},

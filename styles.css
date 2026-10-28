@@ -1901,3 +1901,173 @@ background-size:46px 46px,46px 46px,5px 5px;mask-image:linear-gradient(to bottom
 .dyn-card:hover{transform:translateY(-5px);box-shadow:0 24px 70px rgba(0,0,0,.34),0 0 34px rgba(139,26,26,.13)}
 .dyn-card:hover::after{opacity:1}
 @media(prefers-reduced-motion:reduce){body::before,body::after{animation:none}.dyn-reveal{opacity:1;transform:none;filter:none;transition:none}.dyn-card,.dyn-card:hover{transform:none}.dynamic-cursor-glow{display:none}}
+
+/* ═══════════════════════════════════════════
+   HIGH CONTRAST PATCH — experience + projects
+   Improves red/grey readability on dim or calibrated monitors.
+   ═══════════════════════════════════════════ */
+:root {
+  --blood-accessible: #ff5a5a;
+  --blood-accessible-soft: #e24a4a;
+  --text-strong-accessible: #f6efe8;
+  --text-body-accessible: rgba(246, 239, 232, 0.90);
+  --text-muted-accessible: rgba(246, 239, 232, 0.74);
+  --text-faint-accessible: rgba(246, 239, 232, 0.62);
+  --line-accessible: rgba(246, 239, 232, 0.18);
+  --panel-accessible: rgba(246, 239, 232, 0.065);
+}
+
+/* Experience page: row titles, organization, dates, location, labels */
+.exp-divider,
+.forge-section-label {
+  color: var(--blood-accessible-soft) !important;
+  opacity: 1 !important;
+}
+
+.acc-item {
+  border-color: var(--line-accessible) !important;
+}
+
+.acc-header,
+.acc-content,
+.forge-stat,
+.forge-path,
+.artifact-card {
+  background-color: var(--panel-accessible) !important;
+  border-color: var(--line-accessible) !important;
+}
+
+.acc-role,
+.artifact-title,
+.forge-stat-num {
+  color: var(--text-strong-accessible) !important;
+}
+
+.acc-org,
+.exp-stat-num,
+.acc-symbol span,
+.acc-item.open .acc-symbol span,
+.acc-header:hover .acc-symbol span,
+.acc-label-chronicle,
+.acc-hl-label,
+.acc-bullet-glyph,
+.artifact-type,
+.artifact-link,
+.forge-filter.active,
+.forge-filter:hover {
+  color: var(--blood-accessible) !important;
+  opacity: 1 !important;
+}
+
+.acc-dates,
+.acc-location,
+.forge-stat-label,
+.artifact-meta,
+.artifact-tags,
+.artifact-brief,
+.acc-tag,
+.forge-path p,
+.path-desc {
+  color: var(--text-muted-accessible) !important;
+  opacity: 1 !important;
+}
+
+.acc-mission,
+.acc-bullet,
+.acc-bullet span:last-child,
+.artifact-brief,
+.artifact-detail,
+.artifact-body p {
+  color: var(--text-body-accessible) !important;
+  opacity: 1 !important;
+}
+
+.acc-chevron::before,
+.acc-chevron::after {
+  background: var(--text-muted-accessible) !important;
+  opacity: 1 !important;
+}
+
+.acc-symbol,
+.forge-filter,
+.artifact-card,
+.forge-stat,
+.forge-path {
+  border-color: var(--line-accessible) !important;
+}
+
+.acc-tag,
+.artifact-tag,
+.forge-filter {
+  color: var(--text-muted-accessible) !important;
+  border-color: rgba(246, 239, 232, 0.22) !important;
+}
+
+.acc-header:hover,
+.acc-item.open .acc-header,
+.artifact-card:hover,
+.forge-filter:hover,
+.forge-filter.active {
+  background: rgba(139, 26, 26, 0.14) !important;
+  border-color: rgba(255, 90, 90, 0.55) !important;
+}
+
+.acc-header::after,
+.artifact-card::after,
+.forge-stat::after,
+.forge-filter::after {
+  background: var(--blood-accessible) !important;
+}
+
+/* Page/project decorative text should remain atmospheric, but not make real text unreadable */
+.acc-kanji-bg,
+.bg-kanji,
+.bg-kanji-secondary {
+  opacity: 0.55;
+}
+
+/* Light theme remains readable without neon red */
+html[data-theme="light"] {
+  --blood-accessible: #9f1f1f;
+  --blood-accessible-soft: #8b1a1a;
+  --text-strong-accessible: #171413;
+  --text-body-accessible: #3d3732;
+  --text-muted-accessible: #5d544d;
+  --text-faint-accessible: #6d625a;
+  --line-accessible: rgba(26, 26, 28, 0.18);
+  --panel-accessible: rgba(26, 26, 28, 0.045);
+}
+
+html[data-theme="light"] .acc-header,
+html[data-theme="light"] .acc-content,
+html[data-theme="light"] .forge-stat,
+html[data-theme="light"] .forge-path,
+html[data-theme="light"] .artifact-card {
+  background-color: var(--panel-accessible) !important;
+  border-color: var(--line-accessible) !important;
+}
+
+html[data-theme="light"] .acc-role,
+html[data-theme="light"] .artifact-title,
+html[data-theme="light"] .forge-stat-num {
+  color: var(--text-strong-accessible) !important;
+}
+
+html[data-theme="light"] .acc-mission,
+html[data-theme="light"] .acc-bullet,
+html[data-theme="light"] .artifact-brief,
+html[data-theme="light"] .artifact-detail,
+html[data-theme="light"] .artifact-body p {
+  color: var(--text-body-accessible) !important;
+}
+
+html[data-theme="light"] .acc-dates,
+html[data-theme="light"] .acc-location,
+html[data-theme="light"] .forge-stat-label,
+html[data-theme="light"] .artifact-meta,
+html[data-theme="light"] .artifact-tags,
+html[data-theme="light"] .acc-tag,
+html[data-theme="light"] .forge-path p,
+html[data-theme="light"] .path-desc {
+  color: var(--text-muted-accessible) !important;
+}
