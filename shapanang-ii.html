@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shāpanang II — Locked Story Preview</title>
 <link rel="stylesheet" href="styles.css">
-<link rel="preload" as="image" href="story-assets/shapanang-ii/cover.png" fetchpriority="high">
+<link rel="preload" as="image" href="story-assets/shapanang-ii/cover.webp" fetchpriority="high">
 <link rel="preload" as="image" href="story-assets/shapanang-fragment-02-opening-village.webp">
 <meta name="description" content="A locked preview of Shāpanang II, a fictional cinematic story by Sai Kiran Kumar Nalla.">
 <style>
@@ -38,7 +38,7 @@
   </div>
 
   <section class="story-hero reveal">
-    <div class="cover-frame"><img class="story-cover" src="story-assets/shapanang-ii/cover.png" decoding="async" fetchpriority="high" onerror="this.src='story-assets/shapanang/cover.png'" alt="Placeholder cover of Shāpanang II by Sai Kiran Kumar Nalla"></div>
+    <div class="cover-frame"><img class="story-cover" src="story-assets/shapanang-ii/cover.webp" decoding="async" fetchpriority="high" onerror="this.src='story-assets/shapanang/cover.webp'" alt="Placeholder cover of Shāpanang II by Sai Kiran Kumar Nalla"></div>
     <div>
       <div class="story-kicker">Locked Fiction Archive</div>
       <h1 class="story-title">Shāpanang II</h1>
@@ -52,7 +52,7 @@
   <section class="cinema reveal" aria-label="Shāpanang II preview reader">
     <div class="cinema-top"><div class="cinema-label">Selected Memory Fragments</div><div class="cinema-count" id="pageCount">Cover</div></div>
     <div class="screen">
-      <img id="storyImage" class="story-page-img story-cover-screen" src="story-assets/shapanang-ii/cover.png" decoding="async" fetchpriority="high" onerror="this.src='story-assets/shapanang/cover.png'" alt="Shāpanang II cover preview">
+      <img id="storyImage" class="story-page-img story-cover-screen" src="story-assets/shapanang-ii/cover.webp" decoding="async" fetchpriority="high" onerror="this.src='story-assets/shapanang/cover.webp'" alt="Shāpanang II cover preview">
       <div id="lockedPanel" class="locked-panel" aria-live="polite">
         <div class="locked-kanji">封</div>
         <div class="locked-title">The remaining pages are sealed</div>
@@ -86,8 +86,8 @@
     {title:'Nangpa Pravesh', src:'story-assets/shapanang-fragment-15-nangpa-pravesh.webp'},
     {title:'Character Passage', src:'story-assets/shapanang-fragment-17-character-passage.webp'}
   ];
-  const coverSrc='story-assets/shapanang-ii/cover.png';
-  const fallbackCover='story-assets/shapanang/cover.png';
+  const coverSrc='story-assets/shapanang-ii/cover.webp';
+  const fallbackCover='story-assets/shapanang/cover.webp';
   const cache=new Map();
   function preload(src){
     if(!src||cache.has(src)) return cache.get(src);

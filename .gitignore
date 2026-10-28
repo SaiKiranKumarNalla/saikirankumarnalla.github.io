@@ -4,3 +4,7 @@
 !.dev.vars.example
 .env*
 !.env.example
+media/sources.local.tsv
+node_modules/
+dist/
+.DS_Store

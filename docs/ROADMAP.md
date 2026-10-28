@@ -36,3 +36,9 @@ The old folder `~/Documents/sainalla.github.io` stays untouched. Each task is on
 
 ## Phase F: Launch
 - **F1.** Performance, accessibility, SEO/OG and mobile QA.  **F2.** Merge to `main` and push (only with your OK).
+
+## Performance rules (agreed 2026-10-28)
+- No heavy PDFs online: the thesis and slides are told through the motion story and WebP stills, not hosted PDFs. The CV is the only PDF.
+- Originals stay on the Mac. `npm run media` converts the files listed in `media/sources.local.tsv` (gitignored) into
+  `public/media/`: WebP at 1600px plus a 640px thumb, and muted MP4 + WebM at 960px/24fps with a poster image. Metadata is stripped.
+- Never publish real-body surface renders or debugging figures.
