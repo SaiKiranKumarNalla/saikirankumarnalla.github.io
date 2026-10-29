@@ -14,7 +14,7 @@
 </script>
 </head>
 <body>
-  <canvas id="world" aria-label="3D village. Use the building list for keyboard or screen-reader navigation."></canvas>
+  <canvas id="world" aria-label="3D village. Use the building buttons at the bottom to travel."></canvas>
 
   <div class="w-loader" id="wLoader">
     <div class="w-loader-kanji">村</div>
@@ -41,7 +41,11 @@
     <div class="w-intro-jp">ようこそ</div>
     <h1 class="w-intro-name">Sai Kiran Kumar Nalla, PhD</h1>
     <p class="w-intro-role">Medical imaging scientist × AI builder</p>
-    <button class="w-intro-skip" id="wSkip">Enter the village</button>
+    <div class="w-intro-actions">
+      <button class="w-intro-skip" id="wSkip">Explore in 3D</button>
+      <a class="w-intro-site" href="index.html">Go to the website</a>
+    </div>
+    <p class="w-intro-hint">The 3D village is a playful way to browse. The website has everything in a normal layout.</p>
   </div>
 
   <div class="w-prompt" id="wPrompt" hidden>
@@ -49,15 +53,11 @@
     <div class="w-prompt-title" id="wPromptTitle"></div>
     <div class="w-prompt-sub" id="wPromptSub"></div>
     <a class="w-prompt-go" id="wPromptGo" href="#">Enter <kbd>E</kbd></a>
+    <button class="w-prompt-close" id="wPromptClose" aria-label="Close">×</button>
   </div>
 
-  <div class="w-help" id="wHelp">
-    <span class="w-help-desk"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrows to walk · click the ground to go there · <kbd>E</kbd> to enter</span>
-    <span class="w-help-touch">Tap the ground to walk · tap a building to visit</span>
-  </div>
-
-  <!-- Accessible, no-3D route to every building -->
-  <nav class="w-list" aria-label="Village buildings" id="wList"></nav>
+  <!-- Travel dock: click a building name and Kage walks you there (works without a keyboard) -->
+  <nav class="w-dock" id="wDock" aria-label="Walk to a building"></nav>
 
   <noscript><p class="w-noscript">The village needs JavaScript. <a href="index.html">Open the classic site</a>.</p></noscript>
   <script type="module" src="/src/world/main.js"></script>
