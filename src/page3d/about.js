@@ -1,6 +1,8 @@
 // About: a dark glass globe turns to each city of Sai's path as the visitor scrolls.
 import profile from '../../content/profile.json';
+import life from '../../content/life.json';
 import { runPage } from './engine.js';
+import { makeGlobe } from './globe.js';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const exp = (org) => profile.experience.find((e) => e.org.includes(org));
@@ -10,7 +12,7 @@ const role = (e) => e ? `<div class="s-role"><b>${esc(e.role || e.degree)}</b>, 
 const CITY = {
   hyderabad: { name: 'Hyderabad', sub: 'India', lat: 17.39, lon: 78.49 },
   paris: { name: 'Paris · Palaiseau', sub: 'France', lat: 48.71, lon: 2.25 },
-  toulouse: { name: 'Toulouse', sub: 'France', lat: 43.6, lon: 1.44, side: 'below' },
+  toulouse: { name: 'Toulouse', sub: 'France', lat: 43.6, lon: 1.44 },
   haifa: { name: 'Haifa', sub: 'Rambam Health Care Campus', lat: 32.79, lon: 34.99 },
   london: { name: 'London', sub: 'Open to', lat: 51.51, lon: -0.13, side: 'left' },
   amsterdam: { name: 'Amsterdam', sub: 'Open to', lat: 52.37, lon: 4.9, side: 'above' },
@@ -61,7 +63,8 @@ const STEPS = [
       <p>Drawn to where deep tech meets strategy: healthcare ventures, life-science consulting, and how research reaches patients.</p>
       <h3>Programmes</h3><div class="s-chips">${profile.programmes.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
       <h3>Languages</h3><div class="s-chips">${profile.languages.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
-      <h3>Interests</h3><div class="s-chips">${profile.interests.map((c) => `<span>${esc(c)}</span>`).join('')}</div>`,
+      <h3>Interests</h3><div class="s-chips">${profile.interests.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
+      <a class="s-more" href="/sections/life.html">Off the clock: travel, fiction, music and games →</a>`,
   },
 ];
 
@@ -70,43 +73,17 @@ document.getElementById('main').innerHTML = STEPS.map((s, i) =>
 
 runPage({
   active: 'about',
-  build({ THREE, scene, camera, label, reduceMotion }) {
+  build({ THREE, scene, camera, label, reduceMotion, lowPower }) {
     const R = 3.6;
     const globe = new THREE.Group();
     globe.position.set(3.6, 0, 0);
     scene.add(globe);
 
-    const core = new THREE.Mesh(
-      new THREE.SphereGeometry(R, 64, 48),
-      new THREE.MeshStandardMaterial({ color: 0x15101a, roughness: 0.85, metalness: 0.05, emissive: 0x1a0608, emissiveIntensity: 0.6 })
-    );
-    globe.add(core);
-    // Fresnel-like halo: a slightly larger back-face shell.
-    const halo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.06, 48, 32), new THREE.MeshBasicMaterial({ color: 0xd24a4a, transparent: true, opacity: 0.08, side: THREE.BackSide }));
-    globe.add(halo);
-
-    // Graticule: latitude and longitude lines.
-    const grid = [];
-    const ll = (lat, lon, r = R) => {
-      const la = THREE.MathUtils.degToRad(lat), lo = THREE.MathUtils.degToRad(lon);
-      return new THREE.Vector3(Math.cos(la) * Math.sin(lo) * r, Math.sin(la) * r, Math.cos(la) * Math.cos(lo) * r);
-    };
-    for (let lat = -60; lat <= 60; lat += 30) for (let lon = 0; lon < 360; lon += 4) grid.push(ll(lat, lon, R * 1.002), ll(lat, lon + 4, R * 1.002));
-    for (let lon = 0; lon < 180; lon += 30) for (let lat = -90; lat < 90; lat += 4) {
-      grid.push(ll(lat, lon, R * 1.002), ll(lat + 4, lon, R * 1.002));
-      grid.push(ll(lat, lon + 180, R * 1.002), ll(lat + 4, lon + 180, R * 1.002));
-    }
-    const gridMat = new THREE.LineBasicMaterial({ color: 0xf2ece4, transparent: true, opacity: 0.1 });
-    globe.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(grid), gridMat));
-
-    // Dotted surface: an even point cloud gives the globe texture without any map data.
-    const dots = [];
-    for (let i = 0; i < 1800; i++) {
-      const y = 1 - (i / 1799) * 2, r = Math.sqrt(1 - y * y), phi = i * 2.399963;
-      dots.push(new THREE.Vector3(Math.cos(phi) * r * R * 1.004, y * R * 1.004, Math.sin(phi) * r * R * 1.004));
-    }
-    const dotMat = new THREE.PointsMaterial({ color: 0xf2ece4, size: 0.035, transparent: true, opacity: 0.35 });
-    globe.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints(dots), dotMat));
+    // Real country shapes; the places Sai has lived and visited are lit.
+    const earth = makeGlobe({ R, lowPower, lived: life.travel.lived.map((c) => c.id), visited: life.travel.visited.map((c) => c.id) });
+    globe.add(earth.group);
+    const halo = earth.halo;
+    const ll = earth.ll;
 
     // City pins.
     const pins = {};
@@ -159,13 +136,7 @@ runPage({
         { pos: [0.6, 1.5, 18], look: [0.6, 0, 0] },
         { pos: [0, 0.5, 19], look: [0.4, 0, 0] },
       ],
-      onTheme(p) {
-        core.material.color.set(p.night ? 0x15101a : 0xe9e1d6);
-        core.material.emissive.set(p.night ? 0x1a0608 : 0x000000);
-        gridMat.color.set(p.night ? 0xf2ece4 : 0x1b1715);
-        dotMat.color.set(p.night ? 0xf2ece4 : 0x1b1715);
-        gridMat.opacity = p.night ? 0.1 : 0.16;
-      },
+      onTheme(p) { earth.setTheme(p.night); },
       update(t, progress, dt) {
         const i = Math.min(STEPS.length - 2, Math.floor(progress));
         const f = Math.max(0, Math.min(1, progress - i));

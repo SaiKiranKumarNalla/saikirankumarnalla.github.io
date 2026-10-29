@@ -113,6 +113,7 @@ export const PANELS = {
     html: () => `
       <p class="p-lede">${esc(music.intro)}</p>
       <ul class="p-contact">${music.playlists.map((p, i) => `<li><span>Playlist ${i + 1}</span><a href="${esc(p.url)}" target="_blank" rel="noopener">Listen on Flow Music</a></li>`).join('')}</ul>
-      ${chips(music.featured)}`,
+      ${chips(music.featured)}
+      <div class="p-actions">${more('/sections/life.html', 'Off the clock: travel, fiction, music and games')}</div>`,
   },
 };

@@ -61,3 +61,13 @@ html,body{height:auto;overflow-x:hidden;overflow-y:auto}
   .s-card{background:var(--panel)}
   .s-dots{right:8px}
 }
+
+/* Off the Clock */
+.s-chips span.s-chip-lived{background:var(--accent-strong);border-color:var(--accent);color:#fff}
+.s-playlist{display:flex;gap:16px;align-items:flex-start;padding:14px;margin:.8rem 0;border:1px solid var(--line);border-radius:14px;background:var(--chip);text-decoration:none;color:inherit;transition:border-color .2s}
+.s-playlist:hover{border-color:var(--accent)}
+.s-playlist img{width:96px;height:96px;object-fit:cover;border-radius:10px;flex:none}
+.s-playlist b{display:block;color:var(--text);font-size:1rem}
+.s-playlist ol{margin:.4rem 0 .3rem;padding-left:1.1rem;font-size:.85rem}
+.s-playlist li{line-height:1.5}
+.s-playlist em{font-style:normal;font-weight:600;color:var(--accent);font-size:.85rem}

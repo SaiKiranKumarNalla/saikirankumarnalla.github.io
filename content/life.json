@@ -1,0 +1,167 @@
+{
+  "intro": "Outside the lab I travel, write speculative fiction, make music, and play games with deep systems. All of it feeds the same habit: building worlds and figuring out how they work.",
+  "travel": {
+    "text": "Lived in India and France; explored across Europe and South-East Asia.",
+    "lived": [
+      {
+        "id": "356",
+        "name": "India"
+      },
+      {
+        "id": "250",
+        "name": "France"
+      }
+    ],
+    "visited": [
+      {
+        "id": "724",
+        "name": "Spain"
+      },
+      {
+        "id": "620",
+        "name": "Portugal"
+      },
+      {
+        "id": "276",
+        "name": "Germany"
+      },
+      {
+        "id": "380",
+        "name": "Italy"
+      },
+      {
+        "id": "203",
+        "name": "Czechia"
+      },
+      {
+        "id": "040",
+        "name": "Austria"
+      },
+      {
+        "id": "528",
+        "name": "Netherlands"
+      },
+      {
+        "id": "056",
+        "name": "Belgium"
+      },
+      {
+        "id": "442",
+        "name": "Luxembourg"
+      },
+      {
+        "id": "704",
+        "name": "Vietnam"
+      }
+    ],
+    "cities": 3
+  },
+  "fiction": {
+    "text": "Speculative fiction: cinematic locked archives and prose novels, each with its own reading mode.",
+    "books": [
+      {
+        "name": "Shāpanang",
+        "kind": "Visual fiction",
+        "text": "A cursed library, memory fragments, and a truth that should stay buried.",
+        "cover": "/story-assets/shapanang/cover.webp",
+        "href": "/shapanang.html"
+      },
+      {
+        "name": "Shāpanang II",
+        "kind": "Visual fiction sequel",
+        "text": "The second sealed archive.",
+        "cover": "/story-assets/shapanang-ii/cover.webp",
+        "href": "/shapanang-ii.html"
+      },
+      {
+        "name": "Up There",
+        "kind": "Prose novel",
+        "text": "A traditional novel, told in chapters.",
+        "cover": "/story-assets/up-there/cover.webp",
+        "href": "/up-there.html"
+      }
+    ]
+  },
+  "music": {
+    "text": "Music I make with AI tools, released on Flow Music, with Google Flow visuals.",
+    "playlists": [
+      {
+        "name": "Shapnang",
+        "url": "https://www.flowmusic.app/playlist/cb6cb429-cafb-4434-85b5-06bed869db8b",
+        "cover": "https://storage.googleapis.com/producer-app-public/playlists/c080c171-4b48-4acc-94f6-135331eb2bcd/image/577681ba-b6cc-4601-b786-a667a54fcf23.jpg",
+        "tracks": [
+          "Sangeethama (Telugu)",
+          "Shapnang Theme (English)",
+          "Learning the Sky (English)",
+          "The Sealed Gate"
+        ],
+        "meta": "4 songs · 11 min"
+      },
+      {
+        "name": "Up There",
+        "url": "https://www.flowmusic.app/playlist/57e341c6-85cd-461c-997d-fe7f3f9a70db",
+        "cover": "https://storage.googleapis.com/producer-app-public/playlists/c080c171-4b48-4acc-94f6-135331eb2bcd/image/dea97b70-8f10-4416-bf90-fa96bb336049.jpg"
+      }
+    ]
+  },
+  "games": {
+    "text": "Games with atmosphere, systems, exploration and strong visual worlds.",
+    "list": [
+      {
+        "name": "Ghost of Tsushima",
+        "cover": "/Assets/covers/GOT.png.webp"
+      },
+      {
+        "name": "Detroit: Become Human",
+        "cover": "/Assets/covers/detroit.jpeg"
+      },
+      {
+        "name": "Cricket 26",
+        "cover": "/Assets/covers/cricket26.png"
+      },
+      {
+        "name": "Assassin's Creed",
+        "cover": "/Assets/covers/ACET.png.avif"
+      }
+    ]
+  },
+  "boardGames": {
+    "text": "Strategy away from the screen: rules, incentives, negotiation, uncertainty and pattern recognition.",
+    "list": [
+      {
+        "name": "Eclipse",
+        "cover": "/Assets/board-games/eclipse/cover.png"
+      },
+      {
+        "name": "Spice",
+        "cover": "/Assets/board-games/spice/cover.png"
+      },
+      {
+        "name": "Time Bomb",
+        "cover": "/Assets/board-games/time-bomb/cover.png"
+      },
+      {
+        "name": "Skull",
+        "cover": "/Assets/board-games/skull/cover.png"
+      },
+      {
+        "name": "Splendour",
+        "cover": "/Assets/board-games/splendour/cover.png"
+      },
+      {
+        "name": "Cosmic Encounters",
+        "cover": "/Assets/board-games/cosmic-encounters/cover.png"
+      }
+    ]
+  },
+  "more": [
+    {
+      "name": "Cricket analytics",
+      "text": "The cleanest place to see strategy, uncertainty, role selection and data storytelling. A dedicated page is planned."
+    },
+    {
+      "name": "Cooking",
+      "text": "Another kind of prototyping: ingredients, timing, iteration and taste. Fusion experiments and comfort food."
+    }
+  ]
+}
