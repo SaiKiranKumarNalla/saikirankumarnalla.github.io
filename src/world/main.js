@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import { BUILDINGS } from './buildings.js';
 import { makeBuilding, makeTreeInstances, makeLanterns, makePlayer, makePetals } from './props.js';
+import { makeKage, makeSpeech, IDLE_LINES } from './companion.js';
 
 const canvas = document.getElementById('world');
 const isTouch = matchMedia('(hover: none)').matches;
@@ -96,6 +97,28 @@ scene.add(lanterns.group);
 const player = makePlayer();
 player.position.set(0, 0, 9);
 scene.add(player);
+
+const kage = makeKage();
+kage.position.set(-2.5, 0, 11);
+scene.add(kage);
+const kageEl = document.getElementById('wKage');
+const speech = makeSpeech(kageEl);
+let lastSpoken = null, idleFor = 0, idleIdx = 0;
+
+// Flyover intro: the camera circles the village above a title card, then drops in behind the player.
+const introEl = document.getElementById('wIntro');
+const intro = { active: !reduceMotion, t: 0, DURATION: 7 };
+if (!intro.active) introEl.classList.add('gone');
+function endIntro() {
+  if (!intro.active) return;
+  intro.active = false;
+  introEl.classList.add('gone');
+  document.getElementById('wHelp').classList.remove('fade');
+  setTimeout(() => speech.say("Welcome. I'm Kage, Sai's shadow. Walk up to any building and I'll tell you what's inside.", clock.elapsedTime, 6500), 900);
+}
+document.getElementById('wSkip').addEventListener('click', endIntro);
+addEventListener('keydown', endIntro);
+canvas.addEventListener('pointerdown', endIntro);
 
 const petals = reduceMotion ? null : makePetals({ count: lowPower ? 220 : 450, spread: 70 });
 if (petals) scene.add(petals.points);
@@ -260,10 +283,40 @@ function step() {
   }
   if (!pendingEnter) showPrompt(closestD < 4.5 ? closest : null);
 
-  // Camera follows smoothly.
-  camTarget.copy(player.position).add(camOffset);
-  camera.position.lerp(camTarget, 1 - Math.exp(-dt * 4));
-  camera.lookAt(player.position.x, 1, player.position.z - 6);
+  // Camera: flyover during the intro, then a smooth follow.
+  if (intro.active) {
+    intro.t += dt;
+    const a = intro.t * 0.32 + 0.6;
+    camera.position.set(Math.cos(a) * 52, 34 - intro.t * 1.2, Math.sin(a) * 52);
+    camera.lookAt(0, 2, 0);
+    if (intro.t > intro.DURATION) endIntro();
+  } else {
+    camTarget.copy(player.position).add(camOffset);
+    camera.position.lerp(camTarget, 1 - Math.exp(-dt * 2.6));
+    camera.lookAt(player.position.x, 1, player.position.z - 6);
+  }
+
+  // Kage drifts to a spot just behind and to the left of the player.
+  tmp.set(-2.3, 0, 1.6).applyAxisAngle(THREE.Object3D.DEFAULT_UP, player.rotation.y);
+  tmp.add(player.position);
+  kage.position.lerp(tmp, 1 - Math.exp(-dt * 2.2));
+  kage.lookAt(player.position.x, kage.position.y, player.position.z + 3);
+  if (!reduceMotion) kage.userData.animate(t);
+
+  // Kage narrates: building lines when you arrive, a hint when you stand still.
+  if (!intro.active) {
+    if (near && near !== lastSpoken) { lastSpoken = near; speech.say(near.def.kage, t, 6000); idleFor = 0; }
+    if (!near) lastSpoken = null;
+    idleFor = moving ? 0 : idleFor + dt;
+    if (idleFor > 16) { idleFor = 0; speech.say(IDLE_LINES[idleIdx++ % IDLE_LINES.length], t); }
+  }
+  speech.tick(t);
+  if (speech.visible) {
+    tmp.copy(kage.position).setY(3.6).project(camera);
+    const x = (tmp.x * 0.5 + 0.5) * innerWidth, y = (-tmp.y * 0.5 + 0.5) * innerHeight;
+    const w = kageEl.offsetWidth, h = kageEl.offsetHeight;
+    kageEl.style.transform = `translate(${Math.max(12, Math.min(innerWidth - w - 12, x - 28))}px, ${Math.max(64, y - h - 10)}px)`;
+  }
   sun.target.position.copy(player.position);
   sun.position.set(player.position.x - 30, 50, player.position.z + 20);
   sun.target.updateMatrixWorld();
@@ -278,7 +331,7 @@ function step() {
   // Project labels to the screen.
   for (const b of buildings) {
     tmp.copy(b.group.position).setY(b.labelY).project(camera);
-    const visible = tmp.z < 1 && Math.abs(tmp.x) < 1.2 && Math.abs(tmp.y) < 1.2;
+    const visible = !intro.active && tmp.z < 1 && Math.abs(tmp.x) < 1.2 && Math.abs(tmp.y) < 1.2;
     b.labelEl.style.opacity = visible ? (near === b ? 1 : 0.85) : 0;
     if (visible) b.labelEl.style.transform = `translate(${(tmp.x * 0.5 + 0.5) * innerWidth}px, ${(-tmp.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`;
   }
