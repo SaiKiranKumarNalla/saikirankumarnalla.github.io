@@ -104,3 +104,26 @@ kbd{font-family:'Space Mono',monospace;font-size:.7em;padding:.1em .45em;border:
 .w-intro-site:hover{border-color:var(--glow)}
 :root[data-theme="light"] .w-intro-site{color:#1a1614;border-color:rgba(26,22,20,.4);background:rgba(255,255,255,.5)}
 .w-intro-hint{font-size:.8rem;opacity:.7;margin-top:1.1rem}
+
+/* Intro: rotating greeting, description, stats */
+.w-intro-greet{font-family:'Zen Antique','Noto Serif JP',serif;font-size:clamp(2.2rem,6vw,3.6rem);color:var(--glow);text-shadow:0 0 28px rgba(224,72,72,.55);height:1.3em;transition:opacity .45s,filter .45s}
+.w-intro-greet.swap{opacity:0;filter:blur(6px)}
+.w-intro-jp{font-size:.9rem;letter-spacing:.35em;color:#f0ebe3;opacity:.75}
+:root[data-theme="light"] .w-intro-jp{color:#1a1614}
+.w-intro-desc{max-width:560px;margin:-.6rem auto 1.4rem;font-size:.98rem;line-height:1.6;opacity:.85;color:#f0ebe3}
+:root[data-theme="light"] .w-intro-desc{color:#1a1614}
+.w-intro-stats{display:flex;justify-content:center;gap:clamp(14px,4vw,36px);margin:0 0 1.6rem}
+.w-intro-stats div{display:flex;flex-direction:column;align-items:center}
+.w-intro-stats b{font-family:'Zen Antique',serif;font-weight:400;font-size:1.7rem;color:var(--glow)}
+.w-intro-stats span{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.w-intro.ready .w-intro-desc{transition-delay:1.4s}.w-intro.ready .w-intro-stats{transition-delay:1.6s}
+.w-intro.ready .w-intro-greet{transition:opacity .45s,filter .45s}
+/* Quote ticker */
+.w-quote{position:fixed;top:max(64px,calc(env(safe-area-inset-top) + 52px));left:50%;transform:translateX(-50%);font-family:'Zen Antique',serif;font-style:italic;font-size:.92rem;color:#f0ebe3;opacity:0;transition:opacity .8s;z-index:6;text-align:center;max-width:calc(100vw - 32px);text-shadow:0 1px 10px #000;pointer-events:none}
+.w-quote.show{opacity:.78}
+.w-quote span{font-family:'Noto Serif JP',serif;font-style:normal;color:var(--glow);margin-left:.4em}
+:root[data-theme="light"] .w-quote{color:#1a1614;text-shadow:0 1px 10px rgba(255,255,255,.9)}
+@media (max-width:600px){.w-top-right .w-btn-text{padding:0 9px;font-size:.58rem}.w-intro-stats b{font-size:1.3rem}.w-intro-site{padding:.6rem 1rem;font-size:.62rem}.w-intro-actions{gap:8px}.w-intro-desc{font-size:.85rem}}
+.w-intro-greet{height:1.5em;line-height:1.5;margin-bottom:.2rem}
+.w-intro::before{content:'';position:absolute;inset:-12% -20%;z-index:-1;background:radial-gradient(ellipse at center,rgba(8,4,8,.72) 0%,rgba(8,4,8,.45) 45%,transparent 72%);pointer-events:none}
+:root[data-theme="light"] .w-intro::before{background:radial-gradient(ellipse at center,rgba(250,244,236,.8) 0%,rgba(250,244,236,.5) 45%,transparent 72%)}

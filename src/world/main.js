@@ -22,7 +22,7 @@ let renderer;
 try {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: !lowPower, powerPreference: 'high-performance' });
 } catch (e) {
-  location.replace('index.html');
+  location.replace('home.html');
   throw e;
 }
 renderer.setPixelRatio(Math.min(devicePixelRatio, lowPower ? 1.5 : 1.75));
@@ -176,12 +176,12 @@ const dockEl = $('wDock');
 buildings.forEach((b) => {
   const el = document.createElement('div');
   el.className = 'w-label';
-  el.innerHTML = `<div class="w-label-name">${b.def.label}</div><div class="w-label-sub">${b.def.jp} · ${b.def.en}</div>`;
+  el.innerHTML = `<div class="w-label-name">${b.def.label}</div><div class="w-label-sub"><span lang="ja">${b.def.jp}</span> · ${b.def.en}</div>`;
   labelsEl.appendChild(el);
   b.labelEl = el;
   const btn = document.createElement('button');
   btn.className = 'w-dock-btn';
-  btn.innerHTML = `<span class="w-dock-jp">${b.def.jp}</span><span class="w-dock-en">${b.def.label}</span>`;
+  btn.innerHTML = `<span class="w-dock-jp" lang="ja">${b.def.jp}</span><span class="w-dock-en">${b.def.label}</span>`;
   btn.setAttribute('aria-label', `Walk to ${b.def.label}: ${b.def.sub}`);
   btn.addEventListener('click', () => walkTo(b));
   dockEl.appendChild(btn);
@@ -277,7 +277,7 @@ function showPrompt(b) {
   near = b;
   $('wPromptJp').textContent = b.def.jp;
   $('wPromptTitle').textContent = b.def.label;
-  $('wPromptJp').textContent = `${b.def.jp} · ${b.def.en}`;
+  $('wPromptJp').innerHTML = `<span lang="ja">${b.def.jp}</span> · ${b.def.en}`;
   $('wPromptSub').textContent = b.def.sub;
   goEl.href = b.def.href || '#';
   goEl.innerHTML = b.def.href ? `${b.def.cta || 'Enter'}${isTouch ? '' : ' <kbd>E</kbd>'}` : 'Opening soon';
@@ -314,9 +314,39 @@ function endIntro() {
   intro.active = false;
   introEl.classList.add('gone');
   document.body.classList.add('in-village');
+  nextQuote();
   setTimeout(() => say("Welcome to the village. I'm Kage. Pick a place in the bar below, or click a building, and I'll walk you there. Drag to look around.", 7000), 700);
 }
 $('wSkip').addEventListener('click', endIntro);
+// Rotating welcome, in the languages Sai lives in.
+const GREETINGS = [['ようこそ', 'ja'], ['Welcome', 'en'], ['నమస్కారం', 'te'], ['नमस्ते', 'hi'], ['Bonjour', 'fr']];
+let greetIdx = 0;
+const greetEl = $('wGreet');
+setInterval(() => {
+  if (!intro.active) return;
+  greetEl.classList.add('swap');
+  setTimeout(() => {
+    const [word, lang] = GREETINGS[++greetIdx % GREETINGS.length];
+    greetEl.innerHTML = `<span lang="${lang}">${word}</span>`;
+    greetEl.classList.remove('swap');
+  }, 450);
+}, 2400);
+
+// Samurai quote ticker (from the original home page), shown once inside the village.
+const QUOTES = [
+  ['Think lightly of yourself and deeply of the world', '斬'], ['The way is in training', '道'],
+  ['We work in the dark to serve the light', '刃'], ['Perception is strong and sight weak', '侍'],
+  ["A warrior's greatest weapon is patience", '忍'], ['Honor is not given. It is earned', '誉'],
+  ['The storm is not the enemy. Stillness is the blade', '風'],
+];
+let quoteIdx = 0;
+const quoteEl = $('wQuote');
+function nextQuote() {
+  const [q, k] = QUOTES[quoteIdx++ % QUOTES.length];
+  quoteEl.classList.remove('show');
+  setTimeout(() => { quoteEl.innerHTML = `${q} <span lang="ja">${k}</span>`; quoteEl.classList.add('show'); }, 600);
+}
+setInterval(() => { if (!intro.active) nextQuote(); }, 9000);
 // The village fades in slowly on first load.
 setTimeout(() => introEl.classList.add('ready'), 600);
 

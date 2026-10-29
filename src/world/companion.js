@@ -63,6 +63,8 @@ export function makeSpeech(el) {
 export const IDLE_LINES = [
   'Try clicking a building: I will walk you to its door.',
   'Psst. The ☾ button turns night into day.',
-  'In a hurry? “Classic site” is up in the corner. I won\'t be offended.',
+  'In a hurry? “Website” is up in the corner. I won\'t be offended.',
+  'A researcher walks the same path as a ronin: no master but the question, no allegiance but the truth.',
+  'Recruiter? The CV button is in the top corner.',
   'Sai built this whole village from code. No 3D models were downloaded.',
 ];
