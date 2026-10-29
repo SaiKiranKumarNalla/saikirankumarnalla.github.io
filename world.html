@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Village — Sai Nalla</title>
+<meta name="description" content="Walk through Sai Kiran Kumar Nalla's dōjō village: research, projects, papers, AI builds and music.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Noto+Serif+JP:wght@700&family=Space+Mono&family=DM+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="/src/world/world.css">
+<script>
+  // Theme follows the classic site's saved choice (theme.js uses the same key).
+  try { const t = localStorage.getItem('sai-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body>
+  <canvas id="world" aria-label="3D village. Use the building list for keyboard or screen-reader navigation."></canvas>
+
+  <div class="w-loader" id="wLoader">
+    <div class="w-loader-kanji">村</div>
+    <div class="w-loader-text">Entering the village…</div>
+  </div>
+
+  <header class="w-top">
+    <a class="w-brand" href="index.html">NALLA<span>.</span></a>
+    <div class="w-top-right">
+      <button class="w-btn" id="wTheme" aria-label="Toggle day and night">☾</button>
+      <a class="w-btn w-btn-text" href="index.html">Classic site</a>
+    </div>
+  </header>
+
+  <div id="wLabels" class="w-labels" aria-hidden="true"></div>
+
+  <div class="w-prompt" id="wPrompt" hidden>
+    <div class="w-prompt-jp" id="wPromptJp"></div>
+    <div class="w-prompt-title" id="wPromptTitle"></div>
+    <div class="w-prompt-sub" id="wPromptSub"></div>
+    <a class="w-prompt-go" id="wPromptGo" href="#">Enter <kbd>E</kbd></a>
+  </div>
+
+  <div class="w-help" id="wHelp">
+    <span class="w-help-desk"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrows to walk · click the ground to go there · <kbd>E</kbd> to enter</span>
+    <span class="w-help-touch">Tap the ground to walk · tap a building to visit</span>
+  </div>
+
+  <!-- Accessible, no-3D route to every building -->
+  <nav class="w-list" aria-label="Village buildings" id="wList"></nav>
+
+  <noscript><p class="w-noscript">The village needs JavaScript. <a href="index.html">Open the classic site</a>.</p></noscript>
+  <script type="module" src="/src/world/main.js"></script>
+</body>
+</html>
