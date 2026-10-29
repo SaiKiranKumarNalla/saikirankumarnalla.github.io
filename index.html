@@ -3,76 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Sai Kiran Kumar Nalla, PhD: Portfolio</title>
-<meta name="description" content="Walk through Sai Kiran Kumar Nalla's dōjō village: research, projects, papers, AI builds and music.">
+<title>Sai Kiran Kumar Nalla, PhD | Medical Imaging Scientist & AI Builder</title>
+<meta name="description" content="Sai Kiran Kumar Nalla, PhD: medical imaging scientist building PET/CT simulators, 3D-printed ground truth and agentic AI research workflows.">
+<meta property="og:title" content="Sai Kiran Kumar Nalla, PhD">
+<meta property="og:description" content="Medical imaging scientist & AI builder. PET/CT simulation, digital twins, agentic research workflows.">
+<meta property="og:image" content="og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Noto+Serif+JP:wght@700&family=Space+Mono&family=DM+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Noto+Serif+JP:wght@400;700&family=Space+Mono&family=DM+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/src/world/world.css">
 <script>
-  // Theme follows the classic site's saved choice (theme.js uses the same key).
   try { const t = localStorage.getItem('sai-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
 </script>
 </head>
 <body>
-  <canvas id="world" aria-label="3D village. Use the building buttons at the bottom to travel."></canvas>
+  <canvas id="world" aria-hidden="true"></canvas>
 
-  <div class="w-loader" id="wLoader">
-    <div class="w-loader-kanji" lang="ja">村</div>
-    <div class="w-loader-text">Entering the village…</div>
-  </div>
+  <div class="w-loader" id="wLoader"><div class="w-loader-kanji" lang="ja">村</div></div>
 
-  <header class="w-top">
-    <a class="w-brand" href="index.html">NALLA<span>.</span></a>
-    <div class="w-top-right">
-      <button class="w-btn" id="wTheme" aria-label="Toggle day and night">☾</button>
-      <a class="w-btn w-btn-text" href="Assets/Sai_Nalla_CV.pdf" target="_blank" rel="noopener">CV</a>
-      <a class="w-btn w-btn-text" href="contact.html">Contact</a>
-      <a class="w-btn w-btn-text" href="home.html">Website</a>
+  <header class="w-nav">
+    <a class="w-brand" href="index.html" id="wHome">NALLA<span>.</span></a>
+    <nav class="w-menu" id="wMenu" aria-label="Sections"></nav>
+    <div class="w-nav-right">
+      <button class="w-icon" id="wTheme" aria-label="Toggle light and dark">☾</button>
+      <a class="w-cv" href="Assets/Sai_Nalla_CV.pdf" target="_blank" rel="noopener">CV</a>
+      <button class="w-icon w-burger" id="wBurger" aria-label="Open menu" aria-expanded="false">☰</button>
     </div>
   </header>
 
   <div id="wLabels" class="w-labels" aria-hidden="true"></div>
 
+  <!-- First screen -->
+  <section class="w-hero" id="wHero">
+    <p class="w-hero-greet" id="wGreet"><span lang="ja">ようこそ</span></p>
+    <h1 class="w-hero-name">Sai Kiran Kumar Nalla, PhD</h1>
+    <p class="w-hero-role">Medical imaging scientist &amp; AI builder</p>
+    <p class="w-hero-desc">I build virtual PET/CT scanners, 3D-printed ground truth, and the AI agent teams that run the research, now working toward small generative models for PET/CT simulation and dosimetry.</p>
+    <ul class="w-hero-proof">
+      <li>PhD, Université de Toulouse</li>
+      <li>GE HealthCare collaboration</li>
+      <li>5 papers &amp; preprints</li>
+    </ul>
+    <div class="w-hero-actions">
+      <button class="w-btn-primary" id="wViewWork">View my work</button>
+      <a class="w-btn-secondary" href="Assets/Sai_Nalla_CV.pdf" target="_blank" rel="noopener">Download CV</a>
+    </div>
+  </section>
+
+  <!-- Section panel -->
+  <aside class="w-panel" id="wPanel" aria-labelledby="wPanelTitle" hidden>
+    <div class="w-panel-head">
+      <div>
+        <p class="w-panel-kicker" id="wPanelKicker"></p>
+        <h2 class="w-panel-title" id="wPanelTitle" tabindex="-1"></h2>
+      </div>
+      <button class="w-icon" id="wPanelClose" aria-label="Close panel">×</button>
+    </div>
+    <div class="w-panel-body" id="wPanelBody"></div>
+  </aside>
+
   <div class="w-kage" id="wKage" role="status" aria-live="polite">
-    <span class="w-kage-name">影 Kage</span>
+    <span class="w-kage-name">Kage · guide</span>
     <span class="w-kage-text"></span>
-    <a class="w-kage-ask" href="kage.html">Ask me anything →</a>
   </div>
 
-  <div class="w-intro" id="wIntro">
-    <div class="w-intro-greet" id="wGreet" aria-live="off"><span lang="ja">ようこそ</span></div>
-    <div class="w-intro-jp" lang="ja">ポートフォリオへようこそ</div>
-    <h1 class="w-intro-name">Sai Kiran Kumar Nalla, PhD</h1>
-    <p class="w-intro-role">Medical imaging scientist · AI builder · Toulouse</p>
-    <p class="w-intro-desc">I build virtual PET scanners, 3D-printed ground truth, and the AI agents that run the research.</p>
-    <div class="w-intro-stats">
-      <div><b>8</b><span>Papers &amp; talks</span></div>
-      <div><b>3</b><span>Scanner twins</span></div>
-      <div><b>6</b><span>Institutions</span></div>
-      <div><b>3</b><span>Countries</span></div>
-    </div>
-    <div class="w-intro-actions">
-      <button class="w-intro-skip" id="wSkip">Explore the village</button>
-      <a class="w-intro-site" href="recruiter.html">Recruiter mode</a>
-      <a class="w-intro-site" href="Assets/Sai_Nalla_CV.pdf" target="_blank" rel="noopener">View CV</a>
-    </div>
-    <p class="w-intro-hint">Walk the village in 3D, or open the website for everything in a normal layout.</p>
-  </div>
+  <p class="w-hint" id="wHint">Drag to look around · click a building or a menu item</p>
 
-  <div class="w-quote" id="wQuote" aria-hidden="true"></div>
-
-  <div class="w-prompt" id="wPrompt" hidden>
-    <div class="w-prompt-jp" id="wPromptJp"></div>
-    <div class="w-prompt-title" id="wPromptTitle"></div>
-    <div class="w-prompt-sub" id="wPromptSub"></div>
-    <a class="w-prompt-go" id="wPromptGo" href="#">Enter <kbd>E</kbd></a>
-    <button class="w-prompt-close" id="wPromptClose" aria-label="Close">×</button>
-  </div>
-
-  <!-- Travel dock: click a building name and Kage walks you there (works without a keyboard) -->
-  <nav class="w-dock" id="wDock" aria-label="Walk to a building"></nav>
-
-  <noscript><p class="w-noscript">The village needs JavaScript. <a href="home.html">Open the website</a>.</p></noscript>
+  <noscript><p class="w-noscript">This site needs JavaScript. <a href="about.html">Read the About page</a>.</p></noscript>
   <script type="module" src="/src/world/main.js"></script>
 </body>
 </html>
