@@ -35,7 +35,7 @@ The old folder `~/Documents/sainalla.github.io` stays untouched. Each task is on
 - **E3.** Add 3D exhibits: phantom cube, scanner ring, the atlas, and Kage as a 3D guide.
 
 ## Phase F: Launch
-- **F1.** Performance, accessibility, SEO/OG and mobile QA.  **F2.** Merge to `main` and push (only with your OK).
+- **F1.** Performance, accessibility, SEO/OG and mobile QA (the nav overflows on phones on every page; needs a menu button).  **F2.** Merge to `main` and push (only with your OK).
 
 ## Performance rules (agreed 2026-10-28)
 - No heavy PDFs online: the thesis and slides are told through the motion story and WebP stills, not hosted PDFs. The CV is the only PDF.

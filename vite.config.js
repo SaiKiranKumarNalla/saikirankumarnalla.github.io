@@ -13,6 +13,7 @@ export default defineConfig({
   base: '/',
   build: {
     outDir: 'dist',
+    assetsDir: '_app', // not 'assets': collides with legacy 'Assets/' on case-insensitive disks
     rollupOptions: { input: pages },
     assetsInlineLimit: 4096,
   },

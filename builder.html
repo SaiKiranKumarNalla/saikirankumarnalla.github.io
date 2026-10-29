@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Builder — Sai Nalla</title>
+<meta name="description" content="How Sai Kiran Kumar Nalla, PhD, builds with AI: agent teams, human QC gates, and virtual PET patients.">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="/src/builder.css">
+</head>
+<body>
+
+<div class="ac-transition">
+  <div class="eagle-flash"></div>
+  <div class="animus-lines"></div>
+  <div class="ac-insignia">鷹</div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><rect y="3" width="32" height="6" fill="#0a0a0b" stroke="#8b1a1a" stroke-width="0.8"/><circle cx="16" cy="6" r="2.5" fill="none" stroke="#8b1a1a" stroke-width="0.6"/></svg>
+    <span class="nav-mark">NALLA<span>.</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><span class="nav-divider"></span>
+    <a href="about.html">About</a>
+    <a href="experience.html">Experience</a>
+    <a href="education.html">Education</a>
+    <a href="projects.html">Projects</a>
+    <a href="builder.html" class="active">Builder</a>
+    <a href="papers.html">Publications</a>
+    <a href="contact.html">Reach Out</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="icon-moon">🌙</span><span class="icon-sun">☀️</span></button>
+  </div>
+</nav>
+
+<div class="v-accent"></div>
+
+<div class="page-content">
+<section class="page-hero">
+  <div class="page-tag reveal">The Builder</div>
+  <div class="page-title-jp reveal">工房 — こうぼう</div>
+  <h1 class="page-title reveal" id="bHeadline">I don't just use AI. I build teams of it.</h1>
+  <p class="page-subtitle reveal">Medical-imaging scientist by training. I design agent teams, give them rules, and keep the final say.</p>
+</section>
+
+<section class="content-section">
+  <!-- ELI5 strip -->
+  <div class="b-eli5 reveal">
+    <span class="b-eli5-tag mono">Explain like I'm 5</span>
+    <p>Imagine a team of very fast helpers. One finds files, one draws the organs, one runs the pretend scanner, one checks the maths. They're quick but sometimes wrong, so <strong>I'm the teacher who checks their homework</strong> before anything counts.</p>
+  </div>
+
+  <!-- Animated org: Sai at the centre, agents in orbit -->
+  <div class="b-orbit-wrap reveal">
+    <svg class="b-orbit" viewBox="-260 -260 520 520" role="img" aria-labelledby="orbitTitle">
+      <title id="orbitTitle">Sai at the centre of a ring of AI agents; every result returns through a human check</title>
+      <circle r="190" class="b-ring"/>
+      <circle r="120" class="b-ring b-ring-inner"/>
+      <g id="orbitAgents"></g>
+      <g class="b-core">
+        <circle r="54" class="b-core-disc"/>
+        <text y="-6" class="b-core-name">SenSai</text>
+        <text y="16" class="b-core-sub">human gate</text>
+      </g>
+    </svg>
+    <p class="b-caption mono">Each dot is an agent role. Work flows out, results flow back, and nothing ships without the centre.</p>
+  </div>
+
+  <div class="section-header"><h2 class="section-title">How I work with agents</h2><div class="section-line"></div></div>
+  <div class="b-principles" id="bPrinciples"></div>
+
+  <div class="section-header"><h2 class="section-title">Now: Virtual PET patients</h2><div class="section-line"></div></div>
+  <p class="b-lede">Turn a real PET/CT scan into an auditable virtual patient, scan it again in a simulated scanner, and measure how close it gets. This is the groundwork for small generative and surrogate models for PET/CT simulation and dosimetry.</p>
+  <ol class="b-pipeline" id="bPipeline"></ol>
+  <div class="b-now-facts" id="bNowFacts"></div>
+
+  <div class="section-header"><h2 class="section-title">Things I've built</h2><div class="section-line"></div></div>
+  <div class="b-builds" id="bBuilds"></div>
+
+  <div class="section-header"><h2 class="section-title">Toolbelt</h2><div class="section-line"></div></div>
+  <div class="b-stack" id="bStack"></div>
+
+  <div class="section-header"><h2 class="section-title">Next on the bench</h2><div class="section-line"></div></div>
+  <ul class="b-roadmap" id="bRoadmap"></ul>
+</section>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Sai Kiran Kumar Nalla</div>
+  <div class="footer-text">工房 — The Builder</div>
+</footer>
+
+<script src="theme.js"></script>
+<script src="transitions.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="kage-3d.js"></script>
+<script src="kage.js"></script>
+<script src="dynamic.js"></script>
+<script type="module" src="/src/builder.js"></script>
+</body>
+</html>
