@@ -1,6 +1,6 @@
 // Shared top navigation for the 3D section pages (same look as the home page menu).
 export const SECTIONS = [
-  ['about', 'About'], ['research', 'Research'], ['projects', 'Projects'], ['inventory', 'Project Inventory'],
+  ['about', 'About'], ['research', 'PhD Thesis'], ['projects', 'Projects'], ['inventory', 'Project Inventory'],
   ['publications', 'Publications'], ['builder', 'AI Builder'], ['contact', 'Contact'],
 ];
 

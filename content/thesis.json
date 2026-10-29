@@ -1,20 +1,218 @@
 {
   "title": "Evaluation of medical imaging devices using synthetically modified clinical images and 3D printed phantoms",
   "university": "Université de Toulouse",
-  "labs": ["IUCT Oncopole, Toulouse", "Rambam Health Care Campus, Haifa"],
-  "supervisors": ["Olivier Caselles, PhD", "John Kennedy, PhD"],
-  "partners": ["eMotion Tech (3D printing)", "GE HealthCare (simulation software)"],
+  "labs": [
+    "IUCT Oncopole, Toulouse",
+    "Rambam Health Care Campus, Haifa"
+  ],
+  "supervisors": [
+    "Olivier Caselles, PhD",
+    "John Kennedy, PhD"
+  ],
+  "partners": [
+    "eMotion Tech (3D printing)",
+    "GE HealthCare (simulation software)"
+  ],
   "defended": "2026-09",
   "slides": "Soutenance_SaiNalla.pdf",
   "eli5": "Hospital scanners give numbers that doctors use to pick treatments. But how do we know those numbers are right? I built pretend tumours: some printed in 3D plastic, some drawn by a computer inside real scans. Because I made them, I know the right answer, so I can check whether the scanner tells the truth.",
   "abstractShort": "A hybrid framework combining 3D-printed phantoms with synthetic lesion insertion into raw PET data, giving a ground truth that is physically anchored, can represent spatial heterogeneity, and scales to datasets for AI and radiomics.",
   "chapters": [
-    {"n": 0, "title": "The problem", "eli5": "Scanners have no answer key.", "detail": "Clinical trials lack ground truth; standard phantoms only have uniform spheres; simulations are models, not reality."},
-    {"n": 1, "title": "Sponges that set the brightness", "eli5": "Holes in a printed cube decide how bright it glows.", "detail": "Porosity encodes contrast (solidity 50–75 % → TBR 2.0–4.0). 36-cube phantom on GE DMI: designed contrast held; preparation drove day-to-day change.", "pubs": ["pesm2025", "sfpm2024"]},
-    {"n": 2, "title": "The computer copies the cube", "eli5": "A computer-drawn cube looks just like the printed one.", "detail": "Synthetic insertion (DUETTO) reproduced mean contrast within about 0–6 %; peak values stayed biased.", "pubs": ["ecr2025"]},
-    {"n": 3, "title": "Same recipe, two hospitals", "eli5": "Email the design file and another hospital gets the same answer.", "detail": "Printed at two facilities from shared files, scanned on DMI and OMNI: met ±10 % equivalence bounds.", "pubs": ["dualcentre"]},
-    {"n": 4, "title": "Tumours with patterns inside", "eli5": "Real tumours are patchy, so the printed ones are patchy too.", "detail": "Nested necrosis-like inserts, [18F]FDG and [68Ga]PSMA. Gini index as physical heterogeneity truth; radiomic rank agreement ρ 0.76–0.92. CASSOULET reproduced the trends.", "pubs": ["quantreality", "eanm2025"]},
-    {"n": 5, "title": "Real tumour shapes, twice", "eli5": "Copy real tumour shapes, print them, and also hide them in a healthy scan.", "detail": "8 TCIA lesion geometries, printed and inserted into healthy-volunteer total-body PET. Dice 0.67–0.92, cross-domain difference 0.04 ± 0.03.", "pubs": ["geoanchored"]}
+    {
+      "n": 0,
+      "title": "The problem",
+      "eli5": "Scanners have no answer key.",
+      "detail": "Clinical trials lack ground truth; standard phantoms only have uniform spheres; simulations are models, not reality."
+    },
+    {
+      "n": 1,
+      "title": "Sponges that set the brightness",
+      "eli5": "Holes in a printed cube decide how bright it glows.",
+      "detail": "Porosity encodes contrast (solidity 50–75 % → TBR 2.0–4.0). 36-cube phantom on GE DMI: designed contrast held; preparation drove day-to-day change.",
+      "pubs": [
+        "pesm2025",
+        "sfpm2024"
+      ],
+      "more": {
+        "question": "Do porous inserts keep their quantitative response across repeated preparations and acquisitions?",
+        "figures": [
+          {
+            "src": "/media/thesis/s1-porous-design.webp",
+            "caption": "From a solid cube to a porous lattice: the printed geometry sets how much tracer each insert holds."
+          },
+          {
+            "src": "/media/thesis/s1-pet-days.webp",
+            "caption": "PET of the four phantom layers across five preparation days."
+          }
+        ],
+        "methods": [
+          "36-insert phantom (40 mm cubes in an S–Dp–T grid: solidity 50/60/70 %, pore distance 5/7/10 mm, targets 10/15/20 mm)",
+          "Repeated [18F]FDG acquisitions on a TOF 5-ring GE Discovery MI, Q.Clear (BSREM) with IUCT clinical settings",
+          "Metrics: SUV, target representation index (RC), dilution coefficient, HU; Friedman + Kendall W, Wilcoxon–Holm, MAPE, TOST ±10/15 %"
+        ],
+        "results": [
+          "Designed contrast stayed visible on every day",
+          "Dilution coefficients clustered around theory (e.g. 70 % solidity: 0.32–0.40 vs 0.30), mostly inside the 10 % margin",
+          "Only DCmax differed significantly across days (p = 0.03): preparation, not design, drove day-to-day change",
+          "CT attenuation drifted +1.5–2.7 HU/day as the print saturated with water"
+        ],
+        "limitations": [
+          "Manual VOIs; SUV used total rather than fillable phantom weight (fixed in later studies: 4.5–4.6 L)",
+          "Material and preparation protocol need standardising"
+        ]
+      }
+    },
+    {
+      "n": 2,
+      "title": "The computer copies the cube",
+      "eli5": "A computer-drawn cube looks just like the printed one.",
+      "detail": "Synthetic insertion (DUETTO) reproduced mean contrast within about 0–6 %; peak values stayed biased.",
+      "pubs": [
+        "ecr2025"
+      ],
+      "more": {
+        "question": "Does synthetic lesion insertion reproduce the measured response of uniform printed targets?",
+        "figures": [
+          {
+            "src": "/media/thesis/s2-insertion-vs-acquired.webp",
+            "caption": "Synthetic lesion insertion (DUETTO, left) versus the real acquisition (right) across three decay windows."
+          }
+        ],
+        "methods": [
+          "One layer of the 36-insert phantom, [18F]FDG (58.7 MBq), 3 frames on the DMI",
+          "Synthetic insertion into raw PET data with GE DUETTO, then TOF-BSREM reconstruction",
+          "Visual comparison plus mean and peak recovery, ±10 % MAPE bounds"
+        ],
+        "results": [
+          "No major visual difference between synthetic and acquired targets",
+          "Mean contrast matched within 0–6 % for 15 and 20 mm targets",
+          "Peak values stayed systematically higher in simulation (≈ 7–15 %)"
+        ],
+        "limitations": [
+          "Only two target diameters",
+          "Designed vs measured insert contrast needs calibrating; higher contrasts (10:1) untested"
+        ]
+      }
+    },
+    {
+      "n": 3,
+      "title": "Same recipe, two hospitals",
+      "eli5": "Email the design file and another hospital gets the same answer.",
+      "detail": "Printed at two facilities from shared files, scanned on DMI and OMNI: met ±10 % equivalence bounds.",
+      "pubs": [
+        "dualcentre"
+      ],
+      "more": {
+        "question": "Do inserts printed at different hospitals from the same design files give the same answer?",
+        "figures": [
+          {
+            "src": "/media/thesis/s3-two-facilities.webp",
+            "caption": "Central PET slices of each layer at both facilities, on DMI and OMNI scanners."
+          },
+          {
+            "src": "/media/thesis/s3-suv-bounds.webp",
+            "caption": "Background SUV per layer for every facility, scanner and day stays within the ±10 % bound."
+          }
+        ],
+        "methods": [
+          "Same 36-insert design printed independently at two facilities",
+          "Day 0 and day 8 on TOF DMI (5 × 300 s) and non-TOF OMNI Legend (5 × 420 s), EARL-style preparation, BSREM",
+          "HU, SUV, RC, DC and target-to-background ratio; same three-level statistical hierarchy"
+        ],
+        "results": [
+          "Homogeneous mixing confirmed: every layer comparison inside 10 % bounds",
+          "15 and 20 mm targets within 10 % of the designed TBR at both sites",
+          "Only 2–3 of 54 RC/TBR values exceeded 10 % MAPE",
+          "CT-based attenuation maps contributed equally at both sites"
+        ],
+        "limitations": [
+          "Two facilities, GE scanners only",
+          "Nominal ROIs don't capture print geometry errors; next: more sites, vendors and a NEMA reference"
+        ]
+      }
+    },
+    {
+      "n": 4,
+      "title": "Tumours with patterns inside",
+      "eli5": "Real tumours are patchy, so the printed ones are patchy too.",
+      "detail": "Nested necrosis-like inserts, [18F]FDG and [68Ga]PSMA. Gini index as physical heterogeneity truth; radiomic rank agreement ρ 0.76–0.92. CASSOULET reproduced the trends.",
+      "pubs": [
+        "quantreality",
+        "eanm2025"
+      ],
+      "more": {
+        "question": "Can printed multi-uptake inserts be told apart and ranked consistently, with two tracers and in simulation?",
+        "figures": [
+          {
+            "src": "/media/thesis/s4-fdg-vs-psma.webp",
+            "caption": "Nine heterogeneous insert designs at three sizes, scanned with [18F]FDG and [68Ga]PSMA."
+          },
+          {
+            "src": "/media/thesis/s4-phantom-vs-sim.webp",
+            "caption": "The same inserts: physical phantom versus CASSOULET simulation."
+          },
+          {
+            "src": "/media/thesis/s4-gini.webp",
+            "caption": "Gini index of heterogeneity: theory, FDG and Ga-68 follow the same trend."
+          }
+        ],
+        "methods": [
+          "27 inserts, 9 nested patterns (incipient → full necrosis) at 17, 22 and 28 mm, peak TBR 4:1",
+          "[18F]FDG and [68Ga]PSMA on the OMNI Legend at 50 and 30 MBq",
+          "Gini index as a physical measure of heterogeneity; 60 radiomic features (IBSI families)",
+          "CASSOULET: simulated OMNI model, OSEM 2×10 with PSF, 5 mm smoothing"
+        ],
+        "results": [
+          "Designed patterns separable by first- and second-order metrics",
+          "Cross-tracer rank agreement: median ρ 0.76–0.92 (GLRLM strongest)",
+          "Gini trends matched between tracers and between experiment and simulation",
+          "Simulation reproduced trends more reliably than absolute texture values (median feature error 18–31 %)"
+        ],
+        "limitations": [
+          "No full IBSI benchmark verification",
+          "BSREM (experiment) vs OSEM (simulation) noise texture differs; 30 MBq count matching needs tuning"
+        ]
+      }
+    },
+    {
+      "n": 5,
+      "title": "Real tumour shapes, twice",
+      "eli5": "Copy real tumour shapes, print them, and also hide them in a healthy scan.",
+      "detail": "8 TCIA lesion geometries, printed and inserted into healthy-volunteer total-body PET. Dice 0.67–0.92, cross-domain difference 0.04 ± 0.03.",
+      "pubs": [
+        "geoanchored"
+      ],
+      "more": {
+        "question": "Can the same patient-derived lesion be realised both as a printed insert and as a synthetic lesion in a clinical background?",
+        "figures": [
+          {
+            "src": "/media/thesis/s5-workflow.webp",
+            "caption": "The hybrid workflow: segmented clinical lesions become both 3D-printed inserts and synthetic insertions."
+          },
+          {
+            "src": "/media/thesis/s5-mtv.webp",
+            "caption": "Metabolic tumour volume for each lesion: source geometry, phantom and simulation."
+          }
+        ],
+        "methods": [
+          "Eight TCIA-derived lesion geometries (5.9–23.6 mL, 40–66 mm), TBR 3:1–5:1",
+          "Physical: porous PLA inserts in a Jaszczak phantom, 100 MBq [18F]FDG, OMNI Legend, BSREM",
+          "Synthetic: inserted into healthy-volunteer total-body [18F]FDG PET via an OMNI-like forward projection and OSEM",
+          "MTV (42 % max and peak), Dice, Jaccard, TBR, CRC, CoV, TLG"
+        ],
+        "results": [
+          "Both pathways preserved lesion morphology",
+          "Dice 0.67–0.92 (physical) and 0.77–0.92 (synthetic); mean between-pathway difference 0.04 ± 0.03",
+          "Threshold MTVs exceeded source volumes in both domains (×1.3–2.3)",
+          "Lesion-specific trends in TBR, contrast recovery and CoV preserved across domains"
+        ],
+        "limitations": [
+          "Proof of concept: tests consistent behaviour, not absolute interchangeability",
+          "Healthy-volunteer data from a different scanner (Quadra) resampled to the OMNI geometry"
+        ]
+      }
+    }
   ],
-  "takeaway": "Toward ground-truth tools that are physically anchored, anatomically realistic, and scalable for AI."
+  "takeaway": "Toward ground-truth tools that are physically anchored, anatomically realistic, and scalable for AI.",
+  "nutshell": "My PhD thesis in a nutshell"
 }

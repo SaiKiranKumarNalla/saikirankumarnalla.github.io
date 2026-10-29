@@ -9,7 +9,7 @@ export const BUILDINGS = [
     kage: 'The Scrolls. Every paper, preprint and talk.' },
   { id: 'builder', panel: 'builder', label: 'AI Builder', jp: '工房', en: 'The Workshop', style: 'tower', tiers: 3, footprint: 3.8, height: 12.5,
     kage: 'The Workshop. The lights on the roof are his AI agents.' },
-  { id: 'shrine', panel: 'research', label: 'Research', jp: '論文', en: 'The Shrine', style: 'shrine', footprint: 3.6, height: 7,
+  { id: 'shrine', panel: 'research', label: 'PhD Thesis', jp: '論文', en: 'The Shrine', style: 'shrine', footprint: 3.6, height: 7,
     kage: 'The Shrine. His PhD, and the research that came after it.' },
   { id: 'flow', panel: 'music', label: 'Music', jp: '流れ', en: 'The Stage', style: 'stage', footprint: 3.8, height: 6.5,
     kage: 'The Stage. Sai makes music too.' },

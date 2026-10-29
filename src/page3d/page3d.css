@@ -71,3 +71,15 @@ html,body{height:auto;overflow-x:hidden;overflow-y:auto}
 .s-playlist ol{margin:.4rem 0 .3rem;padding-left:1.1rem;font-size:.85rem}
 .s-playlist li{line-height:1.5}
 .s-playlist em{font-style:normal;font-weight:600;color:var(--accent);font-size:.85rem}
+
+/* Thesis figures and "Know more" */
+.s-fig{margin:1.1rem 0;padding:0}
+.s-fig img{display:block;width:100%;height:auto;border-radius:10px;background:#fff;border:1px solid var(--line)}
+.s-fig figcaption{font-size:.78rem;color:var(--faint);margin-top:.45rem;line-height:1.45}
+.s-know{margin-top:1rem;border-top:1px solid var(--line);padding-top:.8rem}
+.s-know summary{cursor:pointer;font-weight:600;color:var(--accent);list-style:none;display:flex;align-items:baseline;gap:10px}
+.s-know summary::-webkit-details-marker{display:none}
+.s-know summary::before{content:'+';display:inline-block;width:1em;transition:transform .2s}
+.s-know[open] summary::before{content:'–'}
+.s-know .s-q{font-style:italic;color:var(--text)}
+.s-know h3{margin-top:1.1rem}

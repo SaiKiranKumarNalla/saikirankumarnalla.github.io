@@ -42,7 +42,7 @@ export const PANELS = {
       <div class="p-actions">${more('/sections/about.html', 'Full story')}</div>`,
   },
   research: {
-    title: 'Research',
+    title: 'PhD Thesis',
     kicker: 'PhD · Université de Toulouse · 2023–2026',
     html: () => `
       <h3 class="p-first">${esc(thesis.title)}</h3>
