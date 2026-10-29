@@ -14,7 +14,7 @@ html,body{height:auto;overflow-x:hidden;overflow-y:auto}
 .s-pin span{display:block;font-size:.7rem;color:var(--accent);text-shadow:0 1px 6px var(--bg)}
 
 /* Text column */
-.s-main{position:relative;z-index:3;width:min(560px,44vw);margin-left:6vw;padding:0 0 30vh}
+.s-main{position:relative;z-index:3;width:min(520px,38vw);margin-left:4vw;padding:0 0 30vh}
 .s-step{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:96px 0 40px}
 .s-step:first-child{min-height:100vh}
 .s-card{padding:30px 32px;background:var(--panel);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 24px 60px rgba(0,0,0,.28);opacity:.35;transform:translateY(16px);transition:opacity .6s,transform .6s}

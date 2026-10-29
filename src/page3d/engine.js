@@ -120,6 +120,10 @@ export function runPage({ active, build }) {
     renderer.setSize(w, h, false);
     composer?.setSize(w, h);
     camera.aspect = w / h;
+    // On desktop the text column covers the left; shift the projection so the 3D is
+    // composed in the free space to its right.
+    if (w > 860) camera.setViewOffset(w, h, -w * 0.12, 0, w, h);
+    else camera.clearViewOffset();
     camera.updateProjectionMatrix();
     target = measure();
   }
@@ -129,6 +133,12 @@ export function runPage({ active, build }) {
   const clock = new THREE.Clock();
   const pos = new THREE.Vector3(), look = new THREE.Vector3(), tmp = new THREE.Vector3();
   let currentStep = -1;
+  // Deep link: #step-3 opens the page at that step with no transition.
+  const deep = /^#step-(\d+)$/.exec(location.hash);
+  if (deep && steps[+deep[1]]) {
+    steps[+deep[1]].scrollIntoView({ block: 'center' });
+    target = +deep[1];
+  }
   progress = target;
   renderer.setAnimationLoop(() => {
     const dt = Math.min(clock.getDelta(), 0.05);
