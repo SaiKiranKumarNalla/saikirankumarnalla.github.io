@@ -39,7 +39,7 @@ export const PANELS = {
       <ol class="p-timeline">${profile.education.map((e) => `<li><b>${esc(e.degree)}</b>, ${esc(e.school)} <span class="p-meta">${esc(e.years)} · ${esc(e.note)}</span></li>`).join('')}</ol>
       <h3>Programmes</h3>${chips(profile.programmes)}
       <h3>Languages</h3>${chips(profile.languages)}
-      <div class="p-actions">${more('about.html', 'Full story')}${more('experience.html', 'Experience in detail')}</div>`,
+      <div class="p-actions">${more('/sections/about.html', 'Full story')}</div>`,
   },
   research: {
     title: 'Research',
@@ -52,7 +52,7 @@ export const PANELS = {
       <p class="p-lede">${esc(thesis.takeaway)}</p>
       <h3>Now</h3>
       <p>${esc(projects.find((p) => p.id === 'virtualpet').summary)}</p>
-      <div class="p-actions">${more('papers.html', 'Thesis publications')}</div>`,
+      <div class="p-actions">${more('/sections/research.html', 'The research, step by step')}</div>`,
   },
   projects: {
     title: 'Projects',
@@ -63,7 +63,7 @@ export const PANELS = {
         <h4>${esc(p.name)}</h4>
         <p>${esc(p.summary)}</p>
         ${chips(p.stack)}
-      </article>`).join('') + `<div class="p-actions">${more('projects.html', 'All project details')}</div>`,
+      </article>`).join('') + `<div class="p-actions">${more('/sections/projects.html', 'All project details')}</div>`,
   },
   inventory: {
     title: 'Project Inventory',
@@ -74,7 +74,8 @@ export const PANELS = {
         <tbody>${[...projects].sort((a, b) => b.year - a.year).map((p) => `
           <tr><td><b>${esc(p.name)}</b><span class="p-meta">${esc(short(p.summary))}</span></td><td>${esc(p.kind)}</td><td>${esc(p.year)}</td><td>${STATUS[p.status] || esc(p.status)}</td></tr>`).join('')}
         </tbody>
-      </table>`,
+      </table>
+      <div class="p-actions">${more('/sections/inventory.html', 'Inventory in 3D')}</div>`,
   },
   publications: {
     title: 'Publications',
@@ -82,7 +83,7 @@ export const PANELS = {
     html: () => ['published', 'preprint', 'in-preparation', 'conference'].map((s) => {
       const list = pubs.filter((p) => p.status === s).sort((a, b) => b.year - a.year);
       return list.length ? `<h3>${STATUS[s]}</h3><ul class="p-pubs">${list.map(pubItem).join('')}</ul>` : '';
-    }).join('') + `<div class="p-actions">${more('papers.html', 'Abstracts and figures')}</div>`,
+    }).join('') + `<div class="p-actions">${more('/sections/publications.html', 'All publications')}</div>`,
   },
   builder: {
     title: 'AI Builder',
@@ -91,7 +92,7 @@ export const PANELS = {
       <div class="p-grid">${builder.principles.map((p, i) => `<div class="p-principle"><span>0${i + 1}</span><b>${esc(p.title)}</b><p>${esc(p.text)}</p></div>`).join('')}</div>
       <h3>Toolbelt</h3>${chips(builder.stack)}
       <h3>Next on the bench</h3><ul class="p-list">${builder.roadmap.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
-      <div class="p-actions">${more('builder.html', 'How I build with agents')}</div>`,
+      <div class="p-actions">${more('/sections/builder.html', 'How I build with agents')}</div>`,
   },
   contact: {
     title: 'Contact',
@@ -104,7 +105,7 @@ export const PANELS = {
         <li><span>GitHub</span><a href="${esc(profile.links.github)}" target="_blank" rel="noopener">SaiKiranKumarNalla</a></li>
         <li><span>CV</span><a href="${esc(profile.links.cv)}" target="_blank" rel="noopener">Download (PDF)</a></li>
       </ul>
-      <div class="p-actions">${more('kage.html', 'Or ask Kage, my AI assistant')}${more('recruiter.html', 'Recruiter mode')}</div>`,
+      <div class="p-actions">${more('kage.html', 'Or ask Kage, my AI assistant')}${more('recruiter.html', 'Recruiter mode')}${more('/sections/contact.html', 'Contact page')}</div>`,
   },
   music: {
     title: 'Music',

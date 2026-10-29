@@ -2,12 +2,12 @@ import { defineConfig } from 'vite';
 import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-// Every top-level .html file is a page (multi-page site, no SPA router).
-const pages = Object.fromEntries(
-  readdirSync(import.meta.dirname)
+// Every top-level .html file and every sections/*.html file is a page (multi-page site, no SPA router).
+const htmlIn = (dir, prefix = '') =>
+  readdirSync(resolve(import.meta.dirname, dir))
     .filter((f) => f.endsWith('.html'))
-    .map((f) => [f.replace(/\.html$/, ''), resolve(import.meta.dirname, f)])
-);
+    .map((f) => [prefix + f.replace(/\.html$/, ''), resolve(import.meta.dirname, dir, f)]);
+const pages = Object.fromEntries([...htmlIn('.'), ...htmlIn('sections', 'sections/')]);
 
 export default defineConfig({
   base: '/',
