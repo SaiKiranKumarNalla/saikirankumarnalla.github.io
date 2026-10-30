@@ -8,7 +8,8 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { BUILDINGS, MENU } from './buildings.js';
 import { PANELS } from './panels.js';
 import { makeBuilding, makeTreeInstances, makeLanterns } from './props.js';
-import { currentSeason, SEASONS, wind, makeGrass, makeWeather } from './seasons.js';
+import { currentSeason, SEASONS, wind, makeWeather } from './seasons.js';
+import { makeGodRays, makeWindTrail, makeEagle } from './flair.js';
 import { makeKageCharacter } from './character.js';
 import { makeSky, makeMoon, makeStars, makeMountains, makeFireflies, makePond, makeBamboo, makeBanner, makeRocks } from './atmosphere.js';
 import { makeSpeech } from './companion.js';
@@ -51,8 +52,8 @@ if (renderer) {
 // ── Palettes: a restrained crimson night, and a warm afternoon ──
 const PALETTES = {
   dark: {
-    sky: [0x06050a, 0x2a0c14, 0x0a0508], fog: 0x120a10, ground: 0x1a1418, path: 0x342a30,
-    hemiSky: 0x6a5070, hemiGround: 0x221414, hemi: 1.15, moon: 0xffa08a, moonI: 1.6, exposure: 1.25,
+    sky: [0x0b0912, 0x34121c, 0x120a10], fog: 0x1c1218, ground: 0x2a2228, path: 0x4a3c42,
+    hemiSky: 0x9a88b4, hemiGround: 0x3a2a2a, hemi: 1.9, moon: 0xffc0a8, moonI: 2.6, exposure: 1.5,
     lantern: 0.9, bloom: 0.5, mountains: [0x22121a, 0x170c12], night: true,
   },
   light: {
@@ -118,11 +119,13 @@ scene.add(makeRocks(lowPower ? 22 : 40, 33, 70));
 const season = currentSeason();
 document.documentElement.dataset.season = season;
 scene.add(makeTreeInstances({ count: lowPower ? 90 : 190, inner: 33, outer: 85, avoid, crowns: SEASONS[season].crowns }));
-const grass = makeGrass({ count: lowPower ? 2500 : 6000, inner: 30, outer: 70, avoid, colors: SEASONS[season].grass });
-scene.add(grass.mesh);
+
 const lanterns = makeLanterns({ count: 12, radius: 19.6 }); scene.add(lanterns.group);
 const weather = reduceMotion ? null : makeWeather(season, { lowPower });
 if (weather) scene.add(weather.group);
+const rays = makeGodRays({ count: lowPower ? 5 : 9, radius: 38 }); scene.add(rays.group);
+const trail = makeWindTrail(); scene.add(trail.object);
+const eagle = makeEagle(); scene.add(eagle.object);
 const fireflies = reduceMotion ? null : makeFireflies(lowPower ? 30 : 60);
 if (fireflies) scene.add(fireflies.points);
 
@@ -151,7 +154,10 @@ function routeTo(target, targetAngle) {
 const doorOf = (b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2);
 
 function applyTheme() {
-  const p = PALETTES[theme()];
+  let p = PALETTES[theme()];
+  // Fall afternoons glow: a low golden-hour sun, amber haze and warm light.
+  if (!p.night && season === 'fall') p = { ...p, sky: [0xf2b46a, 0xf7d29a, 0xf4e2c4], fog: 0xf0d2a4, hemiSky: 0xffd9a0, moon: 0xffb050, moonI: 2.8, mountains: [0xc08a68, 0xd8ae88] };
+  rays?.setStyle(p.night ? 0x9fb4ff : season === 'fall' ? 0xffc070 : 0xfff0c8, p.night ? 0.05 : season === 'rainy' ? 0.04 : 0.13);
   sky.set(...p.sky);
   scene.fog.color.set(p.fog);
   groundMat.color.set(theme() === 'light' ? SEASONS[season].ground : p.ground); pathMat.color.set(p.path);
@@ -435,8 +441,12 @@ function step() {
     buildings.forEach((b) => b.group.userData.animate?.(t));
     animated.forEach((o) => o.userData.animate(t));
     const w = wind(t);
-    grass.update(t, w);
     weather?.update(dt, t, w, kage.position);
+    rays.update(t);
+    eagle.update(t);
+    const hb = !focus && buildings.find((b) => b.hovered);
+    trail.point(kage.position, hb ? doorOf(hb) : null);
+    trail.update(t, dt);
     fireflies?.update(t);
   }
   lanterns.flicker(t);

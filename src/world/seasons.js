@@ -23,8 +23,10 @@ export function currentSeason() {
 
 // Gusty wind: a steady breeze with slow gusts. Returns strength along +x / +z.
 export function wind(t) {
-  const gust = Math.max(0, Math.sin(t * 0.35) * Math.sin(t * 0.13 + 1)) * 2.2;
-  const s = 0.6 + gust;
+  // Mostly still air; a gust rolls through every so often (roughly one in four seconds of each ~25 s cycle).
+  const g = Math.sin(t * 0.25) * Math.sin(t * 0.09 + 1);
+  const gust = g > 0.55 ? (g - 0.55) * 5 : 0;
+  const s = 0.15 + gust;
   return { x: s, z: s * 0.35, gust };
 }
 
@@ -150,7 +152,7 @@ function makeStreaks(n) {
           s.line.position.set(center.x - 30, 1 + Math.random() * 6, center.z + (Math.random() - 0.5) * 50);
         }
         s.line.position.x += (8 + w.gust * 6) * dt;
-        s.line.material.opacity = Math.max(0, Math.sin((s.life / d) * Math.PI)) * (0.15 + w.gust * 0.12);
+        s.line.material.opacity = Math.max(0, Math.sin((s.life / d) * Math.PI)) * Math.min(0.35, w.gust * 0.25);
       });
     },
   };
