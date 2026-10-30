@@ -1,14 +1,14 @@
 // ── Theme Toggle ──
 (function(){
   // Apply saved theme immediately (before render)
-  var s=localStorage.getItem('sai-theme');
+  var s=sessionStorage.getItem('sai-theme')||(function(){var h=new Date().getHours();return h>=7&&h<19?'light':'dark';})();
   if(s)document.documentElement.setAttribute('data-theme',s);
 
   function toggle(){
     var c=document.documentElement.getAttribute('data-theme');
     var n=(c==='light')?'dark':'light';
     document.documentElement.setAttribute('data-theme',n);
-    localStorage.setItem('sai-theme',n);
+    sessionStorage.setItem('sai-theme',n);
   }
 
   document.addEventListener('DOMContentLoaded',function(){

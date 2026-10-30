@@ -163,7 +163,7 @@ function applyTheme() {
 $('wTheme').addEventListener('click', () => {
   const next = theme() === 'light' ? 'dark' : 'light';
   document.documentElement.dataset.theme = next;
-  try { localStorage.setItem('sai-theme', next); } catch (e) {}
+  try { sessionStorage.setItem('sai-theme', next); } catch (e) {}
   applyTheme();
 });
 applyTheme();
