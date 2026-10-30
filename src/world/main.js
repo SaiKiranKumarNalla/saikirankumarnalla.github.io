@@ -118,7 +118,7 @@ for (let i = 0; i < 8; i++) {
 scene.add(makeRocks(lowPower ? 22 : 40, 33, 70));
 const season = currentSeason();
 document.documentElement.dataset.season = season;
-scene.add(makeTreeInstances({ count: lowPower ? 90 : 190, inner: 33, outer: 85, avoid, crowns: SEASONS[season].crowns }));
+scene.add(makeTreeInstances({ count: lowPower ? 90 : 190, inner: 33, outer: 85, avoid }));
 
 const lanterns = makeLanterns({ count: 12, radius: 19.6 }); scene.add(lanterns.group);
 const weather = reduceMotion ? null : makeWeather(season, { lowPower });
