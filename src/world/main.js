@@ -283,7 +283,7 @@ const heroEl = $('wHero');
 function hideHero() { heroEl.classList.add('gone'); document.body.classList.add('exploring'); }
 // Kage greets once, the first time the visitor drags around the village with no panel open.
 let greeted = false;
-$('wViewWork').addEventListener('click', () => openPanel('projects'));
+$('wViewWork').addEventListener('click', () => { hideHero(); greeted = true; speech.say("Welcome. Walk me with the arrow keys, or click any building.", clock.elapsedTime, 5000); });
 $('wHome').addEventListener('click', (e) => { e.preventDefault(); closePanel(); heroEl.classList.remove('gone'); document.body.classList.remove('exploring'); });
 const GREETINGS = [['ようこそ', 'ja'], ['Welcome', 'en'], ['నమస్కారం', 'te'], ['नमस्ते', 'hi'], ['Bonjour', 'fr']];
 let greetIdx = 0;
