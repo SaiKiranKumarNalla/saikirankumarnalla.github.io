@@ -13,9 +13,9 @@ const count = (st) => pubs.filter((p) => p.status === st).length;
 
 const FIT = [
   ['Imaging research scientist', 'PET/CT quantification, phantoms, simulation and validation, with first-author papers.', '/sections/research.html', 'PhD thesis'],
-  ['Medical-imaging AI / simulation engineer', 'Builds simulators and synthetic ground truth for testing imaging AI; Python, MATLAB, GPU.', '/sections/projects.html#cassoulet', 'CASSOULET'],
-  ['Agentic AI / applied AI', 'Designs and runs multi-agent systems with human gates, routing and provenance.', '/sections/builder.html', 'Agentic AI'],
-  ['MedTech R&D and translation', 'Hospital, startup and industry work: devices, benches, IP and VC programmes.', '/sections/projects.html#ppvi', 'Projects'],
+  ['Medical-imaging AI / simulation engineer', 'Builds simulators and synthetic ground truth for testing imaging AI; Python, MATLAB, GPU.', '/sections/projects#cassoulet', 'CASSOULET'],
+  ['Agentic AI / applied AI', 'Designs and runs multi-agent systems with human gates, routing and provenance.', '/sections/builder', 'Agentic AI'],
+  ['MedTech R&D and translation', 'Hospital, startup and industry work: devices, benches, IP and VC programmes.', '/sections/projects#ppvi', 'Projects'],
 ];
 const PIPE = [['Need', 'A clinical or technical gap'], ['Model', 'Physics, simulation or data'], ['Build', 'Code, CAD, prints, agents'], ['Validate', 'Metrics against ground truth'], ['Translate', 'Papers, tools, products']];
 const agentic = builder.builds.map((id) => projects.find((p) => p.id === id)).filter(Boolean);
@@ -61,11 +61,11 @@ document.getElementById('main').innerHTML = `
 
 <section class="r-sec r-two">
   <div><h2>PhD in one breath</h2><p class="r-lede">${esc(thesis.eli5)}</p><p class="r-meta">${esc(thesis.title)} · ${esc(thesis.university)}</p><a class="r-link" href="/sections/research.html">The five studies →</a></div>
-  <div><h2>Agent systems</h2>${agentic.map((p) => `<div class="r-item"><b>${esc(p.name)}</b><p>${esc(p.eli5)}</p></div>`).join('')}<a class="r-link" href="/sections/builder.html">How they're built →</a></div>
+  <div><h2>Agent systems</h2>${agentic.map((p) => `<div class="r-item"><b>${esc(p.name)}</b><p>${esc(p.eli5)}</p></div>`).join('')}<a class="r-link" href="/sections/builder">How they're built →</a></div>
 </section>
 
 <section class="r-sec"><h2>Selected projects</h2>
-  <div class="r-grid">${repos.map((r) => `<a class="r-card" href="/sections/projects.html#${r.id}"><span class="r-tag">${esc(r.kind)} · ${esc(r.years)}</span><b>${esc(r.name)}</b><p>${esc(r.eli5)}</p></a>`).join('')}</div>
+  <div class="r-grid">${repos.map((r) => `<a class="r-card" href="/sections/projects#${r.id}"><span class="r-tag">${esc(r.kind)} · ${esc(r.years)}</span><b>${esc(r.name)}</b><p>${esc(r.eli5)}</p></a>`).join('')}</div>
 </section>
 
 <section class="r-sec"><h2>Publications</h2>

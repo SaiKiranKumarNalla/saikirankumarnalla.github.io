@@ -57,7 +57,7 @@ const STEPS = [
     html: `<p class="s-kicker">Now · ${esc(profile.location)}</p><h2>What's next</h2>
       <p>Looking for roles where physics-grade imaging meets AI: industry R&amp;D, medtech, and research groups building simulation or generative models for PET/CT.</p>
       <h3>Open to</h3><div class="s-chips">${profile.openTo.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
-      <a class="s-more" href="/sections/contact.html">Get in touch →</a>`,
+      <a class="s-more" href="/sections/contact">Get in touch →</a>`,
   },
   {
     title: 'Beyond the lab', face: 'wide', pins: ['hyderabad', 'paris', 'toulouse', 'haifa'], arcs: [['hyderabad', 'paris'], ['paris', 'toulouse'], ['toulouse', 'haifa']],

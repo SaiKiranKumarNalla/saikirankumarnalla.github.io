@@ -28,7 +28,7 @@ const STEPS = [
       <div class="s-chips">${life.boardGames.list.map((g) => `<span>${esc(g.name)}</span>`).join('')}</div>` },
   { title: 'And more', html: `<p class="s-kicker">And more</p><h2>Other obsessions</h2>
       ${life.more.map((m) => `<div class="s-role"><b>${esc(m.name)}</b><p>${esc(m.text)}</p></div>`).join('')}
-      <a class="s-more" href="/sections/about.html">Back to the professional story →</a>` },
+      <a class="s-more" href="/sections/about">Back to the professional story →</a>` },
 ];
 
 document.getElementById('main').innerHTML = STEPS.map((s, i) =>

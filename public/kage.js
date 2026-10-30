@@ -34,7 +34,8 @@ var PAGE_CTX={
   'recruiter.html':'Recruiter Mode'
 };
 
-function curPage(){return window.location.pathname.split('/').pop()||'index.html';}
+function curPage(){var p=window.location.pathname.split('/').pop();return !p?'index.html':(/\.html$/.test(p)?p:p+'.html');}
+function cleanUrl(u){return String(u).replace(/^index\.html/,'/').replace(/^([\w-]+)\.html/,'/$1');}
 function timeOfDay(){var h=new Date().getHours();return h<6?'deep night':h<12?'morning':h<17?'afternoon':h<21?'evening':'night';}
 function visits(){var c=parseInt(localStorage.getItem('kage-v')||'0')+1;localStorage.setItem('kage-v',String(c));return c;}
 
@@ -407,7 +408,7 @@ function doAction(a){
     lnk.textContent='➜ Take me to '+PAGE_CTX[a.data];
 
     lnk.addEventListener('click',function(){
-      window.location.href=a.data;
+      window.location.href=cleanUrl(a.data);
     });
 
     var box=document.getElementById('kMsgs');
@@ -873,8 +874,8 @@ function showRecruiterChoice(){
       '<button class="kage-choice-btn" id="kChoiceMainTour">Main Site Tour</button>'+ '<button class="kage-choice-btn" id="kChoiceStay">Continue Current Site</button>'+ 
     '</div></div>';
   document.body.appendChild(ov);
-  document.getElementById('kChoiceRecruiter').onclick=function(){ sessionStorage.setItem('kage-start-recruiter-tour','1'); window.location.href='recruiter.html#overview'; };
-  document.getElementById('kChoiceRecruiterPage').onclick=function(){ window.location.href='recruiter.html'; };
+  document.getElementById('kChoiceRecruiter').onclick=function(){ sessionStorage.setItem('kage-start-recruiter-tour','1'); window.location.href='/recruiter#overview'; };
+  document.getElementById('kChoiceRecruiterPage').onclick=function(){ window.location.href='/recruiter'; };
   document.getElementById('kChoiceMainTour').onclick=function(){ sessionStorage.setItem('kage-main-tour-active','1'); sessionStorage.setItem('kage-main-tour-index','0'); ov.classList.remove('show'); setTimeout(function(){ if(ov.parentNode)ov.parentNode.removeChild(ov); startMainSiteTour(); },220); };
   document.getElementById('kChoiceStay').onclick=function(){ ov.classList.remove('show'); setTimeout(function(){ if(ov.parentNode)ov.parentNode.removeChild(ov);},220); };
 }
@@ -945,7 +946,7 @@ function runAutoTour(kind,steps,storageKey,indexKey,delay){
   if(idx>=steps.length)idx=steps.length-1;
   var step=steps[idx];
   if(curPage()!==step.page){
-    window.location.href=step.page+'#tour';
+    window.location.href=cleanUrl(step.page)+'#tour';
     return;
   }
   var card=makeTourCard();
@@ -963,7 +964,7 @@ function runAutoTour(kind,steps,storageKey,indexKey,delay){
       idx++;
       sessionStorage.setItem(indexKey,String(idx));
       var next=steps[idx];
-      if(next.page!==curPage()) window.location.href=next.page+'#tour';
+      if(next.page!==curPage()) window.location.href=cleanUrl(next.page)+'#tour';
       else show();
     }else end();
   }

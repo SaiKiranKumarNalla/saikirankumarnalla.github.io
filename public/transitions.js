@@ -1,17 +1,17 @@
 // === ASSASSIN'S CREED PAGE TRANSITIONS — PAGE-SPECIFIC ===
 
 const PAGE_TRANSITIONS = {
-  'index.html':      { text: 'Performing Leap of Faith...', sub: 'NOTHING IS TRUE',          kanji: '家' },
-  'about.html':      { text: 'Accessing Memory Sequence...', sub: 'DNA MATCH CONFIRMED',     kanji: '浪人' },
-  'experience.html': { text: 'Eavesdropping...',             sub: 'INTELLIGENCE GATHERED',    kanji: '道' },
-  'education.html':  { text: 'Synchronizing Viewpoint...',   sub: 'MAP UPDATED',              kanji: '道場' },
-  'projects.html':   { text: 'Eagle Vision Activated...',    sub: 'TARGETS REVEALED',         kanji: '鍛' },
-  'papers.html':     { text: 'Opening the Codex...',         sub: 'DATA ACQUIRED',            kanji: '刀' },
-  'contact.html':    { text: 'Entering the Bureau...',       sub: 'THE BROTHERHOOD AWAITS',   kanji: '縁' },
-  'story.html':      { text: 'Opening the Fiction Shelf...', sub: 'STORIES REVEALED',          kanji: '物語' },
-  'shapanang.html':  { text: 'Opening the Sealed Archive...', sub: 'PREVIEW ACCESS GRANTED', kanji: '封' },
-  'shapanang-ii.html': { text: 'Opening the Second Archive...', sub: 'SEQUEL PREVIEW',       kanji: '弐' },
-  'up-there.html':   { text: 'Opening Up There...',          sub: 'NOVEL PREVIEW',           kanji: '空' }
+  '/':      { text: 'Performing Leap of Faith...', sub: 'NOTHING IS TRUE',          kanji: '家' },
+  '/about':      { text: 'Accessing Memory Sequence...', sub: 'DNA MATCH CONFIRMED',     kanji: '浪人' },
+  '/experience': { text: 'Eavesdropping...',             sub: 'INTELLIGENCE GATHERED',    kanji: '道' },
+  '/education':  { text: 'Synchronizing Viewpoint...',   sub: 'MAP UPDATED',              kanji: '道場' },
+  '/projects':   { text: 'Eagle Vision Activated...',    sub: 'TARGETS REVEALED',         kanji: '鍛' },
+  '/papers':     { text: 'Opening the Codex...',         sub: 'DATA ACQUIRED',            kanji: '刀' },
+  '/contact':    { text: 'Entering the Bureau...',       sub: 'THE BROTHERHOOD AWAITS',   kanji: '縁' },
+  '/story':      { text: 'Opening the Fiction Shelf...', sub: 'STORIES REVEALED',          kanji: '物語' },
+  '/shapanang':  { text: 'Opening the Sealed Archive...', sub: 'PREVIEW ACCESS GRANTED', kanji: '封' },
+  '/shapanang-ii': { text: 'Opening the Second Archive...', sub: 'SEQUEL PREVIEW',       kanji: '弐' },
+  '/up-there':   { text: 'Opening Up There...',          sub: 'NOVEL PREVIEW',           kanji: '空' }
 };
 
 const GLITCH_CHARS = '█▓▒░╗╔╚╝┃━╋┣┫▌▐▀▄';
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Resolve page key from href ──
   function getPageKey(href) {
     const filename = href.split('/').pop().split('?')[0].split('#')[0];
-    return filename || 'index.html';
+    return filename || '/';
   }
 
   // ── Intercept nav link clicks ──
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
 
       const pageKey = getPageKey(href);
-      const config = PAGE_TRANSITIONS[pageKey] || PAGE_TRANSITIONS['index.html'];
+      const config = PAGE_TRANSITIONS[pageKey] || PAGE_TRANSITIONS['/'];
 
       // Update insignia kanji to match destination
       const insignia = document.querySelector('.ac-insignia');

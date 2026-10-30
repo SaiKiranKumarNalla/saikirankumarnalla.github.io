@@ -30,11 +30,11 @@
 <div class="bg-kanji">物語</div>
 <main class="story-page">
   <div class="story-top">
-    <a class="story-brand" href="index.html" aria-label="Return to home">
+    <a class="story-brand" href="/" aria-label="Return to home">
       <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><rect y="3" width="32" height="6" fill="#0a0a0b" stroke="#8b1a1a" stroke-width="0.8"/><circle cx="16" cy="6" r="2.5" fill="none" stroke="#8b1a1a" stroke-width="0.6"/></svg>
       <span class="story-brand-mark">NALLA<span>.</span></span>
     </a>
-    <a class="story-home" href="index.html">← Back Home</a>
+    <a class="story-home" href="/">← Back Home</a>
   </div>
 
   <section class="story-hero reveal">
@@ -57,7 +57,7 @@
         <div class="locked-kanji">封</div>
         <div class="locked-title">The remaining pages are sealed</div>
         <p class="locked-text">This is only a curated public fragment preview. The full PDF is not served here, and the complete sequence remains sealed. To read the complete Shāpanang archive, contact Sensei Sai and request access.</p>
-        <div class="locked-actions"><a class="story-btn" href="contact.html">Contact Sai</a><button class="story-btn" id="askKageBtn2">Ask Kage for Summary</button></div>
+        <div class="locked-actions"><a class="story-btn" href="/contact">Contact Sai</a><button class="story-btn" id="askKageBtn2">Ask Kage for Summary</button></div>
       </div>
     </div>
     <div class="controls">
@@ -145,7 +145,7 @@
   }
   warmStoryImages();
   prev.addEventListener('click',()=>{if(idx>-1){idx--;render();}});
-  next.addEventListener('click',()=>{if(idx<pages.length){idx++;render();}else{location.href='contact.html';}});
+  next.addEventListener('click',()=>{if(idx<pages.length){idx++;render();}else{location.href='/contact';}});
   document.getElementById('coverBtn').addEventListener('click',()=>{idx=-1;render();});
   document.getElementById('lockBtn').addEventListener('click',()=>{idx=pages.length;render();});
   document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next.click(); if(e.key==='ArrowLeft')prev.click();});

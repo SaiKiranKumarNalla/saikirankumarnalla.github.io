@@ -12,7 +12,7 @@ const fig = (f) => `<figure class="s-fig"><img src="${esc(f.src)}" alt="${esc(f.
 const intro = () => `<p class="s-kicker">Projects &amp; repos</p><h1>Things I've built</h1>
   <p class="s-lede">Simulators, benches and models, from undergrad CFD to PET simulation. Pick a tile, or a name below.</p>
   <div class="s-pick">${repos.map((r) => `<button data-id="${r.id}"><b>${esc(r.name)}</b><span>${esc(r.kind)} · ${esc(r.years)}</span></button>`).join('')}</div>
-  <p class="s-meta">AI agent systems live on the <a href="/sections/builder.html">Agentic AI</a> page.</p>`;
+  <p class="s-meta">AI agent systems live on the <a href="/sections/builder">Agentic AI</a> page.</p>`;
 
 function detail(r) {
   const links = (r.links || []).map((l) => (l.href

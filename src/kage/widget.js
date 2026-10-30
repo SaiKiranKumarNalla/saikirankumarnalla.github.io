@@ -11,9 +11,9 @@ import './widget.css';
 
 const PROXY_URL = 'https://kage-proxy.sainalla82.workers.dev';
 const PAGES = {
-  home: ['/', 'the village (home)'], about: ['/about.html', 'About'], experience: ['/experience.html', 'Experience'],
-  education: ['/education.html', 'Education (PhD, Master\'s, Bachelor\'s)'], projects: ['/projects.html', 'Projects'],
-  publications: ['/papers.html', 'Publications'], contact: ['/contact.html', 'Reach Out'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
+  home: ['/', 'the village (home)'], about: ['/about', 'About'], experience: ['/experience', 'Experience'],
+  education: ['/education', 'Education (PhD, Master\'s, Bachelor\'s)'], projects: ['/projects', 'Projects'],
+  publications: ['/papers', 'Publications'], contact: ['/contact', 'Reach Out'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
 };
 const PROMPTS = ['Who is Sai, in two lines?', 'Explain the PhD like I am five', 'What has Sai built?', 'Is Sai a fit for my role?'];
 
