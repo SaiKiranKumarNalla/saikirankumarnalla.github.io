@@ -89,3 +89,7 @@ html,body{height:auto;overflow-x:hidden;overflow-y:auto}
 .s-cert span{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#d24a4a;font-weight:600}
 .s-cert b{display:block;font-family:'Zen Antique',serif;font-weight:400;font-size:1.3rem;margin:.3rem 0 .1rem}
 .s-cert p{margin:0;color:rgba(242,236,228,.6) !important}
+
+/* Embedded videos */
+.s-video{position:relative;aspect-ratio:16/9;margin:.4rem 0 1rem;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#000}
+.s-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}

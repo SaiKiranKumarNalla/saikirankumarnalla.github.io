@@ -137,5 +137,18 @@
       "haemodynamics"
     ],
     "abstract": "Atherosclerosis in carotid arteries depends mostly on hemodynamic parameters, and any disturbances in pulsatile flows may alter the hemodynamic parameters extensively. Gas emboli are one such source that can hinder and disturb standard blood flow patterns and potentially lead to occlusions and ischemia. To understand how gas embolism affects carotid artery hemodynamics, numerical simulation of coupled Newtonian two-phase laminar flow with interface tracking are performed in an anatomical image-based geometry with flow conditions closely approximating physiological flows. Bubble behavior and Pulsatile flow field changes are quantified. Significant deviation from flow without gas embolism is observed leading to nonstandard flow distributions.\n\nResults: show that gas embolism promotes complex spatio-temporal variations in the carotid artery hemodynamics leading to higher time averaged shear stress values and greater regions of high oscillatory shear index, implying higher probability of atherosclerosis incidence. Depending on contact angle, gas emboli were found to be lodged in carotid sinus or exiting the carotid artery, which can potentially cause abnormalities in blood pressures, heart rates, and ischemia in downstream vasculature, respectively."
+  },
+  {
+    "id": "oceans2021",
+    "title": "Systems Engineering V-Cycle Approach for Design and Development of Autonomous Underwater Vehicle",
+    "venue": "OCEANS 2021: San Diego – Porto (MTS/IEEE)",
+    "year": 2021,
+    "status": "published",
+    "doi": "10.23919/oceans44145.2021.9705756",
+    "tags": [
+      "AUV",
+      "systems engineering"
+    ],
+    "abstract": "Autonomous Underwater Vehicles (AUV) are miniature submarines deployed in water bodies for real time data collection and monitoring. Developing such complex systems for a student competition in a given time frame within the limited resources requires agile project management alongside the technical expertise. This work discusses the implementation of the V-cycle model, also known as the Verification and Validation model, in the mechanical design of Black Pearl, an AUV developed for the Singapore AUV Challenge. Adapting such a model enables designers to keep track of each and every subsystem."
   }
 ]

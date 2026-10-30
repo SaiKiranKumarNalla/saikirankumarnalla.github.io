@@ -1,0 +1,120 @@
+{
+  "masters": {
+    "title": "Lesion morphology prediction during microwave ablation for cancer",
+    "degree": "MSc Biomechanical & Biomedical Engineering (M2), École Polytechnique · IP Paris",
+    "host": "Hepta Medical, Paris (medtech startup)",
+    "dates": "March–August 2023",
+    "advisor": "Thomas Bancel, CEO",
+    "confidential": "Industrial internship: this page shows the ideas and methods; clinical images and simulation outputs stay with Hepta Medical.",
+    "eli5": "Doctors can cook a tumour from the inside with a tiny microwave needle. The hard part is knowing exactly how big the cooked zone gets. I measured it in experiments and rebuilt it in simulations so the device can predict it.",
+    "steps": [
+      {
+        "title": "The problem",
+        "eli5": "Heat doesn't spread the same way in a living body.",
+        "text": "Microwave ablation destroys tumours with heat from a 2.45 GHz antenna. Ablation size follows the delivered energy closely ex vivo (>90 % prediction accuracy) but drops to 50–70 % in vivo.",
+        "more": [
+          "Blood vessels carry heat away (the heat-sink effect)",
+          "Tissue contracts and changes its properties as it heats",
+          "Perfusion and tissue type change how the zone grows over time; ablation volume isn't linear in delivered energy"
+        ]
+      },
+      {
+        "title": "Measuring temperature from inside",
+        "eli5": "The needle also works as a thermometer.",
+        "text": "Hepta's 17G water-cooled monopole antenna integrates radiometric temperature sensing: the heated tissue's thermal radiation is read back as a volumetric temperature around the antenna.",
+        "more": [
+          "Designed and fabricated a new burn fixture",
+          "Validated and calibrated the radiometer in water baths at 25 °C and 50 °C, cooling on and off",
+          "Phantom burns at 75 W and 100 W to compare antenna and radiometric temperatures"
+        ]
+      },
+      {
+        "title": "Ex vivo burns",
+        "eli5": "Practise on tissue first, with fake blood vessels.",
+        "text": "Three kinds of benchmark burns in ex vivo tissue, measured by dissection and automatic MATLAB volume analysis.",
+        "more": [
+          "Fixture burns submerged at 37 °C at 3, 7 and 11 mm from a channel, to mimic perfusion and heat sinks",
+          "Half burns to watch tissue contraction directly",
+          "Bulky burns for full-size ablation zones",
+          "Ablation zones split into coagulation and congestion volumes and correlated with delivered energy"
+        ]
+      },
+      {
+        "title": "Simulation",
+        "eli5": "Build the same burn inside a computer.",
+        "text": "Coupled electromagnetic and Pennes bioheat models, validated in 2D and 3D, then 30 fixture simulations (21 liver, 9 lung) across powers and depths.",
+        "more": [
+          "Stationary EM heating source coupled to transient bioheat (weak coupling)",
+          "Heat-sink asymmetry grows with power near vessels; asymmetric 54 °C isotherms at 3 and 7 mm",
+          "Liver and lung behave differently: in lung the zone grows along the antenna and plateaus",
+          "Simulated radiometric signals and real-time ablation volumes"
+        ]
+      },
+      {
+        "title": "Outcome",
+        "eli5": "The computer and the real burns agree on the trend.",
+        "text": "A benchmarked simulation framework supporting Hepta's radiometry-based prediction, with experiment–simulation correlation of maximum tissue temperature and ablation volume.",
+        "more": [
+          "Foundation for preclinical analysis and early patient-specific simulations",
+          "Tools: COMSOL Multiphysics, MATLAB, ex vivo experimentation, CT image analysis"
+        ]
+      }
+    ]
+  },
+  "auv": {
+    "title": "Black Pearl: an autonomous underwater vehicle",
+    "degree": "BTech Mechanical Engineering, Mahindra École Centrale (Mahindra University)",
+    "team": "AUV MEC",
+    "dates": "2019–2020",
+    "competition": "Singapore AUV Challenge (SAUVC)",
+    "role": "Deputy team lead & mechanical subdivision lead",
+    "eli5": "A small robot submarine that swims and makes decisions on its own. We designed it, built it, and took it to an international competition.",
+    "steps": [
+      {
+        "title": "The brief",
+        "eli5": "Fit a whole robot sub inside a suitcase-sized box.",
+        "text": "Design a vehicle within the SAUVC rule book and the team's own targets.",
+        "more": [
+          "Rule book: under 70 × 50 × 50 cm and 40 kg in air",
+          "Targets: 65 × 47.5 × 47.5 cm, 20–22 kg, 5 active degrees of freedom (surge, sway, heave, roll, yaw)",
+          "Slight positive buoyancy (4 %) and pitch within 0–10°"
+        ]
+      },
+      {
+        "title": "A modified V-cycle",
+        "eli5": "Test on the computer first, then build.",
+        "text": "A systems-engineering V-cycle adapted for a student team: virtual prototyping, then a decision matrix, then physical prototyping.",
+        "more": [
+          "Every component and the assembly rated 1–5 on stability & speed, modularity & structural integrity, ease of in-house fabrication, and aesthetics",
+          "Threshold of 2.5/5 to move to a physical prototype",
+          "5 design iterations and 2 loops back to verification; most changes caught virtually, before pre-qualification"
+        ]
+      },
+      {
+        "title": "The final vehicle",
+        "eli5": "It came out right on target.",
+        "text": "60 × 47 × 37.5 cm, 20.6 kg in air, positive buoyancy of 2.91 %, pitch 3–6°, with all 5 active degrees of freedom.",
+        "more": [
+          "Published at MTS/IEEE OCEANS 2021 (San Diego – Porto)",
+          "Project funded by École Centrale School of Engineering, Mahindra University"
+        ]
+      },
+      {
+        "title": "Building the team",
+        "eli5": "A robot needs a crew.",
+        "text": "Founded the club from scratch: 15 associate and 10 junior members, finances, logistics, logo, social media, a TV interview and news coverage.",
+        "more": []
+      }
+    ],
+    "videos": [
+      {
+        "id": "3HMGDT2w5cE",
+        "title": "Team AUV MEC · SAUVC qualification video"
+      },
+      {
+        "id": "K-8B5hGgC_s",
+        "title": "AUV MEC · TV interview"
+      }
+    ]
+  }
+}

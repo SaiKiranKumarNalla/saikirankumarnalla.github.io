@@ -35,13 +35,15 @@ const STEPS = [
     html: `<p class="s-kicker">2016–2021 · Hyderabad, India</p><h2>Engineering roots</h2>
       <p>Mechanical engineering at Mahindra École Centrale, on an excellence scholarship. First research: simulating how gas bubbles disturb blood flow in the carotid artery, which became a journal paper.</p>
       ${role(edu('Mahindra'))}${role(exp('Mahindra'))}
-      <div class="s-role"><b>Deputy team lead</b>, Autonomous Underwater Vehicle club <span class="s-meta">2019–2020</span><p>Built the club from scratch: 25 members, finances, media.</p></div>`,
+      <div class="s-role"><b>Deputy team lead</b>, Autonomous Underwater Vehicle club <span class="s-meta">2019–2020</span><p>Built the club from scratch: 25 members, finances, media.</p></div>
+      <a class="s-more" href="/sections/auv.html">Black Pearl, the underwater robot →</a>`,
   },
   {
     title: 'Paris', face: 'paris', pins: ['paris'], arcs: [['hyderabad', 'paris']],
     html: `<p class="s-kicker">2021–2023 · Paris & Palaiseau, France</p><h2>Biomedical engineering, hospitals and a startup</h2>
       <p>A fully funded MSc at École Polytechnique, then straight into the clinic and industry.</p>
-      ${role(edu('Polytechnique'))}${role(exp('LadHyX'))}${role(exp('Saint Joseph'))}${role(exp('Hepta'))}`,
+      ${role(edu('Polytechnique'))}${role(exp('LadHyX'))}${role(exp('Saint Joseph'))}${role(exp('Hepta'))}
+      <a class="s-more" href="/sections/masters.html">Master's thesis: microwave ablation →</a>`,
   },
   {
     title: 'Toulouse', face: 'toulouse', pins: ['toulouse', 'haifa'], arcs: [['paris', 'toulouse'], ['toulouse', 'haifa']],
