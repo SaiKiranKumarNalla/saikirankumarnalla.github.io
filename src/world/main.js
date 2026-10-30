@@ -7,7 +7,8 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { BUILDINGS, MENU } from './buildings.js';
 import { PANELS } from './panels.js';
-import { makeBuilding, makeTreeInstances, makeLanterns, makePetals } from './props.js';
+import { makeBuilding, makeTreeInstances, makeLanterns } from './props.js';
+import { currentSeason, SEASONS, wind, makeGrass, makeWeather } from './seasons.js';
 import { makeKageCharacter } from './character.js';
 import { makeSky, makeMoon, makeStars, makeMountains, makeFireflies, makePond, makeBamboo, makeBanner, makeRocks } from './atmosphere.js';
 import { makeSpeech } from './companion.js';
@@ -114,10 +115,14 @@ for (let i = 0; i < 8; i++) {
   ban.lookAt(0, 0, 0); scene.add(ban); animated.push(ban);
 }
 scene.add(makeRocks(lowPower ? 22 : 40, 33, 70));
-scene.add(makeTreeInstances({ count: lowPower ? 46 : 90, inner: 36, outer: 80, avoid }));
+const season = currentSeason();
+document.documentElement.dataset.season = season;
+scene.add(makeTreeInstances({ count: lowPower ? 90 : 190, inner: 33, outer: 85, avoid, crowns: SEASONS[season].crowns }));
+const grass = makeGrass({ count: lowPower ? 2500 : 6000, inner: 30, outer: 70, avoid, colors: SEASONS[season].grass });
+scene.add(grass.mesh);
 const lanterns = makeLanterns({ count: 12, radius: 19.6 }); scene.add(lanterns.group);
-const petals = reduceMotion ? null : makePetals({ count: lowPower ? 90 : 160, spread: 80 });
-if (petals) scene.add(petals.points);
+const weather = reduceMotion ? null : makeWeather(season, { lowPower });
+if (weather) scene.add(weather.group);
 const fireflies = reduceMotion ? null : makeFireflies(lowPower ? 30 : 60);
 if (fireflies) scene.add(fireflies.points);
 
@@ -149,7 +154,7 @@ function applyTheme() {
   const p = PALETTES[theme()];
   sky.set(...p.sky);
   scene.fog.color.set(p.fog);
-  groundMat.color.set(p.ground); pathMat.color.set(p.path);
+  groundMat.color.set(theme() === 'light' ? SEASONS[season].ground : p.ground); pathMat.color.set(p.path);
   hemi.color.set(p.hemiSky); hemi.groundColor.set(p.hemiGround); hemi.intensity = p.hemi;
   moonLight.color.set(p.moon); moonLight.intensity = p.moonI;
   mountains.userData.mats.forEach((m, i) => m.color.set(p.mountains[i]));
@@ -429,7 +434,9 @@ function step() {
     emblem.rotation.z = t * 0.1;
     buildings.forEach((b) => b.group.userData.animate?.(t));
     animated.forEach((o) => o.userData.animate(t));
-    petals?.update(dt * 0.6, kage.position);
+    const w = wind(t);
+    grass.update(t, w);
+    weather?.update(dt, t, w, kage.position);
     fireflies?.update(t);
   }
   lanterns.flicker(t);

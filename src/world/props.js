@@ -186,7 +186,7 @@ export function makeBuilding(def, { lowPower }) {
   return g;
 }
 
-export function makeTreeInstances({ count, inner, outer, avoid }) {
+export function makeTreeInstances({ count, inner, outer, avoid, crowns: palette }) {
   const group = new THREE.Group();
   const trunkGeo = new THREE.CylinderGeometry(0.18, 0.28, 2.4, 6);
   trunkGeo.translate(0, 1.2, 0);
@@ -207,7 +207,7 @@ export function makeTreeInstances({ count, inner, outer, avoid }) {
     q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), rand() * Math.PI);
     m.compose(p, q, s); trunks.setMatrixAt(placed, m);
     m.compose(p.clone().setY(2.6 * k), q, s.clone().multiply(new THREE.Vector3(1, 0.8, 1))); crowns.setMatrixAt(placed, m);
-    crowns.setColorAt(placed, color.set(C.crown).lerp(new THREE.Color(C.crownDark), rand() * 0.6));
+    crowns.setColorAt(placed, palette ? color.set(palette[Math.floor(rand() * palette.length)]).lerp(new THREE.Color(0x000000), rand() * 0.15) : color.set(C.crown).lerp(new THREE.Color(C.crownDark), rand() * 0.6));
     placed++;
   }
   group.add(trunks, crowns);
