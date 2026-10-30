@@ -55,9 +55,9 @@ const PALETTES = {
     lantern: 0.9, bloom: 0.5, mountains: [0x22121a, 0x170c12], night: true,
   },
   light: {
-    sky: [0xbfd3e6, 0xf3dcc0, 0xe9dccb], fog: 0xead9c4, ground: 0xcdbfa8, path: 0xb3a48c,
-    hemiSky: 0xfff1dc, hemiGround: 0x8a6f55, hemi: 1.0, moon: 0xffe2b8, moonI: 2.3, exposure: 1.05,
-    lantern: 0.25, bloom: 0.2, mountains: [0x9c8f9c, 0xb7aab4], night: false,
+    sky: [0xb9d4ea, 0xf6e3d6, 0xeee4dc], fog: 0xe6e6da, ground: 0x93a77a, path: 0xc8b89a,
+    hemiSky: 0xfff4e6, hemiGround: 0x5f7448, hemi: 1.0, moon: 0xffe2b8, moonI: 2.3, exposure: 1.05,
+    lantern: 0.25, bloom: 0.2, mountains: [0x8a9a8c, 0xaab5ad], night: false,
   },
 };
 const theme = () => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
@@ -314,7 +314,7 @@ canvas.addEventListener('pointermove', (e) => {
   if (!isTouch && !drag) {
     const hb = pick(e);
     canvas.style.cursor = hb ? 'pointer' : 'grab';
-    buildings.forEach((b) => { b.group.userData.setHover?.(b === hb); b.labelEl.classList.toggle('hover', b === hb); });
+    buildings.forEach((b) => { b.hovered = b === hb; b.group.userData.setHover?.(b === hb); b.labelEl.classList.toggle('hover', b === hb); });
   }
 });
 canvas.addEventListener('pointerup', (e) => {
@@ -437,6 +437,10 @@ function step() {
   // Labels follow their buildings; hidden behind the hero.
   const showLabels = document.body.classList.contains('exploring');
   for (const b of buildings) {
+    // Hover: the building rises and swells slightly so it reads as clickable.
+    b.hoverT = (b.hoverT || 0) + ((b.hovered ? 1 : 0) - (b.hoverT || 0)) * Math.min(1, dt * 10);
+    b.group.scale.setScalar(1 + 0.07 * b.hoverT);
+    b.group.position.y = 0.5 * b.hoverT;
     tmp.copy(b.group.position).setY(b.labelY).project(camera);
     const vis = showLabels && tmp.z < 1 && Math.abs(tmp.x) < 1.1 && Math.abs(tmp.y) < 1.1;
     b.labelEl.style.opacity = vis ? (focus && focus !== b ? 0.35 : 1) : 0;
