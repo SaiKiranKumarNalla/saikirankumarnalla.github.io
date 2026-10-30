@@ -4,7 +4,10 @@ import { runPage } from './engine.js';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const GROUPS = [['published', 'Published'], ['preprint', 'Preprints'], ['in-preparation', 'In preparation'], ['conference', 'Conference']];
-const item = (p) => `<div class="s-role"><b>${esc(p.title)}</b><p>${esc(p.venue)} · ${p.year}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p></div>`;
+const paras = (t) => String(t).split(/\n\s*\n/).map((x) => `<p>${esc(x.trim())}</p>`).join('');
+const item = (p) => `<div class="s-role"><b>${esc(p.title)}</b><p>${esc(p.venue)} · ${p.year}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p>
+  ${p.abstract ? `<details class="s-know"><summary>Abstract</summary>${paras(p.abstract)}</details>`
+    : p.summary ? `<details class="s-know"><summary>Summary</summary><p>${esc(p.summary)}</p><p class="s-meta">Full abstract on the publisher's site.</p></details>` : ''}</div>`;
 
 const groups = GROUPS.map(([k, name]) => ({ k, name, list: pubs.filter((p) => p.status === k).sort((a, b) => b.year - a.year) })).filter((g) => g.list.length);
 document.getElementById('main').innerHTML = `
@@ -25,15 +28,15 @@ runPage({
     const paperMat = (hot) => new THREE.MeshStandardMaterial({ color: hot ? 0xf6efe6 : 0xcfc5b8, roughness: 0.7, emissive: hot ? 0x3a0e10 : 0, emissiveIntensity: 0.3, side: THREE.DoubleSide });
     const sheets = [];
     groups.forEach((g, gi) => g.list.forEach((p, k) => {
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 2.9, 1, 6), paperMat(false));
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(1.35, 1.85, 1, 6), paperMat(false));
       // Slight curl.
       const pos = m.geometry.attributes.position;
-      for (let v = 0; v < pos.count; v++) pos.setZ(v, Math.pow(pos.getY(v) / 1.45, 2) * 0.12);
+      for (let v = 0; v < pos.count; v++) pos.setZ(v, Math.pow(pos.getY(v) / 0.93, 2) * 0.08);
       m.geometry.computeVertexNormals();
       // Ink lines as thin dark strips.
       for (let l = 0; l < 7; l++) {
-        const line = new THREE.Mesh(new THREE.PlaneGeometry(l === 0 ? 1.4 : 1.7, l === 0 ? 0.12 : 0.05), new THREE.MeshBasicMaterial({ color: l === 0 ? 0x8b1a1a : 0x4a4048 }));
-        line.position.set(l === 0 ? -0.1 : 0, 1.05 - l * 0.28, 0.02);
+        const line = new THREE.Mesh(new THREE.PlaneGeometry(l === 0 ? 0.9 : 1.1, l === 0 ? 0.08 : 0.035), new THREE.MeshBasicMaterial({ color: l === 0 ? 0x8b1a1a : 0x4a4048 }));
+        line.position.set(l === 0 ? -0.07 : 0, 0.68 - l * 0.18, 0.02);
         m.add(line);
       }
       m.userData = { gi, k, n: g.list.length };
@@ -48,8 +51,8 @@ runPage({
         sheets.forEach((m, i) => {
           const { gi, k, n } = m.userData;
           const fan = gi === active;
-          if (fan) tmp.set((k - (n - 1) / 2) * 1.5, 0, 1.5 - Math.abs(k - (n - 1) / 2) * 0.4);
-          else tmp.set(Math.sin(i * 2.4) * 0.3, -1.6 + i * 0.06, -2 - gi * 0.5);
+          if (fan) tmp.set((k - (n - 1) / 2) * 1.05, 0, 1 - Math.abs(k - (n - 1) / 2) * 0.3);
+          else tmp.set(Math.sin(i * 2.4) * 0.2, -1.2 + i * 0.04, -2 - gi * 0.4);
           m.position.lerp(tmp, Math.min(1, dt * 3));
           const rx = fan ? 0 : -Math.PI / 2 + 0.05;
           m.rotation.x += (rx - m.rotation.x) * Math.min(1, dt * 3);

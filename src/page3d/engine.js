@@ -114,6 +114,8 @@ export function runPage({ active, build }) {
     return centers.length - 1;
   }
   addEventListener('scroll', () => { target = measure(); }, { passive: true });
+  // Opening a dropdown changes the page height; re-measure the steps.
+  document.addEventListener('toggle', () => { target = measure(); }, true);
 
   function resize() {
     const w = innerWidth, h = innerHeight;

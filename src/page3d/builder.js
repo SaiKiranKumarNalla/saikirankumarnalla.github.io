@@ -1,4 +1,4 @@
-// AI Builder: a 3D constellation of agent roles around a human core; pulses travel out and return.
+// Agentic AI: a 3D constellation of agent roles around a human core; pulses travel out and return.
 import builder from '../../content/ai-builder.json';
 import projects from '../../content/projects.json';
 import { runPage } from './engine.js';
@@ -8,8 +8,8 @@ const ROLES = ['Coordinator', 'Inventory', 'Segmentation', 'QC / correction', 'A
 const builds = builder.builds.map((id) => projects.find((p) => p.id === id)).filter(Boolean);
 
 document.getElementById('main').innerHTML = `
-  <section class="s-step s-hero" data-title="AI Builder"><div class="s-card">
-    <p class="s-kicker">AI Builder</p><h1>${esc(builder.headline)}</h1>
+  <section class="s-step s-hero" data-title="Agentic AI"><div class="s-card">
+    <p class="s-kicker">Agentic AI</p><h1>${esc(builder.headline)}</h1>
     <p class="s-lede">Agents do the work; I hold the gates. Each light is an agent role, and the core is the human check every result returns through.</p>
     <p class="s-scroll">Scroll for how it works</p>
   </div></section>
@@ -20,7 +20,7 @@ document.getElementById('main').innerHTML = `
   <section class="s-step" data-title="Toolbelt"><div class="s-card"><h2>Toolbelt &amp; next</h2>
     <div class="s-chips">${builder.stack.map((s) => `<span>${esc(s)}</span>`).join('')}</div>
     <h3>Next on the bench</h3><ul class="s-list">${builder.roadmap.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
-    <p class="s-meta">Anthropic certifications coming soon.</p>
+    <div class="s-cert"><span>Certifications</span><b>Anthropic certifications</b><p>Coming soon</p></div>
   </div></section>`;
 
 runPage({

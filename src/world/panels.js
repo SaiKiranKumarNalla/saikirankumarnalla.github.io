@@ -8,7 +8,6 @@ import music from '../../content/music.json';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const chips = (arr) => (arr?.length ? `<div class="p-chips">${arr.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : '');
-const short = (t) => { const f = String(t).split(/(?<=[.:;])\s/)[0].replace(/[.:;]$/, ''); return f.length > 90 ? f.slice(0, 88).replace(/\s\S*$/, '') + '…' : f; };
 const more = (href, text) => `<a class="p-more" href="${href}">${text} <span aria-hidden="true">→</span></a>`;
 
 const STATUS = {
@@ -65,18 +64,6 @@ export const PANELS = {
         ${chips(p.stack)}
       </article>`).join('') + `<div class="p-actions">${more('/sections/projects.html', 'All project details')}</div>`,
   },
-  inventory: {
-    title: 'Project Inventory',
-    kicker: `${projects.length} projects, ${Math.min(...projects.map((p) => p.year))}–${Math.max(...projects.map((p) => p.year))}`,
-    html: () => `
-      <table class="p-table">
-        <thead><tr><th>Project</th><th>Type</th><th>Year</th><th>Status</th></tr></thead>
-        <tbody>${[...projects].sort((a, b) => b.year - a.year).map((p) => `
-          <tr><td><b>${esc(p.name)}</b><span class="p-meta">${esc(short(p.summary))}</span></td><td>${esc(p.kind)}</td><td>${esc(p.year)}</td><td>${STATUS[p.status] || esc(p.status)}</td></tr>`).join('')}
-        </tbody>
-      </table>
-      <div class="p-actions">${more('/sections/inventory.html', 'Inventory in 3D')}</div>`,
-  },
   publications: {
     title: 'Publications',
     kicker: `${pubs.filter((p) => p.status === 'published').length} published · ${pubs.filter((p) => p.status === 'preprint').length} preprints · ${pubs.filter((p) => p.status === 'conference').length} conference`,
@@ -86,7 +73,7 @@ export const PANELS = {
     }).join('') + `<div class="p-actions">${more('/sections/publications.html', 'All publications')}</div>`,
   },
   builder: {
-    title: 'AI Builder',
+    title: 'Agentic AI',
     kicker: builder.headline,
     html: () => `
       <div class="p-grid">${builder.principles.map((p, i) => `<div class="p-principle"><span>0${i + 1}</span><b>${esc(p.title)}</b><p>${esc(p.text)}</p></div>`).join('')}</div>
@@ -106,6 +93,12 @@ export const PANELS = {
         <li><span>CV</span><a href="${esc(profile.links.cv)}" target="_blank" rel="noopener">Download (PDF)</a></li>
       </ul>
       <div class="p-actions">${more('kage.html', 'Or ask Kage, my AI assistant')}${more('recruiter.html', 'Recruiter mode')}${more('/sections/contact.html', 'Contact page')}</div>`,
+  },
+  life: {
+    title: 'Off the Clock',
+    kicker: 'Travel · fiction · music · games',
+    html: () => `<p class="p-lede">Outside the lab: 12 countries, three stories, two playlists and a shelf of strategy games.</p>
+      <div class="p-actions">${more('/sections/life.html', 'Explore Off the Clock')}</div>`,
   },
   music: {
     title: 'Music',

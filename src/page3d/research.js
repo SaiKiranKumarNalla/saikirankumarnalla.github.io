@@ -3,7 +3,6 @@
 // are compared with the same shapes inside a patient.
 // Each study has a key figure and an expandable "Know more" with methods, results and limitations.
 import thesis from '../../content/thesis.json';
-import projects from '../../content/projects.json';
 import pubs from '../../content/publications.json';
 import { runPage } from './engine.js';
 
@@ -13,7 +12,6 @@ const pubLinks = (ids = []) => ids.map((id) => pubs.find((p) => p.id === id)).fi
   .map((p) => `<li>${esc(p.title)} <span class="s-meta">· ${esc(p.venue)}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">DOI</a>` : ''}</span></li>`).join('');
 const figure = (f, cls = '') => `<figure class="s-fig ${cls}"><img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy" decoding="async"><figcaption>${esc(f.caption)}</figcaption></figure>`;
 const ch = (n) => thesis.chapters.find((c) => c.n === n);
-const vp = projects.find((p) => p.id === 'virtualpet');
 
 function study(n) {
   const c = ch(n), m = c.more;
@@ -41,15 +39,11 @@ const STEPS = [
   ...[1, 2, 3, 4, 5].map((n) => ({ title: ch(n).title, html: study(n) })),
   { title: 'Takeaway', html: `<p class="s-kicker">Takeaway</p><h2>Ground truth you can trust</h2>
       <p class="s-lede">${esc(thesis.takeaway)}</p>
-      <h3>What came next: ${esc(vp.name)}</h3><p>${esc(vp.summary)}</p>
-      <div class="s-chips">${vp.facts.map((f) => `<span>${esc(f)}</span>`).join('')}</div>
-      <a class="s-more" href="/sections/builder.html">How the agents work →</a>` },
+      <a class="s-more" href="/sections/projects.html">What I built next →</a>` },
 ];
 
 document.getElementById('main').innerHTML = STEPS.map((s, i) =>
   `<section class="s-step${i === 0 ? ' s-hero' : ''}" data-title="${esc(s.title)}"><div class="s-card">${s.html}</div></section>`).join('');
-// Opening "Know more" changes the page height; re-measure the scroll steps.
-document.querySelectorAll('.s-know').forEach((d) => d.addEventListener('toggle', () => dispatchEvent(new Event('scroll'))));
 
 runPage({
   active: 'research',

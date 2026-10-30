@@ -83,3 +83,9 @@ html,body{height:auto;overflow-x:hidden;overflow-y:auto}
 .s-know[open] summary::before{content:'–'}
 .s-know .s-q{font-style:italic;color:var(--text)}
 .s-know h3{margin-top:1.1rem}
+
+/* Certifications placeholder */
+.s-cert{margin-top:1.4rem;padding:20px 22px;border-radius:14px;background:#050406;border:1px solid rgba(242,236,228,.14);color:#f2ece4}
+.s-cert span{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#d24a4a;font-weight:600}
+.s-cert b{display:block;font-family:'Zen Antique',serif;font-weight:400;font-size:1.3rem;margin:.3rem 0 .1rem}
+.s-cert p{margin:0;color:rgba(242,236,228,.6) !important}

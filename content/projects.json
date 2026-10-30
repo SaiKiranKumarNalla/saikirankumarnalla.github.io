@@ -1,36 +1,248 @@
 [
-  {"id": "virtualpet", "name": "Virtual PET Patients", "kind": "research · AI", "status": "active", "year": 2026,
-   "eli5": "Turn a real scan into a LEGO-model patient that a computer scanner can scan again, with a person checking every step.",
-   "summary": "Human-in-the-loop agentic framework that converts retrospective PET/CT into auditable patient models (anatomy, functional regions, activity, attenuation), runs CASSOULET simulations, and writes quantitative validation reports. Groundwork for NASGM-style learned simulators and PAD-style heterogeneous PET synthesis.",
-   "facts": ["11-subject DMI/OMNI cohort", "162 functional compartments", "8 agent roles with human QC gates"],
-   "stack": ["TotalSegmentator", "MONAI", "CASSOULET", "Codex", "Antigravity", "WebGL review"], "public": false},
-  {"id": "cassoulet", "name": "CASSOULET", "kind": "simulator", "status": "active", "year": 2026,
-   "eli5": "A flight simulator, but for PET scanners.",
-   "summary": "Compositional Anthropomorphic Spatial Synthesizer for ground-truth Lesion Export. GPU PET/CT simulator with scanner models of GE DMI 5R, GE OMNI and Siemens Quadra: DOI, TOF single-scatter, BSREM/OSEM, CT simulation, DICOM export.",
-   "facts": ["3 scanner digital twins", "Over 150 dated studies in Oct 2026", "Colab A100/T4 orchestration"],
-   "stack": ["Python", "MATLAB", "PyTomography", "parallelproj", "CUDA/Metal"], "public": false},
-  {"id": "veritomix", "name": "VeriTomiX", "kind": "venture", "status": "concept", "year": 2026,
-   "eli5": "A driving test for medical-imaging AI before it meets real patients.",
-   "summary": "Benchmarking-as-a-service for imaging devices and AI, built on CASSOULET and 3D-printed phantom evidence.", "public": false},
-  {"id": "veritomix-office", "name": "VeriTomiX Virtual Office", "kind": "AI product", "status": "active", "year": 2026,
-   "eli5": "A tiny company where all the coworkers are AI, and I'm the boss who signs off.",
-   "summary": "Native macOS app running a company of 8 AI department heads (R&D, Phantoms, Product, Clinical, Partnerships, IP/Ops, Management, Finance) on Codex and Gemini CLIs, with local Llama specialists, meetings, task queues and GPU allocation.",
-   "stack": ["Swift/macOS", "Codex CLI", "Gemini CLI", "Ollama", "Whisper"], "image": "office.png", "public": false},
-  {"id": "animus", "name": "ANIMUS Jobs", "kind": "AI agent", "status": "coming-soon", "year": 2026,
-   "eli5": "A job-hunting sidekick that finds jobs, checks they're real, and helps write the letter.",
-   "summary": "Local-first AI career agent: multi-source discovery, AI web radar, link verification by Claude/Codex, tailored CVs and letters, Fellowship Match, kanban, calendar, and a game layer with XP and rarity tiers.",
-   "stack": ["Python", "SQLite", "Claude Code", "Codex", "Gemini"], "public": false, "note": "Public release soon; screenshots only."},
-  {"id": "flowlab", "name": "Flow Lab", "kind": "simulator", "status": "active", "year": 2026,
-   "eli5": "Watch coloured dye flow through pipes like blood, then see how a scanner would picture it.",
-   "summary": "Parametric pulsatile flow-phantom simulator with GUI: pulsatile flow, bladder-like storage, exchanging sphere, PET/CT quality animations.", "media": ["video.gif", "quality_animation.gif"], "public": false},
-  {"id": "digitaltwin", "name": "Human FDG Digital Twin", "kind": "simulation", "status": "active", "year": 2026,
-   "eli5": "A see-through computer body where sugar tracer travels through the blood and out through the kidneys.",
-   "summary": "Coupled FDG circulation and renal excretion, vascular splines, organ TACs, and a WebGL anatomical atlas.", "media": ["atlas.html"], "public": false},
-  {"id": "mupet", "name": "MuPET", "kind": "research", "status": "published-preprint", "year": 2025,
-   "eli5": "Use the physics of how stuff spreads to make realistic fake scans.",
-   "summary": "Mass-transport physics for synthetic PET data generation.", "repos": ["MuPET-Noise-Generator"]},
-  {"id": "3dynapet", "name": "3DynaPET", "kind": "research", "status": "done", "year": 2025, "summary": "Dynamic PET validation with 3D-printed phantoms."},
-  {"id": "hepta", "name": "Hepta Medical toolbox", "kind": "industry", "status": "done", "year": 2023, "summary": "Predictive ablation models and a CT/MRI segmentation-visualisation toolbox."},
-  {"id": "tevar", "name": "Carotid & TEVAR CFD", "kind": "research", "status": "done", "year": 2022, "summary": "In-silico haemodynamics; J Biomech Eng 2022."},
-  {"id": "auv", "name": "AUV MEC", "kind": "student", "status": "done", "year": 2020, "summary": "Deputy team lead, autonomous underwater vehicle club."}
+  {
+    "id": "virtualpet",
+    "name": "Virtual PET Patients",
+    "kind": "research · AI",
+    "status": "active",
+    "year": 2026,
+    "eli5": "Turn a real scan into a LEGO-model patient that a computer scanner can scan again, with a person checking every step.",
+    "summary": "Human-in-the-loop agentic framework that converts retrospective PET/CT into auditable patient models (anatomy, functional regions, activity, attenuation), runs CASSOULET simulations, and writes quantitative validation reports. Groundwork for NASGM-style learned simulators and PAD-style heterogeneous PET synthesis.",
+    "facts": [
+      "11-subject DMI/OMNI cohort",
+      "162 functional compartments",
+      "8 agent roles with human QC gates"
+    ],
+    "stack": [
+      "TotalSegmentator",
+      "MONAI",
+      "CASSOULET",
+      "Codex",
+      "Antigravity",
+      "WebGL review"
+    ],
+    "public": false,
+    "more": {
+      "problem": "Building realistic virtual patients for PET simulation by hand takes days per subject and leaves little record of the choices made.",
+      "approach": [
+        "A coordinator agent dispatches inventory, segmentation, QC, activity-map, simulation and validation agents",
+        "Four separate layers per patient: anatomy, functional regions, activity, attenuation; original labels are never overwritten",
+        "Human QC gates after anatomy, after activity, and before any result is released",
+        "Every step leaves hashes, before/after images and a reason"
+      ],
+      "status": [
+        "11-subject GE DMI/OMNI cohort in preparation; 162 functional compartments drafted",
+        "Next: one end-to-end simulation and quantitative report, then reproducibility tests",
+        "Later: a learned surrogate of the simulator (NASGM-style) and heterogeneous PET synthesis (PAD-style)"
+      ]
+    }
+  },
+  {
+    "id": "cassoulet",
+    "name": "CASSOULET",
+    "kind": "simulator",
+    "status": "active",
+    "year": 2026,
+    "eli5": "A flight simulator, but for PET scanners.",
+    "summary": "Compositional Anthropomorphic Spatial Synthesizer for ground-truth Lesion Export. GPU PET/CT simulator with scanner models of GE DMI 5R, GE OMNI and Siemens Quadra: DOI, TOF single-scatter, BSREM/OSEM, CT simulation, DICOM export.",
+    "facts": [
+      "3 scanner digital twins",
+      "Over 150 dated studies in Oct 2026",
+      "Colab A100/T4 orchestration"
+    ],
+    "stack": [
+      "Python",
+      "MATLAB",
+      "PyTomography",
+      "parallelproj",
+      "CUDA/Metal"
+    ],
+    "public": false,
+    "more": {
+      "problem": "Commercial PET simulators are closed, slow to adapt, and can't insert heterogeneous or patient-shaped lesions on modern scanners.",
+      "approach": [
+        "Analytical PET/CT simulation with scanner models of GE Discovery MI 5-ring, GE OMNI Legend and Siemens Biograph Vision Quadra",
+        "Physics v2: depth-of-interaction sub-LORs, TOF single-scatter, crystal normalisation, randoms",
+        "BSREM and OSEM reconstruction, CT simulation and attenuation, DICOM export",
+        "GPU runs on Colab A100/T4 orchestrated by agents, with a written constitution for every study"
+      ],
+      "status": [
+        "More than 150 dated studies in October 2026",
+        "Multicentre virtual testbench manuscripts in preparation"
+      ]
+    }
+  },
+  {
+    "id": "veritomix",
+    "name": "VeriTomiX",
+    "kind": "venture",
+    "status": "concept",
+    "year": 2026,
+    "eli5": "A driving test for medical-imaging AI before it meets real patients.",
+    "summary": "Benchmarking-as-a-service for imaging devices and AI, built on CASSOULET and 3D-printed phantom evidence.",
+    "public": false,
+    "more": {
+      "problem": "Imaging AI and scanners are rarely tested against a ground truth before they reach patients.",
+      "approach": [
+        "Benchmarking as a service built on CASSOULET simulation and 3D-printed phantom evidence",
+        "Shared phantom designs and virtual testbenches give every site and vendor the same reference"
+      ],
+      "status": [
+        "Concept and evidence stage: strategy, grant and evidence decks prepared"
+      ]
+    }
+  },
+  {
+    "id": "veritomix-office",
+    "name": "VeriTomiX Virtual Office",
+    "kind": "AI product",
+    "status": "active",
+    "year": 2026,
+    "eli5": "A tiny company where all the coworkers are AI, and I'm the boss who signs off.",
+    "summary": "Native macOS app running a company of 8 AI department heads (R&D, Phantoms, Product, Clinical, Partnerships, IP/Ops, Management, Finance) on Codex and Gemini CLIs, with local Llama specialists, meetings, task queues and GPU allocation.",
+    "stack": [
+      "Swift/macOS",
+      "Codex CLI",
+      "Gemini CLI",
+      "Ollama",
+      "Whisper"
+    ],
+    "image": "office.png",
+    "public": false,
+    "more": {
+      "problem": "Running a venture's research, product, IP and finance work alone means constant context switching.",
+      "approach": [
+        "A native macOS app that runs a small company of AI department heads: R&D, Phantoms, Product, Clinical, Partnerships, IP/Ops, Management and Finance",
+        "Department heads run on Codex and Gemini CLIs; each department has a local Llama 3.2 specialist through Ollama for private, cheap tasks",
+        "Meetings, task queues, GPU allocation, Whisper transcription and deliverables folders",
+        "The founder approves; agents propose"
+      ],
+      "status": [
+        "In daily use for VeriTomiX planning and evidence work"
+      ]
+    }
+  },
+  {
+    "id": "animus",
+    "name": "ANIMUS Jobs",
+    "kind": "AI agent",
+    "status": "coming-soon",
+    "year": 2026,
+    "eli5": "A job-hunting sidekick that finds jobs, checks they're real, and helps write the letter.",
+    "summary": "Local-first AI career agent: multi-source discovery, AI web radar, link verification by Claude/Codex, tailored CVs and letters, Fellowship Match, kanban, calendar, and a game layer with XP and rarity tiers.",
+    "stack": [
+      "Python",
+      "SQLite",
+      "Claude Code",
+      "Codex",
+      "Gemini"
+    ],
+    "public": false,
+    "note": "Public release soon; screenshots only.",
+    "more": {
+      "problem": "Job and fellowship searching is scattered across dozens of sites, full of dead links, and hard to tailor applications for.",
+      "approach": [
+        "Discovery from job APIs, company boards, France Travail, EU funding calls, OpenAlex and job-alert emails",
+        "An AI web radar searches the web lane by lane; Claude or Codex open postings to verify they're real",
+        "Tailored CVs, letters, outreach emails, mock interviews and a Fellowship Match for postdocs",
+        "Runs locally on your own AI subscriptions: no API bills, CV stays on your machine"
+      ],
+      "status": [
+        "Version 0.6, macOS and Linux tested",
+        "Public release coming soon"
+      ]
+    }
+  },
+  {
+    "id": "flowlab",
+    "name": "Flow Lab",
+    "kind": "simulator",
+    "status": "active",
+    "year": 2026,
+    "eli5": "Watch coloured dye flow through pipes like blood, then see how a scanner would picture it.",
+    "summary": "Parametric pulsatile flow-phantom simulator with GUI: pulsatile flow, bladder-like storage, exchanging sphere, PET/CT quality animations.",
+    "media": [
+      "video.gif",
+      "quality_animation.gif"
+    ],
+    "public": false,
+    "more": {
+      "problem": "Dynamic and flow PET need ground truth for moving tracer, which static phantoms can't provide.",
+      "approach": [
+        "A parametric flow-phantom simulator with a browser GUI",
+        "Pulsatile flow, bladder-like storage and an exchanging sphere",
+        "Generates tracer-transport animations, time-activity curves and PET/CT quality views automatically"
+      ],
+      "status": [
+        "Pilot studies October 2026"
+      ]
+    }
+  },
+  {
+    "id": "digitaltwin",
+    "name": "Human FDG Digital Twin",
+    "kind": "simulation",
+    "status": "active",
+    "year": 2026,
+    "eli5": "A see-through computer body where sugar tracer travels through the blood and out through the kidneys.",
+    "summary": "Coupled FDG circulation and renal excretion, vascular splines, organ TACs, and a WebGL anatomical atlas.",
+    "media": [
+      "atlas.html"
+    ],
+    "public": false,
+    "more": {
+      "problem": "Whole-body PET simulation needs a body whose tracer moves the way it does in people.",
+      "approach": [
+        "One subject's anatomy from open data, segmented with TotalSegmentator and MOOSE",
+        "Arterial-input-driven renal subsystem first, then circulation detail, calibrated to published human time-activity curves",
+        "An interactive WebGL anatomy atlas for review"
+      ],
+      "status": [
+        "Prototype; staged approximation, not a full physiological model"
+      ]
+    }
+  },
+  {
+    "id": "mupet",
+    "name": "MuPET",
+    "kind": "research",
+    "status": "published-preprint",
+    "year": 2025,
+    "eli5": "Use the physics of how stuff spreads to make realistic fake scans.",
+    "summary": "Mass-transport physics for synthetic PET data generation.",
+    "repos": [
+      "MuPET-Noise-Generator"
+    ]
+  },
+  {
+    "id": "3dynapet",
+    "name": "3DynaPET",
+    "kind": "research",
+    "status": "done",
+    "year": 2025,
+    "summary": "Dynamic PET validation with 3D-printed phantoms."
+  },
+  {
+    "id": "hepta",
+    "name": "Hepta Medical toolbox",
+    "kind": "industry",
+    "status": "done",
+    "year": 2023,
+    "summary": "Predictive ablation models and a CT/MRI segmentation-visualisation toolbox."
+  },
+  {
+    "id": "tevar",
+    "name": "Carotid & TEVAR CFD",
+    "kind": "research",
+    "status": "done",
+    "year": 2022,
+    "summary": "In-silico haemodynamics; J Biomech Eng 2022."
+  },
+  {
+    "id": "auv",
+    "name": "AUV MEC",
+    "kind": "student",
+    "status": "done",
+    "year": 2020,
+    "summary": "Deputy team lead, autonomous underwater vehicle club."
+  }
 ]

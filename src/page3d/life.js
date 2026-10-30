@@ -37,7 +37,7 @@ document.getElementById('main').innerHTML = STEPS.map((s, i) =>
 runPage({
   active: null,
   build({ THREE, scene, reduceMotion, lowPower }) {
-    const anchor = new THREE.Vector3(3.6, 0, 0);
+    const anchor = new THREE.Vector3(2.2, 0, 0);
     const vis = (p, a, w = 0.75) => Math.max(0, 1 - Math.abs(p - a) / w);
 
     // Globe (steps 0–1).
@@ -53,7 +53,7 @@ runPage({
       items.forEach((it, i) => {
         const tex = loader.load(it.cover);
         tex.colorSpace = THREE.SRGBColorSpace;
-        const card = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5, transparent: true }));
+        const card = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true }));
         const k = i - (items.length - 1) / 2;
         card.position.set(k * gap, 0, -Math.abs(k) * 0.5);
         card.rotation.y = -k * arc;

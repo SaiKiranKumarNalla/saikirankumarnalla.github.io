@@ -76,7 +76,7 @@ runPage({
   build({ THREE, scene, camera, label, reduceMotion, lowPower }) {
     const R = 3.6;
     const globe = new THREE.Group();
-    globe.position.set(3.6, 0, 0);
+    globe.position.set(2.2, 0, 0);
     scene.add(globe);
 
     // Real country shapes; the places Sai has lived and visited are lit.

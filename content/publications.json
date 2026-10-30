@@ -1,13 +1,141 @@
 [
-  {"id": "pesm2025", "title": "Enhancing PET/CT target assessment with porous 3D printed grids: a pilot study", "venue": "Physical and Engineering Sciences in Medicine", "year": 2025, "status": "published", "doi": "10.1007/s13246-025-01687-y", "thesisStudy": 1, "tags": ["3D printing", "PET/CT", "phantoms"]},
-  {"id": "dualcentre", "title": "From Digital File to Transferable Phantom: A Dual-Centre Evaluation of Multi-contrast Phantom for Standardized PET Quantification", "venue": "medRxiv · under revision at Physica Medica", "year": 2025, "status": "preprint", "doi": "10.1101/2025.05.30.25328639", "thesisStudy": 2, "tags": ["multicentre", "harmonisation"]},
-  {"id": "quantreality", "title": "Quantitative Reality: A Physical Ground Truth to Assess Heterogeneity Beyond Visual Limits in Molecular Imaging", "venue": "medRxiv", "year": 2025, "status": "preprint", "doi": "10.1101/2025.11.26.25341036", "thesisStudy": 3, "tags": ["heterogeneity", "radiomics", "dual tracer"]},
-  {"id": "mupet", "title": "MuPET (Multiphysics PET): Bridging Computational Mass Transport Physics and Medical Imaging for Synthetic PET Data Generation", "venue": "medRxiv", "year": 2025, "status": "preprint", "doi": "10.1101/2025.07.31.25332512", "tags": ["synthetic data", "multiphysics", "simulation"]},
-  {"id": "geoanchored", "title": "From Physical Phantom to Clinical Background: A Geometry-Anchored Dual-Domain Framework for PET Lesion Ground Truth", "venue": "Manuscript", "year": 2026, "status": "in-preparation", "thesisStudy": 4, "tags": ["anthropomorphic lesions", "lesion insertion"]},
-  {"id": "cassoulet-ms", "title": "CASSOULET: a virtual PET reference for multicentre phantom evaluation", "venue": "Manuscript", "year": 2026, "status": "in-preparation", "tags": ["simulator", "digital twin"]},
-  {"id": "virtualpet", "title": "From PET/CT to Virtual PET: An Agentic Framework with Human-Guided Quality Control and Quantitative Validation", "venue": "Working title", "year": 2026, "status": "in-preparation", "tags": ["agentic AI", "virtual patients"]},
-  {"id": "eanm2025", "title": "3D Printed PET/CT Phantom with Mixed Target Uptake Characteristics to Investigate Lesion Development", "venue": "EANM Congress 2025 · e-poster EP-0949", "year": 2025, "status": "conference", "thesisStudy": 3, "tags": ["conference"]},
-  {"id": "ecr2025", "title": "Synthetic lesion insertion versus 3D-printed uniform targets", "venue": "ECR 2025 · C-28068", "year": 2025, "status": "conference", "thesisStudy": 1, "tags": ["conference"]},
-  {"id": "sfpm2024", "title": "Porous 3D-printed grids for PET/CT", "venue": "SFPM 2024", "year": 2024, "status": "conference", "thesisStudy": 1, "tags": ["conference"]},
-  {"id": "jbme2022", "title": "Effects of Gas Embolism on Pulsatile Flow Characteristics Within a Human Carotid Artery", "venue": "Journal of Biomechanical Engineering", "year": 2022, "status": "published", "doi": "10.1115/1.4054679", "tags": ["CFD", "haemodynamics"]}
+  {
+    "id": "pesm2025",
+    "title": "Enhancing PET/CT target assessment with porous 3D printed grids: a pilot study",
+    "venue": "Physical and Engineering Sciences in Medicine",
+    "year": 2025,
+    "status": "published",
+    "doi": "10.1007/s13246-025-01687-y",
+    "thesisStudy": 1,
+    "tags": [
+      "3D printing",
+      "PET/CT",
+      "phantoms"
+    ],
+    "summary": "Porous 3D-printed cubes encode PET contrast through their solidity (50–75 % → target-to-background 2.0–4.0). A 36-insert phantom scanned repeatedly on a GE Discovery MI kept its designed contrast across preparations; day-to-day differences came from preparation, not design."
+  },
+  {
+    "id": "dualcentre",
+    "title": "From Digital File to Transferable Phantom: A Dual-Centre Evaluation of Multi-contrast Phantom for Standardized PET Quantification",
+    "venue": "medRxiv · under revision at Physica Medica",
+    "year": 2025,
+    "status": "preprint",
+    "doi": "10.1101/2025.05.30.25328639",
+    "thesisStudy": 2,
+    "tags": [
+      "multicentre",
+      "harmonisation"
+    ],
+    "abstract": "Background: Three-dimensional printing has been used to build cost effective & realistic phantoms but their adaptability across facilities remains under-explored. Validation of standardization protocols and quantitative metrics of positron emission tomography (PET) to printed phantoms has been sparse. This study aims to evaluate the digital transferability of a multi-contrast phantom design and the quantitative consistency of metrics across two independent facilities, as a foundational step towards multi-centre standardization.\n\nMethods: Cubic phantom inserts (40 mm) featuring spherical targets (0, 10, 15, and 20 mm), of a previously proven design, were fabricated at two different facilities using 3D printing and positioned within a Jaszczak phantom, filled with radiotracer and soap/water solution. Acquisitions (Day 0, 8) were performed on 5-ring Discovery MI and 32 cm OMNI Legend systems. Quantitative metrics, including CT Hounsfield units (HU), PET recovery coefficients (RC) and PET target-to-background ratios (TBR) were statistically analysed (rank sum tests) to assess the influence of facility, scanner model, and acquisition day.\n\nResults: CT images revealed minor differences across facilities and scanners, with notable HU improvement (in emulating water) upon prolonged cube immersion. PET image quality was visually good with respect to desired feature representation. Average TBRMax (mean{+/-}std. dev.) were 1.56 {+/-} 0.03 (expected 2.0), 2.35 {+/-} 0.05 (expected 2.5), and 3.10 {+/-} 0.05 (expected 3.33). RCMax and RCMean ranged from 0.69 - 1.11 and 0.56 - 0.89. No statistical differences were found for TBRMax, RCMean, or RCMax (p [≥] 0.07 for Mann Whitney; p [≥] 0.57 for Friedman) and Bland-Altman mean bias < 10%.\n\nConclusion: Our study demonstrates that quantitative PET consistency can be reliably maintained across different facilities, printers, and scanners using 3D-printed phantoms produced from a common digital file. This confirmation of digital transferability offers a crucial and cost-effective framework for standardization, paving the way for more accessible multi-center harmonization studies."
+  },
+  {
+    "id": "quantreality",
+    "title": "Quantitative Reality: A Physical Ground Truth to Assess Heterogeneity Beyond Visual Limits in Molecular Imaging",
+    "venue": "medRxiv",
+    "year": 2025,
+    "status": "preprint",
+    "doi": "10.1101/2025.11.26.25341036",
+    "thesisStudy": 3,
+    "tags": [
+      "heterogeneity",
+      "radiomics",
+      "dual tracer"
+    ],
+    "abstract": "Background: Accurate quantification of intratumoral heterogeneity is essential for validating radiomics features and AI models in oncology. However, standard physical phantoms typically utilize homogeneous compartments, lacking the spatially complex uptake patterns required to rigorously benchmark these metrics against a known reality. To address this, we introduce porous 3D-printed inserts for simulating controlled spatial heterogeneity.\n\nMethods: Modular grid inserts (17, 22, 28 mm targets) were developed with contrast of 4:1. Nine heterogeneity models, simulating progressions from uniform uptake to multifocal to necrosis, were imaged on a 32cm Omni Legend PET/CT system. Two different tracers: [18F]FDG ([18F]-2-fluoro-2-deoxy-d-glucose) and [68Ga] (68-Gallium) were used on different days. Quantitative performance was assessed using conventional Standardized Uptake Values (SUV) and Target-to-Background Ratios (TBR), alongside the Gini Index (GI) to quantify spatial heterogeneity and radiotracer distribution inequality.\n\nResults: The phantom demonstrated high consistency, with reference solution variability remaining under 2.2% across layers. In 28 mm inserts, experimental TBRmax values fell within 10% of the theoretical 4:1 design ratio. GI successfully quantified structural complexity, ranging from 0.05 in homogeneous regions to 0.30 in necrotic targets. Cross-tracer analysis demonstrated robust reproducibility with a mean bias of <10%. While Partial Volume Effects reduced visual distinctness in 17 mm geometries, quantitative metrics successfully preserved the intended pathological trends.\n\nConclusion: This study establishes a foundational ground truth for heterogeneous uptake in PET. By providing defined physical standards validated by quantitative metrics, it enables the robust validation of segmentation algorithms and radiomics features even when spatial resolution limits visual assessment."
+  },
+  {
+    "id": "mupet",
+    "title": "MuPET (Multiphysics PET): Bridging Computational Mass Transport Physics and Medical Imaging for Synthetic PET Data Generation",
+    "venue": "medRxiv",
+    "year": 2025,
+    "status": "preprint",
+    "doi": "10.1101/2025.07.31.25332512",
+    "tags": [
+      "synthetic data",
+      "multiphysics",
+      "simulation"
+    ],
+    "abstract": "Purpose: Robust positron emission tomography (PET) research increasingly requires reliable ground-truth activity distributions, yet clinical data and physical phantoms cannot provide them fully. This work introduces MuPET (multiphysics PET), a computational framework that bridges mass-transport physics simulation with image domain noise modeling to generate realistic, synthetic PET images.\n\nMethods: Tracer transport and radioactive decay within a custom phantom geometry were modeled via decay diffusion physics. The simulated activity concentrations were converted into PET equivalent count maps, followed by a pseudo-Poisson noise model calibrated to scanner-specific characteristics. MuPET generated images were compared with experimental PET acquisitions and a conventional synthetic lesion insertion pipeline. VOI (volume of interest) and ROI (region interest) data extraction was performed on all the data. The quantitative metrics included the recovery coefficient (RC), target contrast ratio (TCR), coefficient of variability (COV), and activity profile.\n\nResults: The simulated effective activities matched the decay-corrected measurements within 0.4-1.2%, confirming high physics-model fidelity. The optimized noise model achieved COV values (3.9-4.0%) comparable to those of the acquisitions (3.8-3.9%). MuPET demonstrated strong agreement with the experimental profiles and quantitative metrics, with mean biases within 10% of the acquisition.\n\nConclusion: MuPET establishes a fast (approximately 15 min), physically grounded pipeline that combines transport modeling with PET image simulation, enabling generation of realistic datasets. This approach provides a practical foundation for future dynamic PET simulations. Graphical Abstract O_FIG O_LINKSMALLFIG WIDTH=200 HEIGHT=109 SRC=\"FIGDIR/small/25332512v2_ufig1.gif\" ALT=\"Figure 1\"> View larger version (44K): org.highwire.dtl.DTLVardef@16998b9org.highwire.dtl.DTLVardef@1a9b92eorg.highwire.dtl.DTLVardef@1bcac12org.highwire.dtl.DTLVardef@1c51342_HPS_FORMAT_FIGEXP M_FIG C_FIG"
+  },
+  {
+    "id": "geoanchored",
+    "title": "From Physical Phantom to Clinical Background: A Geometry-Anchored Dual-Domain Framework for PET Lesion Ground Truth",
+    "venue": "Manuscript",
+    "year": 2026,
+    "status": "in-preparation",
+    "thesisStudy": 4,
+    "tags": [
+      "anthropomorphic lesions",
+      "lesion insertion"
+    ],
+    "abstract": "Background: Physical PET phantoms provide measurable ground truth but lack realistic anatomical backgrounds, whereas synthetic lesion insertion enables controlled lesions in clinical images but depends on a computational model. Direct numerical equivalence between these domains is therefore neither expected nor required. This study evaluated a geometry-anchored dual-domain framework in which the same clinically derived lesion geometries were realised as physical 3D-printed inserts and as synthetic lesions embedded in healthy-volunteer PET backgrounds.\n\nMethods: Eight anthropomorphic lesion geometries derived from open clinical imaging data were selected to span volumes of 5.9–23.6 mL, varied axis dimensions, and prescribed target-to-background ratios of 3:1–5:1. Each geometry was fabricated as a porous 3D-printed insert and scanned in an [18F]FDG-filled Jaszczak phantom on a GE OMNI Legend using block-sequential regularised expectation maximisation. The same geometries were converted to digital masks and inserted into healthy-volunteer total-body [18F]FDG PET backgrounds using an analytical OMNI-like forward-projection and ordered-subset expectation maximisation reconstruction pipeline. The study did not test absolute interchangeability. It assessed geometric fidelity within each domain and the preservation of lesion-specific quantitative behaviour across domains. Metabolic tumour volume, Dice similarity coefficient, Jaccard index, target-to-background ratio, contrast recovery coefficient, coefficient of variation, and total lesion glycolysis were evaluated.\n\nResults: Both realisation pathways preserved the overall morphology of the source lesions. Threshold-based metabolic tumour volumes exceeded source geometry volumes in both domains, with ratios of 1.3–2.1 using 42% of maximum uptake and 1.4–2.3 using 42% of peak uptake. Dice similarity coefficients ranged from 0.67 to 0.92 for the physical pathway and from 0.77 to 0.92 for the synthetic pathway; the mean absolute difference between pathways was 0.04 ± 0.03. Jaccard indices ranged from 0.50 to 0.85 and 0.62 to 0.85, respectively. Lesion-specific trends in target-to-background ratio, contrast recovery, and coefficient of variation were broadly preserved. Seven of eight lesions showed contrast recovery differences below 10%, while the highest-contrast compact lesion was a consistent stress case. The synthetic reconstruction produced a different background noise texture, confirming that voxel-level equivalence should not be inferred.\n\nConclusion: A shared lesion geometry can connect a physically measurable phantom experiment with an anatomically realistic synthetic experiment without treating the two datasets as interchangeable. The proposed dual-domain architecture is best interpreted as a complementary ground-truth framework: the physical branch provides experimental anchoring, while the synthetic branch provides clinical context and scalability. Larger matched studies are required before scanner-specific quantitative prediction or radiomic equivalence can be claimed."
+  },
+  {
+    "id": "cassoulet-ms",
+    "title": "CASSOULET: a virtual PET reference for multicentre phantom evaluation",
+    "venue": "Manuscript",
+    "year": 2026,
+    "status": "in-preparation",
+    "tags": [
+      "simulator",
+      "digital twin"
+    ]
+  },
+  {
+    "id": "virtualpet",
+    "title": "From PET/CT to Virtual PET: An Agentic Framework with Human-Guided Quality Control and Quantitative Validation",
+    "venue": "Working title",
+    "year": 2026,
+    "status": "in-preparation",
+    "tags": [
+      "agentic AI",
+      "virtual patients"
+    ]
+  },
+  {
+    "id": "eanm2025",
+    "title": "3D Printed PET/CT Phantom with Mixed Target Uptake Characteristics to Investigate Lesion Development",
+    "venue": "EANM Congress 2025 · e-poster EP-0949",
+    "year": 2025,
+    "status": "conference",
+    "thesisStudy": 3,
+    "tags": [
+      "conference"
+    ]
+  },
+  {
+    "id": "ecr2025",
+    "title": "Synthetic lesion insertion versus 3D-printed uniform targets",
+    "venue": "ECR 2025 · C-28068",
+    "year": 2025,
+    "status": "conference",
+    "thesisStudy": 1,
+    "tags": [
+      "conference"
+    ]
+  },
+  {
+    "id": "sfpm2024",
+    "title": "Porous 3D-printed grids for PET/CT",
+    "venue": "SFPM 2024",
+    "year": 2024,
+    "status": "conference",
+    "thesisStudy": 1,
+    "tags": [
+      "conference"
+    ]
+  },
+  {
+    "id": "jbme2022",
+    "title": "Effects of Gas Embolism on Pulsatile Flow Characteristics Within a Human Carotid Artery",
+    "venue": "Journal of Biomechanical Engineering",
+    "year": 2022,
+    "status": "published",
+    "doi": "10.1115/1.4054679",
+    "tags": [
+      "CFD",
+      "haemodynamics"
+    ],
+    "abstract": "Atherosclerosis in carotid arteries depends mostly on hemodynamic parameters, and any disturbances in pulsatile flows may alter the hemodynamic parameters extensively. Gas emboli are one such source that can hinder and disturb standard blood flow patterns and potentially lead to occlusions and ischemia. To understand how gas embolism affects carotid artery hemodynamics, numerical simulation of coupled Newtonian two-phase laminar flow with interface tracking are performed in an anatomical image-based geometry with flow conditions closely approximating physiological flows. Bubble behavior and Pulsatile flow field changes are quantified. Significant deviation from flow without gas embolism is observed leading to nonstandard flow distributions.\n\nResults: show that gas embolism promotes complex spatio-temporal variations in the carotid artery hemodynamics leading to higher time averaged shear stress values and greater regions of high oscillatory shear index, implying higher probability of atherosclerosis incidence. Depending on contact angle, gas emboli were found to be lodged in carotid sinus or exiting the carotid artery, which can potentially cause abnormalities in blood pressures, heart rates, and ischemia in downstream vasculature, respectively."
+  }
 ]
