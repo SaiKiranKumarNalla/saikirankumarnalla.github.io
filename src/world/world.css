@@ -171,3 +171,5 @@ a{color:inherit}
   .w-dd-menu{position:static;transform:none;opacity:1;pointer-events:auto;min-width:0;padding:0;border:0;background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
   .w-menu .w-dd-menu a{padding:12px 14px}
 }
+.p-card-link{display:block;text-decoration:none;color:inherit;transition:border-color .2s}
+.p-card-link:hover{border-color:var(--accent)}

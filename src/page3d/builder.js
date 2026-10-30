@@ -14,9 +14,18 @@ document.getElementById('main').innerHTML = `
     <p class="s-scroll">Scroll for how it works</p>
   </div></section>
   ${builder.principles.map((p, i) => `<section class="s-step" data-title="${esc(p.title)}"><div class="s-card"><p class="s-kicker">Principle ${i + 1} of ${builder.principles.length}</p><h2>${esc(p.title)}</h2><p class="s-lede">${esc(p.text)}</p></div></section>`).join('')}
-  <section class="s-step" data-title="Builds"><div class="s-card"><p class="s-kicker">Built this way</p><h2>Systems in use</h2>
-    ${builds.map((p) => `<div class="s-role"><b>${esc(p.name)}</b> <span class="s-meta">${esc(p.kind)}</span><p>${esc(p.eli5 || p.summary)}</p></div>`).join('')}
-  </div></section>
+  ${builds.map((p, i) => `<section class="s-step" data-title="${esc(p.name)}"><div class="s-card">
+    <p class="s-kicker">Built this way · ${i + 1} of ${builds.length} · ${esc(p.kind)}</p><h2>${esc(p.name)}</h2>
+    <p class="s-lede">${esc(p.eli5 || '')}</p><p>${esc(p.summary)}</p>
+    ${p.facts ? `<div class="s-chips">${p.facts.map((f) => `<span>${esc(f)}</span>`).join('')}</div>` : ''}
+    ${p.more ? `<details class="s-know"><summary>Know more <span class="s-meta">problem, approach, status</span></summary>
+      <h3>The problem</h3><p>${esc(p.more.problem)}</p>
+      <h3>How it works</h3><ul class="s-list">${p.more.approach.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+      <h3>Status</h3><ul class="s-list">${p.more.status.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+      ${p.stack ? `<h3>Built with</h3><div class="s-chips">${p.stack.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
+      ${p.note ? `<p class="s-meta">${esc(p.note)}</p>` : ''}
+    </details>` : ''}
+  </div></section>`).join('')}
   <section class="s-step" data-title="Toolbelt"><div class="s-card"><h2>Toolbelt &amp; next</h2>
     <div class="s-chips">${builder.stack.map((s) => `<span>${esc(s)}</span>`).join('')}</div>
     <h3>Next on the bench</h3><ul class="s-list">${builder.roadmap.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
@@ -53,7 +62,7 @@ runPage({
       keyframes: [
         { pos: [0, 1, 22], look: [1.2, 0, 0] },
         ...builder.principles.map((_, i) => ({ pos: [1 + Math.sin(i * 1.3) * 3, 1 + Math.cos(i) * 2, 17], look: [2, 0, 0] })),
-        { pos: [0, 4, 17], look: [0.8, 0, 0] },
+        ...builds.map((_, i) => ({ pos: [Math.cos(i * 2) * 3, 3 - i, 18], look: [1.6, 0, 0] })),
         { pos: [0, 0, 22], look: [0.5, 0, 0] },
       ],
       update(t, p) {

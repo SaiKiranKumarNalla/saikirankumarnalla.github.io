@@ -3,6 +3,7 @@ import profile from '../../content/profile.json';
 import pubs from '../../content/publications.json';
 import thesis from '../../content/thesis.json';
 import projects from '../../content/projects.json';
+import repos from '../../content/repos.json';
 import builder from '../../content/ai-builder.json';
 import music from '../../content/music.json';
 
@@ -14,7 +15,6 @@ const STATUS = {
   published: 'Published', preprint: 'Preprint', conference: 'Conference', 'in-preparation': 'In preparation',
   active: 'Active', concept: 'Concept', 'coming-soon': 'Public soon', done: 'Completed', 'published-preprint': 'Preprint',
 };
-const FEATURED = ['virtualpet', 'cassoulet', 'veritomix-office', 'animus', 'veritomix', 'flowlab', 'digitaltwin'];
 
 function pubItem(p) {
   const link = p.doi ? `<a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : '';
@@ -55,14 +55,13 @@ export const PANELS = {
   },
   projects: {
     title: 'Projects',
-    kicker: 'Selected work',
-    html: () => FEATURED.map((id) => projects.find((p) => p.id === id)).filter(Boolean).map((p) => `
-      <article class="p-card">
-        <div class="p-card-top"><span class="p-kind">${esc(p.kind)}</span><span class="p-badge p-${esc(p.status)}">${STATUS[p.status] || ''}</span></div>
+    kicker: 'Projects & repos',
+    html: () => repos.map((p) => `
+      <a class="p-card p-card-link" href="/sections/projects.html#${esc(p.id)}">
+        <div class="p-card-top"><span class="p-kind">${esc(p.kind)}</span><span class="p-meta">${esc(p.years)}</span></div>
         <h4>${esc(p.name)}</h4>
-        <p>${esc(p.summary)}</p>
-        ${chips(p.stack)}
-      </article>`).join('') + `<div class="p-actions">${more('/sections/projects.html', 'All project details')}</div>`,
+        <p>${esc(p.eli5)}</p>
+      </a>`).join('') + `<div class="p-actions">${more('/sections/projects.html', 'Explore all projects in 3D')}${more('/sections/builder.html', 'AI agent systems: Agentic AI')}</div>`,
   },
   publications: {
     title: 'Publications',

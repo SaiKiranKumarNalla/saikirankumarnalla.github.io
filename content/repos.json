@@ -1,0 +1,199 @@
+[
+  {
+    "id": "cassoulet",
+    "name": "CASSOULET PET Suite",
+    "kind": "PET/CT simulator",
+    "years": "2024–2026",
+    "context": "PhD · IUCT Oncopole",
+    "eli5": "A flight simulator for PET scanners: put in a virtual patient, get the image a real scanner would make.",
+    "summary": "Compositional Anthropomorphic Spatial Synthesizer for ground-truth Lesion Export: an analytical PET/CT simulator that inserts uniform, heterogeneous and patient-shaped lesions into phantom or patient data on modern scanners.",
+    "more": {
+      "problem": "Vendor simulators are closed and couldn't insert heterogeneous or necrotic lesions, or patient-derived shapes, on the scanners used in the thesis.",
+      "approach": [
+        "Core architecture follows PETSTEP; noise-factor count calibration and crystal normalisation inspired by SMART-PET",
+        "Insertion uses the same fractional-mask logic as GE DUETTO; CT simulated in the image domain",
+        "Scanner models of GE Discovery MI 5-ring, GE OMNI Legend 32 cm and Siemens Biograph Vision Quadra, from published NEMA and open data",
+        "Physics v2 adds depth-of-interaction sub-LORs, TOF single-scatter simulation, BSREM/OSEM and DICOM export, running on GPUs"
+      ],
+      "outcome": [
+        "Reproduced heterogeneous-insert trends against physical experiments in the PhD",
+        "More than 150 dated studies in October 2026; multicentre manuscripts in preparation"
+      ]
+    },
+    "stack": [
+      "MATLAB",
+      "Python",
+      "parallelproj",
+      "PyTomography",
+      "CUDA"
+    ],
+    "links": [
+      {
+        "label": "CASSOULET website",
+        "status": "soon"
+      },
+      {
+        "label": "Legacy MATLAB version on GitHub",
+        "status": "soon"
+      }
+    ],
+    "figures": [
+      {
+        "src": "/media/projects/cassoulet-pipeline.webp",
+        "caption": "Simulation pipeline: background and lesion are projected, noise is added, data are mixed and reconstructed."
+      },
+      {
+        "src": "/media/projects/cassoulet-sinograms.webp",
+        "caption": "Simulated sinograms."
+      },
+      {
+        "src": "/media/projects/cassoulet-phantom-slice.webp",
+        "caption": "A simulated slice of the heterogeneous-insert phantom."
+      }
+    ]
+  },
+  {
+    "id": "mupet",
+    "name": "MuPET: Multiphysics PET",
+    "kind": "Synthetic data",
+    "years": "2025",
+    "context": "PhD side project · preprint",
+    "eli5": "Use the physics of how things spread through tissue to make realistic, fully known fake PET scans.",
+    "summary": "Couples computational mass-transport physics with PET simulation to generate synthetic PET data whose ground-truth activity is known.",
+    "abstract": "Purpose: Robust positron emission tomography (PET) research increasingly requires reliable ground-truth activity distributions, yet clinical data and physical phantoms cannot provide them fully. This work introduces MuPET (multiphysics PET), a computational framework that bridges mass-transport physics simulation with image domain noise modeling to generate realistic, synthetic PET images.\n\nMethods: Tracer transport and radioactive decay within a custom phantom geometry were modeled via decay diffusion physics. The simulated activity concentrations were converted into PET equivalent count maps, followed by a pseudo-Poisson noise model calibrated to scanner-specific characteristics. MuPET generated images were compared with experimental PET acquisitions and a conventional synthetic lesion insertion pipeline. VOI (volume of interest) and ROI (region interest) data extraction was performed on all the data. The quantitative metrics included the recovery coefficient (RC), target contrast ratio (TCR), coefficient of variability (COV), and activity profile.\n\nResults: The simulated effective activities matched the decay-corrected measurements within 0.4-1.2%, confirming high physics-model fidelity. The optimized noise model achieved COV values (3.9-4.0%) comparable to those of the acquisitions (3.8-3.9%). MuPET demonstrated strong agreement with the experimental profiles and quantitative metrics, with mean biases within 10% of the acquisition.\n\nConclusion: MuPET establishes a fast (approximately 15 min), physically grounded pipeline that combines transport modeling with PET image simulation, enabling generation of realistic datasets. This approach provides a practical foundation for future dynamic PET simulations. Graphical Abstract O_FIG O_LINKSMALLFIG WIDTH=200 HEIGHT=109 SRC=\"FIGDIR/small/25332512v2_ufig1.gif\" ALT=\"Figure 1\"> View larger version (44K): org.highwire.dtl.DTLVardef@16998b9org.highwire.dtl.DTLVardef@1a9b92eorg.highwire.dtl.DTLVardef@1bcac12org.highwire.dtl.DTLVardef@1c51342_HPS_FORMAT_FIGEXP M_FIG C_FIG",
+    "stack": [
+      "Mass-transport physics",
+      "PET simulation"
+    ],
+    "links": [
+      {
+        "label": "Preprint on medRxiv",
+        "href": "https://www.medrxiv.org/content/10.1101/2025.07.31.25332512v2"
+      },
+      {
+        "label": "GitHub release",
+        "status": "soon"
+      }
+    ]
+  },
+  {
+    "id": "ppvi",
+    "name": "Bench test for pulmonary valve implantation",
+    "kind": "Surgical simulation bench",
+    "years": "2022",
+    "context": "M1 internship · Hôpital Marie Lannelongue",
+    "eli5": "A 3D-printed heart on a bench, so cardiologists can rehearse fitting a new valve before the real operation.",
+    "summary": "Redesign of a surgical simulation bench test for percutaneous pulmonary valve implantation (PPVI) in congenital heart disease, advised by Dr Sébastien Hascoët.",
+    "more": {
+      "problem": "Patients with right-ventricular outflow tract dysfunction need a valve implanted by catheter; landing-zone size and coronary compression are hard to judge beforehand. Existing benches replicated geometry well but flow poorly, took long to set up and leaked.",
+      "approach": [
+        "Pipeline from patient CT/MR to segmentation and a 3D-printed model of the outflow tract",
+        "Bench replicating the cath-lab procedure: flow inlet and outlet, contrast injection and balloon dilation",
+        "Benchmarked against a commercial bench (4–6 min setup, negligible leakage)",
+        "New connector and holder design for faster setup and fewer leaks"
+      ],
+      "outcome": [
+        "A compact PPVI bench concept with lower setup time, plus observation of live procedures to identify clinical needs"
+      ]
+    },
+    "stack": [
+      "3D printing",
+      "Segmentation",
+      "Bench testing"
+    ]
+  },
+  {
+    "id": "ladhyx",
+    "name": "Soft particles for drug delivery",
+    "kind": "Microfluidics",
+    "years": "2022",
+    "context": "Research internship · LadHyX, École Polytechnique",
+    "eli5": "Watch tiny soft gel beads squeeze through channels to learn how drug carriers might move in blood.",
+    "summary": "Experiments on soft gels and particle suspensions as model drug-delivery systems, with Gabriel Amselem and Charles Paul Moore.",
+    "more": {
+      "problem": "Drug carriers deform and interact as they flow; soft-gel particles are a controllable model to study that.",
+      "approach": [
+        "Microfluidic experiments with soft gels and particle suspensions",
+        "Automated pipeline to track and analyse particles in image sequences, speeding up result synthesis"
+      ],
+      "outcome": [
+        "Faster, reproducible analysis of experimental videos"
+      ]
+    },
+    "stack": [
+      "Microfluidics",
+      "Python",
+      "Image tracking"
+    ]
+  },
+  {
+    "id": "electrodes",
+    "name": "Flexible dry electrodes",
+    "kind": "Medical device design",
+    "years": "2022–2023",
+    "context": "Master's design project (MEC 659) · with Manitty",
+    "eli5": "Sticky gel patches are messy; we designed soft, dry electrodes that still read the heart while you move.",
+    "summary": "Design, fabrication and characterisation of flexible dry electrodes for physiological measurements on the move, for the sleep-monitoring startup Manitty. Team: Sai Kiran Kumar Nalla, Yuhui Wang, Koohyar Habibi.",
+    "more": {
+      "problem": "Wet gel electrodes are uncomfortable for long recordings and dry electrodes struggle with skin impedance and motion artefacts.",
+      "approach": [
+        "Design constraints from literature: diameter under 10–20 mm, contact area at least 6 cm², contact impedance 20–40 kΩ, 95–98 % correlation with wet electrodes at rest and 85–90 % in motion, €10–30 per electrode",
+        "Fabricated flexible pin electrodes in PDMS with conductive PEDOT:PSS and graphite, plus 3D-printed variants",
+        "Mechanical characterisation by atomic force microscopy (surface and Young's modulus), then electrical characterisation in vitro"
+      ],
+      "outcome": [
+        "Electrode designs evaluated against the constraints, with options for human and veterinary use"
+      ]
+    },
+    "stack": [
+      "PDMS",
+      "PEDOT:PSS",
+      "AFM",
+      "3D printing"
+    ]
+  },
+  {
+    "id": "rbc",
+    "name": "Shear encapsulation into red blood cells",
+    "kind": "Biofluid simulation",
+    "years": "2021",
+    "context": "Master's · MEC 550 Biofluid Mechanics",
+    "eli5": "Squeeze red blood cells just enough that medicine slips inside, but not so much that they break.",
+    "summary": "Modelling of shear-induced membrane poration and drug diffusion to load particles into red blood cells in microchannel flow, compared with experiments. With Camille Awade.",
+    "more": {
+      "problem": "Encapsulation needs enough shear to open membrane pores and enough time for drugs to diffuse in, but too much shear destroys the cell (haemolysis).",
+      "approach": [
+        "Modelled RBC mechanics, shear-induced poration and diffusion through the cytoplasm",
+        "Computational results compared with published microfluidic experiments"
+      ],
+      "outcome": [
+        "About 30 % average encapsulation with around 80 % of cells preserved in the worst cases",
+        "Open issues: physiological haematocrit (~40 %), pulsatile flow, biocompatibility and circulation time"
+      ]
+    },
+    "stack": [
+      "Computational modelling",
+      "Microfluidics"
+    ]
+  },
+  {
+    "id": "carotid",
+    "name": "Gas embolism in the carotid artery",
+    "kind": "CFD",
+    "years": "2020–2021",
+    "context": "Research associate · Mahindra University",
+    "eli5": "What happens when an air bubble gets into the artery feeding the brain? We simulated it.",
+    "summary": "Computational study of how gas emboli change pulsatile blood flow in a human carotid artery, supervised by Sebastian Uppapalli; published in the Journal of Biomechanical Engineering (2022).",
+    "abstract": "Atherosclerosis in carotid arteries depends mostly on hemodynamic parameters, and any disturbances in pulsatile flows may alter the hemodynamic parameters extensively. Gas emboli are one such source that can hinder and disturb standard blood flow patterns and potentially lead to occlusions and ischemia. To understand how gas embolism affects carotid artery hemodynamics, numerical simulation of coupled Newtonian two-phase laminar flow with interface tracking are performed in an anatomical image-based geometry with flow conditions closely approximating physiological flows. Bubble behavior and Pulsatile flow field changes are quantified. Significant deviation from flow without gas embolism is observed leading to nonstandard flow distributions.\n\nResults: show that gas embolism promotes complex spatio-temporal variations in the carotid artery hemodynamics leading to higher time averaged shear stress values and greater regions of high oscillatory shear index, implying higher probability of atherosclerosis incidence. Depending on contact angle, gas emboli were found to be lodged in carotid sinus or exiting the carotid artery, which can potentially cause abnormalities in blood pressures, heart rates, and ischemia in downstream vasculature, respectively.",
+    "stack": [
+      "CFD",
+      "Pulsatile flow"
+    ],
+    "links": [
+      {
+        "label": "Paper (J Biomech Eng 2022)",
+        "href": "https://doi.org/10.1115/1.4054679"
+      }
+    ]
+  }
+]
