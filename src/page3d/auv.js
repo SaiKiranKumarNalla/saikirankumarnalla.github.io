@@ -25,7 +25,7 @@ document.getElementById('main').innerHTML = STEPS.map((s, i) =>
   `<section class="s-step${i === 0 ? ' s-hero' : ''}" data-title="${esc(s.title)}"><div class="s-card">${s.html}</div></section>`).join('');
 
 runPage({
-  active: null,
+  active: 'auv',
   build({ THREE, scene, label, reduceMotion }) {
     const V = (x, y, z) => new THREE.Vector3(x, y, z);
     const vis = (p, a, w) => Math.max(0, Math.min(1, 1 - Math.abs(p - a) / w));

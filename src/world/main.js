@@ -11,6 +11,7 @@ import { makeBuilding, makeTreeInstances, makeLanterns, makePetals } from './pro
 import { makeKageCharacter } from './character.js';
 import { makeSky, makeMoon, makeStars, makeMountains, makeFireflies, makePond, makeBamboo, makeBanner, makeRocks } from './atmosphere.js';
 import { makeSpeech } from './companion.js';
+import { thesisDropdown, wireDropdown } from '../page3d/nav.js';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('world');
@@ -156,6 +157,14 @@ applyTheme();
 const menuEl = $('wMenu');
 const menuBtns = {};
 MENU.forEach((id) => {
+  if (id === 'research') {
+    // Thesis dropdown: PhD opens its panel here; Master's and Bachelor's go to their pages.
+    menuEl.insertAdjacentHTML('beforeend', thesisDropdown());
+    const dd = menuEl.lastElementChild;
+    dd.querySelector('[data-thesis="research"]').addEventListener('click', (e) => { e.preventDefault(); openPanel('research'); closeMenu(); dd.classList.remove('open'); });
+    menuBtns[id] = dd.querySelector('.w-dd-btn');
+    return;
+  }
   const a = document.createElement('a');
   a.href = `#${id}`;
   a.textContent = PANELS[id].title;
@@ -163,6 +172,7 @@ MENU.forEach((id) => {
   menuEl.appendChild(a);
   menuBtns[id] = a;
 });
+wireDropdown(menuEl);
 const burger = $('wBurger');
 function closeMenu() { document.body.classList.remove('menu-open'); burger.setAttribute('aria-expanded', 'false'); }
 burger.addEventListener('click', () => {

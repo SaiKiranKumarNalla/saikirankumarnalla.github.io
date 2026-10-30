@@ -21,7 +21,7 @@ document.getElementById('main').innerHTML = STEPS.map((s, i) =>
   `<section class="s-step${i === 0 ? ' s-hero' : ''}" data-title="${esc(s.title)}"><div class="s-card">${s.html}</div></section>`).join('');
 
 runPage({
-  active: null,
+  active: 'masters',
   build({ THREE, scene, reduceMotion }) {
     const root = new THREE.Group();
     root.position.set(3.6, 0, 0);

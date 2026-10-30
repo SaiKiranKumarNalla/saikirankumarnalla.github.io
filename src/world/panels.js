@@ -51,7 +51,7 @@ export const PANELS = {
       <p class="p-lede">${esc(thesis.takeaway)}</p>
       <h3>Now</h3>
       <p>${esc(projects.find((p) => p.id === 'virtualpet').summary)}</p>
-      <div class="p-actions">${more('/sections/research.html', 'The research, step by step')}</div>`,
+      <div class="p-actions">${more('/sections/research.html', 'The PhD, step by step')}${more('/sections/masters.html', "Master's thesis: microwave ablation")}${more('/sections/auv.html', "Bachelor's: Black Pearl AUV")}</div>`,
   },
   projects: {
     title: 'Projects',

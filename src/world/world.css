@@ -152,3 +152,22 @@ a{color:inherit}
   .w-hint{display:none}
 }
 @media (prefers-reduced-motion:reduce){.w-hero>*{animation:none}.w-panel{transition:none}}
+
+/* Thesis dropdown (home and section pages) */
+.w-dd{position:relative}
+.w-dd-btn{padding:8px 12px;font:inherit;font-size:.88rem;font-weight:500;color:var(--muted);background:none;border:0;border-radius:8px;cursor:pointer;white-space:nowrap}
+.w-dd-btn:hover,.w-dd.open .w-dd-btn,.w-dd:hover .w-dd-btn{color:var(--text);background:var(--chip)}
+.w-dd-btn.active{color:var(--text);background:var(--chip);box-shadow:inset 0 -2px 0 var(--accent)}
+.w-dd-btn span{font-size:.7em;margin-left:2px}
+.w-dd-menu{position:absolute;top:calc(100% + 6px);left:50%;transform:translate(-50%,-4px);min-width:250px;padding:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 16px 40px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:50}
+.w-dd-menu::before{content:'';position:absolute;left:0;right:0;top:-8px;height:8px}
+.w-dd:hover .w-dd-menu,.w-dd:focus-within .w-dd-menu,.w-dd.open .w-dd-menu{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.w-menu .w-dd-menu a{display:block;padding:9px 12px;border-radius:8px;color:var(--text);text-decoration:none;box-shadow:none;background:none}
+.w-menu .w-dd-menu a:hover,.w-menu .w-dd-menu a[aria-current]{background:var(--chip)}
+.w-dd-menu a b{display:block;font-weight:600;font-size:.9rem}
+.w-dd-menu a span{display:block;font-size:.74rem;color:var(--faint);margin-top:1px}
+@media (max-width:860px){
+  .w-dd-btn{display:none}
+  .w-dd-menu{position:static;transform:none;opacity:1;pointer-events:auto;min-width:0;padding:0;border:0;background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .w-menu .w-dd-menu a{padding:12px 14px}
+}
