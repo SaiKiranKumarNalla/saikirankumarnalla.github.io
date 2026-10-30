@@ -123,7 +123,7 @@ if (fireflies) scene.add(fireflies.points);
 
 // ── Kage, the guide: waits in the plaza and walks to whichever building is opened ──
 const kage = makeKageCharacter();
-const KAGE_HOME = new THREE.Vector3(0, 0, 5);
+const KAGE_HOME = new THREE.Vector3(0, 0, 0); // centre of the red ring
 kage.position.copy(KAGE_HOME);
 scene.add(kage);
 const kageLight = new THREE.PointLight(0xffc89a, 14, 9, 1.6);
@@ -247,9 +247,11 @@ const KEYS = { w: [0, 1], arrowup: [0, 1], s: [0, -1], arrowdown: [0, -1], a: [-
 const held = new Set();
 const typing = (e) => /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable;
 const nearDoor = () => buildings.find((b) => doorOf(b).distanceTo(kage.position) < 4.5);
+const keyOf = (e) => { const c = (e.code || '').toLowerCase(); return KEYS[c] ? c : c.startsWith('key') && KEYS[c.slice(3)] ? c.slice(3) : e.key.toLowerCase(); };
+let autoDoor = null; // the door Kage last walked into, so it opens once, not every frame
 addEventListener('keydown', (e) => {
   if (typing(e) || e.metaKey || e.ctrlKey || e.altKey) return;
-  const k = e.key.toLowerCase();
+  const k = keyOf(e);
   if (KEYS[k]) {
     e.preventDefault();
     held.add(k);
@@ -261,7 +263,7 @@ addEventListener('keydown', (e) => {
     if (b) { e.preventDefault(); openPanel(b.def.panel); }
   }
 });
-addEventListener('keyup', (e) => held.delete(e.key.toLowerCase()));
+addEventListener('keyup', (e) => held.delete(keyOf(e)));
 addEventListener('blur', () => held.clear());
 addEventListener('popstate', () => { const id = location.hash.slice(1); if (PANELS[id]) openPanel(id, { push: false }); else closePanel({ push: false }); });
 
@@ -400,8 +402,11 @@ function step() {
         if (d.length() < min) kage.position.copy(b.group.position).addScaledVector(d.normalize(), min).setY(0);
       });
     }
-    const door = nearDoor();
-    $('wHint').textContent = door ? `Press Enter to open ${door.def.label}` : 'WASD or arrow keys to walk · Enter at a door to go in';
+    // Walking up to a building's door opens it.
+    const door = buildings.find((b) => tmp.subVectors(kage.position, b.group.position).setY(0).length() < b.def.footprint + 2.6);
+    if (door && door !== autoDoor && !focus) { autoDoor = door; held.clear(); openPanel(door.def.panel); }
+    else if (!door) autoDoor = null;
+    $('wHint').textContent = 'Arrow keys or WASD to walk · walk to a door to open it';
   }
   if (!walking) kageYawTarget = Math.atan2(camera.position.x - kage.position.x, camera.position.z - kage.position.z);
   // Kage has arrived (or is taking too long): present the panel from his hand.
