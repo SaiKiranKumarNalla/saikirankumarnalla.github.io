@@ -109,8 +109,12 @@ export function makeKageCharacter() {
   shadow.position.y = 0.02;
   root.add(shadow);
 
-  let phase = 0, talk = 0;
+  let phase = 0, talk = 0, present = 0, presentTarget = 0;
   root.userData.setTalking = (v) => { talk = v ? 1 : 0; };
+  // Presenting: the right arm lifts out to the side, palm toward what he is showing.
+  root.userData.setPresenting = (v) => { presentTarget = v ? 1 : 0; };
+  // World position of the presenting hand (where a presented panel unfolds from).
+  root.userData.handWorld = (out) => arms[1].localToWorld(out.set(0, -0.74, 0.02));
   root.userData.animate = (t, moving, dt) => {
     phase += moving ? dt * 9 : 0;
     const swing = moving ? Math.sin(phase) : 0;
@@ -125,6 +129,12 @@ export function makeKageCharacter() {
     eyes.forEach((e) => (e.scale.y = blink));
     mouth.scale.y = talk ? 1 + Math.abs(Math.sin(t * 14)) * 1.6 : 1;
     if (!moving && talk) arms[1].rotation.x = -0.35 + Math.sin(t * 3) * 0.1; // gestures while speaking
+    present += (presentTarget - present) * Math.min(1, (dt || 0.016) * 6);
+    if (present > 0.01 && !moving) {
+      arms[1].rotation.z = 1.35 * present + Math.sin(t * 1.5) * 0.04 * present;
+      arms[1].rotation.x = -0.45 * present;
+      head.rotation.y = 0.35 * present;
+    } else arms[1].rotation.z = 0;
   };
   return root;
 }

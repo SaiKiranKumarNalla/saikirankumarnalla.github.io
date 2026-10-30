@@ -206,6 +206,7 @@ buildings.forEach((b) => {
 // ── Panels ──
 const panelEl = $('wPanel');
 let focus = null; // building currently in focus
+let presentPending = null; // time a panel was requested; it opens when Kage arrives
 function openPanel(id, { push = true } = {}) {
   const def = PANELS[id];
   if (!def) return;
@@ -215,15 +216,16 @@ function openPanel(id, { push = true } = {}) {
   $('wPanelBody').innerHTML = def.html();
   $('wPanelBody').scrollTop = 0;
   panelEl.hidden = false;
-  requestAnimationFrame(() => panelEl.classList.add('open'));
+  panelEl.classList.remove('open');
+  presentPending = clock.elapsedTime; // the panel unfolds from Kage's hand once he arrives
   Object.entries(menuBtns).forEach(([k, a]) => a.classList.toggle('active', k === id));
   if (push && location.hash !== `#${id}`) history.pushState(null, '', `#${id}`);
   document.title = `${def.title} | Sai Kiran Kumar Nalla, PhD`;
   focus = byPanel[id] || null;
   if (focus) {
     routeTo(doorOf(focus), focus.angle);
-    speech.say(focus.def.kage, clock.elapsedTime, 5000);
-  }
+    kage.userData.setPresenting(false);
+  } else presentPending = clock.elapsedTime - 9; // menu items without a building open at once
   $('wPanelTitle').focus({ preventScroll: true });
 }
 function closePanel({ push = true } = {}) {
@@ -231,6 +233,8 @@ function closePanel({ push = true } = {}) {
   setTimeout(() => { if (!panelEl.classList.contains('open')) panelEl.hidden = true; }, 400);
   Object.values(menuBtns).forEach((a) => a.classList.remove('active'));
   focus = null;
+  presentPending = null;
+  kage.userData.setPresenting(false);
   routeTo(KAGE_HOME, Math.atan2(KAGE_HOME.z, KAGE_HOME.x));
   if (push && location.hash) history.pushState(null, '', location.pathname);
   document.title = 'Sai Kiran Kumar Nalla, PhD | Medical Imaging Scientist & AI Builder';
@@ -311,14 +315,15 @@ function step() {
   const t = clock.elapsedTime;
 
   if (focus) {
-    // Stand in front of the building, slightly to one side, so the panel doesn't cover it.
+    // Kage stands at the door, centred in the free space, with his building behind him.
     const a = focus.angle + yawOffset * 0.35;
-    const dist = narrow() ? 30 : 22;
-    wantPos.set(Math.cos(a) * (RADIUS - dist), focus.def.height + 5, Math.sin(a) * (RADIUS - dist));
-    wantLook.copy(focus.group.position).setY(focus.def.height * 0.45);
+    const door = doorOf(focus);
+    const back = narrow() ? 20 : 16;
+    wantPos.set(door.x - Math.cos(a) * back, 5.5 + focus.def.height * 0.25, door.z - Math.sin(a) * back);
+    wantLook.set(door.x, 2.6, door.z);
     right.subVectors(wantLook, wantPos).cross(THREE.Object3D.DEFAULT_UP).normalize();
-    if (!narrow()) wantLook.addScaledVector(right, 7); // building sits left of centre
-    else wantLook.y -= 5; // building sits above the bottom sheet
+    if (!narrow()) wantLook.addScaledVector(right, 3.6); // Kage sits in the middle of the area left of the panel
+    else wantLook.y -= 2.5; // Kage sits above the bottom sheet
   } else {
     const a = (reduceMotion ? 0.6 : t * 0.03 + 0.6) + yawOffset;
     const r = narrow() ? 62 : 52;
@@ -339,13 +344,20 @@ function step() {
     if (dist < 0.3) route.shift();
     else {
       walking = true;
-      kage.position.addScaledVector(tmp.normalize(), Math.min(dist, (reduceMotion ? 40 : 8) * dt));
+      kage.position.addScaledVector(tmp.normalize(), Math.min(dist, (reduceMotion ? 40 : 11) * dt));
       kageYawTarget = Math.atan2(tmp.x, tmp.z);
     }
   }
-  if (!walking) {
-    const look = focus ? focus.group.position : camera.position;
-    kageYawTarget = Math.atan2(look.x - kage.position.x, look.z - kage.position.z);
+  if (!walking) kageYawTarget = Math.atan2(camera.position.x - kage.position.x, camera.position.z - kage.position.z);
+  // Kage has arrived (or is taking too long): present the panel from his hand.
+  if (presentPending !== null && (!walking || clock.elapsedTime - presentPending > 2.4)) {
+    presentPending = null;
+    if (focus) kage.userData.setPresenting(true);
+    kage.userData.handWorld(tmp).project(camera);
+    const r = panelEl.getBoundingClientRect();
+    const hx = (tmp.x * 0.5 + 0.5) * innerWidth, hy = (-tmp.y * 0.5 + 0.5) * innerHeight;
+    panelEl.style.transformOrigin = focus ? `${hx - r.left}px ${hy - r.top}px` : '';
+    panelEl.classList.add('open');
   }
   kage.rotation.y += (((kageYawTarget - kage.rotation.y + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * Math.min(1, dt * (walking ? 8 : 3));
   kage.userData.setTalking(speech.visible && !walking);

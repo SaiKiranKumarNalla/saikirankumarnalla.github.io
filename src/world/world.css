@@ -175,3 +175,11 @@ a{color:inherit}
 .p-card-link:hover{border-color:var(--accent)}
 .w-hero{pointer-events:none}
 .w-hero a,.w-hero button{pointer-events:auto}
+
+/* Kage presents: the panel unfolds from his hand (transform-origin is set to the hand position) */
+.w-panel{transform:scale(.04);opacity:0;transition:transform .75s cubic-bezier(.2,.9,.25,1),opacity .45s}
+.w-panel.open{transform:none;opacity:1}
+@media (max-width:860px){.w-panel{transform:scale(.04)}}
+.w-panel-body a.p-card-link{color:inherit}
+.w-panel-body a.p-card-link p{color:var(--muted)}
+.w-panel-body a.p-card-link h4{color:var(--text)}
