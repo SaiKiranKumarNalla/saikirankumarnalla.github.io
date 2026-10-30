@@ -9,7 +9,7 @@ import { BUILDINGS, MENU } from './buildings.js';
 import { PANELS } from './panels.js';
 import { makeBuilding, makeTreeInstances, makeLanterns } from './props.js';
 import { currentSeason, SEASONS, wind, makeWeather } from './seasons.js';
-import { makeGodRays, makeWindTrail, makeEagle, makeBlossomShrubs, makeStream } from './flair.js';
+import { makeWindTrail, makeEagle, makeBlossomShrubs, makeStream } from './flair.js';
 import { makeKageCharacter } from './character.js';
 import { makeSky, makeMoon, makeStars, makeMountains, makeFireflies, makePond, makeBamboo, makeBanner, makeRocks } from './atmosphere.js';
 import { makeSpeech } from './companion.js';
@@ -124,7 +124,7 @@ const stream = (() => {
   return makeStream(pts);
 })();
 scene.add(stream.mesh);
-scene.add(makeBlossomShrubs({ count: lowPower ? 40 : 90, inner: 12, outer: 40, avoid: [...avoid, ...buildings.map((b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2))] }));
+scene.add(makeBlossomShrubs({ count: lowPower ? 15 : 30, inner: 32, outer: 50, avoid: [...avoid, ...buildings.map((b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2))] }));
 const season = currentSeason();
 document.documentElement.dataset.season = season;
 scene.add(makeTreeInstances({ count: lowPower ? 90 : 190, inner: 33, outer: 85, avoid }));
@@ -132,7 +132,6 @@ scene.add(makeTreeInstances({ count: lowPower ? 90 : 190, inner: 33, outer: 85, 
 const lanterns = makeLanterns({ count: 12, radius: 19.6 }); scene.add(lanterns.group);
 const weather = reduceMotion ? null : makeWeather(season, { lowPower });
 if (weather) scene.add(weather.group);
-const rays = makeGodRays({ count: lowPower ? 5 : 9, radius: 38 }); scene.add(rays.group);
 const trail = makeWindTrail(); scene.add(trail.object);
 const eagle = makeEagle(); scene.add(eagle.object);
 const fireflies = reduceMotion ? null : makeFireflies(lowPower ? 30 : 60);
@@ -162,11 +161,15 @@ function routeTo(target, targetAngle) {
 }
 const doorOf = (b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2);
 
+const goldenNow = () => { const d = new Date(); return location.search.includes('golden') || d.getMinutes() === 0 && d.getSeconds() < 20; };
+let golden = goldenNow();
+setInterval(() => { const g = goldenNow(); if (g !== golden) { golden = g; applyTheme(); } }, 1000);
 function applyTheme() {
   let p = PALETTES[theme()];
-  // Fall afternoons glow: a low golden-hour sun, amber haze and warm light.
-  if (!p.night && season === 'fall') p = { ...p, sky: [0xf2b46a, 0xf7d29a, 0xf4e2c4], fog: 0xf0d2a4, hemiSky: 0xffd9a0, moon: 0xffb050, moonI: 2.8, mountains: [0xc08a68, 0xd8ae88] };
-  rays?.setStyle(p.night ? 0x9fb4ff : season === 'fall' ? 0xffc070 : 0xfff0c8, p.night ? 0.05 : season === 'rainy' ? 0.03 : 0.08);
+  // Golden hour: for the first 20 seconds of every hour the village glows amber.
+  if (goldenNow()) p = p.night
+    ? { ...p, sky: [0x2a1408, 0x8a4a18, 0x3a1a0a], fog: 0x3a2010, hemiSky: 0xffb070, moon: 0xffa040, moonI: 3.2 }
+    : { ...p, sky: [0xf2b46a, 0xf7d29a, 0xf4e2c4], fog: 0xf0d2a4, hemiSky: 0xffd9a0, moon: 0xffb050, moonI: 2.8, mountains: [0xc08a68, 0xd8ae88] };
   sky.set(...p.sky);
   scene.fog.color.set(p.fog);
   groundMat.color.set(theme() === 'light' ? SEASONS[season].ground : p.ground); pathMat.color.set(p.path);
@@ -451,7 +454,6 @@ function step() {
     animated.forEach((o) => o.userData.animate(t));
     const w = wind(t);
     weather?.update(dt, t, w, kage.position);
-    rays.update(t);
     stream.update(t);
     eagle.update(t);
     const hb = !focus && buildings.find((b) => b.hovered);
