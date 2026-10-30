@@ -32,13 +32,26 @@ export const PANELS = {
     html: () => `
       <p class="p-lede">${esc(profile.tagline)}</p>
       <p>${esc(profile.now)}</p>
-      <h3>Experience</h3>
-      <ol class="p-timeline">${profile.experience.map((e) => `<li><b>${esc(e.role)}</b>, ${esc(e.org)} <span class="p-meta">${esc(e.years)}</span></li>`).join('')}</ol>
-      <h3>Education</h3>
-      <ol class="p-timeline">${profile.education.map((e) => `<li><b>${esc(e.degree)}</b>, ${esc(e.school)} <span class="p-meta">${esc(e.years)} · ${esc(e.note)}</span></li>`).join('')}</ol>
       <h3>Programmes</h3>${chips(profile.programmes)}
       <h3>Languages</h3>${chips(profile.languages)}
       <div class="p-actions">${more('/about.html', 'Full story')}</div>`,
+  },
+  experience: {
+    title: 'Experience',
+    kicker: 'Research, hospital and industry',
+    html: () => `
+      <ol class="p-timeline">${profile.experience.map((e) => `<li><b>${esc(e.role)}</b>, ${esc(e.org)} <span class="p-meta">${esc(e.years)}</span><p>${esc(e.points[0])}</p></li>`).join('')}</ol>
+      <div class="p-actions">${more('/experience.html', 'Full experience')}</div>`,
+  },
+  education: {
+    title: 'Education',
+    kicker: 'PhD · Master\'s · Bachelor\'s',
+    html: () => `
+      <ol class="p-timeline">${profile.education.map((e) => `<li><b>${esc(e.degree)}</b>, ${esc(e.school)} <span class="p-meta">${esc(e.years)} · ${esc(e.note)}</span></li>`).join('')}</ol>
+      <h3>PhD thesis</h3>
+      <p><b>${esc(thesis.title)}</b></p>
+      <div class="p-eli5"><span>In one breath</span>${esc(thesis.eli5)}</div>
+      <div class="p-actions">${more('/education.html', 'Full education')}</div>`,
   },
   research: {
     title: 'PhD Thesis',
@@ -81,7 +94,7 @@ export const PANELS = {
       <div class="p-actions">${more('/experience.html', 'Career path')}</div>`,
   },
   contact: {
-    title: 'Contact',
+    title: 'Reach Out',
     kicker: `Based in ${profile.location} · open to ${profile.openTo.join(', ')}`,
     html: () => `
       <p class="p-lede">Research roles, industry R&amp;D, medtech ventures, or a good conversation about PET and AI: I'd like to hear from you.</p>

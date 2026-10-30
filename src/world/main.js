@@ -105,9 +105,9 @@ const byPanel = Object.fromEntries(buildings.map((b) => [b.def.panel, b]));
 // ── Ambience ──
 const animated = [];
 const mid = (i, r) => { const a = ((i + 0.5) / BUILDINGS.length) * Math.PI * 2 + Math.PI / 2; return [Math.cos(a) * r, Math.sin(a) * r, a]; };
-{ const [x, z, a] = mid(6, 27); const pond = makePond(x, z, -a); scene.add(pond); animated.push(pond); }
+{ const [x, z, a] = mid(4, 27); const pond = makePond(x, z, -a); scene.add(pond); animated.push(pond); }
 const avoid = buildings.map((b) => b.group.position);
-[1, 3, 5].forEach((i) => { const [x, z] = mid(i, 31); const b = makeBamboo(x, z, lowPower ? 6 : 10); scene.add(b); avoid.push(b.position); });
+[0, 2].forEach((i) => { const [x, z] = mid(i, 31); const b = makeBamboo(x, z, lowPower ? 6 : 10); scene.add(b); avoid.push(b.position); });
 for (let i = 0; i < 8; i++) {
   const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
   const ban = makeBanner(Math.cos(a) * 8.6, Math.sin(a) * 8.6, i % 2 ? 0x8b1a1a : 0x1d1b24);
@@ -241,6 +241,28 @@ function closePanel({ push = true } = {}) {
 }
 $('wPanelClose').addEventListener('click', () => closePanel());
 addEventListener('keydown', (e) => { if (e.key === 'Escape') { closePanel(); closeMenu(); } });
+
+// ── Walk Kage with the keyboard: WASD / arrows to walk, Enter at a door to go in ──
+const KEYS = { w: [0, 1], arrowup: [0, 1], s: [0, -1], arrowdown: [0, -1], a: [-1, 0], arrowleft: [-1, 0], d: [1, 0], arrowright: [1, 0] };
+const held = new Set();
+const typing = (e) => /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable;
+const nearDoor = () => buildings.find((b) => doorOf(b).distanceTo(kage.position) < 4.5);
+addEventListener('keydown', (e) => {
+  if (typing(e) || e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if (KEYS[k]) {
+    e.preventDefault();
+    held.add(k);
+    if (focus) closePanel();
+    route = [];
+    hideHero();
+  } else if (k === 'enter' && !focus) {
+    const b = nearDoor();
+    if (b) { e.preventDefault(); openPanel(b.def.panel); }
+  }
+});
+addEventListener('keyup', (e) => held.delete(e.key.toLowerCase()));
+addEventListener('blur', () => held.clear());
 addEventListener('popstate', () => { const id = location.hash.slice(1); if (PANELS[id]) openPanel(id, { push: false }); else closePanel({ push: false }); });
 
 // ── Hero ──
@@ -347,6 +369,30 @@ function step() {
       kage.position.addScaledVector(tmp.normalize(), Math.min(dist, (reduceMotion ? 40 : 11) * dt));
       kageYawTarget = Math.atan2(tmp.x, tmp.z);
     }
+  }
+  if (held.size) {
+    // Move relative to the camera: up walks away from the viewer.
+    let fx = 0, fz = 0;
+    held.forEach((k) => { fx += KEYS[k][0]; fz += KEYS[k][1]; });
+    const fwd = tmp.subVectors(camLook, camPos).setY(0).normalize();
+    const mx = fwd.x * fz - fwd.z * fx, mz = fwd.z * fz + fwd.x * fx;
+    const len = Math.hypot(mx, mz);
+    if (len) {
+      walking = true;
+      kage.position.x += (mx / len) * 9 * dt;
+      kage.position.z += (mz / len) * 9 * dt;
+      kageYawTarget = Math.atan2(mx, mz);
+      // Stay in the village and out of the buildings.
+      const r = Math.hypot(kage.position.x, kage.position.z);
+      if (r > 34) kage.position.multiplyScalar(34 / r);
+      buildings.forEach((b) => {
+        const d = tmp.subVectors(kage.position, b.group.position).setY(0);
+        const min = b.def.footprint + 1;
+        if (d.length() < min) kage.position.copy(b.group.position).addScaledVector(d.normalize(), min).setY(0);
+      });
+    }
+    const door = nearDoor();
+    $('wHint').textContent = door ? `Press Enter to open ${door.def.label}` : 'WASD or arrow keys to walk · Enter at a door to go in';
   }
   if (!walking) kageYawTarget = Math.atan2(camera.position.x - kage.position.x, camera.position.z - kage.position.z);
   // Kage has arrived (or is taking too long): present the panel from his hand.
