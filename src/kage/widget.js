@@ -1,7 +1,7 @@
 // Kage, the site's assistant: a small live 3D Kage in the bottom-right corner that opens a chat.
 // Answers come from the existing Cloudflare worker; Kage can also take the visitor to a page.
 import * as THREE from 'three';
-import { makeKageCharacter } from '../world/character.js';
+import { makeKage } from '../world/kageModel.js';
 import profile from '../../content/profile.json';
 import thesis from '../../content/thesis.json';
 import repos from '../../content/repos.json';
@@ -119,7 +119,7 @@ export function mountKage() {
   scene.add(new THREE.HemisphereLight(0xfff1e0, 0x2a1414, 1.6));
   const key = new THREE.DirectionalLight(0xffe2cc, 2); key.position.set(2, 4, 4); scene.add(key);
   const rim = new THREE.DirectionalLight(0xd24a4a, 2.5); rim.position.set(-3, 2, -2); scene.add(rim);
-  const kage = makeKageCharacter();
+  const kage = makeKage();
   kage.rotation.y = -0.35;
   scene.add(kage);
   let last = 0;

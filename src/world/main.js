@@ -10,7 +10,7 @@ import { PANELS } from './panels.js';
 import { makeBuilding, makeTreeInstances, makeLanterns } from './props.js';
 import { currentSeason, SEASONS, wind, makeWeather } from './seasons.js';
 import { makeWindTrail, makeEagle, makeBlossomShrubs, makeStream } from './flair.js';
-import { makeKageCharacter } from './character.js';
+import { makeKage } from './kageModel.js';
 import { makeSky, makeMoon, makeStars, makeMountains, makeFireflies, makePond, makeBamboo, makeBanner, makeRocks } from './atmosphere.js';
 import { makeSpeech } from './companion.js';
 import { thesisDropdown, wireDropdown } from '../page3d/nav.js';
@@ -138,7 +138,7 @@ const fireflies = reduceMotion ? null : makeFireflies(lowPower ? 30 : 60);
 if (fireflies) scene.add(fireflies.points);
 
 // ── Kage, the guide: waits in the plaza and walks to whichever building is opened ──
-const kage = makeKageCharacter();
+const kage = makeKage();
 const KAGE_HOME = new THREE.Vector3(0, 0, 0); // centre of the red ring
 kage.position.copy(KAGE_HOME);
 scene.add(kage);
