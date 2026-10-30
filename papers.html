@@ -2,10 +2,416 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Moved | Sai Kiran Kumar Nalla, PhD</title>
-<meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="0; url=/sections/publications.html">
-<script>location.replace('/sections/publications.html' + location.hash);</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Scrolls — Sai Nalla</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ── PAPER CARDS ── */
+.papers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
+
+.paper-wrap{position:relative}
+
+.paper-card{padding:2rem;border:1px solid var(--ghost-line);background:var(--ghost);transition:all 0.4s;position:relative;overflow:hidden}
+.paper-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--blood);transition:height 0.4s}
+.paper-card:hover{border-color:rgba(139,26,26,0.3);background:rgba(139,26,26,0.03)}
+.paper-card:hover::before{height:100%}
+.paper-wrap.abstract-open .paper-card{border-color:rgba(139,26,26,0.3);border-bottom-color:transparent}
+
+.paper-status{font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.8rem;display:flex;align-items:center;gap:0.8rem}
+.paper-status .dot{width:6px;height:6px;border-radius:0;transform:rotate(45deg)}
+.dot-published{background:var(--blood-glow)}
+.dot-review{background:var(--steel);border:1px solid var(--mist)}
+.dot-preprint{background:transparent;border:1px solid var(--blood)}
+.dot-conference{background:var(--blood-dim)}
+.paper-status span{color:var(--blood)}
+.paper-title{font-family:'Zen Antique',serif;font-size:1rem;line-height:1.5;margin-bottom:0.8rem}
+.paper-journal{font-size:0.78rem;color:var(--steel);font-style:italic}
+
+.paper-actions{display:flex;gap:1.5rem;align-items:center;margin-top:1rem;flex-wrap:wrap}
+.paper-link{font-family:'Space Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--blood-glow);text-decoration:none;transition:color 0.3s;cursor:pointer;background:none;border:none;padding:0}
+.paper-link:hover{color:var(--paper)}
+
+/* ── ABSTRACT ACCORDION ── */
+.abstract-body{max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);border:1px solid transparent;border-top:none;background:transparent}
+.paper-wrap.abstract-open .abstract-body{max-height:800px;border-color:rgba(139,26,26,0.3);background:linear-gradient(135deg, rgba(139,26,26,0.04) 0%, transparent 40%), var(--ghost)}
+
+.abstract-inner{padding:1.8rem 2rem;position:relative}
+
+/* scan line */
+.abstract-scan{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right, transparent, var(--blood), transparent);animation:scanPulse 3.5s ease-in-out infinite}
+@keyframes scanPulse{0%,100%{opacity:0.2}50%{opacity:0.75}}
+
+/* corner brackets */
+.abs-corner{position:absolute;width:9px;height:9px;border-color:rgba(139,26,26,0.2);border-style:solid;pointer-events:none}
+.abs-corner.tl{top:8px;left:8px;border-width:1px 0 0 1px}
+.abs-corner.tr{top:8px;right:8px;border-width:1px 1px 0 0}
+.abs-corner.bl{bottom:8px;left:8px;border-width:0 0 1px 1px}
+.abs-corner.br{bottom:8px;right:8px;border-width:0 1px 1px 0}
+
+.abstract-label{font-family:'Space Mono',monospace;font-size:0.48rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--blood);margin-bottom:0.8rem;display:flex;align-items:center;gap:0.8rem}
+.abstract-label::after{content:'';flex:1;height:1px;background:var(--ghost-line)}
+
+.abstract-text{font-size:0.85rem;line-height:1.85;color:var(--mist);font-weight:300}
+.abstract-loading{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.1em}
+
+
+/* ── RESEARCH PRESENCE / METRICS ── */
+.research-presence{position:relative;margin-top:0}
+.metrics-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.metrics-kicker{font-family:'Space Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.22em;color:var(--blood-glow);margin-bottom:.55rem}
+.metrics-title{font-family:'Zen Antique',serif;font-size:clamp(1.6rem,3vw,2.5rem);line-height:1.15}
+.metrics-note{max-width:560px;color:var(--mist);font-size:.86rem;line-height:1.7;font-weight:300}
+.metrics-note strong{color:var(--paper);font-weight:500}
+.metrics-grid{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:1.2rem;margin:1.2rem 0 1.6rem}
+.metric-card{border:1px solid var(--ghost-line);background:linear-gradient(135deg,rgba(139,26,26,.06),transparent 48%),var(--ghost);padding:1.6rem;position:relative;overflow:hidden;min-height:260px;display:flex;flex-direction:column;justify-content:space-between;transition:all .35s}
+.metric-card:hover{border-color:rgba(139,26,26,.38);background:rgba(139,26,26,.045);transform:translateY(-3px)}
+.metric-card::after{content:'';position:absolute;right:-38px;bottom:-38px;width:110px;height:110px;border:1px solid rgba(139,26,26,.22);transform:rotate(45deg)}
+.metric-source{font-family:'Space Mono',monospace;font-size:.54rem;text-transform:uppercase;letter-spacing:.16em;color:var(--blood-glow);margin-bottom:.7rem}
+.metric-card h3{font-family:'Zen Antique',serif;font-size:1.25rem;margin-bottom:.3rem}
+.metric-id{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--steel);letter-spacing:.04em;margin-bottom:1rem}
+.metric-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:1rem 0}
+.metric-stat{border:1px solid rgba(240,235,227,.07);background:rgba(240,235,227,.03);padding:.8rem}
+.metric-num{font-family:'Zen Antique',serif;font-size:2rem;color:var(--paper);line-height:1}
+.metric-label{font-family:'Space Mono',monospace;font-size:.48rem;text-transform:uppercase;letter-spacing:.12em;color:var(--steel);margin-top:.35rem}
+.metric-row{display:flex;justify-content:space-between;gap:1rem;border-top:1px solid var(--ghost-line);padding:.65rem 0;font-size:.82rem;color:var(--mist)}
+.metric-row:first-of-type{border-top:none}
+.metric-row b{color:var(--paper);font-weight:500}
+.metric-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem;position:relative;z-index:1}
+.metric-link{font-family:'Space Mono',monospace;font-size:.56rem;text-transform:uppercase;letter-spacing:.12em;color:var(--blood-glow);text-decoration:none;border:1px solid rgba(139,26,26,.35);padding:.65rem .85rem;transition:all .25s;background:rgba(139,26,26,.05)}
+.metric-link:hover{color:var(--paper);border-color:rgba(194,59,59,.65);background:rgba(139,26,26,.14)}
+.metric-small{font-family:'Space Mono',monospace;font-size:.5rem;text-transform:uppercase;letter-spacing:.12em;color:var(--steel);margin-top:.8rem}
+.metrics-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:2.5rem}
+.breakdown-card{border:1px solid var(--ghost-line);background:var(--ghost);padding:1.4rem}
+.breakdown-card h3{font-family:'Zen Antique',serif;font-size:1.05rem;margin-bottom:.8rem}
+.breakdown-list{display:grid;gap:.65rem}
+.breakdown-item{display:grid;grid-template-columns:130px 1fr auto;align-items:center;gap:.8rem;font-size:.78rem;color:var(--mist)}
+.breakdown-bar{height:6px;background:rgba(240,235,227,.06);overflow:hidden}
+.breakdown-fill{height:100%;background:linear-gradient(to right,var(--blood),var(--blood-glow));width:0%}
+.breakdown-value{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--paper)}
+html[data-theme="light"] .metrics-note,
+html[data-theme="light"] .metric-row,
+html[data-theme="light"] .breakdown-item{color:#4a4540!important}
+html[data-theme="light"] .metric-card,
+html[data-theme="light"] .breakdown-card,
+html[data-theme="light"] .metric-stat{background:rgba(26,26,28,.035)!important;border-color:rgba(26,26,28,.12)!important}
+html[data-theme="light"] .metric-card h3,
+html[data-theme="light"] .metric-num,
+html[data-theme="light"] .metric-row b,
+html[data-theme="light"] .breakdown-value{color:#1a1a1c!important}
+@media(max-width:1050px){.metrics-grid{grid-template-columns:1fr}.metrics-breakdown{grid-template-columns:1fr}}
+@media(max-width:600px){.metric-stats{grid-template-columns:1fr 1fr}.breakdown-item{grid-template-columns:1fr}.breakdown-value{text-align:left}}
+
+/* ── BLOG / OPINIONS SECTION ── */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
+
+.blog-card{padding:2rem;border:1px solid var(--ghost-line);background:var(--ghost);transition:all 0.4s;position:relative;overflow:hidden;text-decoration:none;color:var(--paper);display:block}
+.blog-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blood);transform:scaleX(0);transform-origin:left;transition:transform 0.4s}
+.blog-card:hover{border-color:rgba(139,26,26,0.3);background:rgba(139,26,26,0.03)}
+.blog-card:hover::before{transform:scaleX(1)}
+
+.blog-tag{font-family:'Space Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--blood-glow);margin-bottom:0.6rem}
+.blog-title{font-family:'Zen Antique',serif;font-size:1.05rem;line-height:1.5;margin-bottom:0.6rem}
+.blog-excerpt{font-size:0.82rem;color:var(--mist);line-height:1.7;font-weight:300;margin-bottom:1rem}
+.blog-meta{font-family:'Space Mono',monospace;font-size:0.52rem;color:var(--steel);letter-spacing:0.08em;text-transform:uppercase}
+.blog-coming{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--steel);letter-spacing:0.12em;text-transform:uppercase;text-align:center;padding:3rem;border:1px dashed var(--ghost-line)}
+
+.arsenal-katana{display:flex;align-items:center;justify-content:center;padding:3rem 0}
+</style>
 </head>
-<body><p>This page has moved: <a href="/sections/publications.html">continue</a>.</p></body>
+<body>
+
+<!-- AC Transition Overlay -->
+<div class="ac-transition">
+  <div class="eagle-flash"></div>
+  <div class="animus-lines"></div>
+  <div class="ac-insignia">鷹</div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><rect y="3" width="32" height="6" fill="#0a0a0b" stroke="#8b1a1a" stroke-width="0.8"/><circle cx="16" cy="6" r="2.5" fill="none" stroke="#8b1a1a" stroke-width="0.6"/></svg>
+    <span class="nav-mark">NALLA<span>.</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><span class="nav-divider"></span>
+    <a href="about.html">About</a>
+    <a href="experience.html">Experience</a>
+    <a href="education.html">Education</a>
+    <a href="projects.html">Projects</a>
+    <a href="papers.html" class="active">Publications</a>
+    <a href="contact.html">Reach Out</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="icon-moon">🌙</span><span class="icon-sun">☀️</span></button>
+  </div>
+</nav>
+
+<div class="v-accent"></div>
+<div class="bg-kanji">刀</div>
+
+<div class="page-content">
+<section class="page-hero">
+  <div class="page-tag reveal">The Scrolls</div>
+  <div class="page-title-jp reveal">武器庫 — ぶきこ</div>
+  <h1 class="page-title reveal">05 — Publications</h1>
+  <p class="page-subtitle reveal">The weapons forged in research — each publication a blade sharpened by rigor</p>
+</section>
+
+<section class="content-section">
+
+  <div class="arsenal-katana">
+    <svg width="500" height="30" viewBox="0 0 500 30" opacity="0.1"><path d="M5 18Q12 16 28 15L460 11Q485 10 497 7L499 6Q500 5.5 499 5L460 6L28 10Q12 11 5 14Z" fill="#f0ebe3"/><path d="M2 17Q4 15 5 18L5 14Q4 12 2 14Z" fill="#c4bfb6"/><rect x="26" y="8" width="6" height="12" rx="1" fill="none" stroke="#f0ebe3" stroke-width="0.6"/><line x1="29" y1="8" x2="29" y2="20" stroke="#8b1a1a" stroke-width="0.3"/></svg>
+  </div>
+
+
+  <section class="research-presence reveal" aria-labelledby="researchPresenceTitle">
+    <div class="metrics-head">
+      <div>
+        <div class="metrics-kicker">Research Presence</div>
+        <h2 class="metrics-title" id="researchPresenceTitle">Scholar profiles &amp; impact signals</h2>
+      </div>
+      <p class="metrics-note">
+        A compact view of verified academic identity and manually updated research metrics from Google Scholar, ResearchGate, and ORCID.
+        <strong>Metrics are a snapshot, not a live feed.</strong>
+      </p>
+    </div>
+
+    <div class="metrics-grid" id="researchMetricsGrid" aria-live="polite">
+      <div class="metric-card"><div class="metric-source">Loading</div><h3>Synchronizing metrics...</h3></div>
+    </div>
+
+    <div class="metrics-breakdown" id="researchMetricsBreakdown"></div>
+  </section>
+
+
+  <div class="papers-grid stagger">
+
+    <!-- Paper 1 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-1.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-published"></span><span>2025 — Published</span></div>
+        <div class="paper-title">Enhancing PET/CT Target Assessment with Porous 3D Printed Grids: A Pilot Study</div>
+        <div class="paper-journal">Physical and Engineering Sciences in Medicine</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1007/s13246-025-01687-y" target="_blank" class="paper-link">Read Paper →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper 2 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-2.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-review"></span><span>2025 — Under Review</span></div>
+        <div class="paper-title">From Digital File to Transferable Phantom: Dual-Centre Evaluation of Multi-contrast Phantom for Standardized PET Quantification</div>
+        <div class="paper-journal">MedRxiv (Pre-print)</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1101/2025.05.30.25328639" target="_blank" class="paper-link">Read Pre-print →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper 3 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-3.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-review"></span><span>2025 — Under Review</span></div>
+        <div class="paper-title">Quantitative Reality: A Physical Ground Truth to Assess Heterogeneity Beyond Visual Limits in Molecular Imaging</div>
+        <div class="paper-journal">MedRxiv (Pre-print)</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1101/2025.11.26.25341036" target="_blank" class="paper-link">Read Pre-print →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper 4 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-4.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-preprint"></span><span>2025 — Pre-print</span></div>
+        <div class="paper-title">MuPET: Bridging Computational Mass Transport Physics and Medical Imaging for Synthetic PET Data Generation</div>
+        <div class="paper-journal">MedRxiv</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1101/2025.07.31.25332512" target="_blank" class="paper-link">Read Pre-print →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper 5 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-5.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-conference"></span><span>2025 — Conference</span></div>
+        <div class="paper-title">3D Printed PET/CT Phantom with Mixed Target Uptake Characteristics to Investigate Lesion Development</div>
+        <div class="paper-journal">EANM Congress — e-Poster EP-0949</div>
+        <div class="paper-actions">
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper 6 -->
+    <div class="paper-wrap" data-abstract="Assets/abstracts/paper-6.txt">
+      <div class="paper-card">
+        <div class="paper-status"><span class="dot dot-published"></span><span>2022 — Published</span></div>
+        <div class="paper-title">Effects of Gas Embolism on Pulsatile Flow Characteristics Within a Human Carotid Artery</div>
+        <div class="paper-journal">Journal of Biomechanical Engineering (ASME)</div>
+        <div class="paper-actions">
+          <a href="https://doi.org/10.1115/1.4054679" target="_blank" class="paper-link">Read Paper →</a>
+          <button class="paper-link abstract-toggle">View Abstract ↓</button>
+        </div>
+      </div>
+      <div class="abstract-body">
+        <div class="abstract-inner">
+          <div class="abstract-scan"></div>
+          <div class="abs-corner tl"></div><div class="abs-corner tr"></div>
+          <div class="abs-corner bl"></div><div class="abs-corner br"></div>
+          <div class="abstract-label">Abstract</div>
+          <div class="abstract-text abstract-content"><span class="abstract-loading">Synchronizing...</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── BLOG / OPINIONS ── -->
+<section class="content-section bg-smoke">
+  <div class="section-header reveal">
+    <span class="section-num">筆</span>
+    <h2 class="section-title">Opinions &amp; Reflections</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="blog-grid stagger">
+
+    <div class="blog-card">
+      <div class="blog-tag">Opinion</div>
+      <div class="blog-title">Why PET/CT Phantoms Need to Stop Being Perfect</div>
+      <div class="blog-excerpt">Clinical tumours are heterogeneous. Our test objects shouldn't pretend otherwise. A case for porous, 3D-printed phantoms as the new standard for quantitative validation.</div>
+      <div class="blog-meta">Coming Soon</div>
+    </div>
+
+    <div class="blog-card">
+      <div class="blog-tag">Reflection</div>
+      <div class="blog-title">From Hyderabad to Toulouse — What a PhD in France Actually Looks Like</div>
+      <div class="blog-excerpt">Visa paperwork, research autonomy, cultural adaptation, and the gap between what you expect from a PhD abroad and what it actually demands of you.</div>
+      <div class="blog-meta">Coming Soon</div>
+    </div>
+
+    <div class="blog-coming reveal">
+      More pieces on medtech translation, deep-tech ventures, and life at the intersection of research and strategy — arriving soon.
+    </div>
+
+  </div>
+</section>
+
+</div>
+<footer>
+  <div class="footer-text">© 2026 Sai Kiran Kumar Nalla</div>
+  <div class="footer-text">刀 — The Blade</div>
+</footer>
+
+<script src="theme.js"></script>
+<script src="transitions.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="kage-3d.js"></script>
+<script src="kage.js"></script>
+<script src="research-metrics.js"></script>
+<script>
+// Abstract accordion: fetch from txt file, cache, toggle
+const abstractCache = {};
+
+document.querySelectorAll('.abstract-toggle').forEach(btn => {
+  btn.addEventListener('click', async function() {
+    const wrap = this.closest('.paper-wrap');
+    const isOpen = wrap.classList.contains('abstract-open');
+
+    // Close all others
+    document.querySelectorAll('.paper-wrap.abstract-open').forEach(w => {
+      if (w !== wrap) {
+        w.classList.remove('abstract-open');
+        w.querySelector('.abstract-toggle').textContent = 'View Abstract ↓';
+      }
+    });
+
+    if (isOpen) {
+      wrap.classList.remove('abstract-open');
+      this.textContent = 'View Abstract ↓';
+      return;
+    }
+
+    // Open this one
+    wrap.classList.add('abstract-open');
+    this.textContent = 'Hide Abstract ↑';
+
+    const src = wrap.dataset.abstract;
+    const contentEl = wrap.querySelector('.abstract-content');
+
+    // Fetch if not cached
+    if (!abstractCache[src]) {
+      try {
+        const res = await fetch(src);
+        if (!res.ok) throw new Error('Not found');
+        abstractCache[src] = await res.text();
+      } catch (e) {
+        abstractCache[src] = 'Abstract not yet available. Check back soon.';
+      }
+    }
+
+    contentEl.innerHTML = abstractCache[src];
+
+    // Smooth scroll into view
+    setTimeout(() => {
+      wrap.querySelector('.abstract-body').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 150);
+  });
+});
+</script>
+<script src="dynamic.js"></script>
+</body>
 </html>
+

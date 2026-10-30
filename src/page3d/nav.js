@@ -1,9 +1,9 @@
 // Shared top navigation for the 3D section pages (same look as the home page menu).
 // "Thesis" is a dropdown: PhD, Master's and Bachelor's each have their own page.
 export const THESES = [
-  ['research', 'PhD', 'Medical imaging · Toulouse 2026', '/sections/research.html'],
-  ['masters', "Master's", 'Microwave ablation · Polytechnique 2023', '/sections/masters.html'],
-  ['auv', "Bachelor's", 'Black Pearl AUV · Mahindra 2020', '/sections/auv.html'],
+  ['research', 'PhD', 'Medical imaging · Toulouse 2026', '/education.html'],
+  ['masters', "Master's", 'Microwave ablation · Polytechnique 2023', '/education.html'],
+  ['auv', "Bachelor's", 'Black Pearl AUV · Mahindra 2020', '/education.html'],
 ];
 export const SECTIONS = [
   ['about', 'About'], ['thesis', 'Thesis'], ['projects', 'Projects'],

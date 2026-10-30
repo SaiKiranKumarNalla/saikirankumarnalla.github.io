@@ -11,11 +11,11 @@ import './widget.css';
 
 const PROXY_URL = 'https://kage-proxy.sainalla82.workers.dev';
 const PAGES = {
-  home: ['/', 'the village (home)'], about: ['/sections/about.html', 'About'], phd: ['/sections/research.html', 'PhD thesis'],
-  masters: ['/sections/masters.html', "Master's thesis"], bachelors: ['/sections/auv.html', "Bachelor's: Black Pearl AUV"],
-  projects: ['/sections/projects.html', 'Projects'], publications: ['/sections/publications.html', 'Publications'],
-  agentic: ['/sections/builder.html', 'Agentic AI'], contact: ['/sections/contact.html', 'Contact'],
-  life: ['/sections/life.html', 'Off the Clock'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
+  home: ['/', 'the village (home)'], about: ['/about.html', 'About'], phd: ['/education.html', 'PhD thesis'],
+  masters: ['/education.html', "Master's thesis"], bachelors: ['/education.html', "Bachelor's: Black Pearl AUV"],
+  projects: ['/projects.html', 'Projects'], publications: ['/papers.html', 'Publications'],
+  agentic: ['/experience.html', 'Experience'], contact: ['/contact.html', 'Contact'],
+  life: ['/about.html', 'Off the Clock'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
 };
 const PROMPTS = ['Who is Sai, in two lines?', 'Explain the PhD like I am five', 'What has Sai built?', 'Is Sai a fit for my role?'];
 

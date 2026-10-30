@@ -2,10 +2,242 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Moved | Sai Kiran Kumar Nalla, PhD</title>
-<meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="0; url=/sections/about.html">
-<script>location.replace('/sections/about.html' + location.hash);</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dōjō — Sai Nalla</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.edu-card{padding:3rem;border:1px solid var(--ghost-line);background:var(--ghost);position:relative;overflow:hidden;transition:all 0.4s;margin-bottom:1.5rem}
+.edu-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(to right,var(--blood),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.5s}
+.edu-card:hover::before{transform:scaleX(1)}
+.edu-card:hover{border-color:rgba(139,26,26,0.2)}
+.edu-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:1rem}
+.edu-degree{font-family:'Zen Antique',serif;font-size:1.3rem;line-height:1.3}
+.edu-dates{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--steel);letter-spacing:0.05em;white-space:nowrap;padding-top:0.4rem}
+.edu-school{font-size:0.9rem;color:var(--blood-glow);margin-bottom:0.5rem;font-weight:500}
+.edu-note{font-size:0.8rem;color:var(--steel);font-style:italic}
+.edu-kanji{position:absolute;right:2rem;bottom:1rem;font-family:'Noto Serif JP',serif;font-size:4rem;font-weight:900;color:rgba(139,26,26,0.06);pointer-events:none}
+.extra-section{margin-top:3rem}
+.extra-card{padding:1.5rem;border:1px solid var(--ghost-line);background:var(--ghost);margin-bottom:1rem}
+.extra-title{font-family:'Zen Antique',serif;font-size:1rem;margin-bottom:0.3rem}
+.extra-org{font-size:0.8rem;color:var(--blood-glow);margin-bottom:0.2rem}
+.extra-detail{font-size:0.78rem;color:var(--steel)}
+</style>
 </head>
-<body><p>This page has moved: <a href="/sections/about.html">continue</a>.</p></body>
+<body>
+
+<!-- AC Transition Overlay -->
+<div class="ac-transition">
+  <div class="eagle-flash"></div>
+  <div class="animus-lines"></div>
+  <div class="ac-insignia">鷹</div>
+</div>
+
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><rect y="3" width="32" height="6" fill="#0a0a0b" stroke="#8b1a1a" stroke-width="0.8"/><circle cx="16" cy="6" r="2.5" fill="none" stroke="#8b1a1a" stroke-width="0.6"/></svg>
+    <span class="nav-mark">NALLA<span>.</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><span class="nav-divider"></span>
+    <a href="about.html">About</a>
+    <a href="experience.html">Experience</a>
+    <a href="education.html" class="active">Education</a>
+    <a href="projects.html">Projects</a>
+    <a href="papers.html">Publications</a>
+    <a href="contact.html">Reach Out</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="icon-moon">🌙</span><span class="icon-sun">☀️</span></button>
+  </div>
+</nav>
+
+<div class="v-accent"></div>
+<!-- Background: angled katana -->
+<svg class="bg-katana" style="transform:translateY(-50%) rotate(-8deg)" width="100" height="800" viewBox="0 0 100 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M46 40Q48 35 50 8L50 3Q50 1 50 3L48 8Q46 35 46 40Z" fill="#f0ebe3" opacity="0.6"/>
+  <path d="M46 40L45 680Q45 720 47 740L50 748L53 740Q55 720 55 680L54 40Z" fill="#f0ebe3"/>
+  <rect x="40" y="36" width="20" height="12" rx="2" fill="none" stroke="#f0ebe3" stroke-width="1.2"/>
+  <line x1="50" y1="36" x2="50" y2="48" stroke="#8b1a1a" stroke-width="0.5"/>
+  <path d="M45 748L43 760Q42 764 45 762L50 757L55 762Q58 764 57 760L55 748Z" fill="#c4bfb6"/>
+</svg>
+
+<div class="page-content">
+<section class="page-hero">
+  <div class="page-tag reveal">The Dōjō</div>
+  <div class="page-title-jp reveal">道場 — どうじょう</div>
+  <h1 class="page-title reveal">03 — Education</h1>
+  <p class="page-subtitle reveal">The Training Ground — Where discipline is forged before the blade</p>
+</section>
+
+<section class="content-section">
+
+  <div class="stagger">
+
+<div class="edu-card">
+  <div class="edu-kanji">博</div>
+
+  <!-- Unified Meta Container for Top Right -->
+  <div class="edu-meta-right">
+    <div class="edu-dates-right mono">Oct 2023 — Sept 2026</div>
+    
+    <div class="health-bar-container">
+      <div class="gpa-label mono">SYNC <span class="gpa-value" style="color: var(--steel);">IN PROGRESS...</span></div>
+      <div class="health-segments">
+        <!-- Pulse effect for ongoing PhD mastery -->
+        <div class="segment filled-dim"></div>
+        <div class="segment filled-dim"></div>
+        <div class="segment filled-dim"></div>
+        <div class="segment filled-dim"></div>
+        <div class="segment filled-dim"></div>
+        <div class="segment filled-dim"></div>
+        <div class="segment"></div>
+        <div class="segment"></div>
+        <div class="segment"></div>
+        <div class="segment"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="edu-top">
+    <div style="display: flex; align-items: center; gap: 2rem;">
+      <a href="https://www.univ-toulouse.fr/" target="_blank" rel="noopener noreferrer">
+        <div class="logo-container">
+          <img src="Assets/logo-UT-site.png" alt="Université de Toulouse" class="edu-logo">
+        </div>
+      </a>
+      <div>
+        <div class="edu-degree">PhD in Medical Imaging & Radiophysics</div>
+        <div class="edu-school">Université de Toulouse — IUCT Oncopole</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="edu-note" style="margin-top: 1.5rem;">Ongoing — Defense scheduled Sept 2026 · Toulouse, France</div>
+</div>
+    
+
+<div class="edu-card">
+  <div class="edu-kanji">修</div>
+
+  <!-- This container anchors EVERYTHING to the top right -->
+  <div class="edu-meta-right">
+    <div class="edu-dates-right mono">Oct 2021 — Sept 2023</div>
+    
+    <div class="health-bar-container">
+      <div class="gpa-label mono">SYNC <span class="gpa-value">3.7/4.0</span></div>
+      <div class="health-segments">
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="edu-top">
+    <div style="display: flex; align-items: center; gap: 2rem;">
+      <a href="https://www.polytechnique.edu/" target="_blank" rel="noopener noreferrer">
+        <div class="logo-container">
+          <img src="Assets/logo-ip-pari.png" alt="École Polytechnique" class="edu-logo logo-white">
+        </div>
+      </a>
+      <div>
+        <div class="edu-degree">MSc in Biomechanical & Biomedical Engineering</div>
+        <div class="edu-school">École Polytechnique — IP Paris</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="edu-note" style="margin-top: 1.5rem;">Full Scholarship — Admitted to PhD Track · Palaiseau, France</div>
+</div>
+
+<div class="edu-card">
+  <div class="edu-kanji">学</div>
+
+  <!-- Unified Meta Container for Top Right -->
+  <div class="edu-meta-right">
+    <div class="edu-dates-right mono">Aug 2016 — Aug 2020</div>
+    
+    <div class="health-bar-container">
+      <div class="gpa-label mono">SYNC <span class="gpa-value">8.5/10.0</span></div>
+      <div class="health-segments">
+        <!-- 8.5/10 Sync Level -->
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled"></div>
+        <div class="segment filled-dim"></div> <!-- The half-sync segment -->
+        <div class="segment"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="edu-top">
+    <div style="display: flex; align-items: center; gap: 2rem;">
+      <a href="https://www.mahindrauniversity.edu.in/" target="_blank" rel="noopener noreferrer">
+        <div class="logo-container">
+          <img src="Assets/logo-mu.png" alt="Mahindra University" class="edu-logo">
+        </div>
+      </a>
+      <div>
+        <div class="edu-degree">B.Tech in Mechanical Engineering</div>
+        <div class="edu-school">Mahindra University (formerly MEC)</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="edu-note" style="margin-top: 1.5rem;">Excellence Scholarship · Hyderabad, India</div>
+</div>
+
+  <div class="extra-section stagger">
+    <div class="section-header">
+      <span class="section-num">鍛</span>
+      <h2 class="section-title">Additional Training</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="extra-card">
+      <div class="extra-title">McKinsey Forward Program</div>
+      <div class="extra-org">McKinsey & Company</div>
+      <div class="extra-detail">Problem-solving, strategic thinking, leadership fundamentals</div>
+    </div>
+
+    <div class="extra-card">
+      <div class="extra-title">Venture Capital Introductory Workshop</div>
+      <div class="extra-org">Independent study</div>
+      <div class="extra-detail">VC fundamentals, European biotech/medtech ecosystems, fund structures, deal sourcing</div>
+    </div>
+
+    <div class="extra-card">
+      <div class="extra-title">Deputy Team Lead — AUV MEC</div>
+      <div class="extra-org">Mahindra University</div>
+      <div class="extra-detail">Mechanical subdivision lead for autonomous underwater vehicle team</div>
+    </div>
+  </div>
+
+</section>
+
+</div>
+<footer>
+  <div class="footer-text">© 2026 Sai Kiran Kumar Nalla</div>
+  <div class="footer-text">道場 — The Dōjō</div>
+</footer>
+
+
+<script src="theme.js"></script>
+<script src="transitions.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="kage-3d.js"></script>
+<script src="kage.js"></script>
+<script src="dynamic.js"></script>
+</body>
 </html>
