@@ -110,3 +110,12 @@ html,body{height:auto;overflow-x:hidden;overflow-y:auto}
 .s-link{font-size:.82rem;padding:6px 12px;border-radius:16px;border:1px solid var(--accent);color:var(--accent);text-decoration:none;font-weight:600}
 .s-link.soon{border-style:dashed;border-color:var(--line);color:var(--faint);font-weight:500}
 @media (max-width:860px){.s-gallery .s-main{left:0;right:0;top:auto;height:55vh}.s-gallery .s-step{padding:0}.s-gallery .s-card{border-radius:18px 18px 0 0}}
+
+/* Agent hierarchy tiers */
+.s-tiers{list-style:none;padding:0;margin:.4rem 0;border-left:2px solid var(--accent-strong)}
+.s-tiers li{position:relative;padding:4px 0 12px 16px}
+.s-tiers li::before{content:'';position:absolute;left:-6px;top:10px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--panel)}
+.s-tiers span{display:block;font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.s-tiers b{display:block;color:var(--text)}
+.s-tiers p{margin:.15rem 0 0;font-size:.88rem}
+.s-tiers em{display:inline-block;margin-top:4px;font-style:normal;font-size:.74rem;padding:2px 8px;border-radius:10px;border:1px solid var(--line);color:var(--text)}

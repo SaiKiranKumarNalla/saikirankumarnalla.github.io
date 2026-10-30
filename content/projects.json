@@ -119,6 +119,56 @@
       "status": [
         "In daily use for VeriTomiX planning and evidence work"
       ]
+    },
+    "architecture": {
+      "figures": [
+        {
+          "src": "/media/agentic/veritomix-office-floor.webp",
+          "caption": "The office floor: each department has a room; agents move between desk, coffee and break rooms, and the founder chats with any of them. Here Mira summarises a study from a vault document with its SHA-256 provenance."
+        },
+        {
+          "src": "/media/agentic/veritomix-meetings.webp",
+          "caption": "Meetings: agents present completed studies as slide decks with results and limitations, and can present them live with narration."
+        }
+      ],
+      "hierarchy": [
+        {
+          "level": "Founder",
+          "who": "You",
+          "does": "Sets priorities, approves results, can pause the office or hit the emergency stop"
+        },
+        {
+          "level": "Coordinator",
+          "who": "Atlas · Management",
+          "does": "Breaks requests into tasks, assigns departments, runs meetings and the weekly review",
+          "model": "Codex CLI"
+        },
+        {
+          "level": "Department heads",
+          "who": "Mira (R&D), Noah (Phantoms), Ada (Product), Lina (Clinical), Leo (Partnerships), Iris (IP & operations), Finn (Finance)",
+          "does": "Own their department's work and deliverables",
+          "model": "Codex CLI for R&D; Gemini CLI for the others"
+        },
+        {
+          "level": "Specialists",
+          "who": "One per department",
+          "does": "Evidence extraction and small support tasks, kept private and free",
+          "model": "Llama 3.2 1B, local via Ollama"
+        }
+      ],
+      "deployment": [
+        "A native macOS app that keeps a background office running, with a start/stop launcher",
+        "Each agent runs as its own CLI session; a shared execution queue, per-agent locks and GPU allocation stop them colliding",
+        "Local Python workers handle numerical jobs (regression, maths) so results are computed, not guessed",
+        "Whisper transcribes meetings; slides are exported for live presentation",
+        "Documents enter a vault with SHA-256 hashes so every answer can be traced to its source"
+      ],
+      "safeguards": [
+        "Capabilities and grants per agent; the founder approves anything consequential",
+        "Audit ledger of actions and a monthly budget cap",
+        "Emergency stop and pause office controls",
+        "Explicit 'not clinical validation' labelling on generated material"
+      ]
     }
   },
   {
@@ -149,6 +199,49 @@
       "status": [
         "Version 0.6, macOS and Linux tested",
         "Public release coming soon"
+      ]
+    },
+    "architecture": {
+      "figures": [
+        {
+          "src": "/media/agentic/animus-world-map.webp",
+          "caption": "ANIMUS world map: every verified opportunity pinned by location and type, scored against the CV, with remote and online listings alongside."
+        }
+      ],
+      "hierarchy": [
+        {
+          "level": "You",
+          "who": "Candidate",
+          "does": "Swipe to triage, approve applications; your swipes train the ranking"
+        },
+        {
+          "level": "Router",
+          "who": "Agent router",
+          "does": "Picks a model per task type, falls through on usage limits, login errors or daily budget",
+          "model": "Claude CLI → Codex → Gemini → Anthropic API"
+        },
+        {
+          "level": "Council",
+          "who": "Claude, Codex, Gemini",
+          "does": "For hard questions, each family answers and one synthesis is written"
+        },
+        {
+          "level": "Workers",
+          "who": "Sources, scorer, verifier, writer",
+          "does": "Fetch opportunities, score against the CV, verify links, draft CVs and letters"
+        }
+      ],
+      "deployment": [
+        "Runs locally: a FastAPI server and web UI, with data in a local SQLite database outside the repo",
+        "Uses the AI subscriptions you already have through their CLIs, so there are no API bills and the CV stays on your machine",
+        "Sources: job APIs, company boards (Greenhouse, Lever, Ashby), France Travail, EU funding calls, OpenAlex for potential PIs, read-only job-alert emails, and an AI web radar",
+        "Daily per-agent budgets, cooldowns and health tracking for each model"
+      ],
+      "safeguards": [
+        "Gemini may only propose opportunities; Claude or Codex must approve them before they appear",
+        "A verifier archives dead, generic, duplicate or expired links and shows who added and who verified each item",
+        "Never invents facts about the candidate: everything comes from the stored resume",
+        "No scraping of sites whose terms forbid it"
       ]
     }
   },
