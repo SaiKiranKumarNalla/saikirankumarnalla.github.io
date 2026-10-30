@@ -274,6 +274,15 @@ $('wViewWork').addEventListener('click', () => openPanel('projects'));
 $('wHome').addEventListener('click', (e) => { e.preventDefault(); closePanel(); heroEl.classList.remove('gone'); document.body.classList.remove('exploring'); });
 const GREETINGS = [['ようこそ', 'ja'], ['Welcome', 'en'], ['నమస్కారం', 'te'], ['नमस्ते', 'hi'], ['Bonjour', 'fr']];
 let greetIdx = 0;
+// "I am a …": each role fades out and the next one fades in.
+const ROLES = ['a researcher', 'a medical imaging scientist', 'an engineer', 'an agentic AI builder', 'a venture explorer', 'a writer', 'a jack of all trades'];
+let roleIdx = 0;
+setInterval(() => {
+  if (heroEl.classList.contains('gone')) return;
+  const w = $('wWord');
+  w.classList.add('swap');
+  setTimeout(() => { w.textContent = ROLES[++roleIdx % ROLES.length]; w.classList.remove('swap'); }, 350);
+}, 2200);
 setInterval(() => {
   if (heroEl.classList.contains('gone')) return;
   const g = $('wGreet');

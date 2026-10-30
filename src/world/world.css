@@ -43,6 +43,8 @@ a{color:inherit}
 .w-hero-greet{margin:0 0 .6rem;font-size:1rem;color:var(--accent);height:1.6em;transition:opacity .4s}
 .w-hero-greet.swap{opacity:0}
 .w-hero-name{font-family:'Zen Antique',serif;font-weight:400;font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1.08;margin:0 0 .5rem}
+.w-hero-word{display:inline-block;color:var(--accent);font-weight:600;transition:opacity .35s,transform .35s}
+.w-hero-word.swap{opacity:0;transform:translateY(8px)}
 .w-hero-role{font-size:1.15rem;font-weight:500;color:var(--muted);margin:0 0 1.2rem}
 .w-hero-desc{font-size:1.02rem;line-height:1.65;color:var(--muted);margin:0 0 1.4rem;max-width:520px}
 .w-hero-proof{list-style:none;padding:0;margin:0 0 1.8rem;display:flex;flex-wrap:wrap;gap:8px}
