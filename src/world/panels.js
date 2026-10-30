@@ -75,7 +75,7 @@ export const PANELS = {
     title: 'Agentic AI',
     kicker: builder.headline,
     html: () => `
-      <div class="p-grid">${builder.principles.map((p, i) => `<div class="p-principle"><span>0${i + 1}</span><b>${esc(p.title)}</b><p>${esc(p.text)}</p></div>`).join('')}</div>
+      <p class="p-lede">AI agent systems I designed and run: VeriTomiX Office, a company of AI department heads, and ANIMUS Jobs, a verified career agent.</p>
       <h3>Toolbelt</h3>${chips(builder.stack)}
       <h3>Next on the bench</h3><ul class="p-list">${builder.roadmap.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
       <div class="p-actions">${more('/sections/builder.html', 'How I build with agents')}</div>`,

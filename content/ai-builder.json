@@ -31,7 +31,6 @@
     "TotalSegmentator"
   ],
   "builds": [
-    "virtualpet",
     "veritomix-office",
     "animus"
   ],

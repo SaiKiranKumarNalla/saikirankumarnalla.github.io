@@ -1,6 +1,6 @@
-// Agentic AI: principles, then each agent system with its screenshot and "How it's built"
+// Agentic AI: each agent system with its screenshot and "How it's built"
 // (hierarchy, models, deployment, safeguards). The 3D shows a matching diagram per system:
-// a constellation for Virtual PET, an org tree for VeriTomiX Office, a model router for ANIMUS.
+// a constellation for the intro, an org tree for VeriTomiX Office, a model router for ANIMUS.
 import builder from '../../content/ai-builder.json';
 import projects from '../../content/projects.json';
 import { runPage } from './engine.js';
@@ -37,7 +37,6 @@ document.getElementById('main').innerHTML = `
     <p class="s-lede">Agents do the work; I hold the gates. Each light is an agent role, and the core is the human check every result returns through.</p>
     <p class="s-scroll">Scroll for how it works</p>
   </div></section>
-  ${builder.principles.map((p, i) => `<section class="s-step" data-title="${esc(p.title)}"><div class="s-card"><p class="s-kicker">Principle ${i + 1} of ${builder.principles.length}</p><h2>${esc(p.title)}</h2><p class="s-lede">${esc(p.text)}</p></div></section>`).join('')}
   ${builds.map((p, i) => `<section class="s-step" data-title="${esc(p.name)}"><div class="s-card">${buildCard(p, i)}</div></section>`).join('')}
   <section class="s-step" data-title="Toolbelt"><div class="s-card"><h2>Toolbelt &amp; next</h2>
     <div class="s-chips">${builder.stack.map((s) => `<span>${esc(s)}</span>`).join('')}</div>
@@ -45,7 +44,7 @@ document.getElementById('main').innerHTML = `
     <div class="s-cert"><span>Certifications</span><b>Anthropic certifications</b><p>Coming soon</p></div>
   </div></section>`;
 
-const STEP = { office: 1 + builder.principles.length + builds.findIndex((b) => b.id === 'veritomix-office'), animus: 1 + builder.principles.length + builds.findIndex((b) => b.id === 'animus') };
+const STEP = { office: 1 + builds.findIndex((b) => b.id === 'veritomix-office'), animus: 1 + builds.findIndex((b) => b.id === 'animus') };
 
 runPage({
   active: 'builder',
@@ -56,7 +55,7 @@ runPage({
     const nodeMat = (c) => new THREE.MeshStandardMaterial({ color: 0xf2ece4, emissive: c, emissiveIntensity: 0.6, flatShading: true });
     const lineTo = (a, b, op = 0.25) => new THREE.Line(new THREE.BufferGeometry().setFromPoints([a, b]), new THREE.LineBasicMaterial({ color: 0xf2ece4, transparent: true, opacity: op }));
 
-    // ── Constellation (intro, principles, Virtual PET): agent roles around a human core.
+    // ── Constellation (intro and toolbelt): agent roles around a human core.
     const star = new THREE.Group();
     star.position.set(5.2, 0, 0);
     scene.add(star);
@@ -121,12 +120,11 @@ runPage({
     router.add(lineTo(hub.position, gate.position, 0.35));
     const flow = [...Array(10)].map(() => { const m = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6), new THREE.MeshBasicMaterial({ color: 0xffc46b })); router.add(m); return m; });
 
-    const nSteps = 2 + builder.principles.length + builds.length;
+    const nSteps = 2 + builds.length;
     return {
       keyframes: [
         { pos: [0, 1, 22], look: [1.2, 0, 0] },
-        ...builder.principles.map((_, i) => ({ pos: [1 + Math.sin(i * 1.3) * 3, 1 + Math.cos(i) * 2, 17], look: [2, 0, 0] })),
-        ...builds.map((b) => (b.id === 'virtualpet' ? { pos: [1, 2, 18], look: [1.6, 0, 0] } : { pos: [1.4, 0.6, 15], look: [2.2, 0.3, 0] })),
+        ...builds.map(() => ({ pos: [1.4, 0.6, 15], look: [2.2, 0.3, 0] })),
         { pos: [0, 0, 22], look: [0.5, 0, 0] },
       ].slice(0, nSteps),
       update(t, p) {
@@ -141,9 +139,8 @@ runPage({
         star.rotation.y = time * 0.08 + p * 0.4;
         shell.rotation.x = time * 0.1;
         core.scale.setScalar(1 + Math.sin(time * 2) * 0.05);
-        const gateP = Math.max(0, 1 - Math.abs(p - 2)); // "humans hold the gates": faster return pulses
         nodes.forEach((nd) => {
-          const s = (time * (0.25 + gateP * 0.2) + nd.phase) % 1, k = s < 0.5 ? s * 2 : 2 - s * 2;
+          const s = (time * 0.25 + nd.phase) % 1, k = s < 0.5 ? s * 2 : 2 - s * 2;
           nd.pulse.position.copy(nd.p).multiplyScalar(k);
           nd.pulse.material.color.set(s < 0.5 ? 0xff7a5a : 0xf2ece4);
           nd.m.rotation.y = time + nd.phase * 6;
