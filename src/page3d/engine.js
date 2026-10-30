@@ -26,6 +26,7 @@ export function runPage({ active, build }) {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
   } catch (e) {
     document.body.classList.add('no-webgl');
+    import('../kage/widget.js').then((m) => m.mountKage());
     return;
   }
   renderer.setPixelRatio(Math.min(devicePixelRatio, lowPower ? 1.5 : 1.75));
@@ -174,4 +175,5 @@ export function runPage({ active, build }) {
     if (composer) composer.render(); else renderer.render(scene, camera);
   });
   document.body.classList.add('ready');
+  import('../kage/widget.js').then((m) => m.mountKage());
 }

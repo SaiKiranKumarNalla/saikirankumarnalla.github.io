@@ -173,3 +173,5 @@ a{color:inherit}
 }
 .p-card-link{display:block;text-decoration:none;color:inherit;transition:border-color .2s}
 .p-card-link:hover{border-color:var(--accent)}
+.w-hero{pointer-events:none}
+.w-hero a,.w-hero button{pointer-events:auto}

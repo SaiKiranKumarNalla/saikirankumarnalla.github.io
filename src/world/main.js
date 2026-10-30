@@ -121,14 +121,29 @@ if (petals) scene.add(petals.points);
 const fireflies = reduceMotion ? null : makeFireflies(lowPower ? 30 : 60);
 if (fireflies) scene.add(fireflies.points);
 
-// ── Kage, the guide, stands in the plaza ──
+// ── Kage, the guide: waits in the plaza and walks to whichever building is opened ──
 const kage = makeKageCharacter();
-kage.position.set(0, 0, 5);
+const KAGE_HOME = new THREE.Vector3(0, 0, 5);
+kage.position.copy(KAGE_HOME);
 scene.add(kage);
 const kageLight = new THREE.PointLight(0xffc89a, 14, 9, 1.6);
-kageLight.position.set(1.5, 4.2, 7.5);
 scene.add(kageLight);
 let kageYawTarget = 0;
+let route = []; // waypoints; walks around the plaza ring rather than through buildings
+function routeTo(target, targetAngle) {
+  const pts = [];
+  const r = Math.hypot(kage.position.x, kage.position.z);
+  const a0 = Math.atan2(kage.position.z, kage.position.x);
+  let d = targetAngle - a0;
+  d = ((d + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+  if (r > 11 && Math.abs(d) > 0.3) {
+    const steps = Math.ceil(Math.abs(d) / (Math.PI / 6));
+    for (let i = 0; i <= steps; i++) pts.push(new THREE.Vector3(Math.cos(a0 + (d * i) / steps) * 11.5, 0, Math.sin(a0 + (d * i) / steps) * 11.5));
+  }
+  pts.push(target.clone());
+  route = pts;
+}
+const doorOf = (b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2);
 
 function applyTheme() {
   const p = PALETTES[theme()];
@@ -206,7 +221,7 @@ function openPanel(id, { push = true } = {}) {
   document.title = `${def.title} | Sai Kiran Kumar Nalla, PhD`;
   focus = byPanel[id] || null;
   if (focus) {
-    kageYawTarget = Math.atan2(focus.group.position.x - kage.position.x, focus.group.position.z - kage.position.z);
+    routeTo(doorOf(focus), focus.angle);
     speech.say(focus.def.kage, clock.elapsedTime, 5000);
   }
   $('wPanelTitle').focus({ preventScroll: true });
@@ -216,7 +231,7 @@ function closePanel({ push = true } = {}) {
   setTimeout(() => { if (!panelEl.classList.contains('open')) panelEl.hidden = true; }, 400);
   Object.values(menuBtns).forEach((a) => a.classList.remove('active'));
   focus = null;
-  kageYawTarget = Math.atan2(camera.position.x - kage.position.x, camera.position.z - kage.position.z);
+  routeTo(KAGE_HOME, Math.atan2(KAGE_HOME.z, KAGE_HOME.x));
   if (push && location.hash) history.pushState(null, '', location.pathname);
   document.title = 'Sai Kiran Kumar Nalla, PhD | Medical Imaging Scientist & AI Builder';
 }
@@ -316,11 +331,26 @@ function step() {
   camera.position.copy(camPos);
   camera.lookAt(camLook);
 
-  // Kage turns toward what you're looking at and gestures while talking.
-  if (!focus) kageYawTarget = Math.atan2(camera.position.x - kage.position.x, camera.position.z - kage.position.z);
-  kage.rotation.y += (((kageYawTarget - kage.rotation.y + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * Math.min(1, dt * 3);
-  kage.userData.setTalking(speech.visible);
-  kage.userData.animate(t, false, dt);
+  // Kage walks his route; when he arrives he faces the open building (or the camera at home).
+  let walking = false;
+  if (route.length) {
+    tmp.subVectors(route[0], kage.position).setY(0);
+    const dist = tmp.length();
+    if (dist < 0.3) route.shift();
+    else {
+      walking = true;
+      kage.position.addScaledVector(tmp.normalize(), Math.min(dist, (reduceMotion ? 40 : 8) * dt));
+      kageYawTarget = Math.atan2(tmp.x, tmp.z);
+    }
+  }
+  if (!walking) {
+    const look = focus ? focus.group.position : camera.position;
+    kageYawTarget = Math.atan2(look.x - kage.position.x, look.z - kage.position.z);
+  }
+  kage.rotation.y += (((kageYawTarget - kage.rotation.y + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * Math.min(1, dt * (walking ? 8 : 3));
+  kage.userData.setTalking(speech.visible && !walking);
+  kage.userData.animate(t, walking, dt);
+  kageLight.position.set(kage.position.x + 1.5, 4.2, kage.position.z + 2.5);
   speech.tick(t);
 
   if (!reduceMotion) {
@@ -360,6 +390,7 @@ if (renderer) {
   $('wLoader').classList.add('done');
 }
 addEventListener('pageshow', (e) => { if (e.persisted) $('wLoader').classList.add('done'); });
+import('../kage/widget.js').then((m) => m.mountKage());
 
 // Deep links: /#publications opens straight to that panel.
 const initial = location.hash.slice(1);

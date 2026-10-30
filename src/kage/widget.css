@@ -1,0 +1,33 @@
+/* Kage assistant widget (bottom-right on every page). Uses the site tokens from world.css. */
+#kageDock{position:fixed;right:18px;bottom:16px;z-index:45;display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-family:'DM Sans',system-ui,sans-serif}
+.kg-btn{position:relative;width:84px;height:104px;padding:0;border:0;background:radial-gradient(ellipse at 50% 70%,rgba(210,74,74,.28),transparent 70%);cursor:pointer;border-radius:50% 50% 20px 20px}
+.kg-btn canvas{width:84px;height:104px;display:block}
+.kg-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.kg-tip{position:absolute;right:88px;bottom:30px;white-space:nowrap;font-size:.78rem;font-weight:600;padding:6px 10px;border-radius:14px;background:var(--panel);border:1px solid var(--line);color:var(--text);opacity:0;transform:translateX(6px);transition:opacity .2s,transform .2s;pointer-events:none}
+.kg-btn:hover .kg-tip{opacity:1;transform:none}
+.kg-static{background:var(--accent-strong);border-radius:50%;width:56px;height:56px}
+.kg-static canvas{display:none}
+.kg-static::after{content:'影';color:#fff;font-family:'Noto Serif JP',serif;font-size:1.4rem}
+.kg-panel{width:min(370px,calc(100vw - 32px));height:min(520px,calc(100vh - 160px));display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;color:var(--text)}
+.kg-panel[hidden]{display:none}
+.kg-panel header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.kg-panel header b{display:block;font-family:'Zen Antique',serif;font-weight:400;font-size:1.15rem}
+.kg-panel header span{font-size:.75rem;color:var(--faint)}
+.kg-x{background:none;border:0;color:var(--muted);font-size:1.4rem;cursor:pointer}
+.kg-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.kg-msg{max-width:88%;padding:9px 12px;border-radius:12px;font-size:.88rem;line-height:1.5}
+.kg-msg.kage{align-self:flex-start;background:var(--chip);border:1px solid var(--line)}
+.kg-msg.user{align-self:flex-end;background:var(--accent-strong);color:#fff}
+.kg-msg.action{cursor:pointer;border-color:var(--accent);color:var(--accent);font-weight:600}
+.kg-msg.typing{display:flex;gap:4px}
+.kg-msg.typing i{width:6px;height:6px;border-radius:50%;background:var(--faint);animation:kg-dot 1s infinite}
+.kg-msg.typing i:nth-child(2){animation-delay:.15s}.kg-msg.typing i:nth-child(3){animation-delay:.3s}
+@keyframes kg-dot{50%{opacity:.25;transform:translateY(-3px)}}
+.kg-quick{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+.kg-quick button{font:inherit;font-size:.74rem;padding:5px 10px;border-radius:14px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer}
+.kg-quick button:hover{border-color:var(--accent);color:var(--text)}
+.kg-form{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.kg-form input{flex:1;min-width:0;font:inherit;font-size:.9rem;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--chip);color:var(--text);outline:none}
+.kg-form input:focus{border-color:var(--accent)}
+.kg-form button{border:0;border-radius:10px;background:var(--accent-strong);color:#fff;width:40px;cursor:pointer}
+@media (max-width:860px){#kageDock{right:10px;bottom:10px}.kg-btn,.kg-btn canvas{width:64px;height:80px}}
