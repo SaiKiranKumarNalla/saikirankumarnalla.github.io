@@ -100,3 +100,69 @@ export function makeEagle() {
     },
   };
 }
+
+// Small cherry-blossom shrubs scattered between the buildings and along the paths.
+export function makeBlossomShrubs({ count, inner, outer, avoid }) {
+  const group = new THREE.Group();
+  const stemGeo = new THREE.CylinderGeometry(0.05, 0.08, 0.7, 5); stemGeo.translate(0, 0.35, 0);
+  const bloomGeo = new THREE.IcosahedronGeometry(0.55, 0);
+  const stems = new THREE.InstancedMesh(stemGeo, new THREE.MeshStandardMaterial({ color: 0x4a2e22, roughness: 0.9 }), count);
+  const blooms = new THREE.InstancedMesh(bloomGeo, new THREE.MeshStandardMaterial({ roughness: 0.85, flatShading: true }), count * 2);
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3(), c = new THREE.Color();
+  const pinks = [0xf7b6c8, 0xee8fae, 0xffd3df, 0xe0708f];
+  let placed = 0;
+  for (let i = 0; placed < count && i < count * 30; i++) {
+    const a = Math.random() * Math.PI * 2, r = inner + Math.random() * (outer - inner);
+    p.set(Math.cos(a) * r, 0, Math.sin(a) * r);
+    if (avoid.some((v) => v.distanceTo(p) < 6.5)) continue;
+    const k = 0.7 + Math.random() * 0.7;
+    q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.random() * 6);
+    m.compose(p, q, s.set(k, k, k)); stems.setMatrixAt(placed, m);
+    for (let j = 0; j < 2; j++) {
+      const b = p.clone().add(new THREE.Vector3((Math.random() - 0.5) * 0.5 * k, (0.75 + j * 0.25) * k, (Math.random() - 0.5) * 0.5 * k));
+      const bk = k * (j ? 0.7 : 1);
+      m.compose(b, q, s.set(bk, bk * 0.8, bk)); blooms.setMatrixAt(placed * 2 + j, m);
+      blooms.setColorAt(placed * 2 + j, c.set(pinks[(placed + j) % pinks.length]));
+    }
+    placed++;
+  }
+  stems.count = placed; blooms.count = placed * 2;
+  blooms.castShadow = true;
+  group.add(stems, blooms);
+  return group;
+}
+
+// A winding stream that flows in from the forest and into the pond (scrolling ripples in the shader).
+export function makeStream(points, width = 2.4) {
+  const curve = new THREE.CatmullRomCurve3(points.map(([x, z]) => new THREE.Vector3(x, 0.04, z)));
+  const N = 120, pos = [], uv = [], idx = [];
+  const up = new THREE.Vector3(0, 1, 0), side = new THREE.Vector3();
+  for (let i = 0; i <= N; i++) {
+    const u = i / N, pt = curve.getPointAt(u), tan = curve.getTangentAt(u);
+    side.crossVectors(tan, up).normalize().multiplyScalar(width * (0.8 + 0.3 * Math.sin(u * 17)) / 2);
+    pos.push(pt.x - side.x, pt.y, pt.z - side.z, pt.x + side.x, pt.y, pt.z + side.z);
+    uv.push(0, u * 30, 1, u * 30);
+    if (i < N) { const k = i * 2; idx.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  geo.setIndex(idx);
+  const uniforms = { uTime: { value: 0 }, uDeep: { value: new THREE.Color(0x2f6f8a) }, uShallow: { value: new THREE.Color(0x8fd0dc) } };
+  const mat = new THREE.ShaderMaterial({
+    uniforms, transparent: true, depthWrite: false,
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+    fragmentShader: `uniform float uTime; uniform vec3 uDeep; uniform vec3 uShallow; varying vec2 vUv;
+      void main(){
+        float edge = smoothstep(0.0, 0.25, vUv.x) * smoothstep(1.0, 0.75, vUv.x);
+        float flow = vUv.y - uTime * 1.2;
+        float ripple = sin(flow * 6.0 + sin(vUv.x * 9.0 + uTime) * 1.5) * 0.5 + 0.5;
+        float sparkle = smoothstep(0.92, 1.0, sin(flow * 13.0 + vUv.x * 20.0) * 0.5 + 0.5);
+        vec3 col = mix(uShallow, uDeep, edge) + ripple * 0.06 + sparkle * 0.35;
+        gl_FragColor = vec4(col, 0.55 + edge * 0.35);
+      }`,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.renderOrder = 1;
+  return { mesh, update(t) { uniforms.uTime.value = t; }, setNight(n) { uniforms.uDeep.value.set(n ? 0x1a2c44 : 0x2f6f8a); uniforms.uShallow.value.set(n ? 0x4a6a8a : 0x8fd0dc); } };
+}

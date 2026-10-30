@@ -9,7 +9,7 @@ import { BUILDINGS, MENU } from './buildings.js';
 import { PANELS } from './panels.js';
 import { makeBuilding, makeTreeInstances, makeLanterns } from './props.js';
 import { currentSeason, SEASONS, wind, makeWeather } from './seasons.js';
-import { makeGodRays, makeWindTrail, makeEagle } from './flair.js';
+import { makeGodRays, makeWindTrail, makeEagle, makeBlossomShrubs, makeStream } from './flair.js';
 import { makeKageCharacter } from './character.js';
 import { makeSky, makeMoon, makeStars, makeMountains, makeFireflies, makePond, makeBamboo, makeBanner, makeRocks } from './atmosphere.js';
 import { makeSpeech } from './companion.js';
@@ -116,6 +116,15 @@ for (let i = 0; i < 8; i++) {
   ban.lookAt(0, 0, 0); scene.add(ban); animated.push(ban);
 }
 scene.add(makeRocks(lowPower ? 22 : 40, 33, 70));
+// A stream winds in from the forest and feeds the pond.
+const stream = (() => {
+  const [, , a] = mid(4, 27);
+  const pts = [29, 38, 48, 58, 70, 88].map((r, i) => { const w = a + Math.sin(i * 1.7) * 0.12; return [Math.cos(w) * r, Math.sin(w) * r]; });
+  pts.forEach(([x, z]) => avoid.push(new THREE.Vector3(x, 0, z)));
+  return makeStream(pts);
+})();
+scene.add(stream.mesh);
+scene.add(makeBlossomShrubs({ count: lowPower ? 40 : 90, inner: 12, outer: 40, avoid: [...avoid, ...buildings.map((b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2))] }));
 const season = currentSeason();
 document.documentElement.dataset.season = season;
 scene.add(makeTreeInstances({ count: lowPower ? 90 : 190, inner: 33, outer: 85, avoid }));
@@ -157,14 +166,14 @@ function applyTheme() {
   let p = PALETTES[theme()];
   // Fall afternoons glow: a low golden-hour sun, amber haze and warm light.
   if (!p.night && season === 'fall') p = { ...p, sky: [0xf2b46a, 0xf7d29a, 0xf4e2c4], fog: 0xf0d2a4, hemiSky: 0xffd9a0, moon: 0xffb050, moonI: 2.8, mountains: [0xc08a68, 0xd8ae88] };
-  rays?.setStyle(p.night ? 0x9fb4ff : season === 'fall' ? 0xffc070 : 0xfff0c8, p.night ? 0.05 : season === 'rainy' ? 0.04 : 0.13);
+  rays?.setStyle(p.night ? 0x9fb4ff : season === 'fall' ? 0xffc070 : 0xfff0c8, p.night ? 0.05 : season === 'rainy' ? 0.03 : 0.08);
   sky.set(...p.sky);
   scene.fog.color.set(p.fog);
   groundMat.color.set(theme() === 'light' ? SEASONS[season].ground : p.ground); pathMat.color.set(p.path);
   hemi.color.set(p.hemiSky); hemi.groundColor.set(p.hemiGround); hemi.intensity = p.hemi;
   moonLight.color.set(p.moon); moonLight.intensity = p.moonI;
   mountains.userData.mats.forEach((m, i) => m.color.set(p.mountains[i]));
-  moon.setNight(p.night); stars.visible = p.night; fireflies?.setVisible(p.night);
+  stream.setNight(p.night); moon.setNight(p.night); stars.visible = p.night; fireflies?.setVisible(p.night);
   if (renderer) renderer.toneMappingExposure = p.exposure;
   if (bloom) bloom.strength = p.bloom;
   lanterns.setIntensity(p.lantern);
@@ -443,6 +452,7 @@ function step() {
     const w = wind(t);
     weather?.update(dt, t, w, kage.position);
     rays.update(t);
+    stream.update(t);
     eagle.update(t);
     const hb = !focus && buildings.find((b) => b.hovered);
     trail.point(kage.position, hb ? doorOf(hb) : null);
