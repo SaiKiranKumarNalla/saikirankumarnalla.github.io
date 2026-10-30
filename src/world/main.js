@@ -377,7 +377,7 @@ function step() {
     if (dist < 0.3) route.shift();
     else {
       walking = true;
-      kage.position.addScaledVector(tmp.normalize(), Math.min(dist, (reduceMotion ? 40 : 11) * dt));
+      kage.position.addScaledVector(tmp.normalize(), Math.min(dist, (reduceMotion ? 40 : 19) * dt));
       kageYawTarget = Math.atan2(tmp.x, tmp.z);
     }
   }
@@ -390,8 +390,8 @@ function step() {
     const len = Math.hypot(mx, mz);
     if (len) {
       walking = true;
-      kage.position.x += (mx / len) * 9 * dt;
-      kage.position.z += (mz / len) * 9 * dt;
+      kage.position.x += (mx / len) * 16 * dt;
+      kage.position.z += (mz / len) * 16 * dt;
       kageYawTarget = Math.atan2(mx, mz);
       // Stay in the village and out of the buildings.
       const r = Math.hypot(kage.position.x, kage.position.z);

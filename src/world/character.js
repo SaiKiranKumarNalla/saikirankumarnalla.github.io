@@ -109,32 +109,46 @@ export function makeKageCharacter() {
   shadow.position.y = 0.02;
   root.add(shadow);
 
-  let phase = 0, talk = 0, present = 0, presentTarget = 0;
+  let phase = 0, talk = 0, present = 0, presentTarget = 0, med = 0, idle = 0, still = 0;
   root.userData.setTalking = (v) => { talk = v ? 1 : 0; };
   // Presenting: the right arm lifts out to the side, palm toward what he is showing.
   root.userData.setPresenting = (v) => { presentTarget = v ? 1 : 0; };
   // World position of the presenting hand (where a presented panel unfolds from).
   root.userData.handWorld = (out) => arms[1].localToWorld(out.set(0, -0.74, 0.02));
   root.userData.animate = (t, moving, dt) => {
-    phase += moving ? dt * 9 : 0;
+    dt = dt || 0.016;
+    // Running: quick stride, big arm swing, leaning into it.
+    phase += moving ? dt * 15 : 0;
     const swing = moving ? Math.sin(phase) : 0;
-    legs[0].rotation.x = swing * 0.6;
-    legs[1].rotation.x = -swing * 0.6;
-    arms[0].rotation.x = -swing * 0.5;
-    arms[1].rotation.x = swing * 0.5;
-    body.position.y = moving ? Math.abs(Math.cos(phase)) * 0.07 : Math.sin(t * 1.6) * 0.015;
-    head.rotation.y = moving ? 0 : Math.sin(t * 0.7) * 0.15;
+    // At rest he settles into floating meditation (cross-legged, hands in his lap, eyes closed).
+    idle = moving || talk || presentTarget ? 0 : idle + dt;
+    const medTarget = idle > 1.2 ? 1 : 0;
+    med += (medTarget - med) * Math.min(1, dt * (medTarget ? 2 : 8));
+    const m = med;
+    legs[0].rotation.x = swing * 0.9 * (1 - m) - 1.45 * m;
+    legs[1].rotation.x = -swing * 0.9 * (1 - m) - 1.45 * m;
+    legs[0].rotation.z = -0.9 * m;
+    legs[1].rotation.z = 0.9 * m;
+    arms[0].rotation.x = -swing * 0.9 * (1 - m) - 0.75 * m;
+    arms[1].rotation.x = swing * 0.9 * (1 - m) - 0.75 * m;
+    arms[0].rotation.z = -0.35 * m;
+    body.rotation.x = moving ? 0.22 : 0;
+    const float = 0.55 + Math.sin(t * 1.3) * 0.12;
+    body.position.y = moving ? Math.abs(Math.cos(phase)) * 0.12 : Math.sin(t * 1.6) * 0.015 * (1 - m) + float * m - 0.45 * m;
+    shadow.scale.setScalar(1 - 0.35 * m);
+    head.rotation.y = moving ? 0 : Math.sin(t * 0.7) * 0.15 * (1 - m);
+    head.rotation.x = 0.12 * m;
     head.rotation.z = moving ? swing * 0.03 : 0;
     const blink = (t % 3.8) < 0.11 ? 0.1 : 1;
-    eyes.forEach((e) => (e.scale.y = blink));
+    eyes.forEach((e) => (e.scale.y = m > 0.6 ? 0.12 : blink));
     mouth.scale.y = talk ? 1 + Math.abs(Math.sin(t * 14)) * 1.6 : 1;
     if (!moving && talk) arms[1].rotation.x = -0.35 + Math.sin(t * 3) * 0.1; // gestures while speaking
-    present += (presentTarget - present) * Math.min(1, (dt || 0.016) * 6);
+    present += (presentTarget - present) * Math.min(1, dt * 6);
     if (present > 0.01 && !moving) {
       arms[1].rotation.z = 1.35 * present + Math.sin(t * 1.5) * 0.04 * present;
       arms[1].rotation.x = -0.45 * present;
       head.rotation.y = 0.35 * present;
-    } else arms[1].rotation.z = 0;
+    } else arms[1].rotation.z = 0.35 * m;
   };
   return root;
 }
