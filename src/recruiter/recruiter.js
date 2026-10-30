@@ -5,7 +5,7 @@ import repos from '../../content/repos.json';
 import projects from '../../content/projects.json';
 import builder from '../../content/ai-builder.json';
 import thesis from '../../content/thesis.json';
-import { renderNav } from '../page3d/nav.js';
+import { renderNav, wireTheme } from '../page3d/nav.js';
 import './recruiter.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -86,13 +86,5 @@ document.getElementById('main').innerHTML = `
 </section>`;
 
 renderNav(null);
-const themeBtn = document.getElementById('themeBtn');
-const syncTheme = () => { themeBtn.textContent = document.documentElement.dataset.theme === 'light' ? '☀' : '☾'; };
-themeBtn.addEventListener('click', () => {
-  const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-  document.documentElement.dataset.theme = next;
-  try { localStorage.setItem('sai-theme', next); } catch (e) {}
-  syncTheme();
-});
-syncTheme();
+wireTheme();
 import('../kage/widget.js').then((m) => m.mountKage());

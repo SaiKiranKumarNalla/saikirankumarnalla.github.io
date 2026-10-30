@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shāpanang II — Locked Story Preview</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Noto+Serif+JP:wght@400;700;900&family=Space+Mono&family=DM+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/src/story/story.css">
+<script>try { const t = localStorage.getItem('sai-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <link rel="preload" as="image" href="story-assets/shapanang-ii/cover.webp" fetchpriority="high">
 <link rel="preload" as="image" href="story-assets/shapanang-fragment-02-opening-village.webp">
 <meta name="description" content="A locked preview of Shāpanang II, a fictional cinematic story by Sai Kiran Kumar Nalla.">
@@ -25,16 +28,13 @@
 @media(max-width:800px){.story-page{padding:1rem 1rem 4rem}.story-hero{grid-template-columns:1fr;text-align:center;padding:1.5rem}.cover-frame{margin:0 auto}.story-meta{justify-content:center}.screen{min-height:55vh;padding:.8rem}.story-page-img{max-height:58vh}.controls{flex-direction:column}.kage-summary{flex-direction:column;text-align:center}.story-top{padding-top:1rem}}
 </style>
 </head>
-<body>
-<div class="v-accent"></div>
-<div class="bg-kanji">物語</div>
+<body class="st-page">
+<header id="nav"></header>
+
 <main class="story-page">
   <div class="story-top">
-    <a class="story-brand" href="index.html" aria-label="Return to home">
-      <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><rect y="3" width="32" height="6" fill="#0a0a0b" stroke="#8b1a1a" stroke-width="0.8"/><circle cx="16" cy="6" r="2.5" fill="none" stroke="#8b1a1a" stroke-width="0.6"/></svg>
-      <span class="story-brand-mark">NALLA<span>.</span></span>
-    </a>
-    <a class="story-home" href="story.html">← Fiction Shelf</a>
+    
+    <a class="story-home" href="/sections/life.html#step-2">← Fiction · Off the Clock</a>
   </div>
 
   <section class="story-hero reveal">
@@ -57,7 +57,7 @@
         <div class="locked-kanji">封</div>
         <div class="locked-title">The remaining pages are sealed</div>
         <p class="locked-text">This is only a curated public fragment preview. The full PDF is not served here, and the complete sequence remains sealed. To read the complete Shāpanang II archive, contact Sensei Sai and request access.</p>
-        <div class="locked-actions"><a class="story-btn" href="contact.html">Contact Sai</a><button class="story-btn" id="askKageBtn2">Ask Kage for Summary</button></div>
+        <div class="locked-actions"><a class="story-btn" href="/sections/contact.html">Contact Sai</a><button class="story-btn" id="askKageBtn2">Ask Kage for Summary</button></div>
       </div>
     </div>
     <div class="controls">
@@ -72,11 +72,6 @@
     <button class="story-btn" id="askKageBtn">Ask Kage</button>
   </section>
 </main>
-<script src="theme.js"></script>
-<script src="transitions.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="kage-3d.js"></script>
-<script src="kage.js?v=story-summary-visible"></script>
 <script>
 (function(){
   const pages=[
@@ -168,6 +163,6 @@
   render();
 })();
 </script>
-<script src="dynamic.js"></script>
+<script type="module" src="/src/story/story.js"></script>
 </body>
 </html>

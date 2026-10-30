@@ -1,0 +1,13 @@
+/* Story reading pages: keep each page's own reader, in the new site's look.
+   The pages' inline styles use the old colour names; map them onto the new tokens. */
+@import '../world/world.css';
+
+:root{--paper:var(--text);--mist:var(--muted);--steel:var(--faint);--blood:var(--accent-strong);--blood-glow:var(--accent);--ghost:var(--chip);--ghost-line:var(--line)}
+html,body{height:auto;overflow-y:auto;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif}
+body>main{padding-top:84px !important}
+.st-page .w-nav{background:var(--bg);border-bottom:1px solid var(--line)}
+.reveal{opacity:1;transform:none}
+.story-top,.novel-top{justify-content:flex-start !important}
+.story-home,.novel-home{border-radius:16px}
+:root[data-theme="light"] .cinema,:root[data-theme="light"] .screen{background:#141114 !important}

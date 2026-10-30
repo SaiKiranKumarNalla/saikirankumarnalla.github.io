@@ -102,6 +102,8 @@ export function mountKage() {
     busy = false;
     state = 'idle';
   }
+  // Pages can hand Kage a question directly (e.g. the story pages' "Ask Kage for a summary").
+  window.KageAsk = (text) => { toggle(true); send(text); return true; };
   dock.querySelector('.kg-form').addEventListener('submit', (e) => { e.preventDefault(); const v = input.value; input.value = ''; send(v); });
   dock.querySelectorAll('.kg-quick button').forEach((b) => b.addEventListener('click', () => send(b.textContent)));
 

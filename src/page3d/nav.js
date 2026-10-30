@@ -35,6 +35,19 @@ export function wireDropdown(root) {
   document.addEventListener('click', () => root.querySelectorAll('.w-dd.open').forEach((d) => { d.classList.remove('open'); d.querySelector('.w-dd-btn').setAttribute('aria-expanded', 'false'); }));
 }
 
+// Light/dark toggle for pages without the 3D engine (the engine wires its own, with scene colours).
+export function wireTheme() {
+  const btn = document.getElementById('themeBtn');
+  const sync = () => { btn.textContent = document.documentElement.dataset.theme === 'light' ? '☀' : '☾'; };
+  btn.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('sai-theme', next); } catch (e) {}
+    sync();
+  });
+  sync();
+}
+
 export function renderNav(active) {
   const header = document.getElementById('nav');
   header.className = 'w-nav';
