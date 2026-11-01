@@ -604,11 +604,11 @@ runPage({
 
     function reveal(sys, d) {
       const s = sys.s;
-      const a = clamp01((0.62 - Math.abs(d)) / 0.34);
+      const a = clamp01((0.52 - Math.abs(d)) / 0.3);
       s.a = a;
       s.g.visible = a > 0.001;
       // Outgoing systems drift up and turn away; incoming ones rise from below.
-      s.g.position.y = Math.sign(d) * eio(clamp01(Math.abs(d) / 0.75)) * 2.6;
+      s.g.position.y = Math.sign(d) * eio(clamp01(Math.abs(d) / 0.6)) * 3.2;
       s.g.rotation.y = -d * 0.35;
       if (!s.g.visible) return;
       for (const e of s.els) {
