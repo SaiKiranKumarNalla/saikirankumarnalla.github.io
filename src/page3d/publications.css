@@ -1,0 +1,28 @@
+/* Publications page: metrics card, thumbnails, placeholders. Uses tokens from page3d.css. */
+.pub-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:1rem 0}
+.pub-tile{padding:12px 10px;border:1px solid var(--line);border-radius:12px;background:var(--chip);display:flex;flex-direction:column}
+.pub-tile b{font-family:'Zen Antique',serif;font-weight:400;font-size:1.7rem;line-height:1;color:var(--accent)}
+.pub-tile span{font-size:.72rem;color:var(--faint);margin-top:5px}
+.pub-src{margin:1.1rem 0 .2rem;font-size:.78rem;font-weight:600;color:var(--text);letter-spacing:.04em;text-transform:uppercase}
+.pub-chart{width:100%;height:auto;display:block;margin:.4rem 0}
+.pub-chart rect{fill:var(--accent)}
+.pub-chart rect.zero{fill:var(--line)}
+.pub-chart text{fill:var(--faint);font-size:10px;font-family:'DM Sans',sans-serif}
+.pub-chart text.v{fill:var(--text);font-weight:600}
+.pub-links{display:flex;flex-wrap:wrap;gap:8px;margin:.9rem 0 .3rem}
+.pub-links a{font-size:.82rem;font-weight:600;padding:6px 13px;border-radius:14px;border:1px solid var(--line);background:var(--chip);color:var(--text);text-decoration:none;transition:border-color .2s}
+.pub-links a:hover{border-color:var(--accent);color:var(--accent)}
+.pub-counts{display:flex;flex-wrap:wrap;gap:6px 14px;margin:.4rem 0 0;font-size:.82rem;color:var(--muted)}
+.pub-counts b{color:var(--text)}
+.pub-item{display:flex;gap:14px;align-items:flex-start}
+.pub-item>div{min-width:0;flex:1}
+.pub-thumb{flex:none;width:84px;aspect-ratio:3/4;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:var(--chip);display:block;padding:0;cursor:default;font:inherit;color:inherit}
+.pub-thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+a.pub-thumb{cursor:zoom-in}
+.pub-ph{display:flex;flex-direction:column;justify-content:space-between;height:100%;padding:9px 8px;text-align:left;border-top:3px solid var(--accent);box-sizing:border-box}
+.pub-ph i{font-style:normal;font-size:.58rem;line-height:1.3;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical}
+.pub-ph b{font-family:'Zen Antique',serif;font-weight:400;font-size:1.15rem;color:var(--accent);line-height:1}
+@media (max-width:700px){
+  .pub-thumb{width:64px}
+  .pub-tiles{gap:8px}.pub-tile b{font-size:1.4rem}
+}

@@ -1,0 +1,107 @@
+/* Skills & Tools page: constellation on the right, domain cards on the left. Tokens from world.css. */
+:root{--sk-learnt:#d24a4a;--sk-learning:#e0a84a;--sk-next:rgba(242,236,228,.5)}
+:root[data-theme="light"]{--sk-learnt:#a32424;--sk-learning:#a8701a;--sk-next:rgba(27,23,21,.45)}
+
+.sk-step{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:96px 0 40px}
+.sk-step .s-card{opacity:.35;transform:translateY(16px)}
+.sk-step.on .s-card{opacity:1;transform:none}
+.sk-foot{display:none}
+
+/* Filter bar: stays at the top of the column while the domains scroll by. */
+.sk-bar{position:sticky;top:74px;z-index:5;display:inline-flex;gap:4px;padding:4px;margin-top:84px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.sk-bar+.sk-step{padding-top:24px}
+.sk-bar button{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:999px;border:1px solid transparent;background:none;color:var(--muted);font:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.sk-bar button:hover{color:var(--text)}
+.sk-bar button[aria-pressed="true"]{background:var(--pill-on);border-color:var(--pill-on-line);color:var(--text)}
+.sk-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.sk-dot.sk-learnt{background:var(--sk-learnt)}
+.sk-dot.sk-learning{background:var(--sk-learning);animation:sk-pulse 1.8s ease-in-out infinite}
+.sk-dot.sk-next{border:1.5px dashed var(--sk-next);width:9px;height:9px;box-sizing:border-box}
+@keyframes sk-pulse{50%{transform:scale(.6);opacity:.55}}
+
+/* Legend */
+.sk-legend{list-style:none;padding:0;margin:1rem 0 .4rem;display:grid;gap:10px}
+.sk-legend li{display:flex;gap:12px;align-items:flex-start}
+.sk-legend svg{flex:none;width:22px;height:22px;margin-top:1px}
+.sk-legend .sk-learnt svg{color:var(--sk-learnt)}
+.sk-legend .sk-learning svg{color:var(--sk-learning);animation:sk-spin 3.2s linear infinite}
+.sk-legend .sk-next svg{color:var(--sk-next)}
+.sk-legend b{display:block;color:var(--text);font-size:.9rem;font-weight:600}
+.sk-legend span{display:block;font-size:.82rem;color:var(--faint);line-height:1.45}
+@keyframes sk-spin{to{transform:rotate(360deg)}}
+.sk-jump{display:flex;flex-wrap:wrap;gap:6px}
+.sk-jump button{font:inherit;font-size:.78rem;padding:6px 11px;border-radius:14px;background:var(--chip);border:1px solid var(--line);color:var(--text);cursor:pointer;transition:border-color .2s,transform .2s}
+.sk-jump button:hover{border-color:var(--accent);transform:translateY(-1px)}
+.sk-hint{margin-top:1rem}
+
+/* Skill rows */
+.sk-list{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:2px}
+.sk-row{display:flex;gap:12px;align-items:flex-start;padding:10px 10px;margin:0 -10px;border-radius:12px;outline:none;transition:background .25s,opacity .5s,transform .5s;opacity:0;transform:translateY(8px)}
+.sk-step.on .sk-row{opacity:1;transform:none;transition-delay:calc(var(--i) * 45ms),calc(var(--i) * 45ms),0s}
+.sk-row:hover,.sk-row:focus-visible{background:var(--chip)}
+.sk-row:focus-visible{box-shadow:0 0 0 2px var(--pill-on-line)}
+.sk-row.flash{animation:sk-flash 1.4s ease-out}
+@keyframes sk-flash{0%,30%{background:var(--pill-on)}100%{background:transparent}}
+.sk-logo{flex:none;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.sk-logo img{width:18px;height:18px;object-fit:contain;display:block}
+.sk-row[data-state="learnt"] .sk-logo{box-shadow:0 0 0 2px var(--sk-learnt)}
+.sk-row[data-state="learning"] .sk-logo{box-shadow:0 0 0 2px var(--sk-learning)}
+.sk-row[data-state="next"] .sk-logo{outline:1.5px dashed var(--sk-next);outline-offset:1px}
+.sk-body{min-width:0;flex:1}
+.sk-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.sk-head b{color:var(--text);font-weight:600;font-size:.93rem}
+.sk-body p{margin:.15rem 0 .2rem !important;font-size:.86rem !important;line-height:1.5 !important}
+.sk-used{display:block;font-size:.76rem;color:var(--faint)}
+.sk-used a{color:var(--accent);text-decoration:none}
+.sk-used a:hover{text-decoration:underline}
+.sk-badge{font-size:.66rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:8px;line-height:1.4}
+.sk-badge.sk-learnt{color:var(--sk-learnt);background:color-mix(in srgb,var(--sk-learnt) 14%,transparent)}
+.sk-badge.sk-learning{color:var(--sk-learning);background:color-mix(in srgb,var(--sk-learning) 16%,transparent)}
+.sk-badge.sk-next{color:var(--muted);border:1px dashed var(--sk-next)}
+html[data-sk-filter="learnt"] .sk-row:not([data-state="learnt"]),
+html[data-sk-filter="learning"] .sk-row:not([data-state="learning"]),
+html[data-sk-filter="next"] .sk-row:not([data-state="next"]){display:none}
+
+/* 3D labels */
+.sk-dlabel b{font-family:'Zen Antique',serif;font-weight:400;font-size:1.05rem}
+.sk-dlabel span{color:var(--faint)}
+.sk-plabel b{font-size:.74rem;font-weight:500;color:var(--muted)}
+
+/* Hover card for a star */
+.sk-tip{position:fixed;left:0;top:0;z-index:6;max-width:300px;padding:12px 14px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.3);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);pointer-events:none;animation:sk-in .18s ease-out}
+.sk-tip[hidden]{display:none}
+.sk-tip-head{display:flex;gap:10px;align-items:center}
+.sk-tip-head b{display:block;color:var(--text);font-size:.92rem;margin-bottom:3px}
+.sk-tip p{margin:.55rem 0 .35rem;color:var(--muted);font-size:.84rem;line-height:1.5}
+@keyframes sk-in{from{opacity:0;transform:translateY(4px)}}
+
+@media (min-width:861px){.s-main{padding-bottom:20vh}}
+
+/* Phones and narrow tablets: the scene fills the band at the top, the cards scroll in the panel below. */
+@media (max-width:860px){
+  html.sk-page,html.sk-page body{overflow:hidden;height:100%}
+  .sk-page .s-main{position:fixed;left:0;right:0;top:44vh;bottom:0;margin:0;width:auto;padding:0 14px 20px;overflow-y:auto;overscroll-behavior:contain;background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -18px 40px rgba(0,0,0,.25)}
+  .sk-bar{top:0;margin:10px 0 4px;display:flex;width:max-content;max-width:100%}
+  .sk-bar button{padding:6px 10px}
+  .sk-bar+.sk-step{padding-top:6px}
+  .sk-step{min-height:calc(56vh - 40px);padding:8px 0 18px;justify-content:flex-start}
+  .sk-step .s-card{opacity:.5;transform:none;padding:20px 18px;background:var(--panel);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
+  .sk-step.s-hero .s-card{padding:6px 2px}
+  .sk-page .s-main h1{font-size:2rem}
+  .sk-page .s-dots,.sk-page .s-footer{display:none}
+  .sk-foot{display:block;text-align:center;margin:8px 0 0}
+  .sk-tip{max-width:calc(100vw - 24px)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .sk-row,.sk-step .s-card{transition:none;opacity:1;transform:none}
+  .sk-legend .sk-learning svg,.sk-dot.sk-learning{animation:none}
+  .sk-row.flash{animation:none;background:var(--pill-on)}
+}
+@media (max-width:860px){.sk-dlabel b{font-size:.92rem}.sk-plabel b{font-size:.68rem}}
+/* world.css gives the phone Thesis submenu pointer-events:auto even while the menu is closed, which
+   swallows taps on the 3D band under the header. Scoped fix for this page; the shared rule needs the same. */
+@media (max-width:860px){.sk-page body:not(.menu-open) .w-dd-menu{pointer-events:none}}
+/* Full skill name under each star of the domain in view */
+.sk-slabel b{position:relative;display:block;transform:translate(-50%,30px);font-size:.7rem;font-weight:500;color:var(--text);white-space:nowrap;text-shadow:0 1px 6px var(--bg),0 0 3px var(--bg)}
+@media (max-width:860px){.sk-slabel b{font-size:.6rem;transform:translate(-50%,20px)}}

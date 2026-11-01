@@ -1,0 +1,65 @@
+/* Agentic AI page: diagram labels, phase stepper, card extras and the phone layout.
+   Uses the tokens from world.css / page3d.css; both themes follow data-theme on <html>. */
+
+/* Labels pinned to the 3D diagrams (positioned from builder.js). */
+.bd-labels{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:hidden}
+.bd-label{position:absolute;left:0;top:0;opacity:0;will-change:transform,opacity}
+.bd-label>*{position:absolute;left:0;top:0;white-space:nowrap}
+.bd-up>*{transform:translate(-50%,-100%)}
+.bd-down>*{transform:translate(-50%,0)}
+.bd-left>*{transform:translate(-100%,-50%)}
+.bd-right>*{transform:translate(0,-50%)}
+.bd-mid>*{transform:translate(-50%,-50%)}
+.bd-upr>*{transform:translate(0,-100%)}
+
+.bd-tag{display:flex;align-items:center;gap:7px;padding:4px 9px 4px 7px;border-radius:9px;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.18);font-size:.74rem;line-height:1.2;color:var(--text)}
+.bd-tag b{font-weight:600;display:block}
+.bd-tag i{font-style:normal;display:block;font-size:.66rem;color:var(--faint)}
+.bd-tag .bd-logo{flex:none;width:18px;height:18px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.bd-tag .bd-logo img{width:12px;height:12px;object-fit:contain;display:block}
+.bd-tag.bd-plain{background:none;border:0;box-shadow:none;padding:0;color:var(--faint);font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600;text-shadow:0 1px 6px var(--bg)}
+.bd-tag.bd-sm{padding:3px 7px;font-size:.7rem}
+.bd-tag.bd-chip{padding:2px 7px;font-size:.66rem;border-radius:6px}
+.bd-tag.bd-chip.on{border-color:var(--accent);color:var(--accent)}
+
+/* Phase stepper under each diagram: which part of the loop is playing now. */
+.bd-steps{display:flex;gap:4px;margin:0;padding:4px;list-style:none;border-radius:999px;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.bd-steps li{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.7rem;font-weight:500;color:var(--faint);transition:color .35s cubic-bezier(.2,.8,.2,1),background-color .35s cubic-bezier(.2,.8,.2,1)}
+.bd-steps li::before{content:attr(data-n);font-size:.62rem;font-weight:600;opacity:.8}
+.bd-steps li.on{background:var(--accent-strong);color:#fff}
+.bd-steps li.done{color:var(--text)}
+
+/* Card extras */
+.bd-watch{margin:1rem 0 .4rem;padding:10px 12px;border-left:2px solid var(--accent);background:var(--chip);border-radius:0 10px 10px 0;font-size:.9rem !important;line-height:1.6 !important}
+.bd-watch span{display:block;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
+.bd-gamelink{display:flex;align-items:center;gap:12px;margin:1rem 0 .2rem;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--chip);color:var(--text);text-decoration:none;transition:border-color .25s cubic-bezier(.2,.8,.2,1),transform .25s cubic-bezier(.2,.8,.2,1)}
+.bd-gamelink:hover,.bd-gamelink:focus-visible{border-color:var(--accent);transform:translateX(3px)}
+.bd-gamelink span{display:block;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.bd-gamelink b{display:block;font-weight:600;font-size:.92rem}
+.bd-gamelink em{margin-left:auto;font-style:normal;color:var(--accent);font-weight:600}
+.bd-agents{display:flex;flex-wrap:wrap;gap:6px;margin:.6rem 0 0;padding:0;list-style:none}
+.bd-agents li{display:inline-flex;align-items:center;gap:7px;padding:5px 11px 5px 6px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-size:.8rem;font-weight:500;line-height:1}
+.bd-agents .bd-logo{flex:none;width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.bd-agents .bd-logo img{width:15px;height:15px;object-fit:contain;display:block}
+
+@media (prefers-reduced-motion:reduce){
+  .bd-steps li,.bd-gamelink{transition:none}
+}
+
+/* Phones and narrow windows: the 3D sits in a band at the top, the cards scroll below it. */
+@media (max-width:860px){
+  html body #stage{height:46svh;z-index:4;border-bottom:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.18)}
+  html body .bd-labels{height:46svh;z-index:5}
+  .s-main .s-step{min-height:96svh;padding-top:calc(46svh + 18px);padding-bottom:24px;justify-content:flex-start}
+  .s-main .s-step:first-child{min-height:96svh}
+  .s-main .s-card{opacity:1;transform:none}
+  .bd-tag{font-size:.66rem;padding:3px 7px 3px 5px;gap:5px}
+  .bd-tag.bd-plain{font-size:.56rem}
+  .bd-tag.bd-chip,.bd-tag.bd-sm{font-size:.58rem;padding:2px 5px}
+  .bd-tag i{display:none}
+  .bd-tag .bd-logo{width:15px;height:15px}
+  .bd-tag .bd-logo img{width:10px;height:10px}
+  .bd-steps{gap:2px;padding:3px}
+  .bd-steps li{padding:3px 7px;font-size:.62rem}
+  .bd-steps li::before{display:none}
+}

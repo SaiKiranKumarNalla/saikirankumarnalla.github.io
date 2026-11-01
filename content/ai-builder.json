@@ -31,16 +31,47 @@
     "TotalSegmentator"
   ],
   "builds": [
+    "kage-game",
     "veritomix-office",
     "animus"
   ],
   "roadmap": [
-    "Cassoulet-trained surrogate simulator (NASGM-style)",
+    "Surrogate PET simulator trained on Monte Carlo output (NASGM-style)",
     "Heterogeneous PET synthesis from uniform activity maps (PAD-style)",
     "Small generative models for PET/CT simulation and dosimetry"
   ],
   "learning": {
     "repo": "Medical-AI-self-learning-tasks",
     "text": "45-day medical-imaging AI apprenticeship with a local Gemma tutor and Codex review."
+  },
+  "explainers": {
+    "kage-game": {
+      "watch": "Follow one task: it is queued on the ./crew board, built in its own git worktree by Claude Code or Codex, reviewed by a different agent, and merged to main only after I approve.",
+      "steps": [
+        "Queue",
+        "Build",
+        "Peer review",
+        "Merge"
+      ]
+    },
+    "veritomix-office": {
+      "watch": "Follow one request: Atlas splits it across the department heads, each works with a local specialist, and the results come back through Atlas and my approval gate before anything ships.",
+      "steps": [
+        "Request",
+        "Dispatch",
+        "Work",
+        "Report",
+        "Approve"
+      ]
+    },
+    "animus": {
+      "watch": "Follow the highlighted listing: the router sorts each opportunity into a lane, Claude or Codex opens the link to check it is real, and only verified items reach the board. Dead or duplicate links drop into the archive.",
+      "steps": [
+        "Discover",
+        "Classify",
+        "Verify",
+        "Board"
+      ]
+    }
   }
 }

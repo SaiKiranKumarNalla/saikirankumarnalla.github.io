@@ -1,5 +1,5 @@
 // Cinematic touches for the village: light shafts through the trees, a wind trail that points the way,
-// and an eagle circling overhead.
+// and black kites circling overhead.
 import * as THREE from 'three';
 
 // Soft additive light shafts slanting down through the tree belt.
@@ -64,39 +64,109 @@ export function makeWindTrail() {
   };
 }
 
-// An eagle gliding in wide circles above the village, with the occasional wing beat.
-export function makeEagle() {
-  const g = new THREE.Group();
-  const dark = new THREE.MeshStandardMaterial({ color: 0x3a2a20, roughness: 0.8, flatShading: true });
-  const light = new THREE.MeshStandardMaterial({ color: 0xe8e0d0, roughness: 0.8, flatShading: true });
-  const body = new THREE.Mesh(new THREE.ConeGeometry(0.35, 2.2, 5), dark);
-  body.rotation.x = Math.PI / 2;
-  g.add(body);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.28, 6, 5), light);
-  head.position.z = 1.15; g.add(head);
-  const beak = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.3, 4), new THREE.MeshStandardMaterial({ color: 0xe0a020 }));
-  beak.rotation.x = Math.PI / 2; beak.position.z = 1.45; g.add(beak);
-  const tail = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.05, 0.6), dark);
-  tail.position.z = -1.2; g.add(tail);
-  const wing = (s) => {
-    const w = new THREE.Group();
-    const shape = new THREE.Shape([new THREE.Vector2(0, 0.4), new THREE.Vector2(2.6 * s, 0.1), new THREE.Vector2(3.2 * s, -0.4), new THREE.Vector2(0, -0.5)]);
-    const m = new THREE.Mesh(new THREE.ShapeGeometry(shape), new THREE.MeshStandardMaterial({ color: 0x4a3426, side: THREE.DoubleSide, flatShading: true }));
-    m.rotation.x = -Math.PI / 2;
-    w.add(m);
-    g.add(w);
-    return w;
-  };
-  const wings = [wing(-1), wing(1)];
-  g.scale.setScalar(1.2);
+// Black kites (tobi), the bird you actually see over Japanese towns: they soar in wide thermal
+// circles on long, fingered wings, banking into the turn, with a short burst of deep wing beats now and then.
+// Each wing has an arm and a hand section, so a beat bends at the wrist instead of flapping like a plank.
+function wingGeometries() {
+  // Shapes are drawn in x (span, outward) and y (= forward), then laid flat.
+  const arm = new THREE.Shape();
+  arm.moveTo(0, 0.2); arm.lineTo(1.25, 0.24); arm.lineTo(1.25, -0.36);
+  arm.quadraticCurveTo(0.7, -0.52, 0, -0.42); arm.closePath();
+  const hand = new THREE.Shape();
+  hand.moveTo(0, 0.24);
+  hand.quadraticCurveTo(0.7, 0.24, 1.15, 0.06);
+  // Five slotted primaries ("fingers") along the outer trailing edge.
+  const tips = [[1.42, -0.02], [1.46, -0.12], [1.42, -0.22], [1.32, -0.31], [1.16, -0.38]];
+  tips.forEach(([x, y], k) => {
+    hand.lineTo(x, y);
+    const n = tips[k + 1];
+    if (n) hand.lineTo((x + n[0]) / 2 - 0.12, (y + n[1]) / 2 - 0.01);
+  });
+  hand.quadraticCurveTo(0.6, -0.42, 0, -0.36); hand.closePath();
+  const flat = (shape) => { const g = new THREE.ShapeGeometry(shape, 6); g.rotateX(Math.PI / 2); g.computeVertexNormals(); return g; };
+  // Forked tail, the kite's signature.
+  const tail = new THREE.Shape();
+  tail.moveTo(-0.1, 0); tail.lineTo(-0.26, -0.78); tail.lineTo(0, -0.62); tail.lineTo(0.26, -0.78); tail.lineTo(0.1, 0); tail.closePath();
+  return { arm: flat(arm), hand: flat(hand), tail: flat(tail) };
+}
+
+export function makeKites({ count = 2 } = {}) {
+  const group = new THREE.Group();
+  const geo = wingGeometries();
+  const plumage = new THREE.MeshStandardMaterial({ color: 0x5a4030, emissive: 0x1e140d, roughness: 0.9, side: THREE.DoubleSide });
+  const primaries = new THREE.MeshStandardMaterial({ color: 0x2c1f17, emissive: 0x120c08, roughness: 0.9, side: THREE.DoubleSide });
+  const bodyMat = new THREE.MeshStandardMaterial({ color: 0x5a3f2c, roughness: 0.85 });
+  const headMat = new THREE.MeshStandardMaterial({ color: 0x9a8064, roughness: 0.85 });
+  // A slim, tapered body (widest at the chest) rather than a cone.
+  const bodyGeo = new THREE.SphereGeometry(1, 14, 10);
+  const bp = bodyGeo.attributes.position;
+  for (let i = 0; i < bp.count; i++) {
+    const z = bp.getZ(i), taper = z > 0 ? 1 : 1 + z * 0.45;
+    bp.setXYZ(i, bp.getX(i) * 0.2 * taper, bp.getY(i) * 0.19 * taper, z * 0.72);
+  }
+  bodyGeo.computeVertexNormals();
+  const headGeo = new THREE.SphereGeometry(0.15, 12, 8);
+  const beakGeo = new THREE.ConeGeometry(0.045, 0.16, 6); beakGeo.rotateX(Math.PI / 2);
+  const beakMat = new THREE.MeshStandardMaterial({ color: 0x3a3028, roughness: 0.6 });
+
+  const birds = Array.from({ length: count }, (_, n) => {
+    const g = new THREE.Group();
+    g.rotation.order = 'YXZ';
+    g.add(new THREE.Mesh(bodyGeo, bodyMat));
+    const head = new THREE.Mesh(headGeo, headMat); head.position.set(0, 0.06, 0.78); g.add(head);
+    const beak = new THREE.Mesh(beakGeo, beakMat); beak.position.set(0, 0.03, 0.94); g.add(beak);
+    const tail = new THREE.Group(); tail.position.set(0, 0.02, -0.6);
+    tail.add(new THREE.Mesh(geo.tail, plumage)); g.add(tail);
+    const side = (s) => {
+      const shoulder = new THREE.Group(); shoulder.position.set(0.12 * s, 0.06, 0.12);
+      const arm = new THREE.Mesh(geo.arm, plumage); arm.scale.x = s; shoulder.add(arm);
+      const wrist = new THREE.Group(); wrist.position.x = 1.25 * s; shoulder.add(wrist);
+      const hand = new THREE.Mesh(geo.hand, primaries); hand.scale.x = s; wrist.add(hand);
+      g.add(shoulder);
+      return { shoulder, wrist, s };
+    };
+    const wings = [side(1), side(-1)];
+    g.scale.setScalar(1.25);
+    group.add(g);
+    return {
+      g, tail, wings,
+      R: 24 + n * 7, w: (n % 2 ? -1 : 1) * (0.2 - n * 0.03), th: n * 2.4,
+      alt: 27 + n * 5, cx: 0, cz: 0, drift: n * 3.1,
+      nextFlap: 3 + n * 4, flapStart: -10, beat: 0,
+    };
+  });
+
+  const toC = new THREE.Vector3();
   return {
-    object: g,
-    update(t) {
-      const a = t * 0.12, r = 34;
-      g.position.set(Math.cos(a) * r, 30 + Math.sin(t * 0.3) * 2, Math.sin(a) * r);
-      g.rotation.set(0, -a, 0.35); // bank into the turn
-      const beat = Math.sin(t * 0.5) > 0.7 ? Math.sin(t * 9) * 0.5 : 0.08; // mostly gliding
-      wings[0].rotation.z = beat; wings[1].rotation.z = -beat;
+    group,
+    update(t, dt) {
+      birds.forEach((b) => {
+        // The thermal drifts slowly over the village, and the circle breathes in and out.
+        b.cx = Math.sin(t * 0.021 + b.drift) * 14; b.cz = Math.cos(t * 0.017 + b.drift) * 12;
+        const R = b.R + Math.sin(t * 0.07 + b.drift) * 4;
+        b.th += b.w * dt;
+        const x = b.cx + Math.cos(b.th) * R, z = b.cz + Math.sin(b.th) * R;
+        // Wing beats: a short burst every 8–15 s; climbs a little while beating, sinks gently while soaring.
+        if (t > b.nextFlap) { b.flapStart = t; b.nextFlap = t + 8 + Math.random() * 7; }
+        const ft = t - b.flapStart;
+        const env = ft < 0 || ft > 1.8 ? 0 : Math.sin((ft / 1.8) * Math.PI) ** 0.6;
+        b.alt += (env * 0.9 - 0.12) * dt;
+        b.alt = Math.min(36, Math.max(25, b.alt));
+        b.g.position.set(x, b.alt + Math.sin(t * 0.5 + b.drift) * 0.4, z);
+        // Face the direction of travel and bank into the turn (toward the circle's centre).
+        const vx = -Math.sin(b.th) * b.w, vz = Math.cos(b.th) * b.w;
+        const yaw = Math.atan2(vx, vz);
+        toC.set(b.cx - x, 0, b.cz - z).normalize();
+        const lateral = toC.x * Math.cos(yaw) - toC.z * Math.sin(yaw); // + means the centre is on the bird's +x side
+        b.g.rotation.set(-0.05 - env * 0.12, yaw, -Math.sign(lateral) * (0.32 + Math.sin(t * 0.9 + b.drift) * 0.04));
+        // Soaring: wings held slightly raised, hands drooped, with small gust corrections.
+        // Beating: the arm leads and the hand follows a moment later, bending at the wrist.
+        b.beat += dt * (2.1 * Math.PI * 2) * (env > 0 ? 1 : 0);
+        const arm = 0.1 + Math.sin(t * 1.3 + b.drift) * 0.03 + env * Math.sin(b.beat) * 0.6;
+        const hand = -0.06 + env * Math.sin(b.beat - 0.9) * 0.45;
+        b.wings.forEach((w) => { w.shoulder.rotation.z = arm * w.s; w.wrist.rotation.z = hand * w.s; });
+        b.tail.rotation.z = -Math.sign(lateral) * 0.12; // the forked tail twists to steer
+      });
     },
   };
 }
@@ -155,14 +225,14 @@ export function makeStream(points, width = 2.4) {
     fragmentShader: `uniform float uTime; uniform vec3 uDeep; uniform vec3 uShallow; varying vec2 vUv;
       void main(){
         float edge = smoothstep(0.0, 0.25, vUv.x) * smoothstep(1.0, 0.75, vUv.x);
-        float flow = vUv.y - uTime * 1.2;
+        float flow = vUv.y + uTime * 1.2; // ripples travel down toward the pond
         float ripple = sin(flow * 6.0 + sin(vUv.x * 9.0 + uTime) * 1.5) * 0.5 + 0.5;
-        float sparkle = smoothstep(0.92, 1.0, sin(flow * 13.0 + vUv.x * 20.0) * 0.5 + 0.5);
-        vec3 col = mix(uShallow, uDeep, edge) + ripple * 0.06 + sparkle * 0.35;
+        float sparkle = smoothstep(0.95, 1.0, sin(flow * 11.0 + sin(vUv.x * 6.0 + uTime * 0.7) * 2.2) * 0.5 + 0.5);
+        vec3 col = mix(uShallow, uDeep, edge) + ripple * 0.06 + sparkle * 0.16;
         gl_FragColor = vec4(col, 0.55 + edge * 0.35);
       }`,
   });
   const mesh = new THREE.Mesh(geo, mat);
   mesh.renderOrder = 1;
-  return { mesh, update(t) { uniforms.uTime.value = t; }, setNight(n) { uniforms.uDeep.value.set(n ? 0x1a2c44 : 0x2f6f8a); uniforms.uShallow.value.set(n ? 0x4a6a8a : 0x8fd0dc); } };
+  return { mesh, curve, update(t) { uniforms.uTime.value = t; }, setNight(n) { uniforms.uDeep.value.set(n ? 0x1a2c44 : 0x2f6f8a); uniforms.uShallow.value.set(n ? 0x4a6a8a : 0x8fd0dc); } };
 }

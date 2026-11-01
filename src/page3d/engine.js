@@ -88,7 +88,7 @@ export function runPage({ active, build }) {
   document.getElementById('themeBtn')?.addEventListener('click', () => {
     const next = theme() === 'light' ? 'dark' : 'light';
     document.documentElement.dataset.theme = next;
-    try { sessionStorage.setItem('sai-theme', next); } catch (e) {}
+    try { localStorage.setItem('sai-theme', next); } catch (e) {}
     applyTheme();
   });
   applyTheme();

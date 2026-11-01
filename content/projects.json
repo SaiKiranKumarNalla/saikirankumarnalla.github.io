@@ -2,7 +2,7 @@
   {
     "id": "virtualpet",
     "name": "Virtual PET Patients",
-    "kind": "research · AI",
+    "kind": "research \u00b7 AI",
     "status": "active",
     "year": 2026,
     "eli5": "Turn a real scan into a LEGO-model patient that a computer scanner can scan again, with a person checking every step.",
@@ -139,7 +139,7 @@
         },
         {
           "level": "Coordinator",
-          "who": "Atlas · Management",
+          "who": "Atlas \u00b7 Management",
           "does": "Breaks requests into tasks, assigns departments, runs meetings and the weekly review",
           "model": "Codex CLI"
         },
@@ -218,7 +218,7 @@
           "level": "Router",
           "who": "Agent router",
           "does": "Picks a model per task type, falls through on usage limits, login errors or daily budget",
-          "model": "Claude CLI → Codex → Gemini → Anthropic API"
+          "model": "Claude CLI \u2192 Codex \u2192 Gemini \u2192 Anthropic API"
         },
         {
           "level": "Council",
@@ -337,5 +337,79 @@
     "status": "done",
     "year": 2020,
     "summary": "Deputy team lead, autonomous underwater vehicle club."
+  },
+  {
+    "id": "kage-game",
+    "name": "Kage Game Dev Pipeline",
+    "kind": "game dev · agentic AI",
+    "status": "active",
+    "year": 2026,
+    "eli5": "Three AI coding agents build my game in parallel, check each other's work, and I approve every merge.",
+    "summary": "A multi-agent game studio: Claude Code, Codex CLI and Antigravity take tasks from a ./crew board, each works in its own git worktree, and a different agent reviews the change before I merge it to main. Meshy AI and headless Blender scripts produce the 3D assets.",
+    "facts": [
+      "3 CLI agents, 1 human gate",
+      "One git worktree per task",
+      "./crew: todo → running → review → approve",
+      "No agent approves its own work"
+    ],
+    "architecture": {
+      "hierarchy": [
+        {
+          "level": "Director",
+          "who": "Human Lead (Sai)",
+          "does": "Game direction, lore, mechanics design, final merge gate approval, and asset review",
+          "model": "Human in the loop"
+        },
+        {
+          "level": "Lead Architect",
+          "who": "Claude Code",
+          "does": "Engine architecture, shader systems, camera damping, and scene composition",
+          "model": "Claude 3.7 Sonnet / Opus"
+        },
+        {
+          "level": "Gameplay & Physics",
+          "who": "Codex CLI",
+          "does": "Combat state machines, locomotion, hitboxes, character controller, and test suites",
+          "model": "GPT-5 / Codex"
+        },
+        {
+          "level": "Verification & Review",
+          "who": "Antigravity CLI (agy)",
+          "does": "Automated regression testing, git worktree peer review, and headless validation",
+          "model": "Gemini 2.5 Flash / Pro"
+        },
+        {
+          "level": "3D Asset Generation",
+          "who": "Meshy AI + Blender MCP",
+          "does": "T2 Smart Topology 3D generation (<=15k tris), auto-rigging, and headless glTF optimization",
+          "model": "Meshy T2 · gltf-transform"
+        }
+      ],
+      "deployment": [
+        "Local canonical repo with isolated git worktrees per agent task",
+        "Autonomous ./crew orchestrator managing tasks from todo -> running -> review -> approve",
+        "Headless Blender 5.2 Python scripts for automated glTF optimization and texture atlasing",
+        "Cross-agent peer review requiring another agent's approval before human merges to main"
+      ],
+      "safeguards": [
+        "Strict budget guards: <=150k triangles on screen, <=2 shadow-casting lights, 60 FPS target",
+        "Dry-run mandatory on paid Meshy AI credits before actual 3D generation runs",
+        "Read-only sandboxed review passes ensuring no agent self-approves code",
+        "Human review required for all final asset and code merges"
+      ]
+    },
+    "more": {
+      "problem": "Solo indie 3D game development requires balancing 3D modeling, texturing, rigging, animation, physics, camera scripting, sound design, and shader engineering with limited time.",
+      "approach": [
+        "Deploy a multi-agent crew where specialized CLI agents tackle discrete domains based on their reasoning strengths.",
+        "Integrate automated DCC pipelines (Blender headless + Meshy AI) to generate rigged characters without manual topology work.",
+        "Enforce strict Git worktree isolation with automated peer verification before human approval."
+      ],
+      "status": [
+        "./crew task orchestration running daily across Claude Code, Codex and Antigravity",
+        "Gameplay, the world and footage are on the Kage game page"
+      ]
+    },
+    "stack": ["Blender", "Godot", "Meshy AI", "Claude Code", "Codex CLI", "Antigravity CLI", "Three.js", "Python"]
   }
 ]

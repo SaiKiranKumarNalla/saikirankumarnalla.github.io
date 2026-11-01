@@ -3,11 +3,29 @@ import profile from '../../content/profile.json';
 import life from '../../content/life.json';
 import { runPage } from './engine.js';
 import { makeGlobe } from './globe.js';
+import './about.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const exp = (org) => profile.experience.find((e) => e.org.includes(org));
-const edu = (school) => profile.education.find((e) => e.school.includes(school));
-const role = (e) => e ? `<div class="s-role"><b>${esc(e.role || e.degree)}</b>, ${esc(e.org || e.school)} <span class="s-meta">${esc(e.years)}</span>${e.points ? `<p>${esc(e.points[0])}</p>` : e.note ? `<p>${esc(e.note)}</p>` : ''}</div>` : '';
+
+// Every degree and role in profile.json, placed in the city step it belongs to and sorted oldest first.
+// The AUV club is not a profile entry, so it is added here.
+const EXTRA = [
+  { role: 'Deputy team lead', org: 'Autonomous Underwater Vehicle club, Mahindra École Centrale', years: '2019–2020', start: '2019', city: 'hyderabad', points: ['Built the club from scratch: 25 members, finances, media.'] },
+];
+const ENTRIES = [
+  ...profile.education.map((e) => ({ ...e, title: e.degree, org: e.school, line: e.note, edu: true })),
+  ...profile.experience.map((e) => ({ ...e, title: e.role, line: e.points?.[0] })),
+  ...EXTRA.map((e) => ({ ...e, title: e.role, line: e.points[0] })),
+].sort((a, b) => a.start.localeCompare(b.start) || (b.edu ? 1 : 0) - (a.edu ? 1 : 0));
+
+const logo = (src, alt) => `<span class="a-logo${src ? '' : ' a-logo-none'}">${src ? `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async">` : ''}</span>`;
+const entry = (e) => `<div class="s-role a-entry">${logo(e.logo, e.logoAlt || e.org)}<div class="a-text">
+  <b>${esc(e.title)}</b>, ${esc(e.org)} <span class="s-meta a-years">${esc(e.years)}</span>
+  ${e.group ? `<span class="a-group">${esc(e.group)}</span>` : ''}${e.line ? `<p>${esc(e.line)}</p>` : ''}</div></div>`;
+const timeline = (city) => `<div class="a-timeline">${ENTRIES.filter((e) => e.city === city).map(entry).join('')}</div>`;
+const partners = (list = []) => list.length ? `<h3>Partners</h3><ul class="a-partners">${list.map((p) =>
+  `<li>${logo(p.logo, p.name)}<span><b>${esc(p.name)}</b><span class="s-meta">${esc(p.note)}</span></span></li>`).join('')}</ul>` : '';
+const phdPartners = profile.experience.flatMap((e) => e.partners || []);
 
 const CITY = {
   hyderabad: { name: 'Hyderabad', sub: 'India', lat: 17.39, lon: 78.49 },
@@ -34,22 +52,22 @@ const STEPS = [
     title: 'Hyderabad', face: 'hyderabad', pins: ['hyderabad'], arcs: [],
     html: `<p class="s-kicker">2016–2021 · Hyderabad, India</p><h2>Engineering roots</h2>
       <p>Mechanical engineering at Mahindra École Centrale, on an excellence scholarship. First research: simulating how gas bubbles disturb blood flow in the carotid artery, which became a journal paper.</p>
-      ${role(edu('Mahindra'))}${role(exp('Mahindra'))}
-      <div class="s-role"><b>Deputy team lead</b>, Autonomous Underwater Vehicle club <span class="s-meta">2019–2020</span><p>Built the club from scratch: 25 members, finances, media.</p></div>
+      ${timeline('hyderabad')}
       <a class="s-more" href="/sections/auv.html">Black Pearl, the underwater robot →</a>`,
   },
   {
     title: 'Paris', face: 'paris', pins: ['paris'], arcs: [['hyderabad', 'paris']],
     html: `<p class="s-kicker">2021–2023 · Paris & Palaiseau, France</p><h2>Biomedical engineering, hospitals and a startup</h2>
-      <p>A fully funded MSc at École Polytechnique, then straight into the clinic and industry.</p>
-      ${role(edu('Polytechnique'))}${role(exp('LadHyX'))}${role(exp('Saint Joseph'))}${role(exp('Hepta'))}
+      <p>A fully funded MSc at École Polytechnique, alongside a deep-tech startup, a fluid-mechanics lab, a hospital and a medtech company.</p>
+      ${timeline('paris')}
       <a class="s-more" href="/sections/masters.html">Master's thesis: microwave ablation →</a>`,
   },
   {
     title: 'Toulouse', face: 'toulouse', pins: ['toulouse', 'haifa'], arcs: [['paris', 'toulouse'], ['toulouse', 'haifa']],
     html: `<p class="s-kicker">2023–2026 · Toulouse, France</p><h2>PhD in medical imaging</h2>
-      <p>At the IUCT Oncopole cancer institute, co-supervised with Rambam Health Care Campus in Haifa, and working with GE HealthCare and eMotion Tech.</p>
-      ${role(edu('Toulouse'))}${role(exp('IUCT'))}
+      <p>At the IUCT Oncopole cancer institute: ground truth for PET/CT from 3D-printed phantoms and synthetic lesions.</p>
+      ${timeline('toulouse')}
+      ${partners(phdPartners)}
       <a class="s-more" href="/sections/research.html">The research, explained →</a>`,
   },
   {
@@ -57,16 +75,8 @@ const STEPS = [
     html: `<p class="s-kicker">Now · ${esc(profile.location)}</p><h2>What's next</h2>
       <p>Looking for roles where physics-grade imaging meets AI: industry R&amp;D, medtech, and research groups building simulation or generative models for PET/CT.</p>
       <h3>Open to</h3><div class="s-chips">${profile.openTo.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
-      <a class="s-more" href="/sections/contact">Get in touch →</a>`,
-  },
-  {
-    title: 'Beyond the lab', face: 'wide', pins: ['hyderabad', 'paris', 'toulouse', 'haifa'], arcs: [['hyderabad', 'paris'], ['paris', 'toulouse'], ['toulouse', 'haifa']],
-    html: `<p class="s-kicker">Beyond the lab</p><h2>The rest of me</h2>
-      <p>Drawn to where deep tech meets strategy: healthcare ventures, life-science consulting, and how research reaches patients.</p>
-      <h3>Programmes</h3><div class="s-chips">${profile.programmes.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
-      <h3>Languages</h3><div class="s-chips">${profile.languages.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
-      <h3>Interests</h3><div class="s-chips">${profile.interests.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
-      <a class="s-more" href="/sections/life.html">Off the clock: travel, fiction, music and games →</a>`,
+      <a class="s-more" href="/sections/life.html">Off the clock: hobbies, games &amp; life →</a>
+      <a class="s-more" style="margin-top:6px" href="/sections/contact.html">Get in touch →</a>`,
   },
 ];
 
@@ -136,7 +146,6 @@ runPage({
         { pos: [1.2, 0.6, 17], look: [0.9, 0, 0] },
         { pos: [1.2, 0.6, 17], look: [0.9, 0, 0] },
         { pos: [0.6, 1.5, 18], look: [0.6, 0, 0] },
-        { pos: [0, 0.5, 19], look: [0.4, 0, 0] },
       ],
       onTheme(p) { earth.setTheme(p.night); },
       update(t, progress, dt) {

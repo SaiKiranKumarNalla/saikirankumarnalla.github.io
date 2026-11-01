@@ -1,13 +1,47 @@
 // Publications: a stack of floating paper sheets; the group being read fans out toward the camera.
 import pubs from '../../content/publications.json';
+import metrics from '../../content/research-metrics.json';
 import { runPage } from './engine.js';
+import './publications.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const GROUPS = [['published', 'Published'], ['preprint', 'Preprints'], ['in-preparation', 'In preparation'], ['conference', 'Conference']];
 const paras = (t) => String(t).split(/\n\s*\n/).map((x) => `<p>${esc(x.trim())}</p>`).join('');
-const item = (p) => `<div class="s-role"><b>${esc(p.title)}</b><p>${esc(p.venue)} · ${p.year}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p>
+const thumb = (p) => {
+  const ph = `<span class="pub-ph"><i>${esc(String(p.venue).split(' · ')[0])}</i><b>${p.year}</b></span>`;
+  return `<span class="pub-thumb" data-pid="${esc(p.id)}" data-ph="${esc(ph)}"><img src="/media/papers/${esc(p.id)}.webp" alt="First page of ${esc(p.title)}" loading="lazy" width="84" height="112"></span>`;
+};
+const item = (p) => `<div class="s-role pub-item">${thumb(p)}<div><b>${esc(p.title)}</b><p>${esc(p.venue)} · ${p.year}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p>
   ${p.abstract ? `<details class="s-know"><summary>Abstract</summary>${paras(p.abstract)}</details>`
-    : p.summary ? `<details class="s-know"><summary>Summary</summary><p>${esc(p.summary)}</p><p class="s-meta">Full abstract on the publisher's site.</p></details>` : ''}</div>`;
+    : p.summary ? `<details class="s-know"><summary>Summary</summary><p>${esc(p.summary)}</p><p class="s-meta">Full abstract on the publisher's site.</p></details>` : ''}</div></div>`;
+
+const gs = metrics.googleScholar, rg = metrics.researchGate, oc = metrics.orcid;
+const chart = () => {
+  const have = Object.fromEntries((gs.yearlyCitations || []).map((y) => [y.year, +y.value]));
+  const ys = (gs.yearlyCitations || []).map((y) => +y.year);
+  const end = Math.max(...ys), start = Math.min(gs.sinceYear || end, ...ys);
+  const yrs = []; for (let y = start; y <= end; y++) yrs.push(y);
+  const max = Math.max(1, ...yrs.map((y) => have[y] || 0)), W = 300, H = 110, bw = W / yrs.length;
+  return `<svg class="pub-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Citations per year">${yrs.map((y, i) => {
+    const v = have[y] || 0, h = v ? Math.max(4, (v / max) * 70) : 2, x = i * bw + bw * 0.2;
+    return `<rect class="${v ? '' : 'zero'}" x="${x}" y="${88 - h}" width="${bw * 0.6}" height="${h}" rx="3"/>${v ? `<text class="v" x="${x + bw * 0.3}" y="${82 - h}" text-anchor="middle">${v}</text>` : ''}<text x="${x + bw * 0.3}" y="104" text-anchor="middle">${y}</text>`;
+  }).join('')}</svg>`;
+};
+const tile = (n, l) => `<div class="pub-tile"><b>${n}</b><span>${l}</span></div>`;
+const STATUS_LABEL = { published: 'published', preprint: 'preprints', 'in-preparation': 'in preparation', conference: 'conference' };
+const counts = GROUPS.map(([k]) => [k, pubs.filter((p) => p.status === k).length]).filter(([, n]) => n);
+const metricsStep = `<section class="s-step" data-title="Research metrics"><div class="s-card">
+  <p class="s-kicker">Research metrics</p><h2>Impact at a glance</h2>
+  <p class="pub-src">Google Scholar</p>
+  <div class="pub-tiles">${tile(gs.citations, 'citations')}${tile(gs.hIndex, 'h-index')}${tile(gs.i10Index, 'i10-index')}</div>
+  <p class="s-meta" style="margin:0">Citations per year</p>${chart()}
+  <p class="pub-src">ResearchGate</p>
+  <div class="pub-tiles">${tile(rg.researchInterestScore, 'RI score')}${tile(rg.reads, 'reads')}${tile(rg.citations, 'citations')}</div>
+  <p class="pub-src">Output</p>
+  <div class="pub-counts">${counts.map(([k, n]) => `<span><b>${n}</b> ${STATUS_LABEL[k]}</span>`).join('')}</div>
+  <div class="pub-links"><a href="${esc(gs.profile)}" target="_blank" rel="noopener">Google Scholar</a><a href="${esc(rg.profile)}" target="_blank" rel="noopener">ResearchGate</a><a href="${esc(oc.profile)}" target="_blank" rel="noopener">ORCID ${esc(oc.id)}</a></div>
+  <p class="s-meta">Updated ${esc(metrics.updated)}</p>
+</div></section>`;
 
 const groups = GROUPS.map(([k, name]) => ({ k, name, list: pubs.filter((p) => p.status === k).sort((a, b) => b.year - a.year) })).filter((g) => g.list.length);
 document.getElementById('main').innerHTML = `
@@ -17,7 +51,17 @@ document.getElementById('main').innerHTML = `
     <div class="s-stat">${groups.map((g) => `<div><b>${g.list.length}</b><span>${g.name.toLowerCase()}</span></div>`).join('')}</div>
     <p class="s-scroll">Scroll through each group</p>
   </div></section>
+  ${metricsStep}
   ${groups.map((g) => `<section class="s-step" data-title="${g.name}"><div class="s-card"><p class="s-kicker">${g.list.length} ${g.list.length > 1 ? 'items' : 'item'}</p><h2>${g.name}</h2>${g.list.map(item).join('')}</div></section>`).join('')}`;
+
+// Thumbnails: link the image to itself when it loads; otherwise swap in the typographic placeholder.
+document.querySelectorAll('.pub-thumb').forEach((el) => {
+  const img = el.querySelector('img');
+  const fail = () => { el.innerHTML = el.dataset.ph; };
+  img.addEventListener('error', fail, { once: true });
+  img.addEventListener('load', () => { if (!img.naturalWidth) fail(); else { const a = document.createElement('a'); a.className = 'pub-thumb'; a.href = img.src; a.target = '_blank'; a.rel = 'noopener'; a.setAttribute('aria-label', 'Open page image'); a.appendChild(img); el.replaceWith(a); } }, { once: true });
+  if (img.complete) { img.naturalWidth ? img.dispatchEvent(new Event('load')) : fail(); }
+});
 
 runPage({
   active: 'publications',

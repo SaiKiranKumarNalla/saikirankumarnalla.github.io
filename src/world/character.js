@@ -115,10 +115,11 @@ export function makeKageCharacter() {
   root.userData.setPresenting = (v) => { presentTarget = v ? 1 : 0; };
   // World position of the presenting hand (where a presented panel unfolds from).
   root.userData.handWorld = (out) => arms[1].localToWorld(out.set(0, -0.74, 0.02));
-  root.userData.animate = (t, moving, dt) => {
+  root.userData.animate = (t, moving, dt, speed) => {
     dt = dt || 0.016;
-    // Running: quick stride, big arm swing, leaning into it.
-    phase += moving ? dt * 15 : 0;
+    // Running: the cycle advances with the distance covered (legs ~0.78 long, 0.9 rad swing: each foot
+    // sweeps ~1.2 units, fastest mid-stance at π/2 x average), so the planted foot does not slide.
+    phase += moving ? (Math.PI * 2 * (speed ?? 6.5) * dt) / 3.8 : 0;
     const swing = moving ? Math.sin(phase) : 0;
     // At rest he settles into floating meditation (cross-legged, hands in his lap, eyes closed).
     idle = moving || talk || presentTarget ? 0 : idle + dt;

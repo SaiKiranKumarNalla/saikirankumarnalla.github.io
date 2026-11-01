@@ -9,7 +9,9 @@ import { BUILDINGS, MENU } from './buildings.js';
 import { PANELS } from './panels.js';
 import { makeBuilding, makeTreeInstances, makeLanterns } from './props.js';
 import { currentSeason, SEASONS, wind, makeWeather } from './seasons.js';
-import { makeWindTrail, makeEagle, makeBlossomShrubs, makeStream } from './flair.js';
+import { makeWindTrail, makeKites, makeBlossomShrubs, makeStream } from './flair.js';
+import { makeVillageLife } from './village.js';
+import { makeKoi, makeSkyLanterns, makeClouds, makeShootingStars, makeButterflies } from './extras.js';
 import { makeKage } from './kageModel.js';
 import { makeSky, makeMoon, makeStars, makeMountains, makeFireflies, makePond, makeBamboo, makeBanner, makeRocks } from './atmosphere.js';
 import { makeSpeech } from './companion.js';
@@ -52,14 +54,14 @@ if (renderer) {
 // ── Palettes: a restrained crimson night, and a warm afternoon ──
 const PALETTES = {
   dark: {
-    sky: [0x0b0912, 0x34121c, 0x120a10], fog: 0x1c1218, ground: 0x2a2228, path: 0x4a3c42,
-    hemiSky: 0x9a88b4, hemiGround: 0x3a2a2a, hemi: 1.9, moon: 0xffc0a8, moonI: 2.6, exposure: 1.5,
+    sky: [0x06050a, 0x2a0c14, 0x0a0508], fog: 0x120a10, ground: 0x1a1418, path: 0x342a30,
+    hemiSky: 0x6a5070, hemiGround: 0x221414, hemi: 1.15, moon: 0xffa08a, moonI: 1.6, exposure: 1.25,
     lantern: 0.9, bloom: 0.5, mountains: [0x22121a, 0x170c12], night: true,
   },
   light: {
-    sky: [0xb9d4ea, 0xf6e3d6, 0xeee4dc], fog: 0xe6e6da, ground: 0x93a77a, path: 0xc8b89a,
-    hemiSky: 0xfff4e6, hemiGround: 0x5f7448, hemi: 1.0, moon: 0xffe2b8, moonI: 2.3, exposure: 1.05,
-    lantern: 0.25, bloom: 0.2, mountains: [0x8a9a8c, 0xaab5ad], night: false,
+    sky: [0xbfd3e6, 0xf3dcc0, 0xe9dccb], fog: 0xead9c4, ground: 0xcdbfa8, path: 0xb3a48c,
+    hemiSky: 0xfff1dc, hemiGround: 0x8a6f55, hemi: 1.0, moon: 0xffe2b8, moonI: 2.3, exposure: 1.05,
+    lantern: 0.25, bloom: 0.2, mountains: [0x9c8f9c, 0xb7aab4], night: false,
   },
 };
 const theme = () => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
@@ -107,9 +109,12 @@ const byPanel = Object.fromEntries(buildings.map((b) => [b.def.panel, b]));
 // ── Ambience ──
 const animated = [];
 const mid = (i, r) => { const a = ((i + 0.5) / BUILDINGS.length) * Math.PI * 2 + Math.PI / 2; return [Math.cos(a) * r, Math.sin(a) * r, a]; };
-{ const [x, z, a] = mid(4, 27); const pond = makePond(x, z, -a); scene.add(pond); animated.push(pond); }
+const POND = mid(6, 27);
+const pondObj = (() => { const [x, z, a] = POND; const pond = makePond(x, z, -a); scene.add(pond); animated.push(pond); return pond; })();
+const koi = reduceMotion ? null : makeKoi(POND[0], POND[1], { count: lowPower ? 4 : 7 });
+if (koi) scene.add(koi.group);
 const avoid = buildings.map((b) => b.group.position);
-[0, 2].forEach((i) => { const [x, z] = mid(i, 31); const b = makeBamboo(x, z, lowPower ? 6 : 10); scene.add(b); avoid.push(b.position); });
+const groves = [1, 3, 5].map((i) => { const [x, z] = mid(i, 31); const b = makeBamboo(x, z, lowPower ? 6 : 10); scene.add(b); avoid.push(b.position); return b.position; });
 for (let i = 0; i < 8; i++) {
   const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
   const ban = makeBanner(Math.cos(a) * 8.6, Math.sin(a) * 8.6, i % 2 ? 0x8b1a1a : 0x1d1b24);
@@ -118,12 +123,18 @@ for (let i = 0; i < 8; i++) {
 scene.add(makeRocks(lowPower ? 22 : 40, 33, 70));
 // A stream winds in from the forest and feeds the pond.
 const stream = (() => {
-  const [, , a] = mid(4, 27);
-  const pts = [29, 38, 48, 58, 70, 88].map((r, i) => { const w = a + Math.sin(i * 1.7) * 0.12; return [Math.cos(w) * r, Math.sin(w) * r]; });
+  const a = POND[2];
+  const pts = [30.5, 38, 48, 58, 70, 88].map((r, i) => { const w = a + Math.sin(i * 1.7) * 0.12; return [Math.cos(w) * r, Math.sin(w) * r]; });
   pts.forEach(([x, z]) => avoid.push(new THREE.Vector3(x, 0, z)));
   return makeStream(pts);
 })();
 scene.add(stream.mesh);
+// Village life: forge smoke, a waterwheel and a small bridge on the stream, stone lanterns lit at dusk.
+const forge = buildings.find((b) => b.def.style === 'forge');
+if (forge) forge.group.updateMatrixWorld(true);
+const village = makeVillageLife({ stream, lowPower, forgeChimney: forge && forge.group.localToWorld(new THREE.Vector3(2.6, 8.1, -1.4)) });
+scene.add(village.group);
+avoid.push(...village.footprints);
 scene.add(makeBlossomShrubs({ count: lowPower ? 15 : 30, inner: 32, outer: 50, avoid: [...avoid, ...buildings.map((b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2))] }));
 const season = currentSeason();
 document.documentElement.dataset.season = season;
@@ -133,9 +144,17 @@ const lanterns = makeLanterns({ count: 12, radius: 19.6 }); scene.add(lanterns.g
 const weather = reduceMotion ? null : makeWeather(season, { lowPower });
 if (weather) scene.add(weather.group);
 const trail = makeWindTrail(); scene.add(trail.object);
-const eagle = makeEagle(); scene.add(eagle.object);
+const kites = makeKites({ count: lowPower ? 1 : 2 }); scene.add(kites.group);
 const fireflies = reduceMotion ? null : makeFireflies(lowPower ? 30 : 60);
 if (fireflies) scene.add(fireflies.points);
+// Night: sky lanterns and shooting stars. Day: drifting clouds and butterflies.
+const skyLanterns = reduceMotion ? null : makeSkyLanterns({ count: lowPower ? 10 : 18 });
+if (skyLanterns) scene.add(skyLanterns.group);
+const shooting = reduceMotion ? null : makeShootingStars();
+if (shooting) scene.add(shooting.object);
+const clouds = makeClouds({ count: lowPower ? 4 : 7 }); scene.add(clouds.group);
+const butterflies = reduceMotion ? null : makeButterflies({ count: lowPower ? 8 : 14 });
+if (butterflies) scene.add(butterflies.group);
 
 // ── Kage, the guide: waits in the plaza and walks to whichever building is opened ──
 const kage = makeKage();
@@ -145,20 +164,52 @@ scene.add(kage);
 const kageLight = new THREE.PointLight(0xffc89a, 14, 9, 1.6);
 scene.add(kageLight);
 let kageYawTarget = 0;
-let route = []; // waypoints; walks around the plaza ring rather than through buildings
-function routeTo(target, targetAngle) {
-  const pts = [];
-  const r = Math.hypot(kage.position.x, kage.position.z);
-  const a0 = Math.atan2(kage.position.z, kage.position.x);
-  let d = targetAngle - a0;
-  d = ((d + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
-  if (r > 11 && Math.abs(d) > 0.3) {
-    const steps = Math.ceil(Math.abs(d) / (Math.PI / 6));
-    for (let i = 0; i <= steps; i++) pts.push(new THREE.Vector3(Math.cos(a0 + (d * i) / steps) * 11.5, 0, Math.sin(a0 + (d * i) / steps) * 11.5));
+const KAGE_SPEED = 6.5; // a relaxed jog, units per second (Kage is 3 units tall)
+let kageSpeed = 0;
+let route = []; // waypoints: the most direct line, bending only around what is in the way
+// Things Kage must not walk through: buildings, the pond and its bridge, bamboo, lanterns, banners.
+const obstacles = [];
+const blocked = (a, b, skip) => {
+  // First obstacle the segment a→b passes through (ignoring ones that contain either end).
+  let best = null, bestT = Infinity;
+  const dx = b.x - a.x, dz = b.z - a.z, len2 = dx * dx + dz * dz || 1;
+  for (const o of obstacles) {
+    if (o === skip) continue;
+    if (Math.hypot(a.x - o.x, a.z - o.z) < o.r || Math.hypot(b.x - o.x, b.z - o.z) < o.r) continue;
+    const t = Math.max(0, Math.min(1, ((o.x - a.x) * dx + (o.z - a.z) * dz) / len2));
+    const cx = a.x + dx * t, cz = a.z + dz * t;
+    if (Math.hypot(cx - o.x, cz - o.z) < o.r && t < bestT) { best = { o, cx, cz }; bestT = t; }
   }
-  pts.push(target.clone());
-  route = pts;
+  return best;
+};
+function plan(a, b, depth = 0) {
+  const hit = depth < 6 && blocked(a, b);
+  if (!hit) return [b];
+  // Step around the obstacle on the side the straight line already passes (the shorter way round).
+  const { o, cx, cz } = hit;
+  let nx = cx - o.x, nz = cz - o.z, n = Math.hypot(nx, nz);
+  if (n < 1e-3) { nx = -(b.z - a.z); nz = b.x - a.x; n = Math.hypot(nx, nz) || 1; }
+  const p = new THREE.Vector3(o.x + (nx / n) * (o.r + 0.9), 0, o.z + (nz / n) * (o.r + 0.9));
+  return [...plan(a, p, depth + 1), ...plan(p, b, depth + 1)];
 }
+function routeTo(target) {
+  const from = kage.position.clone().setY(0);
+  const pts = [from, ...plan(from, target.clone().setY(0))];
+  // Pull the string tight: skip any waypoint that has a clear line past it.
+  const out = [];
+  for (let i = 0; i < pts.length - 1;) {
+    let j = pts.length - 1;
+    while (j > i + 1 && blocked(pts[i], pts[j])) j--;
+    out.push(pts[j]);
+    i = j;
+  }
+  route = out;
+}
+buildings.forEach((b) => obstacles.push({ x: b.group.position.x, z: b.group.position.z, r: b.def.footprint + 1.1 }));
+obstacles.push({ x: POND[0], z: POND[1], r: 5.9 }); // pond, stone rim and bridge ends
+groves.forEach((g) => obstacles.push({ x: g.x, z: g.z, r: 2.8 }));
+for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2 + Math.PI / 12; obstacles.push({ x: Math.cos(a) * 19.6, z: Math.sin(a) * 19.6, r: 0.9 }); }
+for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 + Math.PI / 8; obstacles.push({ x: Math.cos(a) * 8.6, z: Math.sin(a) * 8.6, r: 0.7 }); }
 const doorOf = (b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2);
 
 const goldenNow = () => { const d = new Date(); return location.search.includes('golden') || d.getMinutes() === 0 && d.getSeconds() < 20; };
@@ -176,7 +227,8 @@ function applyTheme() {
   hemi.color.set(p.hemiSky); hemi.groundColor.set(p.hemiGround); hemi.intensity = p.hemi;
   moonLight.color.set(p.moon); moonLight.intensity = p.moonI;
   mountains.userData.mats.forEach((m, i) => m.color.set(p.mountains[i]));
-  stream.setNight(p.night); moon.setNight(p.night); stars.visible = p.night; fireflies?.setVisible(p.night);
+  stream.setNight(p.night); village.setNight(p.night); pondObj.userData.setNight?.(p.night); moon.setNight(p.night); stars.visible = p.night; fireflies?.setVisible(p.night);
+  skyLanterns?.setVisible(p.night); shooting?.setVisible(p.night); clouds.setVisible(!p.night); butterflies?.setVisible(!p.night);
   if (renderer) renderer.toneMappingExposure = p.exposure;
   if (bloom) bloom.strength = p.bloom;
   lanterns.setIntensity(p.lantern);
@@ -186,9 +238,18 @@ function applyTheme() {
 $('wTheme').addEventListener('click', () => {
   const next = theme() === 'light' ? 'dark' : 'light';
   document.documentElement.dataset.theme = next;
-  try { sessionStorage.setItem('sai-theme', next); } catch (e) {}
+  try { localStorage.setItem('sai-theme', next); } catch (e) {} // a manual choice sticks
   applyTheme();
 });
+// Without a manual choice the village follows the visitor's clock: day 07:00-19:00, night otherwise.
+const storedTheme = () => { try { return localStorage.getItem('sai-theme'); } catch (e) { return null; } };
+const clockTheme = () => { const h = new Date().getHours(); return h >= 7 && h < 19 ? 'light' : 'dark'; };
+if (!storedTheme()) document.documentElement.dataset.theme = clockTheme();
+setInterval(() => {
+  if (storedTheme() || theme() === clockTheme()) return;
+  document.documentElement.dataset.theme = clockTheme();
+  applyTheme();
+}, 60000);
 applyTheme();
 
 // ── Menu, labels ──
@@ -201,6 +262,11 @@ MENU.forEach((id) => {
     const dd = menuEl.lastElementChild;
     dd.querySelector('[data-thesis="research"]').addEventListener('click', (e) => { e.preventDefault(); openPanel('research'); closeMenu(); dd.classList.remove('open'); });
     menuBtns[id] = dd.querySelector('.w-dd-btn');
+    return;
+  }
+  // Sections without a village panel (Skills) link straight to their page.
+  if (!PANELS[id]) {
+    menuEl.insertAdjacentHTML('beforeend', `<a href="/sections/${id}.html">${id[0].toUpperCase() + id.slice(1)}</a>`);
     return;
   }
   const a = document.createElement('a');
@@ -246,7 +312,7 @@ function openPanel(id, { push = true } = {}) {
   document.title = `${def.title} | Sai Kiran Kumar Nalla, PhD`;
   focus = byPanel[id] || null;
   if (focus) {
-    routeTo(doorOf(focus), focus.angle);
+    routeTo(doorOf(focus));
     kage.userData.setPresenting(false);
   } else presentPending = clock.elapsedTime - 9; // menu items without a building open at once
   $('wPanelTitle').focus({ preventScroll: true });
@@ -258,14 +324,14 @@ function closePanel({ push = true } = {}) {
   focus = null;
   presentPending = null;
   kage.userData.setPresenting(false);
-  routeTo(KAGE_HOME, Math.atan2(KAGE_HOME.z, KAGE_HOME.x));
+  routeTo(KAGE_HOME);
   if (push && location.hash) history.pushState(null, '', location.pathname);
   document.title = 'Sai Kiran Kumar Nalla, PhD | Medical Imaging Scientist & AI Builder';
 }
 $('wPanelClose').addEventListener('click', () => closePanel());
 addEventListener('keydown', (e) => { if (e.key === 'Escape') { closePanel(); closeMenu(); } });
 
-// ── Walk Kage with the keyboard: WASD / arrows to walk, Enter at a door to go in ──
+// ── Keyboard access: arrows / WASD also walk Kage, Enter at a door goes in (not advertised) ──
 const KEYS = { w: [0, 1], arrowup: [0, 1], s: [0, -1], arrowdown: [0, -1], a: [-1, 0], arrowleft: [-1, 0], d: [1, 0], arrowright: [1, 0] };
 const held = new Set();
 const typing = (e) => /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable;
@@ -295,16 +361,17 @@ const heroEl = $('wHero');
 function hideHero() { heroEl.classList.add('gone'); document.body.classList.add('exploring'); }
 // Kage greets once, the first time the visitor drags around the village with no panel open.
 let greeted = false;
-$('wViewWork').addEventListener('click', () => { hideHero(); greeted = true; speech.say("Welcome. Walk me with the arrow keys, or click any building.", clock.elapsedTime, 5000); });
+$('wViewWork').addEventListener('click', () => { hideHero(); greeted = true; speech.say("Welcome to the village. Click any building, or pick a section from the menu.", clock.elapsedTime, 5000); });
 $('wHome').addEventListener('click', (e) => { e.preventDefault(); closePanel(); heroEl.classList.remove('gone'); document.body.classList.remove('exploring'); });
 const GREETINGS = [['ようこそ', 'ja'], ['Welcome', 'en'], ['నమస్కారం', 'te'], ['नमस्ते', 'hi'], ['Bonjour', 'fr']];
 let greetIdx = 0;
 // "I am a …": each role fades out and the next one fades in.
-const ROLES = ['a researcher', 'a medical imaging scientist', 'an engineer', 'an agentic AI builder', 'a venture explorer', 'a writer', 'a jack of all trades'];
+const ROLES = ['a researcher', 'a medical imaging scientist', 'an engineer', 'an agentic AI builder', 'a game maker', 'a writer', 'a jack of all trades'];
 let roleIdx = 0;
 setInterval(() => {
   if (heroEl.classList.contains('gone')) return;
   const w = $('wWord');
+  if (!w) return;
   w.classList.add('swap');
   setTimeout(() => { w.textContent = ROLES[++roleIdx % ROLES.length]; w.classList.remove('swap'); }, 350);
 }, 2200);
@@ -340,6 +407,9 @@ canvas.addEventListener('pointermove', (e) => {
     buildings.forEach((b) => { b.hovered = b === hb; b.group.userData.setHover?.(b === hb); b.labelEl.classList.toggle('hover', b === hb); });
   }
 });
+// The overview camera leans gently toward the cursor (a small parallax, desktop only).
+const lean = { x: 0, y: 0, tx: 0, ty: 0 };
+if (!isTouch && !reduceMotion) addEventListener('pointermove', (e) => { lean.tx = (e.clientX / innerWidth) * 2 - 1; lean.ty = (e.clientY / innerHeight) * 2 - 1; });
 canvas.addEventListener('pointerup', (e) => {
   drag = null;
   if (!downAt || Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 6) return;
@@ -366,8 +436,10 @@ addEventListener('resize', resize);
 resize();
 
 let frames = 0;
-function step() {
-  const dt = Math.min(clock.getDelta(), 0.05);
+let debugCam = null; // dev only: window.__village.view(pos, look)
+function step(fixedDt) {
+  let dt;
+  if (typeof fixedDt === 'number') { clock.elapsedTime += fixedDt; dt = fixedDt; } else dt = Math.min(clock.getDelta(), 0.05);
   const t = clock.elapsedTime;
 
   if (focus) {
@@ -383,7 +455,8 @@ function step() {
   } else {
     const a = (reduceMotion ? 0.6 : t * 0.03 + 0.6) + yawOffset;
     const r = narrow() ? 62 : 52;
-    wantPos.set(Math.cos(a) * r, narrow() ? 38 : 30, Math.sin(a) * r);
+    lean.x += (lean.tx - lean.x) * Math.min(1, dt * 2); lean.y += (lean.ty - lean.y) * Math.min(1, dt * 2);
+    wantPos.set(Math.cos(a + lean.x * 0.06) * r, (narrow() ? 38 : 30) - lean.y * 4, Math.sin(a + lean.x * 0.06) * r);
     wantLook.set(0, 3, 0);
   }
   const k = 1 - Math.exp(-dt * (focus ? 1.8 : 1.2));
@@ -391,19 +464,29 @@ function step() {
   camLook.lerp(wantLook, k);
   camera.position.copy(camPos);
   camera.lookAt(camLook);
+  if (import.meta.env.DEV && debugCam) { camera.position.copy(debugCam[0]); camera.lookAt(debugCam[1]); }
 
   // Kage walks his route; when he arrives he faces the open building (or the camera at home).
-  let walking = false;
+  // He eases in and out, and his gait is driven by the distance he actually covers.
+  let walking = false, moved = 0;
+  const cruise = reduceMotion ? 14 : KAGE_SPEED;
   if (route.length) {
     tmp.subVectors(route[0], kage.position).setY(0);
-    const dist = tmp.length();
-    if (dist < 0.3) route.shift();
+    let dist = tmp.length();
+    // Corner-cut: switch to the next waypoint a little early so turns are smooth arcs.
+    if (route.length > 1 && dist < 1.4) { route.shift(); tmp.subVectors(route[0], kage.position).setY(0); dist = tmp.length(); }
+    if (route.length === 1 && dist < 0.05) { route.shift(); kageSpeed = 0; }
     else {
+      let left = dist;
+      for (let i = 1; i < route.length; i++) left += route[i].distanceTo(route[i - 1]);
+      const want = Math.min(cruise, Math.sqrt(2 * 9 * left) + 0.6); // brake smoothly before the door
+      kageSpeed += (want - kageSpeed) * Math.min(1, dt * (want < kageSpeed ? 10 : 3.5));
+      moved = Math.min(dist, kageSpeed * dt);
+      kage.position.addScaledVector(tmp.normalize(), moved);
       walking = true;
-      kage.position.addScaledVector(tmp.normalize(), Math.min(dist, (reduceMotion ? 40 : 19) * dt));
       kageYawTarget = Math.atan2(tmp.x, tmp.z);
     }
-  }
+  } else kageSpeed = 0;
   if (held.size) {
     // Move relative to the camera: up walks away from the viewer.
     let fx = 0, fz = 0;
@@ -413,8 +496,9 @@ function step() {
     const len = Math.hypot(mx, mz);
     if (len) {
       walking = true;
-      kage.position.x += (mx / len) * 16 * dt;
-      kage.position.z += (mz / len) * 16 * dt;
+      moved = KAGE_SPEED * dt;
+      kage.position.x += (mx / len) * moved;
+      kage.position.z += (mz / len) * moved;
       kageYawTarget = Math.atan2(mx, mz);
       // Stay in the village and out of the buildings.
       const r = Math.hypot(kage.position.x, kage.position.z);
@@ -429,11 +513,10 @@ function step() {
     const door = buildings.find((b) => tmp.subVectors(kage.position, b.group.position).setY(0).length() < b.def.footprint + 2.6);
     if (door && door !== autoDoor && !focus) { autoDoor = door; held.clear(); openPanel(door.def.panel); }
     else if (!door) autoDoor = null;
-    $('wHint').textContent = 'Arrow keys or WASD to walk · walk to a door to open it';
   }
   if (!walking) kageYawTarget = Math.atan2(camera.position.x - kage.position.x, camera.position.z - kage.position.z);
   // Kage has arrived (or is taking too long): present the panel from his hand.
-  if (presentPending !== null && (!walking || clock.elapsedTime - presentPending > 2.4)) {
+  if (presentPending !== null && (!walking || clock.elapsedTime - presentPending > 6)) {
     presentPending = null;
     if (focus) kage.userData.setPresenting(true);
     kage.userData.handWorld(tmp).project(camera);
@@ -442,9 +525,9 @@ function step() {
     panelEl.style.transformOrigin = focus ? `${hx - r.left}px ${hy - r.top}px` : '';
     panelEl.classList.add('open');
   }
-  kage.rotation.y += (((kageYawTarget - kage.rotation.y + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * Math.min(1, dt * (walking ? 8 : 3));
+  kage.rotation.y += (((kageYawTarget - kage.rotation.y + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * Math.min(1, dt * (walking ? 9 : 3));
   kage.userData.setTalking(speech.visible && !walking);
-  kage.userData.animate(t, walking, dt);
+  kage.userData.animate(t, walking && moved > 0, dt, dt > 0 ? moved / dt : 0);
   kageLight.position.set(kage.position.x + 1.5, 4.2, kage.position.z + 2.5);
   speech.tick(t);
 
@@ -455,10 +538,16 @@ function step() {
     const w = wind(t);
     weather?.update(dt, t, w, kage.position);
     stream.update(t);
-    eagle.update(t);
+    kites.update(t, dt);
+    village.update(t, dt, w);
     const hb = !focus && buildings.find((b) => b.hovered);
     trail.point(kage.position, hb ? doorOf(hb) : null);
     trail.update(t, dt);
+    koi?.update(t, dt);
+    skyLanterns?.update(t, dt, w);
+    shooting?.update(t, dt, camera);
+    clouds.update(dt, w);
+    butterflies?.update(t);
     fireflies?.update(t);
   }
   lanterns.flicker(t);
@@ -490,12 +579,13 @@ function step() {
 
 if (renderer) {
   renderer.compile(scene, camera);
-  renderer.setAnimationLoop(step);
+  renderer.setAnimationLoop(() => step());
 } else {
   $('wLoader').classList.add('done');
 }
 addEventListener('pageshow', (e) => { if (e.persisted) $('wLoader').classList.add('done'); });
 import('../kage/widget.js').then((m) => m.mountKage());
+if (import.meta.env.DEV) window.__village = { kage, buildings, openPanel, closePanel, get route() { return route; }, camera, scene, kites, village, view: (p, l) => { debugCam = p ? [new THREE.Vector3(...p), new THREE.Vector3(...l)] : null; }, pond: POND, tick: (n = 1, dt = 1 / 60) => { for (let i = 0; i < n; i++) step(dt); } };
 
 // Deep links: /#publications opens straight to that panel.
 const initial = location.hash.slice(1);

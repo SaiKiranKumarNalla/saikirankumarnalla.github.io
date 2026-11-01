@@ -56,12 +56,17 @@
     ],
     "cities": 3
   },
+  "studio": {
+    "name": "Fragrantmash Creative Studio",
+    "kicker": "Creative Hub · Audio, Fiction & Games",
+    "text": "Welcome to Fragrantmash Creative Studio — the home for my experimental audio compositions, speculative visual fiction, comic archives, and interactive game worlds outside the research lab."
+  },
   "fiction": {
-    "text": "Speculative fiction: cinematic locked archives and prose novels, each with its own reading mode.",
+    "text": "Speculative fiction & comic books: cinematic locked archives and prose novels, each with its own visual reading mode.",
     "books": [
       {
         "name": "Shāpanang",
-        "kind": "Visual fiction",
+        "kind": "Visual fiction / Comic archive",
         "text": "A cursed library, memory fragments, and a truth that should stay buried.",
         "cover": "/story-assets/shapanang/cover.webp",
         "href": "/shapanang.html"
@@ -83,24 +88,53 @@
     ]
   },
   "music": {
-    "text": "Music I make with AI tools, released on Flow Music, with Google Flow visuals.",
+    "text": "Original compositions crafted with Google Flow Music AI, complete with audio masters and Google Flow visuals.",
     "playlists": [
       {
-        "name": "Shapnang",
+        "name": "Shāpanang (Official Soundtrack)",
         "url": "https://www.flowmusic.app/playlist/cb6cb429-cafb-4434-85b5-06bed869db8b",
         "cover": "https://storage.googleapis.com/producer-app-public/playlists/c080c171-4b48-4acc-94f6-135331eb2bcd/image/577681ba-b6cc-4601-b786-a667a54fcf23.jpg",
         "tracks": [
-          "Sangeethama (Telugu)",
-          "Shapnang Theme (English)",
-          "Learning the Sky (English)",
-          "The Sealed Gate"
+          {
+            "title": "Shāpanang Theme (English Master)",
+            "src": "/media/music/shapnang/shapnang-theme.mp4",
+            "meta": "Master WAV · Cinematic",
+            "cover": "/media/music/covers/shapnang-theme.webp"
+          },
+          {
+            "title": "Sangeethama (Telugu Master)",
+            "src": "/media/music/shapnang/sangeethama.mp4",
+            "meta": "Master WAV · Vocal",
+            "cover": "/media/music/covers/sangeethama.webp"
+          },
+          {
+            "title": "Learning the Sky (English Master)",
+            "src": "/media/music/shapnang/learning-the-sky.mp4",
+            "meta": "Master WAV · Ambient",
+            "cover": "/media/music/covers/learning-the-sky.webp"
+          }
         ],
-        "meta": "4 songs · 11 min"
+        "meta": "Google Flow Music · 3 Master Tracks"
       },
       {
-        "name": "Up There",
+        "name": "Up There (Soundtrack)",
         "url": "https://www.flowmusic.app/playlist/57e341c6-85cd-461c-997d-fe7f3f9a70db",
-        "cover": "https://storage.googleapis.com/producer-app-public/playlists/c080c171-4b48-4acc-94f6-135331eb2bcd/image/dea97b70-8f10-4416-bf90-fa96bb336049.jpg"
+        "cover": "https://storage.googleapis.com/producer-app-public/playlists/c080c171-4b48-4acc-94f6-135331eb2bcd/image/dea97b70-8f10-4416-bf90-fa96bb336049.jpg",
+        "tracks": [
+          {
+            "title": "Les rois de rien",
+            "src": "/media/music/upthere/les-rois-de-rien.mp4",
+            "meta": "High Quality WAV · French",
+            "cover": "/media/music/covers/les-rois-de-rien.webp"
+          },
+          {
+            "title": "C'est une grâce",
+            "src": "/media/music/upthere/cest-une-grace.mp4",
+            "meta": "High Quality WAV · French Chanson",
+            "cover": "/media/music/covers/cest-une-grace.webp"
+          }
+        ],
+        "meta": "Google Flow Music · 2 Master Tracks"
       }
     ]
   },
@@ -158,10 +192,42 @@
     {
       "name": "Cricket analytics",
       "text": "The cleanest place to see strategy, uncertainty, role selection and data storytelling. A dedicated page is planned."
-    },
-    {
-      "name": "Cooking",
-      "text": "Another kind of prototyping: ingredients, timing, iteration and taste. Fusion experiments and comfort food."
     }
-  ]
+  ],
+  "food": {
+    "text": "Cooking is another kind of prototyping: ingredients, timing, iteration and taste. Fusion experiments and comfort food.",
+    "plates": [
+      {
+        "name": "Fusion experiments",
+        "note": "Mixing techniques and flavours to see what holds together."
+      },
+      {
+        "name": "Comfort food",
+        "note": "The reliable dishes that need no recipe."
+      },
+      {
+        "name": "Indian",
+        "note": "Favourite cuisine."
+      },
+      {
+        "name": "Biryani",
+        "note": "Signature dish."
+      }
+    ]
+  },
+  "gameDev": {
+    "name": "Kage",
+    "kind": "Original game in development",
+    "text": "A 3D samurai action-adventure I am building from scratch.",
+    "href": "/sections/game.html",
+    "cta": "Open the Kage showcase",
+    "frames": [
+      "/media/kage-game/gameplay-opening-1080.webp",
+      "/media/kage-game/akabashi-gate.webp",
+      "/media/kage-game/akabashi-rooftops.webp",
+      "/media/kage-game/akabashi-wide.webp",
+      "/media/kage-game/pagoda-interior.webp",
+      "/media/kage-game/kage-home.webp"
+    ]
+  }
 }

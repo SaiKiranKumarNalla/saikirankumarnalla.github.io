@@ -1,0 +1,24 @@
+/* Projects page: problem / built / result block, key numbers and tool badges. */
+
+.pj-brief{margin:1rem 0 .2rem;display:grid;gap:.75rem}
+.pj-brief div{display:grid;grid-template-columns:5.2rem 1fr;gap:.9rem;align-items:baseline}
+.pj-brief dt{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.pj-brief dd{margin:0;color:var(--muted);line-height:1.6;font-size:.93rem}
+
+.pj-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(4.8rem,1fr));gap:8px;margin:1.1rem 0 .3rem}
+.pj-stats div{min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--chip)}
+.pj-stats b{display:block;font-family:'Zen Antique',serif;font-weight:400;font-size:1.2rem;line-height:1.1;color:var(--text);white-space:nowrap}
+.pj-stats span{display:block;font-size:.74rem;color:var(--faint);margin-top:3px;line-height:1.35}
+
+.pj-label{display:block;margin:1.2rem 0 .45rem;font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.pj-tools{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.pj-tools li{display:inline-flex;align-items:center;gap:7px;padding:5px 11px 5px 6px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-size:.8rem;font-weight:500;line-height:1}
+/* Logos keep their own brand colours; a small light disc keeps dark marks readable on the dark theme. */
+.pj-tools .pj-logo{flex:none;width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.pj-tools .pj-logo img{width:16px;height:16px;object-fit:contain;display:block}
+.pj-tools .pj-mono{font-size:.62rem;font-weight:600;color:#1b1715}
+.pj-methods{margin-top:.5rem}
+
+@media (max-width:860px){
+  .pj-brief div{grid-template-columns:1fr;gap:.15rem}
+}

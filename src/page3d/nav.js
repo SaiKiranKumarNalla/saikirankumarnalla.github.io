@@ -1,14 +1,21 @@
 // Shared top navigation for the 3D section pages (same look as the home page menu).
 // "Thesis" is a dropdown: PhD, Master's and Bachelor's each have their own page.
 export const THESES = [
-  ['research', 'PhD', 'Medical imaging · Toulouse 2026', '/education'],
-  ['masters', "Master's", 'Microwave ablation · Polytechnique 2023', '/education'],
-  ['auv', "Bachelor's", 'Black Pearl AUV · Mahindra 2020', '/education'],
+  ['research', 'PhD', 'Medical imaging · Toulouse 2026', '/sections/research.html'],
+  ['masters', "Master's", 'Microwave ablation · Polytechnique 2023', '/sections/masters.html'],
+  ['auv', "Bachelor's", 'Black Pearl AUV · Mahindra 2020', '/sections/auv.html'],
 ];
 export const SECTIONS = [
   ['about', 'About'], ['thesis', 'Thesis'], ['projects', 'Projects'],
-  ['publications', 'Publications'], ['builder', 'Agentic AI'], ['contact', 'Contact'],
+  ['publications', 'Publications'], ['skills', 'Skills'], ['builder', 'Agentic AI'], ['life', 'Off the Clock'], ['contact', 'Contact'],
 ];
+
+// Theme: a saved choice wins; otherwise follow the visitor's clock (light 07:00-19:00), like the home page.
+// Runs on import, before the 3D engine reads the theme.
+try {
+  const h = new Date().getHours();
+  document.documentElement.dataset.theme = localStorage.getItem('sai-theme') || (h >= 7 && h < 19 ? 'light' : 'dark');
+} catch (e) { /* storage blocked: keep whatever the page set */ }
 
 // The dropdown markup; `active` is the current page id (highlights the matching item).
 export function thesisDropdown(active) {
@@ -42,7 +49,7 @@ export function wireTheme() {
   btn.addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
     document.documentElement.dataset.theme = next;
-    try { sessionStorage.setItem('sai-theme', next); } catch (e) {}
+    try { localStorage.setItem('sai-theme', next); } catch (e) {}
     sync();
   });
   sync();

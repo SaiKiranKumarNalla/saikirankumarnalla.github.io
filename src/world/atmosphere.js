@@ -114,11 +114,29 @@ export function makeFireflies(count = 70) {
 
 const flat = (color, extra = {}) => new THREE.MeshStandardMaterial({ color, flatShading: true, roughness: 0.85, ...extra });
 
-// Koi pond with an arched red bridge, placed between two buildings.
+// Pond with an arched red bridge, placed between two buildings. The water is a translucent sheet raised a
+// little above a dark bed, so the koi (extras.js) swim visibly beneath the surface instead of on top of it.
+function pondBedTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const grd = g.createRadialGradient(64, 64, 4, 64, 64, 64);
+  grd.addColorStop(0, '#16201f'); grd.addColorStop(0.7, '#27312a'); grd.addColorStop(1, '#4a4a3a');
+  g.fillStyle = grd; g.fillRect(0, 0, 128, 128);
+  for (let i = 0; i < 90; i++) { // pebbles
+    g.fillStyle = `rgba(${150 + Math.random() * 60},${140 + Math.random() * 50},${120 + Math.random() * 40},${0.08 + Math.random() * 0.12})`;
+    g.beginPath(); g.arc(Math.random() * 128, Math.random() * 128, 1 + Math.random() * 2.5, 0, Math.PI * 2); g.fill();
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
 export function makePond(x, z, rotY = 0) {
   const g = new THREE.Group();
-  const water = new THREE.Mesh(new THREE.CircleGeometry(4.2, 40), new THREE.MeshStandardMaterial({ color: 0x1b2a3a, roughness: 0.08, metalness: 0.6, emissive: 0x2a0a0a, emissiveIntensity: 0.4 }));
-  water.rotation.x = -Math.PI / 2; water.position.y = 0.05;
+  const bed = new THREE.Mesh(new THREE.CircleGeometry(4.35, 40), new THREE.MeshStandardMaterial({ map: pondBedTexture(), roughness: 1 }));
+  bed.rotation.x = -Math.PI / 2; bed.position.y = 0.03; bed.receiveShadow = true;
+  g.add(bed);
+  const waterMat = new THREE.MeshStandardMaterial({ color: 0x2a5560, roughness: 0.06, metalness: 0.25, transparent: true, opacity: 0.5, depthWrite: false });
+  const water = new THREE.Mesh(new THREE.CircleGeometry(4.25, 40), waterMat);
+  water.rotation.x = -Math.PI / 2; water.position.y = 0.32; water.renderOrder = 2;
   g.add(water);
   for (let i = 0; i < 16; i++) { // stone rim
     const a = (i / 16) * Math.PI * 2;
@@ -147,20 +165,11 @@ export function makePond(x, z, rotY = 0) {
     g.add(rail);
   });
   g.add(deck);
-  const koi = [0xff7a3c, 0xf2efe6, 0xff4a2a].map((c, i) => {
-    const f = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.7, 6), flat(c, { emissive: c, emissiveIntensity: 0.15 }));
-    f.rotation.z = Math.PI / 2;
-    f.userData.phase = i * 2.1;
-    g.add(f);
-    return f;
-  });
   g.position.set(x, 0, z);
   g.rotation.y = rotY;
-  g.userData.animate = (t) => koi.forEach((f) => {
-    const a = t * 0.5 + f.userData.phase;
-    f.position.set(Math.cos(a) * 2.6, 0.12, Math.sin(a) * 2.6);
-    f.rotation.y = -a;
-  });
+  let op = 0.5;
+  g.userData.animate = (t) => { waterMat.opacity = op + Math.sin(t * 0.6) * 0.03; };
+  g.userData.setNight = (n) => { waterMat.color.set(n ? 0x1c2c40 : 0x2a5560); op = n ? 0.6 : 0.5; waterMat.opacity = op; };
   return g;
 }
 

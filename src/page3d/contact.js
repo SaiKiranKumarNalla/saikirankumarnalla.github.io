@@ -14,7 +14,7 @@ document.getElementById('main').innerHTML = `
     <div class="s-role"><b>GitHub</b><p><a href="${esc(profile.links.github)}" target="_blank" rel="noopener">github.com/SaiKiranKumarNalla</a></p></div>
     <div class="s-role"><b>CV</b><p><a href="/${esc(profile.links.cv)}" target="_blank" rel="noopener">Download (PDF)</a></p></div>
     <h3>Open to</h3><div class="s-chips">${profile.openTo.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
-    <a class="s-more" href="/kage">Or ask Kage, my AI assistant →</a>
+    <a class="s-more" href="/kage.html">Or ask Kage, my AI assistant →</a>
   </div></section>`;
 
 runPage({

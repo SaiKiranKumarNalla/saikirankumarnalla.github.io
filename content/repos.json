@@ -50,6 +50,29 @@
         "src": "/media/projects/cassoulet-phantom-slice.webp",
         "caption": "A simulated slice of the heterogeneous-insert phantom."
       }
+    ],
+    "headline": "An analytical PET/CT simulator that inserts uniform, heterogeneous and patient-shaped lesions into phantom or patient data, modelled on three current clinical scanners.",
+    "brief": {
+      "problem": "Vendor simulators are closed and could not insert heterogeneous or necrotic lesions, or patient-derived shapes, on the scanners in use.",
+      "built": "A GPU pipeline that projects background and lesion separately, adds calibrated noise, mixes the data and reconstructs it (BSREM/OSEM) with DICOM export, for the GE Discovery MI, GE OMNI Legend and Siemens Biograph Vision Quadra.",
+      "result": "Reproduced the heterogeneous-insert trends measured in physical experiments; more than 150 dated studies by October 2026, with multicentre manuscripts in preparation."
+    },
+    "stats": [
+      {
+        "value": "3",
+        "label": "scanner models"
+      },
+      {
+        "value": "150+",
+        "label": "dated studies, Oct 2026"
+      }
+    ],
+    "tools": [
+      "MATLAB",
+      "Python",
+      "CUDA",
+      "PyTomography",
+      "parallelproj"
     ]
   },
   {
@@ -60,7 +83,7 @@
     "context": "PhD side project · preprint",
     "eli5": "Use the physics of how things spread through tissue to make realistic, fully known fake PET scans.",
     "summary": "Couples computational mass-transport physics with PET simulation to generate synthetic PET data whose ground-truth activity is known.",
-    "abstract": "Purpose: Robust positron emission tomography (PET) research increasingly requires reliable ground-truth activity distributions, yet clinical data and physical phantoms cannot provide them fully. This work introduces MuPET (multiphysics PET), a computational framework that bridges mass-transport physics simulation with image domain noise modeling to generate realistic, synthetic PET images.\n\nMethods: Tracer transport and radioactive decay within a custom phantom geometry were modeled via decay diffusion physics. The simulated activity concentrations were converted into PET equivalent count maps, followed by a pseudo-Poisson noise model calibrated to scanner-specific characteristics. MuPET generated images were compared with experimental PET acquisitions and a conventional synthetic lesion insertion pipeline. VOI (volume of interest) and ROI (region interest) data extraction was performed on all the data. The quantitative metrics included the recovery coefficient (RC), target contrast ratio (TCR), coefficient of variability (COV), and activity profile.\n\nResults: The simulated effective activities matched the decay-corrected measurements within 0.4-1.2%, confirming high physics-model fidelity. The optimized noise model achieved COV values (3.9-4.0%) comparable to those of the acquisitions (3.8-3.9%). MuPET demonstrated strong agreement with the experimental profiles and quantitative metrics, with mean biases within 10% of the acquisition.\n\nConclusion: MuPET establishes a fast (approximately 15 min), physically grounded pipeline that combines transport modeling with PET image simulation, enabling generation of realistic datasets. This approach provides a practical foundation for future dynamic PET simulations. Graphical Abstract O_FIG O_LINKSMALLFIG WIDTH=200 HEIGHT=109 SRC=\"FIGDIR/small/25332512v2_ufig1.gif\" ALT=\"Figure 1\"> View larger version (44K): org.highwire.dtl.DTLVardef@16998b9org.highwire.dtl.DTLVardef@1a9b92eorg.highwire.dtl.DTLVardef@1bcac12org.highwire.dtl.DTLVardef@1c51342_HPS_FORMAT_FIGEXP M_FIG C_FIG",
+    "abstract": "Purpose: Robust positron emission tomography (PET) research increasingly requires reliable ground-truth activity distributions, yet clinical data and physical phantoms cannot provide them fully. This work introduces MuPET (multiphysics PET), a computational framework that bridges mass-transport physics simulation with image domain noise modeling to generate realistic, synthetic PET images.\n\nMethods: Tracer transport and radioactive decay within a custom phantom geometry were modeled via decay diffusion physics. The simulated activity concentrations were converted into PET equivalent count maps, followed by a pseudo-Poisson noise model calibrated to scanner-specific characteristics. MuPET generated images were compared with experimental PET acquisitions and a conventional synthetic lesion insertion pipeline. VOI (volume of interest) and ROI (region interest) data extraction was performed on all the data. The quantitative metrics included the recovery coefficient (RC), target contrast ratio (TCR), coefficient of variability (COV), and activity profile.\n\nResults: The simulated effective activities matched the decay-corrected measurements within 0.4-1.2%, confirming high physics-model fidelity. The optimized noise model achieved COV values (3.9-4.0%) comparable to those of the acquisitions (3.8-3.9%). MuPET demonstrated strong agreement with the experimental profiles and quantitative metrics, with mean biases within 10% of the acquisition.\n\nConclusion: MuPET establishes a fast (approximately 15 min), physically grounded pipeline that combines transport modeling with PET image simulation, enabling generation of realistic datasets. This approach provides a practical foundation for future dynamic PET simulations.",
     "stack": [
       "Mass-transport physics",
       "PET simulation"
@@ -74,6 +97,30 @@
         "label": "GitHub release",
         "status": "soon"
       }
+    ],
+    "headline": "Synthetic PET images with a known ground truth, generated from tracer-transport physics in about 15 minutes and checked against real scanner acquisitions.",
+    "brief": {
+      "problem": "PET research needs ground-truth activity distributions, which clinical data and physical phantoms cannot fully provide.",
+      "built": "A framework that models tracer transport and radioactive decay (decay diffusion) in a custom phantom geometry, converts the activity to PET-equivalent counts and adds a pseudo-Poisson noise model calibrated to the scanner.",
+      "result": "Simulated activities matched decay-corrected measurements within 0.4–1.2 %; image noise (COV 3.9–4.0 %) matched the acquisitions (3.8–3.9 %), with mean biases within 10 %."
+    },
+    "stats": [
+      {
+        "value": "0.4–1.2 %",
+        "label": "activity error vs measured"
+      },
+      {
+        "value": "<10 %",
+        "label": "mean bias vs acquisition"
+      },
+      {
+        "value": "~15 min",
+        "label": "per synthetic dataset"
+      }
+    ],
+    "tools": [
+      "MATLAB",
+      "Python"
     ]
   },
   {
@@ -81,7 +128,7 @@
     "name": "Bench test for pulmonary valve implantation",
     "kind": "Surgical simulation bench",
     "years": "2022",
-    "context": "M1 internship · Hôpital Marie Lannelongue",
+    "context": "M1 internship · Hôpital Marie Lannelongue (Groupe Hospitalier Paris Saint-Joseph)",
     "eli5": "A 3D-printed heart on a bench, so cardiologists can rehearse fitting a new valve before the real operation.",
     "summary": "Redesign of a surgical simulation bench test for percutaneous pulmonary valve implantation (PPVI) in congenital heart disease, advised by Dr Sébastien Hascoët.",
     "more": {
@@ -100,7 +147,17 @@
       "3D printing",
       "Segmentation",
       "Bench testing"
-    ]
+    ],
+    "headline": "A redesigned bench for rehearsing catheter pulmonary valve implantation on 3D-printed, patient-specific outflow tracts, built to set up faster and leak less.",
+    "brief": {
+      "problem": "Before percutaneous pulmonary valve implantation, landing-zone size and coronary compression are hard to judge. Existing benches reproduced the geometry but not the flow, took long to set up and leaked.",
+      "built": "A pipeline from patient CT/MR to segmentation and a printed outflow tract, and a bench that reproduces the cath-lab steps (flow inlet and outlet, contrast injection, balloon dilation) with a new connector and holder.",
+      "result": "A compact bench concept with lower setup time, benchmarked against a commercial bench (4–6 min setup, negligible leakage), plus clinical needs gathered by observing live procedures."
+    },
+    "tools": [
+      "Autodesk Meshmixer"
+    ],
+    "knowMore": false
   },
   {
     "id": "ladhyx",
@@ -124,7 +181,18 @@
       "Microfluidics",
       "Python",
       "Image tracking"
-    ]
+    ],
+    "headline": "Flow experiments on soft gel particles as stand-ins for deformable drug carriers, with an automated pipeline that tracks particles across the recorded image sequences.",
+    "brief": {
+      "problem": "Drug carriers deform and interact as they flow; soft gel particles are a controllable model for studying that.",
+      "built": "Flow-resistance experiments with soft gels and particle suspensions, and a tracking pipeline that follows and analyses many particles in an image sequence at once.",
+      "result": "Faster, reproducible analysis of the experimental videos, which sped up the synthesis of results."
+    },
+    "tools": [
+      "MATLAB",
+      "Python"
+    ],
+    "knowMore": false
   },
   {
     "id": "electrodes",
@@ -150,7 +218,15 @@
       "PEDOT:PSS",
       "AFM",
       "3D printing"
-    ]
+    ],
+    "headline": "Gel-free, flexible pin electrodes in PDMS with PEDOT:PSS and graphite, designed for the sleep-monitoring startup Manitty to record while the wearer moves.",
+    "brief": {
+      "problem": "Wet gel electrodes are uncomfortable over long recordings, and dry electrodes struggle with skin impedance and motion artefacts.",
+      "built": "Flexible pin electrodes moulded in PDMS with conductive PEDOT:PSS and graphite, plus 3D-printed variants, characterised by atomic force microscopy (surface, Young's modulus) and in vitro electrical tests.",
+      "result": "Designs assessed against targets of 20–40 kΩ contact impedance, 95–98 % correlation with wet electrodes at rest (85–90 % in motion) and €10–30 per electrode, with options for human and veterinary use."
+    },
+    "tools": [],
+    "knowMore": false
   },
   {
     "id": "rbc",
@@ -174,7 +250,27 @@
     "stack": [
       "Computational modelling",
       "Microfluidics"
-    ]
+    ],
+    "headline": "A model of loading drugs into red blood cells with shear flow: about 30 % average encapsulation while around 80 % of cells survive in the worst cases.",
+    "brief": {
+      "problem": "Shear has to open membrane pores long enough for a drug to diffuse in, but too much shear destroys the cell (haemolysis).",
+      "built": "A multiphase (Euler–Euler) and species-transport model of RBC mechanics, shear-induced poration and diffusion through the cytoplasm, compared with published microfluidic experiments.",
+      "result": "About 30 % average encapsulation with around 80 % of cells preserved in the worst cases. Still open: physiological haematocrit (~40 %), pulsatile flow, biocompatibility and circulation time."
+    },
+    "stats": [
+      {
+        "value": "~30 %",
+        "label": "average encapsulation"
+      },
+      {
+        "value": "~80 %",
+        "label": "cells preserved, worst case"
+      }
+    ],
+    "tools": [
+      "COMSOL"
+    ],
+    "knowMore": false
   },
   {
     "id": "carotid",
@@ -194,6 +290,15 @@
         "label": "Paper (J Biomech Eng 2022)",
         "href": "https://doi.org/10.1115/1.4054679"
       }
+    ],
+    "headline": "Two-phase CFD of a gas bubble travelling through an image-based human carotid artery under pulsatile flow, published in the Journal of Biomechanical Engineering (2022).",
+    "brief": {
+      "problem": "Gas emboli disturb normal blood flow and can lead to occlusion and ischaemia; the study set out to quantify how they change carotid haemodynamics.",
+      "built": "Coupled Newtonian two-phase laminar flow simulations with interface tracking, in an anatomical image-based geometry with near-physiological pulsatile inflow.",
+      "result": "Emboli raised time-averaged shear stress and enlarged regions of high oscillatory shear index. Depending on contact angle, the bubble lodged in the carotid sinus or left the artery."
+    },
+    "tools": [
+      "COMSOL"
     ]
   }
 ]

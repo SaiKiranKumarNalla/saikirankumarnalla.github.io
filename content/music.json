@@ -2,8 +2,18 @@
   "title": "The Flow",
   "intro": "Music I make with AI tools, paired with Google Flow cinematic visuals.",
   "playlists": [
-    {"url": "https://www.flowmusic.app/playlist/cb6cb429-cafb-4434-85b5-06bed869db8b"},
-    {"url": "https://www.flowmusic.app/playlist/57e341c6-85cd-461c-997d-fe7f3f9a70db"}
+    {
+      "url": "https://www.flowmusic.app/playlist/cb6cb429-cafb-4434-85b5-06bed869db8b"
+    },
+    {
+      "url": "https://www.flowmusic.app/playlist/57e341c6-85cd-461c-997d-fe7f3f9a70db"
+    }
   ],
-  "featured": ["Sangeethama", "C'est une grâce", "Shāpanang Theme"]
+  "featured": [
+    "Sangeethama",
+    "C'est une grâce",
+    "Shāpanang Theme"
+  ],
+  "studio": "Fragrantmash Creative Studio",
+  "trackCount": 5
 }

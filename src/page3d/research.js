@@ -39,7 +39,7 @@ const STEPS = [
   ...[1, 2, 3, 4, 5].map((n) => ({ title: ch(n).title, html: study(n) })),
   { title: 'Takeaway', html: `<p class="s-kicker">Takeaway</p><h2>Ground truth you can trust</h2>
       <p class="s-lede">${esc(thesis.takeaway)}</p>
-      <a class="s-more" href="/sections/projects">What I built next →</a>` },
+      <a class="s-more" href="/sections/projects.html">What I built next →</a>` },
 ];
 
 document.getElementById('main').innerHTML = STEPS.map((s, i) =>

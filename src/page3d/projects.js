@@ -2,35 +2,63 @@
 // swaps the side card for its details. No long scroll; each project has a #id deep link.
 import repos from '../../content/repos.json';
 import { runPage } from './engine.js';
+import './projects.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const list = (items) => `<ul class="s-list">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
-const chips = (a) => (a?.length ? `<div class="s-chips">${a.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : '');
 const paras = (t) => String(t).split(/\n\s*\n/).map((x) => `<p>${esc(x.trim())}</p>`).join('');
 const fig = (f) => `<figure class="s-fig"><img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy"><figcaption>${esc(f.caption)}</figcaption></figure>`;
 
+// Tool badges: name -> logo in /media/logos/tools. Unknown names fall back to a monogram.
+const TOOL_LOGOS = {
+  MATLAB: 'matlab.webp',
+  Python: 'python.svg',
+  COMSOL: 'comsol.webp',
+  CUDA: 'cuda.svg',
+  PyTomography: 'pytomography.webp',
+  parallelproj: 'parallelproj.webp',
+  'Autodesk Meshmixer': 'autodesk.svg',
+};
+const toolBadge = (name) => {
+  const file = TOOL_LOGOS[name];
+  const mark = file
+    ? `<img src="/media/logos/tools/${file}" alt="" width="16" height="16" loading="lazy">`
+    : `<span class="pj-mono">${esc(name.slice(0, 2))}</span>`;
+  return `<li><span class="pj-logo" aria-hidden="true">${mark}</span>${esc(name)}</li>`;
+};
+const tools = (a) => (a?.length ? `<span class="pj-label">Tools</span><ul class="pj-tools">${a.map(toolBadge).join('')}</ul>` : '');
+const stats = (a) => (a?.length ? `<div class="pj-stats">${a.map((x) => `<div><b>${esc(x.value)}</b><span>${esc(x.label)}</span></div>`).join('')}</div>` : '');
+const brief = (b) => (b ? `<dl class="pj-brief">${[['Problem', b.problem], ['Built', b.built], ['Result', b.result]]
+  .filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : '');
+
 const intro = () => `<p class="s-kicker">Projects &amp; repos</p><h1>Things I've built</h1>
-  <p class="s-lede">Simulators, benches and models, from undergrad CFD to PET simulation. Pick a tile, or a name below.</p>
+  <p class="s-lede">PET/CT simulation, cardiovascular CFD, a surgical bench and wearable electrodes. Each one sets out the problem, what I built and the result.</p>
   <div class="s-pick">${repos.map((r) => `<button data-id="${r.id}"><b>${esc(r.name)}</b><span>${esc(r.kind)} · ${esc(r.years)}</span></button>`).join('')}</div>
-  <p class="s-meta">AI agent systems live on the <a href="/sections/builder">Agentic AI</a> page.</p>`;
+  <p class="s-meta">AI agent systems live on the <a href="/sections/builder.html">Agentic AI</a> page.</p>`;
 
 function detail(r) {
   const links = (r.links || []).map((l) => (l.href
     ? `<a class="s-link" href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`
     : `<span class="s-link soon">${esc(l.label)} · coming soon</span>`)).join('');
   const m = r.more;
+  // Methods that are not already shown as tool badges.
+  const methods = (r.stack || []).filter((x) => !(r.tools || []).some((t) => x.toLowerCase().startsWith(t.toLowerCase())));
   return `<button class="s-back" data-back>← All projects</button>
     <p class="s-kicker">${esc(r.kind)} · ${esc(r.years)} · ${esc(r.context)}</p>
     <h2>${esc(r.name)}</h2>
-    <p class="s-lede">${esc(r.eli5)}</p><p>${esc(r.summary)}</p>
+    <p class="s-lede">${esc(r.headline || r.eli5)}</p>
+    ${r.brief ? brief(r.brief) : `<p>${esc(r.summary)}</p>`}
+    ${stats(r.stats)}
+    ${tools(r.tools)}
+    ${methods.length ? `<span class="pj-label">Methods</span><div class="s-chips pj-methods">${methods.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
     ${links ? `<div class="s-links">${links}</div>` : ''}
     ${r.figures?.[0] ? fig(r.figures[0]) : ''}
-    ${m ? `<details class="s-know"><summary>Know more <span class="s-meta">problem, approach, outcome</span></summary>
-      <h3>The problem</h3><p>${esc(m.problem)}</p><h3>How</h3>${list(m.approach)}<h3>Outcome</h3>${list(m.outcome)}
+    ${m && r.knowMore !== false ? `<details class="s-know"><summary>Know more <span class="s-meta">${r.brief ? 'method details' : 'problem, approach, outcome'}</span></summary>
+      ${r.brief ? '' : `<h3>The problem</h3><p>${esc(m.problem)}</p>`}<h3>How</h3>${list(m.approach)}
+      ${r.brief ? '' : `<h3>Outcome</h3>${list(m.outcome)}`}
       ${(r.figures || []).slice(1).map(fig).join('')}
     </details>` : ''}
-    ${r.abstract ? `<details class="s-know"><summary>Abstract</summary>${paras(r.abstract)}</details>` : ''}
-    ${r.stack ? `<h3>Built with</h3>${chips(r.stack)}` : ''}`;
+    ${r.abstract ? `<details class="s-know"><summary>Abstract</summary>${paras(r.abstract)}</details>` : ''}`;
 }
 
 document.documentElement.classList.add('s-gallery');
@@ -257,6 +285,13 @@ runPage({
       keyframes: [{ pos: [0, 0.4, 17], look: [0, 0, 0] }],
       update(t, p, dt) {
         const time = reduceMotion ? 0 : t, k = Math.min(1, dt * 3);
+        // On phones the card fills the bottom 55 % of the screen, so the wall and the explainers
+        // move up into the free band above it instead of sitting behind the card.
+        const narrow = innerWidth <= 860;
+        wall.position.set(narrow ? -0.6 : 0, narrow ? 2.4 : 0, 0);
+        wall.scale.setScalar(narrow ? 0.55 : 1);
+        stage.position.set(narrow ? 0 : 1.4, narrow ? 1.9 : 0, 0);
+        stage.scale.setScalar(narrow ? 0.4 : 0.72);
         tiles.forEach((m) => {
           const tgt = current ? m.userData.home.clone().multiplyScalar(1.1).add(V(0, 0, -7)) : m.userData.home.clone().add(V(0, 0, m === hover ? 0.4 : 0));
           m.position.lerp(tgt, k);

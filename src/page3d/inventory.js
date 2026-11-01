@@ -17,7 +17,7 @@ document.getElementById('main').innerHTML = `
     <table class="s-table"><thead><tr><th>Project</th><th>Type</th><th>Year</th><th>Status</th></tr></thead><tbody>
     ${sorted.map((p) => `<tr><td><b>${esc(p.name)}</b></td><td>${esc(p.kind)}</td><td>${p.year}</td><td>${STATUS[p.status] || esc(p.status)}</td></tr>`).join('')}
     </tbody></table>
-    <a class="s-more" href="/sections/projects">Featured projects in detail →</a>
+    <a class="s-more" href="/sections/projects.html">Featured projects in detail →</a>
   </div></section>`;
 
 runPage({

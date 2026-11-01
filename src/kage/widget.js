@@ -11,9 +11,11 @@ import './widget.css';
 
 const PROXY_URL = 'https://kage-proxy.sainalla82.workers.dev';
 const PAGES = {
-  home: ['/', 'the village (home)'], about: ['/about', 'About'], experience: ['/experience', 'Experience'],
-  education: ['/education', 'Education (PhD, Master\'s, Bachelor\'s)'], projects: ['/projects', 'Projects'],
-  publications: ['/papers', 'Publications'], contact: ['/contact', 'Reach Out'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
+  home: ['/', 'the village (home)'], about: ['/sections/about.html', 'About'], phd: ['/sections/research.html', 'PhD thesis'],
+  masters: ['/sections/masters.html', "Master's thesis"], bachelors: ['/sections/auv.html', "Bachelor's: Black Pearl AUV"],
+  projects: ['/sections/projects.html', 'Projects'], publications: ['/sections/publications.html', 'Publications'],
+  agentic: ['/sections/builder.html', 'Agentic AI'], contact: ['/sections/contact.html', 'Contact'],
+  life: ['/sections/life.html', 'Off the Clock'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
 };
 const PROMPTS = ['Who is Sai, in two lines?', 'Explain the PhD like I am five', 'What has Sai built?', 'Is Sai a fit for my role?'];
 
@@ -82,6 +84,7 @@ export function mountKage() {
     state = 'talk';
     try {
       const res = await fetch(PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ system: systemPrompt(), messages: history.slice(-12) }) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       typing.remove();
       if (data.error) throw new Error(data.error);
@@ -95,7 +98,8 @@ export function mountKage() {
       }
     } catch (e) {
       typing.remove();
-      add('kage', "I couldn't reach my brain just now. Try again in a moment, or use the Contact page to reach Sai directly.");
+      if (history[history.length - 1]?.role === 'user') history.pop(); // keep the history clean for a retry
+      add('kage', "I'm offline right now and couldn't answer that. Try again in a moment, or reach Sai directly through the Contact page.");
     }
     busy = false;
     state = 'idle';
