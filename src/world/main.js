@@ -366,7 +366,14 @@ $('wHome').addEventListener('click', (e) => { e.preventDefault(); closePanel(); 
 const GREETINGS = [['ようこそ', 'ja'], ['Welcome', 'en'], ['నమస్కారం', 'te'], ['नमस्ते', 'hi'], ['Bonjour', 'fr']];
 let greetIdx = 0;
 // "I am a …": each role fades out and the next one fades in.
-const ROLES = ['a researcher', 'a medical imaging scientist', 'an engineer', 'an agentic AI builder', 'a game maker', 'a writer', 'a jack of all trades'];
+const ROLES = [
+  'a medical imaging scientist by profession',
+  'a novice game developer',
+  'a polymorph by nature',
+  'an agentic AI builder',
+  'a researcher & engineer',
+  'a writer & world builder'
+];
 let roleIdx = 0;
 setInterval(() => {
   if (heroEl.classList.contains('gone')) return;

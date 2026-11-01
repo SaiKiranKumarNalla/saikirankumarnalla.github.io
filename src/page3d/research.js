@@ -33,6 +33,15 @@ const STEPS = [
   { title: 'In a nutshell', html: `<p class="s-kicker">PhD · ${esc(thesis.university)} · 2023–2026</p>
       <h1>${esc(thesis.nutshell)}</h1>
       <p class="s-lede">${esc(thesis.eli5)}</p>
+      <div style="margin: 1.1rem 0; padding: 12px 14px; background: rgba(230,57,70,0.12); border: 1px solid var(--accent); border-radius: 10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <b style="color:var(--text); font-size:0.95rem; display:block;">📊 PhD Defense Presentation Slides</b>
+            <span style="font-size:0.75rem; color:var(--muted);">Soutenance de Thèse · IUCT Oncopole / Université de Toulouse (18 MB PDF)</span>
+          </div>
+          <a class="s-more" href="/docs/Soutenance_SaiNalla.pdf" target="_blank" rel="noopener" style="margin-top:0; font-weight:600; background:var(--accent-strong); color:#fff; padding:6px 14px; border-radius:6px; text-decoration:none; display:inline-block;">View Presentation (PDF) ↗</a>
+        </div>
+      </div>
       <p>${esc(thesis.abstractShort)}</p>
       <p class="s-meta">${esc(thesis.title)}<br>${thesis.labs.map(esc).join(' · ')} · Supervised by ${thesis.supervisors.map(esc).join(' & ')}</p>
       <p class="s-scroll">Scroll through the five studies</p>` },

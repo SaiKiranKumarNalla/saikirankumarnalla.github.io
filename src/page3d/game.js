@@ -23,8 +23,11 @@ const STEPS = [
         <span>Ghost of Tsushima Inspired</span><span>Sensei Sai's Shadow</span><span>Ronin Mascot</span><span>3D Interactive Companion</span>
       </div>
 
-      <div style="margin-top: 1.4rem;">
-        <button onclick="if(window.KageAsk) window.KageAsk('Tell me about Sensei Sai');" style="background: var(--accent-strong); color: #fff; border: 0; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.86rem; transition: transform 0.2s;">💬 Ask Kage (Chat Assistant)</button>
+      <div style="margin-top: 1.4rem; display: flex; gap: 8px; flex-wrap: wrap;">
+        <button onclick="if(window.KageAsk) window.KageAsk('Tell me about Sensei Sai');" style="background: var(--accent-strong); color: #fff; border: 0; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.86rem; transition: transform 0.2s;">💬 Ask Kage</button>
+        <a href="https://github.com/SaiKiranKumarNalla" target="_blank" rel="noopener" style="background: var(--chip); color: var(--text); border: 1px solid var(--line); padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 0.84rem; text-decoration: none; display: inline-flex; align-items: center;">GitHub Repo ↗</a>
+        <a href="https://itch.io" target="_blank" rel="noopener" style="background: var(--chip); color: var(--text); border: 1px solid var(--line); padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 0.84rem; text-decoration: none; display: inline-flex; align-items: center;">Itch.io ↗</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" style="background: var(--chip); color: var(--text); border: 1px solid var(--line); padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 0.84rem; text-decoration: none; display: inline-flex; align-items: center;">YouTube ↗</a>
       </div>
 
       <p class="s-scroll">Scroll down to explore the Kage action-adventure game below ↓</p>

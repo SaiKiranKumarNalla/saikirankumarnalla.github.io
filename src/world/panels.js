@@ -62,6 +62,11 @@ export const PANELS = {
       <h3 class="p-first">${esc(thesis.title)}</h3>
       <p class="p-meta">${thesis.labs.map(esc).join(' · ')} · Supervised by ${thesis.supervisors.map(esc).join(' & ')}</p>
       <div class="p-eli5"><span>In one breath</span>${esc(thesis.eli5)}</div>
+      <div style="margin: 0.8rem 0; padding: 10px 12px; background: rgba(230,57,70,0.1); border: 1px solid var(--accent); border-radius: 8px;">
+        <b style="color:var(--text); font-size:0.86rem; display:block; margin-bottom:2px;">📊 PhD Defense Presentation Slides</b>
+        <p style="font-size:0.78rem; color:var(--muted); margin:0 0 6px;">Soutenance de Thèse · 18 MB PDF</p>
+        <a class="p-more" href="/docs/Soutenance_SaiNalla.pdf" target="_blank" rel="noopener" style="font-size:0.78rem; font-weight:600; background:var(--accent-strong); color:#fff; padding:4px 10px; border-radius:6px; display:inline-block; text-decoration:none;">View Presentation Slides ↗</a>
+      </div>
       <ol class="p-steps">${thesis.chapters.filter((c) => c.n > 0).map((c) => `<li><b>${esc(c.title)}</b><p>${esc(c.detail)}</p></li>`).join('')}</ol>
       <p class="p-lede">${esc(thesis.takeaway)}</p>
       <h3>Now</h3>
@@ -110,6 +115,8 @@ export const PANELS = {
         <li><span>Email</span><a href="mailto:${esc(profile.email)}">${esc(profile.email)}</a></li>
         <li><span>LinkedIn</span><a href="${esc(profile.links.linkedin)}" target="_blank" rel="noopener">sai-kiran-kumar-nalla</a></li>
         <li><span>GitHub</span><a href="${esc(profile.links.github)}" target="_blank" rel="noopener">SaiKiranKumarNalla</a></li>
+        ${profile.links.itch ? `<li><span>Itch.io</span><a href="${esc(profile.links.itch)}" target="_blank" rel="noopener">Indie Games on Itch</a></li>` : ''}
+        ${profile.links.youtube ? `<li><span>YouTube</span><a href="${esc(profile.links.youtube)}" target="_blank" rel="noopener">Dev &amp; Game Reels</a></li>` : ''}
         <li><span>CV</span><a href="${esc(profile.links.cv)}" target="_blank" rel="noopener">Download (PDF)</a></li>
       </ul>
       <div class="p-actions">${more('kage.html', 'Or ask Kage, my AI assistant')}${more('recruiter.html', 'Recruiter mode')}${more('/sections/contact.html', 'Contact page')}</div>`,

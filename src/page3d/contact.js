@@ -12,6 +12,8 @@ document.getElementById('main').innerHTML = `
     <div class="s-role"><b>Email</b><p><a href="mailto:${esc(profile.email)}">${esc(profile.email)}</a></p></div>
     <div class="s-role"><b>LinkedIn</b><p><a href="${esc(profile.links.linkedin)}" target="_blank" rel="noopener">linkedin.com/in/sai-kiran-kumar-nalla</a></p></div>
     <div class="s-role"><b>GitHub</b><p><a href="${esc(profile.links.github)}" target="_blank" rel="noopener">github.com/SaiKiranKumarNalla</a></p></div>
+    ${profile.links.itch ? `<div class="s-role"><b>Itch.io</b><p><a href="${esc(profile.links.itch)}" target="_blank" rel="noopener">Indie Games on Itch</a></p></div>` : ''}
+    ${profile.links.youtube ? `<div class="s-role"><b>YouTube</b><p><a href="${esc(profile.links.youtube)}" target="_blank" rel="noopener">Dev &amp; Game Reels</a></p></div>` : ''}
     <div class="s-role"><b>CV</b><p><a href="/${esc(profile.links.cv)}" target="_blank" rel="noopener">Download (PDF)</a></p></div>
     <h3>Open to</h3><div class="s-chips">${profile.openTo.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
     <a class="s-more" href="/kage.html">Or ask Kage, my AI assistant →</a>
