@@ -12,12 +12,13 @@ const thumb = (p) => {
   return `<span class="pub-thumb" data-pid="${esc(p.id)}" data-ph="${esc(ph)}"><img src="/media/papers/${esc(p.id)}.webp" alt="First page of ${esc(p.title)}" loading="lazy" width="84" height="112"></span>`;
 };
 const item = (p) => {
-  const paperLink = p.doi ? `https://doi.org/${esc(p.doi)}` : '';
+  const paperLink = p.pdf || (p.doi ? `https://doi.org/${esc(p.doi)}` : '');
+  const linkLabel = p.pdf ? 'View full poster PDF ↗' : 'Read paper / manuscript ↗';
   const statusBadge = p.statusText ? `<span class="pub-status-badge">${esc(p.statusText)}</span>` : '';
   return `<div class="s-role pub-item">${thumb(p)}<div>
     <b>${esc(p.title)}</b>
-    <p>${statusBadge}${esc(p.venue)} · ${p.year}${paperLink ? ` · <a href="${paperLink}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p>
-    ${paperLink ? `<p style="margin:4px 0 6px"><a class="pub-read-btn" href="${paperLink}" target="_blank" rel="noopener">Read paper / manuscript ↗</a></p>` : ''}
+    <p>${statusBadge}${esc(p.venue)} · ${p.year}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p>
+    ${paperLink ? `<p style="margin:4px 0 6px"><a class="pub-read-btn" href="${paperLink}" target="_blank" rel="noopener">${linkLabel}</a></p>` : ''}
     ${p.abstract ? `<details class="s-know"><summary>Abstract</summary>${paras(p.abstract)}</details>`
       : p.summary ? `<details class="s-know"><summary>Summary</summary><p>${esc(p.summary)}</p><p class="s-meta">Full abstract on the publisher's site.</p></details>` : ''}</div></div>`;
 };

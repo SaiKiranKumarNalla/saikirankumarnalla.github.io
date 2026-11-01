@@ -94,6 +94,22 @@
     ]
   },
   {
+    "id": "e4h2024",
+    "title": "3D Printed \"Analog\" Ground Truth & Anthropomorphic Lesion Evaluation – Pilot Study",
+    "venue": "Engineering for Health (E4H) · Institut Polytechnique de Paris",
+    "year": 2024,
+    "status": "conference",
+    "pdf": "/docs/PosterE4H.pdf",
+    "thesisStudy": 4,
+    "tags": [
+      "E4H",
+      "poster",
+      "anthropomorphic lesions",
+      "ground truth"
+    ],
+    "abstract": "Validating molecular imaging advances (Dynamic 4D imaging, theranostics, and AI) requires controlled ground truths prior to clinical use. Standard phantoms lack customizability and require tedious preparation prone to error. This work introduces a complementary framework: 3D-printed porous phantoms to provide physical ground truth with single-injection multi-contrast encoding, coupled with diffusion-decay mass transport simulations for scalable analytical ground truth across 8 patient lesion morphologies extracted from TCIA."
+  },
+  {
     "id": "eanm2025",
     "title": "3D Printed PET/CT Phantom with Mixed Target Uptake Characteristics to Investigate Lesion Development",
     "venue": "EANM Congress 2025 · e-poster EP-0949",
