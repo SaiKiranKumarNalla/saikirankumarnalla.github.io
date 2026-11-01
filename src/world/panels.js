@@ -18,8 +18,9 @@ const STATUS = {
 
 function pubItem(p) {
   const link = p.doi ? `<a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : '';
+  const badgeText = p.statusText || STATUS[p.status] || esc(p.status);
   return `<li class="p-pub">
-    <span class="p-badge p-${esc(p.status)}">${STATUS[p.status] || esc(p.status)}</span>
+    <span class="p-badge p-${esc(p.status)}">${esc(badgeText)}</span>
     <h4>${esc(p.title)}</h4>
     <p class="p-meta">${esc(p.venue)} · ${esc(p.year)} ${link ? `· ${link}` : ''}</p>
   </li>`;
