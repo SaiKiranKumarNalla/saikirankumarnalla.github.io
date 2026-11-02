@@ -17,7 +17,7 @@
   {
     "id": "dualcentre",
     "title": "From Digital File to Transferable Phantom: A Dual-Centre Evaluation of Multi-contrast Phantom for Standardized PET Quantification",
-    "venue": "Physica Medica (under revision) · medRxiv preprint",
+    "venue": "medRxiv preprint",
     "year": 2025,
     "status": "preprint",
     "doi": "10.1101/2025.05.30.25328639",
@@ -27,7 +27,8 @@
       "harmonisation"
     ],
     "abstract": "Background: Three-dimensional printing has been used to build cost effective & realistic phantoms but their adaptability across facilities remains under-explored. Validation of standardization protocols and quantitative metrics of positron emission tomography (PET) to printed phantoms has been sparse. This study aims to evaluate the digital transferability of a multi-contrast phantom design and the quantitative consistency of metrics across two independent facilities, as a foundational step towards multi-centre standardization.\n\nMethods: Cubic phantom inserts (40 mm) featuring spherical targets (0, 10, 15, and 20 mm), of a previously proven design, were fabricated at two different facilities using 3D printing and positioned within a Jaszczak phantom, filled with radiotracer and soap/water solution. Acquisitions (Day 0, 8) were performed on 5-ring Discovery MI and 32 cm OMNI Legend systems. Quantitative metrics, including CT Hounsfield units (HU), PET recovery coefficients (RC) and PET target-to-background ratios (TBR) were statistically analysed (rank sum tests) to assess the influence of facility, scanner model, and acquisition day.\n\nResults: CT images revealed minor differences across facilities and scanners, with notable HU improvement (in emulating water) upon prolonged cube immersion. PET image quality was visually good with respect to desired feature representation. Average TBRMax (mean{+/-}std. dev.) were 1.56 {+/-} 0.03 (expected 2.0), 2.35 {+/-} 0.05 (expected 2.5), and 3.10 {+/-} 0.05 (expected 3.33). RCMax and RCMean ranged from 0.69 - 1.11 and 0.56 - 0.89. No statistical differences were found for TBRMax, RCMean, or RCMax (p [≥] 0.07 for Mann Whitney; p [≥] 0.57 for Friedman) and Bland-Altman mean bias < 10%.\n\nConclusion: Our study demonstrates that quantitative PET consistency can be reliably maintained across different facilities, printers, and scanners using 3D-printed phantoms produced from a common digital file. This confirmation of digital transferability offers a crucial and cost-effective framework for standardization, paving the way for more accessible multi-center harmonization studies.",
-    "statusText": "Reviewed at Physica Medica (under revisions)"
+    "statusText": "Reviewed at Physica Medica (under revisions)",
+    "firstPage": true
   },
   {
     "id": "quantreality",
@@ -42,7 +43,8 @@
       "radiomics",
       "dual tracer"
     ],
-    "abstract": "Background: Accurate quantification of intratumoral heterogeneity is essential for validating radiomics features and AI models in oncology. However, standard physical phantoms typically utilize homogeneous compartments, lacking the spatially complex uptake patterns required to rigorously benchmark these metrics against a known reality. To address this, we introduce porous 3D-printed inserts for simulating controlled spatial heterogeneity.\n\nMethods: Modular grid inserts (17, 22, 28 mm targets) were developed with contrast of 4:1. Nine heterogeneity models, simulating progressions from uniform uptake to multifocal to necrosis, were imaged on a 32cm Omni Legend PET/CT system. Two different tracers: [18F]FDG ([18F]-2-fluoro-2-deoxy-d-glucose) and [68Ga] (68-Gallium) were used on different days. Quantitative performance was assessed using conventional Standardized Uptake Values (SUV) and Target-to-Background Ratios (TBR), alongside the Gini Index (GI) to quantify spatial heterogeneity and radiotracer distribution inequality.\n\nResults: The phantom demonstrated high consistency, with reference solution variability remaining under 2.2% across layers. In 28 mm inserts, experimental TBRmax values fell within 10% of the theoretical 4:1 design ratio. GI successfully quantified structural complexity, ranging from 0.05 in homogeneous regions to 0.30 in necrotic targets. Cross-tracer analysis demonstrated robust reproducibility with a mean bias of <10%. While Partial Volume Effects reduced visual distinctness in 17 mm geometries, quantitative metrics successfully preserved the intended pathological trends.\n\nConclusion: This study establishes a foundational ground truth for heterogeneous uptake in PET. By providing defined physical standards validated by quantitative metrics, it enables the robust validation of segmentation algorithms and radiomics features even when spatial resolution limits visual assessment."
+    "abstract": "Background: Accurate quantification of intratumoral heterogeneity is essential for validating radiomics features and AI models in oncology. However, standard physical phantoms typically utilize homogeneous compartments, lacking the spatially complex uptake patterns required to rigorously benchmark these metrics against a known reality. To address this, we introduce porous 3D-printed inserts for simulating controlled spatial heterogeneity.\n\nMethods: Modular grid inserts (17, 22, 28 mm targets) were developed with contrast of 4:1. Nine heterogeneity models, simulating progressions from uniform uptake to multifocal to necrosis, were imaged on a 32cm Omni Legend PET/CT system. Two different tracers: [18F]FDG ([18F]-2-fluoro-2-deoxy-d-glucose) and [68Ga] (68-Gallium) were used on different days. Quantitative performance was assessed using conventional Standardized Uptake Values (SUV) and Target-to-Background Ratios (TBR), alongside the Gini Index (GI) to quantify spatial heterogeneity and radiotracer distribution inequality.\n\nResults: The phantom demonstrated high consistency, with reference solution variability remaining under 2.2% across layers. In 28 mm inserts, experimental TBRmax values fell within 10% of the theoretical 4:1 design ratio. GI successfully quantified structural complexity, ranging from 0.05 in homogeneous regions to 0.30 in necrotic targets. Cross-tracer analysis demonstrated robust reproducibility with a mean bias of <10%. While Partial Volume Effects reduced visual distinctness in 17 mm geometries, quantitative metrics successfully preserved the intended pathological trends.\n\nConclusion: This study establishes a foundational ground truth for heterogeneous uptake in PET. By providing defined physical standards validated by quantitative metrics, it enables the robust validation of segmentation algorithms and radiomics features even when spatial resolution limits visual assessment.",
+    "firstPage": true
   },
   {
     "id": "mupet",
@@ -56,7 +58,8 @@
       "multiphysics",
       "simulation"
     ],
-    "abstract": "Purpose: Robust positron emission tomography (PET) research increasingly requires reliable ground-truth activity distributions, yet clinical data and physical phantoms cannot provide them fully. This work introduces MuPET (multiphysics PET), a computational framework that bridges mass-transport physics simulation with image domain noise modeling to generate realistic, synthetic PET images.\n\nMethods: Tracer transport and radioactive decay within a custom phantom geometry were modeled via decay diffusion physics. The simulated activity concentrations were converted into PET equivalent count maps, followed by a pseudo-Poisson noise model calibrated to scanner-specific characteristics. MuPET generated images were compared with experimental PET acquisitions and a conventional synthetic lesion insertion pipeline. VOI (volume of interest) and ROI (region interest) data extraction was performed on all the data. The quantitative metrics included the recovery coefficient (RC), target contrast ratio (TCR), coefficient of variability (COV), and activity profile.\n\nResults: The simulated effective activities matched the decay-corrected measurements within 0.4-1.2%, confirming high physics-model fidelity. The optimized noise model achieved COV values (3.9-4.0%) comparable to those of the acquisitions (3.8-3.9%). MuPET demonstrated strong agreement with the experimental profiles and quantitative metrics, with mean biases within 10% of the acquisition.\n\nConclusion: MuPET establishes a fast (approximately 15 min), physically grounded pipeline that combines transport modeling with PET image simulation, enabling generation of realistic datasets. This approach provides a practical foundation for future dynamic PET simulations. Graphical Abstract O_FIG O_LINKSMALLFIG WIDTH=200 HEIGHT=109 SRC=\"FIGDIR/small/25332512v2_ufig1.gif\" ALT=\"Figure 1\"> View larger version (44K): org.highwire.dtl.DTLVardef@16998b9org.highwire.dtl.DTLVardef@1a9b92eorg.highwire.dtl.DTLVardef@1bcac12org.highwire.dtl.DTLVardef@1c51342_HPS_FORMAT_FIGEXP M_FIG C_FIG"
+    "abstract": "Purpose: Robust positron emission tomography (PET) research increasingly requires reliable ground-truth activity distributions, yet clinical data and physical phantoms cannot provide them fully. This work introduces MuPET (multiphysics PET), a computational framework that bridges mass-transport physics simulation with image domain noise modeling to generate realistic, synthetic PET images.\n\nMethods: Tracer transport and radioactive decay within a custom phantom geometry were modeled via decay diffusion physics. The simulated activity concentrations were converted into PET equivalent count maps, followed by a pseudo-Poisson noise model calibrated to scanner-specific characteristics. MuPET generated images were compared with experimental PET acquisitions and a conventional synthetic lesion insertion pipeline. VOI (volume of interest) and ROI (region interest) data extraction was performed on all the data. The quantitative metrics included the recovery coefficient (RC), target contrast ratio (TCR), coefficient of variability (COV), and activity profile.\n\nResults: The simulated effective activities matched the decay-corrected measurements within 0.4-1.2%, confirming high physics-model fidelity. The optimized noise model achieved COV values (3.9-4.0%) comparable to those of the acquisitions (3.8-3.9%). MuPET demonstrated strong agreement with the experimental profiles and quantitative metrics, with mean biases within 10% of the acquisition.\n\nConclusion: MuPET establishes a fast (approximately 15 min), physically grounded pipeline that combines transport modeling with PET image simulation, enabling generation of realistic datasets. This approach provides a practical foundation for future dynamic PET simulations. Graphical Abstract O_FIG O_LINKSMALLFIG WIDTH=200 HEIGHT=109 SRC=\"FIGDIR/small/25332512v2_ufig1.gif\" ALT=\"Figure 1\"> View larger version (44K): org.highwire.dtl.DTLVardef@16998b9org.highwire.dtl.DTLVardef@1a9b92eorg.highwire.dtl.DTLVardef@1bcac12org.highwire.dtl.DTLVardef@1c51342_HPS_FORMAT_FIGEXP M_FIG C_FIG",
+    "firstPage": true
   },
   {
     "id": "geoanchored",
@@ -107,7 +110,8 @@
       "anthropomorphic lesions",
       "ground truth"
     ],
-    "abstract": "Validating molecular imaging advances (Dynamic 4D imaging, theranostics, and AI) requires controlled ground truths prior to clinical use. Standard phantoms lack customizability and require tedious preparation prone to error. This work introduces a complementary framework: 3D-printed porous phantoms to provide physical ground truth with single-injection multi-contrast encoding, coupled with diffusion-decay mass transport simulations for scalable analytical ground truth across 8 patient lesion morphologies extracted from TCIA."
+    "abstract": "Validating molecular imaging advances (Dynamic 4D imaging, theranostics, and AI) requires controlled ground truths prior to clinical use. Standard phantoms lack customizability and require tedious preparation prone to error. This work introduces a complementary framework: 3D-printed porous phantoms to provide physical ground truth with single-injection multi-contrast encoding, coupled with diffusion-decay mass transport simulations for scalable analytical ground truth across 8 patient lesion morphologies extracted from TCIA.",
+    "firstPage": true
   },
   {
     "id": "eanm2025",
@@ -122,14 +126,15 @@
   },
   {
     "id": "ecr2025",
-    "title": "Synthetic lesion insertion versus 3D-printed uniform targets",
+    "title": "Fillable 3D-Printed Phantom Grids: Enhancing Accuracy in PET/CT Quality Control",
     "venue": "ECR 2025 · C-28068",
     "year": 2025,
     "status": "conference",
     "thesisStudy": 1,
     "tags": [
       "conference"
-    ]
+    ],
+    "firstPage": true
   },
   {
     "id": "sfpm2024",
@@ -140,7 +145,8 @@
     "thesisStudy": 1,
     "tags": [
       "conference"
-    ]
+    ],
+    "firstPage": true
   },
   {
     "id": "jbme2022",

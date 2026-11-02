@@ -266,7 +266,7 @@ MENU.forEach((id) => {
   }
   // Sections without a village panel (Skills) link straight to their page.
   if (!PANELS[id]) {
-    menuEl.insertAdjacentHTML('beforeend', `<a href="/sections/${id}.html">${id[0].toUpperCase() + id.slice(1)}</a>`);
+    menuEl.insertAdjacentHTML('beforeend', `<a href="/sections/${id}.html">${{ skills: 'Skills', veritomix: 'VeriTomiX' }[id] || id}</a>`);
     return;
   }
   const a = document.createElement('a');

@@ -22,4 +22,4 @@ export const BUILDINGS = [
 ];
 
 // Top-menu order (the music stage is reachable in the scene and from the About panel).
-export const MENU = ['about', 'research', 'projects', 'publications', 'skills', 'builder', 'life', 'contact'];
+export const MENU = ['about', 'research', 'projects', 'publications', 'skills', 'builder', 'veritomix', 'life', 'contact'];

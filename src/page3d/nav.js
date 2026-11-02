@@ -7,7 +7,7 @@ export const THESES = [
 ];
 export const SECTIONS = [
   ['about', 'About'], ['thesis', 'Thesis'], ['projects', 'Projects'],
-  ['publications', 'Publications'], ['skills', 'Skills'], ['builder', 'Agentic AI'], ['life', 'Off the Clock'], ['contact', 'Contact'],
+  ['publications', 'Publications'], ['skills', 'Skills'], ['builder', 'Agentic AI'], ['veritomix', 'VeriTomiX'], ['life', 'Off the Clock'], ['contact', 'Contact'],
 ];
 
 // Theme: a saved choice wins; otherwise follow the visitor's clock (light 07:00-19:00), like the home page.

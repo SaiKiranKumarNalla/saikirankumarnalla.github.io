@@ -1,87 +1,135 @@
-/* Skills & Tools page: constellation on the right, domain cards on the left. Tokens from world.css. */
-:root{--sk-learnt:#d24a4a;--sk-learning:#e0a84a;--sk-next:rgba(242,236,228,.5)}
-:root[data-theme="light"]{--sk-learnt:#a32424;--sk-learning:#a8701a;--sk-next:rgba(27,23,21,.45)}
+/* Skills & Tools page: timeline and domain cards on the left, the 3D network on the right. Tokens from world.css. */
+:root{--sk-learnt:#d24a4a;--sk-learning:#e0a84a;--sk-next:rgba(242,236,228,.5);--sk-tool:#e2705f;--sk-comp:#4cb5a5}
+:root[data-theme="light"]{--sk-learnt:#a32424;--sk-learning:#a8701a;--sk-next:rgba(27,23,21,.45);--sk-tool:#a8322a;--sk-comp:#1d7f72}
 
 .sk-step{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:96px 0 40px}
 .sk-step .s-card{opacity:.35;transform:translateY(16px)}
 .sk-step.on .s-card{opacity:1;transform:none}
 .sk-foot{display:none}
+.sk-short{font-size:.9rem !important;line-height:1.55 !important;margin:0 0 .4rem}
 
-/* Filter bar: stays at the top of the column while the domains scroll by. */
+/* Filter bar: stays at the top of the column. */
 .sk-bar{position:sticky;top:74px;z-index:5;display:inline-flex;gap:4px;padding:4px;margin-top:84px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .sk-bar+.sk-step{padding-top:24px}
-.sk-bar button{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:999px;border:1px solid transparent;background:none;color:var(--muted);font:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.sk-bar button{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;border:1px solid transparent;background:none;color:var(--muted);font:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .sk-bar button:hover{color:var(--text)}
 .sk-bar button[aria-pressed="true"]{background:var(--pill-on);border-color:var(--pill-on-line);color:var(--text)}
-.sk-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-.sk-dot.sk-learnt{background:var(--sk-learnt)}
-.sk-dot.sk-learning{background:var(--sk-learning);animation:sk-pulse 1.8s ease-in-out infinite}
-.sk-dot.sk-next{border:1.5px dashed var(--sk-next);width:9px;height:9px;box-sizing:border-box}
-@keyframes sk-pulse{50%{transform:scale(.6);opacity:.55}}
 
-/* Legend */
-.sk-legend{list-style:none;padding:0;margin:1rem 0 .4rem;display:grid;gap:10px}
+/* Shape keys: a disc for tools, a hexagon gem for competencies (same shapes as in the 3D). */
+.sk-shape{flex:none;display:inline-block;width:12px;height:12px}
+.sk-shape-tool{border-radius:50%;background:#fff;box-shadow:0 0 0 1.5px var(--sk-tool)}
+.sk-shape-competency{clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,color-mix(in srgb,var(--sk-comp) 55%,#fff),var(--sk-comp) 60%,color-mix(in srgb,var(--sk-comp) 70%,#000))}
+
+/* Hero legend */
+.sk-legend{list-style:none;padding:0;margin:1rem 0 .5rem;display:grid;gap:9px}
 .sk-legend li{display:flex;gap:12px;align-items:flex-start}
-.sk-legend svg{flex:none;width:22px;height:22px;margin-top:1px}
-.sk-legend .sk-learnt svg{color:var(--sk-learnt)}
-.sk-legend .sk-learning svg{color:var(--sk-learning);animation:sk-spin 3.2s linear infinite}
-.sk-legend .sk-next svg{color:var(--sk-next)}
+.sk-legend .sk-shape{width:18px;height:18px;margin-top:2px}
 .sk-legend b{display:block;color:var(--text);font-size:.9rem;font-weight:600}
 .sk-legend span{display:block;font-size:.82rem;color:var(--faint);line-height:1.45}
+.sk-states{list-style:none;padding:0;margin:.2rem 0 1rem;display:flex;flex-wrap:wrap;gap:14px}
+.sk-states li{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)}
+.sk-states svg{width:16px;height:16px}
+.sk-states .sk-learnt svg{color:var(--sk-learnt)}
+.sk-states .sk-learning svg{color:var(--sk-learning);animation:sk-spin 3.2s linear infinite}
+.sk-states .sk-next svg{color:var(--sk-next)}
 @keyframes sk-spin{to{transform:rotate(360deg)}}
 .sk-jump{display:flex;flex-wrap:wrap;gap:6px}
 .sk-jump button{font:inherit;font-size:.78rem;padding:6px 11px;border-radius:14px;background:var(--chip);border:1px solid var(--line);color:var(--text);cursor:pointer;transition:border-color .2s,transform .2s}
 .sk-jump button:hover{border-color:var(--accent);transform:translateY(-1px)}
-.sk-hint{margin-top:1rem}
 
-.sk-section-header{margin:1rem 0 0.4rem;padding-bottom:4px;border-bottom:1px solid var(--line)}
-.sk-section-header span{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+/* Groups inside a domain card */
+.sk-group{margin-top:.9rem}
+.sk-ghead{display:flex;align-items:center;gap:8px;padding-bottom:5px;border-bottom:1px solid var(--line);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.sk-ghead em{font-style:normal;font-weight:500;margin-left:auto;letter-spacing:0}
+html[data-sk-kind="tool"] .sk-group[data-kind="competency"],
+html[data-sk-kind="competency"] .sk-group[data-kind="tool"]{display:none}
 
-/* Skill rows */
-.sk-list{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:2px}
-.sk-row{display:flex;gap:12px;align-items:flex-start;padding:10px 10px;margin:0 -10px;border-radius:12px;outline:none;transition:background .25s,opacity .5s,transform .5s;opacity:0;transform:translateY(8px)}
-.sk-step.on .sk-row{opacity:1;transform:none;transition-delay:calc(var(--i) * 45ms),calc(var(--i) * 45ms),0s}
-.sk-row:hover,.sk-row:focus-visible{background:var(--chip)}
-.sk-row:focus-visible{box-shadow:0 0 0 2px var(--pill-on-line)}
+/* Compact rows: icon, name, years and projects, state. Details open on click. */
+.sk-list{list-style:none;padding:0;margin:.25rem 0 0;display:grid;gap:0}
+.sk-row{margin:0 -8px;border-radius:10px;transition:background .25s,opacity .5s,transform .5s;opacity:0;transform:translateY(6px)}
+.sk-step.on .sk-row{opacity:1;transform:none}
+.sk-row:hover{background:var(--chip)}
 .sk-row.flash{animation:sk-flash 1.4s ease-out}
 @keyframes sk-flash{0%,30%{background:var(--pill-on)}100%{background:transparent}}
-.sk-logo{flex:none;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
-.sk-logo img{width:18px;height:18px;object-fit:contain;display:block}
-.sk-row[data-state="learnt"] .sk-logo{box-shadow:0 0 0 2px var(--sk-learnt)}
-.sk-row[data-state="learning"] .sk-logo{box-shadow:0 0 0 2px var(--sk-learning)}
-.sk-row[data-state="next"] .sk-logo{outline:1.5px dashed var(--sk-next);outline-offset:1px}
-.sk-body{min-width:0;flex:1}
-.sk-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px}
-.sk-head b{color:var(--text);font-weight:600;font-size:.93rem}
-.sk-pills{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
-.sk-kind{font-size:.65rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:6px;border:1px solid var(--line)}
-.sk-kind-domainknowledge{color:#d24a4a;border-color:rgba(210,74,74,0.3);background:rgba(210,74,74,0.08)}
-.sk-kind-skill{color:#2a9d8f;border-color:rgba(42,157,143,0.35);background:rgba(42,157,143,0.08)}
-.sk-kind-tool{color:var(--muted);background:var(--chip)}
-.sk-yrs{font-size:.68rem;font-weight:600;padding:1px 6px;border-radius:6px;background:var(--chip);color:var(--text);border:1px solid var(--line)}
-.sk-punchline{margin:.2rem 0 .25rem !important;font-size:.84rem !important;line-height:1.4 !important;color:var(--muted)}
-.sk-used{display:block;font-size:.75rem;color:var(--faint);margin-top:2px}
-.sk-used a{color:var(--accent);text-decoration:none}
-.sk-used a:hover{text-decoration:underline}
-.sk-badge{font-size:.65rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:6px;line-height:1.3}
-.sk-badge.sk-learnt{color:var(--sk-learnt);background:color-mix(in srgb,var(--sk-learnt) 14%,transparent)}
-.sk-badge.sk-learning{color:var(--sk-learning);background:color-mix(in srgb,var(--sk-learning) 16%,transparent)}
-.sk-badge.sk-next{color:var(--muted);border:1px dashed var(--sk-next)}
-html[data-sk-filter="learnt"] .sk-row:not([data-state="learnt"]),
-html[data-sk-filter="learning"] .sk-row:not([data-state="learning"]),
-html[data-sk-filter="next"] .sk-row:not([data-state="next"]){display:none}
+.sk-rowbtn{display:flex;align-items:center;gap:10px;width:100%;padding:6px 8px;border:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:10px}
+.sk-rowbtn:focus-visible{outline:2px solid var(--pill-on-line);outline-offset:-2px}
+.sk-ico{flex:none;width:28px;height:28px;display:grid;place-items:center}
+.sk-ico img{display:block;object-fit:contain}
+.sk-ico-tool{border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+.sk-ico-tool img{width:17px;height:17px}
+.sk-ico-competency img{width:28px;height:28px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
+.sk-row[data-state="learning"] .sk-ico-tool{box-shadow:0 0 0 2px var(--sk-learning)}
+.sk-row[data-state="next"] .sk-ico-tool{outline:1.5px dashed var(--sk-next);outline-offset:1px}
+.sk-row[data-state="next"] .sk-ico img{opacity:.75}
+.sk-nm{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.sk-nm b{color:var(--text);font-weight:600;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sk-nm small{font-size:.74rem;color:var(--faint)}
+.sk-st{flex:none;font-size:.62rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:6px;line-height:1.3}
+.sk-st.sk-learnt{padding:0}
+.sk-st.sk-learnt i{display:block;width:8px;height:8px;border-radius:50%;background:var(--sk-learnt)}
+.sk-st.sk-learning{color:var(--sk-learning);background:color-mix(in srgb,var(--sk-learning) 16%,transparent)}
+.sk-st.sk-next{color:var(--muted);border:1px dashed var(--sk-next)}
+.sk-chev{flex:none;width:7px;height:7px;border-right:1.5px solid var(--faint);border-bottom:1.5px solid var(--faint);transform:rotate(45deg) translateY(-2px);transition:transform .25s}
+.sk-rowbtn[aria-expanded="true"] .sk-chev{transform:rotate(225deg)}
+.sk-detail{padding:0 8px 10px 46px}
+.sk-detail p{margin:0 0 .4rem !important;font-size:.82rem !important;line-height:1.5 !important}
+.sk-uses{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline;margin-top:4px;font-size:.74rem}
+.sk-uses span{width:100%;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.sk-uses a{color:var(--accent);text-decoration:none;padding:1px 7px;border-radius:9px;border:1px solid var(--line);background:var(--chip)}
+.sk-uses a:hover{border-color:var(--accent)}
+
+/* Timeline */
+.sk-tl{margin-top:.6rem}
+.sk-tl-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:4px}
+.sk-tl-year b{display:block;font-family:'Zen Antique',serif;font-weight:400;font-size:2.1rem;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.sk-tl-year span{font-size:.76rem;color:var(--faint)}
+.sk-tl-year i{font-style:normal;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+.sk-tl-play{font:inherit;font-size:.76rem;font-weight:600;padding:5px 12px;border-radius:14px;border:1px solid var(--line);background:var(--chip);color:var(--text);cursor:pointer}
+.sk-tl-play:hover{border-color:var(--accent)}
+.sk-tl-chart{width:100%;overflow:hidden}
+.sk-tl-svg{display:block;overflow:visible;font-family:'DM Sans',sans-serif}
+.sk-tl-tick{stroke:var(--line);stroke-width:1}
+.sk-tl-yr{font-size:9.5px;fill:var(--faint)}
+.sk-tl-ms{stroke:var(--accent);stroke-width:1;stroke-dasharray:2 3;opacity:.55}
+.sk-tl-mst{font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;fill:var(--accent)}
+.sk-tl-now{stroke:var(--text);stroke-width:1;opacity:.25}
+.sk-tl-head-line{stroke:var(--accent);stroke-width:1.5;opacity:.8}
+.sk-tl-svg.done .sk-tl-head-line{opacity:0}
+.sk-lane{transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .3s;opacity:0;cursor:default}
+.sk-lane.shown{opacity:1}
+.sk-lane.off{opacity:0;pointer-events:none}
+.sk-lane-hit{fill:transparent}
+.sk-lane:hover .sk-lane-hit{fill:var(--chip)}
+.sk-lane-bar{stroke-linecap:round}
+.sk-tool .sk-lane-bar{stroke:var(--sk-tool)}
+.sk-competency .sk-lane-bar{stroke:var(--sk-comp)}
+.sk-st-next .sk-lane-bar{stroke:var(--sk-next);stroke-dasharray:2 2.5}
+.sk-lane-end{fill:none;stroke:none}
+.sk-tl-svg.done .sk-st-learning .sk-lane-end{fill:var(--sk-learning);animation:sk-blink 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes sk-blink{50%{opacity:.25;transform:scale(1.6)}}
+.sk-lane-mark{transition:none}
+.sk-lane-disc{fill:#fff;stroke:rgba(0,0,0,.18);stroke-width:.8}
+.sk-st-next .sk-lane-disc{stroke:var(--sk-next);stroke-dasharray:1.6 1.4;stroke-width:1}
+.sk-st-next .sk-lane-mark image{opacity:.7}
+.sk-lane-txt{font-size:9.5px;fill:var(--muted)}
+.sk-lane:hover .sk-lane-txt{fill:var(--text)}
+.sk-lane-txt.halo{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+.sk-tl-scrub{width:100%;margin:6px 0 0;accent-color:var(--accent)}
 
 /* 3D labels */
 .sk-dlabel b{font-family:'Zen Antique',serif;font-weight:400;font-size:1.05rem}
 .sk-dlabel span{color:var(--faint)}
 .sk-plabel b{font-size:.74rem;font-weight:500;color:var(--muted)}
+.sk-slabel b{position:relative;display:block;transform:translate(-50%,30px);font-size:.7rem;font-weight:500;color:var(--text);white-space:nowrap;text-shadow:0 1px 6px var(--bg),0 0 3px var(--bg)}
 
-/* Hover card for a star */
-.sk-tip{position:fixed;left:0;top:0;z-index:6;max-width:300px;padding:12px 14px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.3);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);pointer-events:none;animation:sk-in .18s ease-out}
+/* Hover card for a node or a timeline lane */
+.sk-tip{position:fixed;left:0;top:0;z-index:6;max-width:290px;padding:11px 13px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.3);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);pointer-events:none;animation:sk-in .18s ease-out}
 .sk-tip[hidden]{display:none}
 .sk-tip-head{display:flex;gap:10px;align-items:center}
-.sk-tip-head b{display:block;color:var(--text);font-size:.92rem;margin-bottom:3px}
-.sk-tip p{margin:.55rem 0 .35rem;color:var(--muted);font-size:.84rem;line-height:1.5}
+.sk-tip-head b{display:block;color:var(--text);font-size:.9rem}
+.sk-tip-head span{display:block;font-size:.72rem;color:var(--faint)}
+.sk-tip p{margin:.5rem 0 .3rem;color:var(--muted);font-size:.82rem;line-height:1.45}
+.sk-tip-uses{display:block;font-size:.72rem;color:var(--faint)}
 @keyframes sk-in{from{opacity:0;transform:translateY(4px)}}
 
 @media (min-width:861px){.s-main{padding-bottom:20vh}}
@@ -94,23 +142,22 @@ html[data-sk-filter="next"] .sk-row:not([data-state="next"]){display:none}
   .sk-bar button{padding:6px 10px}
   .sk-bar+.sk-step{padding-top:6px}
   .sk-step{min-height:calc(56vh - 40px);padding:8px 0 18px;justify-content:flex-start}
-  .sk-step .s-card{opacity:.5;transform:none;padding:20px 18px;background:var(--panel);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
+  .sk-step .s-card{opacity:.5;transform:none;padding:18px 16px;background:var(--panel);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
   .sk-step.s-hero .s-card{padding:6px 2px}
   .sk-page .s-main h1{font-size:2rem}
   .sk-page .s-dots,.sk-page .s-footer{display:none}
   .sk-foot{display:block;text-align:center;margin:8px 0 0}
   .sk-tip{max-width:calc(100vw - 24px)}
+  .sk-dlabel b{font-size:.92rem}.sk-plabel b{font-size:.68rem}
+  .sk-slabel b{font-size:.6rem;transform:translate(-50%,20px)}
+  .sk-detail{padding-left:8px}
+  /* world.css gives the phone Thesis submenu pointer-events:auto while closed, which swallows taps on the 3D band. */
+  .sk-page body:not(.menu-open) .w-dd-menu{pointer-events:none}
 }
 
 @media (prefers-reduced-motion:reduce){
   .sk-row,.sk-step .s-card{transition:none;opacity:1;transform:none}
-  .sk-legend .sk-learning svg,.sk-dot.sk-learning{animation:none}
+  .sk-lane{transition:none}
+  .sk-states .sk-learning svg,.sk-tl-svg.done .sk-st-learning .sk-lane-end{animation:none}
   .sk-row.flash{animation:none;background:var(--pill-on)}
 }
-@media (max-width:860px){.sk-dlabel b{font-size:.92rem}.sk-plabel b{font-size:.68rem}}
-/* world.css gives the phone Thesis submenu pointer-events:auto even while the menu is closed, which
-   swallows taps on the 3D band under the header. Scoped fix for this page; the shared rule needs the same. */
-@media (max-width:860px){.sk-page body:not(.menu-open) .w-dd-menu{pointer-events:none}}
-/* Full skill name under each star of the domain in view */
-.sk-slabel b{position:relative;display:block;transform:translate(-50%,30px);font-size:.7rem;font-weight:500;color:var(--text);white-space:nowrap;text-shadow:0 1px 6px var(--bg),0 0 3px var(--bg)}
-@media (max-width:860px){.sk-slabel b{font-size:.6rem;transform:translate(-50%,20px)}}

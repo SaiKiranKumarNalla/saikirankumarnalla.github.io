@@ -7,18 +7,21 @@ import './publications.css';
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const GROUPS = [['published', 'Published'], ['preprint', 'Preprints'], ['in-preparation', 'In preparation'], ['conference', 'Conference']];
 const paras = (t) => String(t).split(/\n\s*\n/).map((x) => `<p>${esc(x.trim())}</p>`).join('');
+// First-page images exist only for items flagged firstPage in the JSON (preprints, own posters and abstracts).
+// Everything else (journal papers, unpublished manuscripts) gets the typographic placeholder.
+const paperLink = (p) => p.pdf || (p.doi ? `https://doi.org/${p.doi}` : '');
 const thumb = (p) => {
-  const ph = `<span class="pub-ph"><i>${esc(String(p.venue).split(' · ')[0])}</i><b>${p.year}</b></span>`;
-  return `<span class="pub-thumb" data-pid="${esc(p.id)}" data-ph="${esc(ph)}"><img src="/media/papers/${esc(p.id)}.webp" alt="First page of ${esc(p.title)}" loading="lazy" width="84" height="112"></span>`;
+  if (!p.firstPage) return `<span class="pub-thumb pub-ph" aria-hidden="true"><i>${esc(String(p.venue).split(' · ')[0])}</i><b>${p.year}</b></span>`;
+  return `<button type="button" class="pub-thumb" data-pid="${esc(p.id)}" aria-label="Read the first page of ${esc(p.title)}"><img src="/media/papers/${esc(p.id)}-thumb.webp" alt="" loading="lazy" width="84" height="119"></button>`;
 };
 const item = (p) => {
-  const paperLink = p.pdf || (p.doi ? `https://doi.org/${esc(p.doi)}` : '');
+  const link = paperLink(p);
   const linkLabel = p.pdf ? 'View full poster PDF ↗' : 'Read paper / manuscript ↗';
   const statusBadge = p.statusText ? `<span class="pub-status-badge">${esc(p.statusText)}</span>` : '';
   return `<div class="s-role pub-item">${thumb(p)}<div>
     <b>${esc(p.title)}</b>
     <p>${statusBadge}${esc(p.venue)} · ${p.year}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p>
-    ${paperLink ? `<p style="margin:4px 0 6px"><a class="pub-read-btn" href="${paperLink}" target="_blank" rel="noopener">${linkLabel}</a></p>` : ''}
+    ${link ? `<p class="pub-read"><a class="pub-read-btn" href="${esc(link)}" target="_blank" rel="noopener">${linkLabel}</a></p>` : ''}
     ${p.abstract ? `<details class="s-know"><summary>Abstract</summary>${paras(p.abstract)}</details>`
       : p.summary ? `<details class="s-know"><summary>Summary</summary><p>${esc(p.summary)}</p><p class="s-meta">Full abstract on the publisher's site.</p></details>` : ''}</div></div>`;
 };
@@ -62,13 +65,48 @@ document.getElementById('main').innerHTML = `
   ${metricsStep}
   ${groups.map((g) => `<section class="s-step" data-title="${g.name}"><div class="s-card"><p class="s-kicker">${g.list.length} ${g.list.length > 1 ? 'items' : 'item'}</p><h2>${g.name}</h2>${g.list.map(item).join('')}</div></section>`).join('')}`;
 
-// Thumbnails: link the image to itself when it loads; otherwise swap in the typographic placeholder.
-document.querySelectorAll('.pub-thumb').forEach((el) => {
+// Lightbox: the small thumbnail opens a readable first-page image (Esc, close button or outside click to close).
+const byId = Object.fromEntries(pubs.map((p) => [p.id, p]));
+const lb = document.createElement('div');
+lb.className = 'pub-lb';
+lb.hidden = true;
+lb.setAttribute('role', 'dialog');
+lb.setAttribute('aria-modal', 'true');
+lb.setAttribute('aria-label', 'First page preview');
+lb.innerHTML = '<div class="pub-lb-box"><button type="button" class="pub-lb-x" aria-label="Close preview">&times;</button><div class="pub-lb-img"><img alt=""></div><div class="pub-lb-bar"><span class="pub-lb-cap"></span><a class="pub-read-btn" target="_blank" rel="noopener"></a></div></div>';
+document.body.appendChild(lb);
+const lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.pub-lb-cap'), lbLink = lb.querySelector('.pub-read-btn'), lbX = lb.querySelector('.pub-lb-x');
+let lastFocus = null;
+const closeLb = () => { if (lb.hidden) return; lb.hidden = true; document.body.classList.remove('pub-lb-open'); lbImg.removeAttribute('src'); if (lastFocus) lastFocus.focus(); };
+const openLb = (p, from) => {
+  lastFocus = from;
+  lbImg.src = `/media/papers/${p.id}.webp`;
+  lbImg.alt = `First page of ${p.title}`;
+  lbCap.textContent = `${String(p.venue).split(' · ')[0]} · ${p.year}`;
+  const link = paperLink(p);
+  lbLink.hidden = !link;
+  if (link) { lbLink.href = link; lbLink.textContent = p.pdf ? 'Read the poster' : 'Read the paper'; }
+  lb.hidden = false;
+  document.body.classList.add('pub-lb-open');
+  lbX.focus();
+};
+document.querySelectorAll('button.pub-thumb').forEach((el) => {
   const img = el.querySelector('img');
-  const fail = () => { el.innerHTML = el.dataset.ph; };
-  img.addEventListener('error', fail, { once: true });
-  img.addEventListener('load', () => { if (!img.naturalWidth) fail(); else { const a = document.createElement('a'); a.className = 'pub-thumb'; a.href = img.src; a.target = '_blank'; a.rel = 'noopener'; a.setAttribute('aria-label', 'Open page image'); a.appendChild(img); el.replaceWith(a); } }, { once: true });
-  if (img.complete) { img.naturalWidth ? img.dispatchEvent(new Event('load')) : fail(); }
+  const ph = () => { const p = byId[el.dataset.pid]; el.outerHTML = `<span class="pub-thumb pub-ph" aria-hidden="true"><i>${esc(String(p.venue).split(' · ')[0])}</i><b>${p.year}</b></span>`; };
+  img.addEventListener('error', ph, { once: true });
+  if (img.complete && !img.naturalWidth && img.src) ph();
+  el.addEventListener('click', () => openLb(byId[el.dataset.pid], el));
+});
+lb.addEventListener('click', (e) => { if (e.target === lb || e.target.closest('.pub-lb-x')) closeLb(); });
+document.addEventListener('keydown', (e) => {
+  if (lb.hidden) return;
+  if (e.key === 'Escape') { e.preventDefault(); closeLb(); }
+  else if (e.key === 'Tab') {
+    const f = [...lb.querySelectorAll('button, a[href]')].filter((n) => !n.hidden);
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
 });
 
 runPage({

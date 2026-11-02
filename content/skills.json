@@ -1,5 +1,18 @@
 {
-  "intro": "What I use in real work, what I am learning right now, and what comes next. Each skill links to the project that used it.",
+  "intro": "What I use in real work, what I am learning now and what comes next. Tools are software and instruments; competencies are the physics and methods behind them.",
+  "now": 2026,
+  "kinds": {
+    "tool": {
+      "name": "Tools",
+      "one": "Tool",
+      "text": "Software, languages, frameworks and instruments."
+    },
+    "competency": {
+      "name": "Competencies",
+      "one": "Competency",
+      "text": "Domain knowledge and methods: the physics and the know-how."
+    }
+  },
   "states": {
     "learnt": {
       "name": "Learnt",
@@ -7,13 +20,31 @@
     },
     "learning": {
       "name": "Learning",
-      "text": "In progress now, with a project that needs it."
+      "text": "Started, with a project that needs it."
     },
     "next": {
       "name": "Next",
-      "text": "Planned, with a date or a project waiting for it."
+      "text": "Planned, with a project waiting for it."
     }
   },
+  "milestones": [
+    {
+      "year": 2016.6,
+      "name": "BTech"
+    },
+    {
+      "year": 2021.8,
+      "name": "MSc"
+    },
+    {
+      "year": 2023.8,
+      "name": "PhD"
+    },
+    {
+      "year": 2026.7,
+      "name": "Defence"
+    }
+  ],
   "domains": [
     {
       "id": "imaging",
@@ -52,762 +83,1052 @@
       "text": "Hands-on work: printed phantoms in the scanner, microfluidic chips, soft electrodes and ex vivo burns."
     }
   ],
-  "projects": [
+  "works": [
     {
       "id": "cassoulet",
       "name": "CASSOULET",
+      "type": "project",
+      "year": 2024,
       "href": "/sections/projects.html#cassoulet"
-    },
-    {
-      "id": "phd",
-      "name": "PhD phantom studies",
-      "href": "/sections/research.html"
     },
     {
       "id": "mupet",
       "name": "MuPET",
+      "type": "project",
+      "year": 2025,
       "href": "/sections/projects.html#mupet"
     },
     {
       "id": "virtualpet",
       "name": "Virtual PET Patients",
+      "type": "project",
+      "year": 2026,
       "href": "/sections/builder.html"
     },
     {
+      "id": "flowlab",
+      "name": "Flow Lab",
+      "type": "project",
+      "year": 2026,
+      "href": "/sections/builder.html"
+    },
+    {
+      "id": "digitaltwin",
+      "name": "Human FDG Digital Twin",
+      "type": "project",
+      "year": 2026,
+      "href": "/sections/builder.html"
+    },
+    {
+      "id": "dynapet",
+      "name": "3DynaPET",
+      "type": "project",
+      "year": 2025,
+      "href": "/sections/research.html"
+    },
+    {
+      "id": "phd",
+      "name": "PhD thesis",
+      "type": "thesis",
+      "year": 2026,
+      "href": "/sections/research.html"
+    },
+    {
       "id": "masters",
-      "name": "Microwave ablation (MSc)",
+      "name": "Microwave ablation (MSc thesis)",
+      "type": "thesis",
+      "year": 2023,
       "href": "/sections/masters.html"
     },
     {
       "id": "carotid",
       "name": "Carotid embolism CFD",
+      "type": "project",
+      "year": 2020,
       "href": "/sections/projects.html#carotid"
     },
     {
       "id": "rbc",
       "name": "RBC encapsulation",
+      "type": "project",
+      "year": 2021,
       "href": "/sections/projects.html#rbc"
     },
     {
       "id": "auv",
       "name": "Black Pearl AUV",
+      "type": "project",
+      "year": 2019,
       "href": "/sections/auv.html"
     },
     {
       "id": "ladhyx",
       "name": "Soft-particle microfluidics",
+      "type": "project",
+      "year": 2022,
       "href": "/sections/projects.html#ladhyx"
     },
     {
       "id": "electrodes",
       "name": "Flexible dry electrodes",
+      "type": "project",
+      "year": 2022,
       "href": "/sections/projects.html#electrodes"
     },
     {
       "id": "ppvi",
       "name": "Valve implantation bench",
+      "type": "project",
+      "year": 2022,
       "href": "/sections/projects.html#ppvi"
     },
     {
       "id": "office",
       "name": "VeriTomiX Virtual Office",
+      "type": "project",
+      "year": 2026,
       "href": "/sections/builder.html"
     },
     {
       "id": "kage",
       "name": "Kage game pipeline",
+      "type": "project",
+      "year": 2026,
       "href": "/sections/builder.html"
     },
     {
       "id": "animus",
       "name": "ANIMUS Jobs",
+      "type": "project",
+      "year": 2026,
       "href": "/sections/builder.html"
     },
     {
       "id": "site",
       "name": "This portfolio",
+      "type": "project",
+      "year": 2026,
       "href": "/"
     },
     {
       "id": "course",
       "name": "Medical-AI course",
+      "type": "project",
+      "year": 2026,
       "href": "/sections/builder.html"
+    },
+    {
+      "id": "pesm2025",
+      "name": "Porous 3D-printed grids (PESM 2025)",
+      "type": "paper",
+      "year": 2025,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "dualcentre",
+      "name": "Dual-centre phantom (Physica Medica, in revision)",
+      "type": "paper",
+      "year": 2025,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "quantreality",
+      "name": "Quantitative Reality (preprint)",
+      "type": "paper",
+      "year": 2025,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "mupetpaper",
+      "name": "MuPET (preprint)",
+      "type": "paper",
+      "year": 2025,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "geoanchored",
+      "name": "Geometry-anchored lesion ground truth (in prep.)",
+      "type": "paper",
+      "year": 2026,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "cassouletms",
+      "name": "CASSOULET manuscript (in prep.)",
+      "type": "paper",
+      "year": 2026,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "virtualpetms",
+      "name": "Virtual PET manuscript (in prep.)",
+      "type": "paper",
+      "year": 2026,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "e4h2024",
+      "name": "E4H 2024 poster",
+      "type": "paper",
+      "year": 2024,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "eanm2025",
+      "name": "EANM 2025 e-poster",
+      "type": "paper",
+      "year": 2025,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "ecr2025",
+      "name": "ECR 2025 poster",
+      "type": "paper",
+      "year": 2025,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "sfpm2024",
+      "name": "SFPM 2024 talk",
+      "type": "paper",
+      "year": 2024,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "jbme2022",
+      "name": "J Biomech Eng 2022",
+      "type": "paper",
+      "year": 2022,
+      "href": "/sections/publications.html"
+    },
+    {
+      "id": "oceans2021",
+      "name": "OCEANS 2021 (IEEE)",
+      "type": "paper",
+      "year": 2021,
+      "href": "/sections/publications.html"
     }
   ],
   "skills": [
     {
       "id": "petsim",
       "name": "PET/CT simulation",
+      "kind": "competency",
       "domain": "imaging",
       "state": "learnt",
-      "projects": [
+      "since": 2023,
+      "uses": [
         "cassoulet",
-        "mupet"
+        "mupet",
+        "virtualpet",
+        "flowlab",
+        "digitaltwin",
+        "phd",
+        "quantreality",
+        "ecr2025",
+        "geoanchored",
+        "mupetpaper",
+        "cassouletms",
+        "virtualpetms"
       ],
-      "evidence": "Digital twin scanner projection, calibrated noise, DOI & TOF scatter.",
-      "kind": "Domain Knowledge",
-      "years": "3 yrs (PhD)",
-      "role": "Digital twin scanner physics & Monte Carlo theory"
+      "evidence": "Analytical digital twins of three scanners: DOI, TOF scatter, calibrated noise."
     },
     {
       "id": "recon",
       "name": "Iterative reconstruction (OSEM, BSREM)",
+      "short": "Reconstruction",
+      "kind": "competency",
       "domain": "imaging",
       "state": "learnt",
-      "projects": [
-        "cassoulet"
+      "since": 2023,
+      "uses": [
+        "cassoulet",
+        "mupet",
+        "phd",
+        "mupetpaper",
+        "cassouletms"
       ],
-      "evidence": "Iterative OSEM & BSREM reconstruction matched to clinical Q.Clear.",
-      "kind": "Domain Knowledge",
-      "years": "3 yrs (PhD)",
-      "role": "Iterative inversion math: OSEM, BSREM, PSF & MAP"
-    },
-    {
-      "id": "pytomography",
-      "name": "PyTomography",
-      "logo": "/media/logos/tools/pytomography.webp",
-      "domain": "imaging",
-      "state": "learnt",
-      "projects": [
-        "cassoulet"
-      ],
-      "evidence": "Core reconstruction engine in the Python CASSOULET framework.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Python SPECT/PET reconstruction framework"
-    },
-    {
-      "id": "parallelproj",
-      "name": "parallelproj",
-      "logo": "/media/logos/tools/parallelproj.webp",
-      "domain": "imaging",
-      "state": "learnt",
-      "projects": [
-        "cassoulet"
-      ],
-      "evidence": "High-performance GPU forward/back-projector acceleration.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "CUDA/OpenCL tomographic projector library"
+      "evidence": "OSEM and BSREM matched to the clinical Q.Clear reconstruction."
     },
     {
       "id": "quant",
       "name": "Quantitative PET & statistics",
+      "short": "Quantitative PET",
+      "kind": "competency",
       "domain": "imaging",
       "state": "learnt",
-      "projects": [
-        "phd"
+      "since": 2023,
+      "uses": [
+        "phd",
+        "cassoulet",
+        "virtualpet",
+        "dynapet",
+        "pesm2025",
+        "dualcentre",
+        "quantreality",
+        "geoanchored",
+        "e4h2024",
+        "eanm2025",
+        "ecr2025",
+        "sfpm2024",
+        "virtualpetms"
       ],
-      "evidence": "SUV, recovery coefficients & statistical hypothesis testing (TOST, Wilcoxon).",
-      "kind": "Domain Knowledge",
-      "years": "3 yrs (PhD)",
-      "role": "Tracer quantification, SUV metrics & hypothesis testing"
+      "evidence": "SUV, recovery coefficients, TOST equivalence and Wilcoxon tests across two centres."
     },
     {
       "id": "radiomics",
       "name": "Radiomics (IBSI features)",
+      "short": "Radiomics",
+      "kind": "competency",
       "domain": "imaging",
       "state": "learnt",
-      "projects": [
-        "phd"
+      "since": 2024,
+      "confirm": true,
+      "uses": [
+        "phd",
+        "quantreality"
       ],
-      "evidence": "60 IBSI radiomic features evaluated against 3D printed ground truth.",
-      "kind": "Domain Knowledge",
-      "years": "2 yrs",
-      "role": "IBSI feature extraction & spatial heterogeneity metrics"
+      "evidence": "IBSI features ranked against a printed heterogeneity ground truth (rho 0.76 to 0.92)."
     },
     {
       "id": "dynamic",
       "name": "Dynamic PET",
+      "kind": "competency",
       "domain": "imaging",
       "state": "learnt",
-      "projects": [
+      "since": 2024,
+      "confirm": true,
+      "uses": [
         "phd",
-        "mupet"
+        "dynapet",
+        "mupet",
+        "mupetpaper",
+        "flowlab",
+        "digitaltwin",
+        "geoanchored"
       ],
-      "evidence": "Dynamic total-body lesion insertion and 3DynaPET phantom validation.",
-      "kind": "Domain Knowledge",
-      "years": "2 yrs",
-      "role": "Pharmacokinetics, dynamic uptake & time-activity curves"
-    },
-    {
-      "id": "slicer",
-      "name": "3D Slicer",
-      "domain": "imaging",
-      "state": "learnt",
-      "projects": [
-        "phd",
-        "ppvi"
-      ],
-      "evidence": "Multi-organ segmentation & 3D lesion modelling for imaging studies.",
-      "kind": "Tool",
-      "years": "4 yrs",
-      "role": "Medical image computing & segmentation platform"
-    },
-    {
-      "id": "dicom",
-      "name": "DICOM & NIfTI (pydicom, nibabel)",
-      "domain": "imaging",
-      "state": "learnt",
-      "projects": [
-        "cassoulet"
-      ],
-      "evidence": "High-throughput DICOM/NIfTI parsing, pipeline validation & data export.",
-      "kind": "Tool",
-      "years": "4 yrs",
-      "role": "Clinical imaging standards, headers & data transport"
-    },
-    {
-      "id": "totalseg",
-      "name": "TotalSegmentator",
-      "domain": "imaging",
-      "state": "learnt",
-      "projects": [
-        "virtualpet"
-      ],
-      "evidence": "Full-body anatomical multi-organ deep-learning segmentation.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Pretrained multi-organ anatomical AI segmentation"
+      "evidence": "Dynamic total-body lesion insertion, 3DynaPET phantoms and time-activity curves."
     },
     {
       "id": "genpet",
       "name": "Generative models for PET/CT",
+      "short": "Generative PET/CT",
+      "kind": "competency",
       "domain": "imaging",
       "state": "learning",
-      "projects": [
+      "since": 2026,
+      "uses": [
         "virtualpet",
         "cassoulet"
       ],
-      "evidence": "Heterogeneous PET synthesis from activity maps (PAD-style).",
-      "kind": "Skill",
-      "years": "Active",
-      "role": "AI-based PET lesion generation & synthetic data insertion"
+      "evidence": "Heterogeneous PET synthesis from activity maps (PAD-style), trained on CASSOULET output."
     },
     {
       "id": "surrogate",
       "name": "Surrogate simulators",
+      "kind": "competency",
       "domain": "imaging",
       "state": "learning",
-      "projects": [
+      "since": 2026,
+      "uses": [
         "cassoulet",
         "virtualpet"
       ],
-      "evidence": "Fast learned neural surrogate models for sub-second PET simulation.",
-      "kind": "Skill",
-      "years": "Active",
-      "role": "Surrogate deep learning modeling for instant forward simulation"
+      "evidence": "Learned simulators (NASGM-style) for sub-second PET forward models."
     },
     {
       "id": "dosimetry",
       "name": "AI for dosimetry",
+      "kind": "competency",
       "domain": "imaging",
       "state": "next",
-      "projects": [
+      "uses": [
         "virtualpet"
       ],
-      "evidence": "Generative deep learning models for PET/CT patient-specific dosimetry.",
-      "kind": "Domain Knowledge",
-      "years": "Next",
-      "role": "Internal radionuclide radiation dosimetry calculations"
+      "evidence": "Patient-specific dosimetry from the virtual patients and generative models."
     },
     {
-      "id": "comsol",
-      "name": "COMSOL Multiphysics",
-      "logo": "/media/logos/tools/comsol.webp",
-      "domain": "sim",
+      "id": "pytomography",
+      "name": "PyTomography",
+      "kind": "tool",
+      "domain": "imaging",
       "state": "learnt",
-      "projects": [
-        "masters",
-        "rbc"
+      "since": 2025,
+      "confirm": true,
+      "logo": "/media/logos/tools/pytomography.webp",
+      "uses": [
+        "cassoulet",
+        "cassouletms"
       ],
-      "evidence": "30+ coupled electromagnetic & Pennes bioheat thermal ablation runs.",
-      "kind": "Tool",
-      "years": "3 yrs",
-      "role": "Coupled RF electromagnetic & Pennes bioheat solver"
+      "evidence": "Reconstruction engine of the Python CASSOULET."
+    },
+    {
+      "id": "parallelproj",
+      "name": "parallelproj",
+      "kind": "tool",
+      "domain": "imaging",
+      "state": "learnt",
+      "since": 2025,
+      "confirm": true,
+      "logo": "/media/logos/tools/parallelproj.webp",
+      "uses": [
+        "cassoulet",
+        "cassouletms"
+      ],
+      "evidence": "GPU forward and back projectors for CASSOULET."
+    },
+    {
+      "id": "duetto",
+      "name": "GE DUETTO toolbox",
+      "short": "DUETTO",
+      "kind": "tool",
+      "domain": "imaging",
+      "state": "learnt",
+      "since": 2024,
+      "confirm": true,
+      "logo": "/media/logos/orgs/ge-healthcare.svg",
+      "uses": [
+        "phd",
+        "ecr2025"
+      ],
+      "evidence": "Synthetic lesion insertion in raw PET data: printed-cube contrast reproduced within 0 to 6 %."
+    },
+    {
+      "id": "slicer",
+      "name": "3D Slicer",
+      "kind": "tool",
+      "domain": "imaging",
+      "state": "learnt",
+      "since": 2022,
+      "logo": "/media/logos/skills/slicer.webp",
+      "uses": [
+        "phd",
+        "ppvi",
+        "geoanchored",
+        "e4h2024"
+      ],
+      "evidence": "Segmentation and lesion models for printed phantoms and the valve bench."
+    },
+    {
+      "id": "dicom",
+      "name": "DICOM & NIfTI (pydicom, nibabel)",
+      "short": "DICOM & NIfTI",
+      "kind": "tool",
+      "domain": "imaging",
+      "state": "learnt",
+      "since": 2022,
+      "confirm": true,
+      "emblem": "dicom",
+      "uses": [
+        "cassoulet",
+        "virtualpet",
+        "masters",
+        "digitaltwin"
+      ],
+      "evidence": "DICOM export from CASSOULET; CT/MRI parsing in the Hepta toolbox."
+    },
+    {
+      "id": "totalseg",
+      "name": "TotalSegmentator",
+      "kind": "tool",
+      "domain": "imaging",
+      "state": "learnt",
+      "since": 2026,
+      "confirm": true,
+      "emblem": "totalseg",
+      "uses": [
+        "virtualpet",
+        "digitaltwin",
+        "virtualpetms"
+      ],
+      "evidence": "Whole-body organ segmentation for the virtual patients and the FDG twin."
     },
     {
       "id": "cfd",
       "name": "CFD: pulsatile two-phase flow",
+      "short": "CFD",
+      "kind": "competency",
       "domain": "sim",
       "state": "learnt",
-      "projects": [
-        "carotid"
+      "since": 2020,
+      "uses": [
+        "carotid",
+        "jbme2022",
+        "flowlab"
       ],
-      "evidence": "Pulsatile two-phase laminar blood flow & bubble interface tracking (JBME 2022).",
-      "kind": "Domain Knowledge",
-      "years": "2 yrs",
-      "role": "Multiphase Navier-Stokes & pulsatile carotid hemodynamics"
+      "evidence": "Gas bubble in an image-based carotid artery (J Biomech Eng 2022)."
     },
     {
       "id": "transport",
       "name": "Mass-transport modelling",
+      "short": "Mass transport",
+      "kind": "competency",
       "domain": "sim",
       "state": "learnt",
-      "projects": [
-        "mupet"
+      "since": 2021,
+      "uses": [
+        "rbc",
+        "mupet",
+        "mupetpaper",
+        "digitaltwin",
+        "flowlab"
       ],
-      "evidence": "Decay-diffusion tracer kinetics modeling in MuPET (0.4–1.2% accuracy).",
-      "kind": "Domain Knowledge",
-      "years": "2 yrs",
-      "role": "Continuum mass-transport physics & radioactive decay kinetics"
+      "evidence": "Shear poration and diffusion in RBCs; decay-diffusion tracer kinetics in MuPET."
     },
     {
       "id": "vcycle",
       "name": "Systems engineering (V-cycle)",
+      "short": "V-cycle",
+      "kind": "competency",
       "domain": "sim",
       "state": "learnt",
-      "projects": [
-        "auv"
+      "since": 2019,
+      "uses": [
+        "auv",
+        "oceans2021"
       ],
-      "evidence": "V-cycle verification & validation systems engineering for AUV submarine.",
-      "kind": "Skill",
-      "years": "2 yrs",
-      "role": "V-cycle Verification & Validation systems engineering"
+      "evidence": "V-cycle design of a student AUV, published at OCEANS 2021."
+    },
+    {
+      "id": "comsol",
+      "name": "COMSOL Multiphysics",
+      "short": "COMSOL",
+      "kind": "tool",
+      "domain": "sim",
+      "state": "learnt",
+      "since": 2021,
+      "logo": "/media/logos/tools/comsol.webp",
+      "uses": [
+        "rbc",
+        "masters"
+      ],
+      "evidence": "Coupled electromagnetic and bioheat ablation models: 30 fixture simulations."
+    },
+    {
+      "id": "ansys",
+      "name": "ANSYS & STAR-CCM+",
+      "short": "ANSYS",
+      "kind": "tool",
+      "domain": "sim",
+      "state": "learnt",
+      "since": 2020,
+      "confirm": true,
+      "logo": "/media/logos/skills/ansys.svg",
+      "uses": [
+        "carotid",
+        "jbme2022"
+      ],
+      "evidence": "Numerical flow modelling listed on the CV; carotid CFD."
     },
     {
       "id": "python",
       "name": "Python",
-      "logo": "/media/logos/tools/python.svg",
+      "kind": "tool",
       "domain": "code",
       "state": "learnt",
-      "projects": [
+      "since": 2020,
+      "confirm": true,
+      "logo": "/media/logos/tools/python.svg",
+      "uses": [
         "cassoulet",
         "mupet",
+        "virtualpet",
+        "flowlab",
+        "digitaltwin",
         "ladhyx",
-        "animus"
+        "animus",
+        "kage",
+        "course",
+        "cassouletms"
       ],
-      "evidence": "Scientific computing, CASSOULET v2, particle tracking & agent backends.",
-      "kind": "Tool",
-      "years": "5+ yrs",
-      "role": "Scientific stack: NumPy, SciPy, Matplotlib & automation"
+      "evidence": "CASSOULET v2, particle tracking, agent back ends."
     },
     {
       "id": "matlab",
       "name": "MATLAB",
-      "logo": "/media/logos/tools/matlab.webp",
+      "kind": "tool",
       "domain": "code",
       "state": "learnt",
-      "projects": [
+      "since": 2018,
+      "confirm": true,
+      "logo": "/media/logos/tools/matlab.webp",
+      "uses": [
         "cassoulet",
         "masters",
-        "mupet"
+        "mupet",
+        "phd"
       ],
-      "evidence": "Original CASSOULET GUI simulator & Hepta Medical clinical segmentation toolbox.",
-      "kind": "Tool",
-      "years": "5+ yrs",
-      "role": "Algorithm prototyping, DICOM toolboxes & GUI simulators"
+      "evidence": "First CASSOULET simulator and the Hepta segmentation toolbox."
     },
     {
       "id": "numpy",
       "name": "NumPy & SciPy",
-      "logo": "/media/logos/skills/numpy.svg",
+      "short": "NumPy",
+      "kind": "tool",
       "domain": "code",
       "state": "learnt",
-      "projects": [
-        "cassoulet"
+      "since": 2022,
+      "confirm": true,
+      "logo": "/media/logos/skills/numpy.svg",
+      "uses": [
+        "cassoulet",
+        "ladhyx",
+        "virtualpet",
+        "flowlab",
+        "digitaltwin",
+        "course"
       ],
-      "evidence": "Matrix operations, numerical solvers & multi-institutional benchmark analytics.",
-      "kind": "Tool",
-      "years": "5+ yrs",
-      "role": "Vectorized numerical linear algebra & tensor routines"
+      "evidence": "Array maths and solvers behind the simulators."
     },
     {
       "id": "pandas",
       "name": "pandas",
-      "logo": "/media/logos/skills/pandas.svg",
+      "kind": "tool",
       "domain": "code",
       "state": "learnt",
-      "projects": [
-        "cassoulet"
+      "since": 2024,
+      "confirm": true,
+      "logo": "/media/logos/skills/pandas.svg",
+      "uses": [
+        "cassoulet",
+        "course"
       ],
-      "evidence": "Multicentre tabular statistics, recovery curves & cohort analysis.",
-      "kind": "Tool",
-      "years": "4 yrs",
-      "role": "Tabular cohort statistics & reproducibility registries"
+      "evidence": "Multicentre tables, recovery curves and study registries."
     },
     {
       "id": "cuda",
       "name": "CUDA & GPU computing",
-      "logo": "/media/logos/tools/cuda.svg",
+      "short": "CUDA",
+      "kind": "tool",
       "domain": "code",
       "state": "learnt",
-      "projects": [
-        "cassoulet"
+      "since": 2025,
+      "confirm": true,
+      "logo": "/media/logos/tools/cuda.svg",
+      "uses": [
+        "cassoulet",
+        "cassouletms"
       ],
-      "evidence": "GPU-accelerated emission tomography projectors on A100/T4 & Apple Metal.",
-      "kind": "Skill",
-      "years": "3 yrs",
-      "role": "GPU parallel kernel programming & compute acceleration"
+      "evidence": "GPU projectors on A100/T4 and Apple Metal."
     },
     {
       "id": "git",
       "name": "Git",
-      "logo": "/media/logos/skills/git.svg",
+      "kind": "tool",
       "domain": "code",
       "state": "learnt",
-      "projects": [
+      "since": 2024,
+      "confirm": true,
+      "logo": "/media/logos/skills/git.svg",
+      "uses": [
+        "cassoulet",
         "kage",
-        "site"
+        "site",
+        "animus",
+        "office",
+        "course"
       ],
-      "evidence": "Advanced Git workflows, multi-agent worktrees & CI/CD deployment.",
-      "kind": "Skill",
-      "years": "5+ yrs",
-      "role": "Version control, multi-agent worktrees & branch pipelines"
+      "evidence": "One worktree per agent task; CI deploys this site."
     },
     {
       "id": "sqlite",
       "name": "SQLite",
-      "logo": "/media/logos/skills/sqlite.svg",
+      "kind": "tool",
       "domain": "code",
       "state": "learnt",
-      "projects": [
+      "since": 2026,
+      "logo": "/media/logos/skills/sqlite.svg",
+      "uses": [
         "animus"
       ],
-      "evidence": "Local-first relational job storage & telemetry for ANIMUS agent runtime.",
-      "kind": "Tool",
-      "years": "3 yrs",
-      "role": "Embedded local-first relational telemetry store"
+      "evidence": "Local-first job store for ANIMUS."
     },
     {
       "id": "pytorch",
       "name": "PyTorch",
-      "logo": "/media/logos/skills/pytorch.svg",
+      "kind": "tool",
       "domain": "code",
       "state": "learning",
-      "projects": [
+      "since": 2026,
+      "logo": "/media/logos/skills/pytorch.svg",
+      "uses": [
         "course"
       ],
-      "evidence": "3D U-Nets, CNNs & vision transformers for medical image synthesis.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Deep learning tensor operations, loss autograd & CNNs"
+      "evidence": "Deep-learning days of the 45-day course: not started yet."
     },
     {
       "id": "sklearn",
       "name": "scikit-learn",
-      "logo": "/media/logos/skills/scikitlearn.svg",
+      "kind": "tool",
       "domain": "code",
       "state": "learning",
-      "projects": [
+      "since": 2026,
+      "logo": "/media/logos/skills/scikitlearn.svg",
+      "uses": [
         "course"
       ],
-      "evidence": "Classical machine learning baselines, dimensionality reduction & evaluation.",
-      "kind": "Tool",
-      "years": "3 yrs",
-      "role": "Statistical machine learning baselines & cross-validation"
+      "evidence": "Classical ML baselines, course day 5."
     },
     {
       "id": "monai",
       "name": "MONAI",
+      "kind": "tool",
       "domain": "code",
       "state": "learning",
-      "projects": [
+      "since": 2026,
+      "logo": "/media/logos/skills/monai.svg",
+      "uses": [
         "course",
         "virtualpet"
       ],
-      "evidence": "Medical open network for AI: 3D segmentation transforms & loaders.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Medical deep learning transforms, dataloaders & networks"
+      "evidence": "Medical deep-learning pipelines, course day 25."
     },
     {
       "id": "swift",
       "name": "Swift (macOS)",
-      "logo": "/media/logos/skills/swift.svg",
+      "short": "Swift",
+      "kind": "tool",
       "domain": "code",
       "state": "learning",
-      "projects": [
+      "since": 2026,
+      "logo": "/media/logos/skills/swift.svg",
+      "uses": [
         "office"
       ],
-      "evidence": "Native macOS desktop front-end for VeriTomiX Virtual Office.",
-      "kind": "Tool",
-      "years": "1 yr",
-      "role": "Native macOS application engineering & AppKit interfaces"
+      "evidence": "Native macOS front end of the Virtual Office."
     },
     {
       "id": "vlm",
       "name": "Vision-language models",
+      "short": "VLMs",
+      "kind": "competency",
       "domain": "code",
       "state": "next",
-      "projects": [
+      "uses": [
         "course"
       ],
-      "evidence": "Contrastive vision-language medical diagnostic grounding benchmarks.",
-      "kind": "Skill",
-      "years": "Next",
-      "role": "Vision-Language multimodal grounding & medical prompt evaluation"
+      "evidence": "Medical VLM adaptation and evaluation, course days 36 to 39."
     },
     {
       "id": "docker",
       "name": "Docker",
-      "logo": "/media/logos/skills/docker.svg",
+      "kind": "tool",
       "domain": "code",
       "state": "next",
-      "projects": [
+      "logo": "/media/logos/skills/docker.svg",
+      "uses": [
         "course"
       ],
-      "evidence": "Containerised model serving, reproducible environments & pipeline isolation.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Containerization, sandboxed testbeds & reproducible CI/CD"
-    },
-    {
-      "id": "claude",
-      "name": "Claude Code",
-      "logo": "/media/logos/skills/claude.svg",
-      "domain": "agents",
-      "state": "learnt",
-      "projects": [
-        "kage",
-        "animus",
-        "site"
-      ],
-      "evidence": "Architecture & systems engineering lead for Kage, ANIMUS & web pipelines.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Anthropic agent CLI for architecture & shader execution"
-    },
-    {
-      "id": "codex",
-      "name": "Codex CLI",
-      "logo": "/media/logos/skills/openai.svg",
-      "domain": "agents",
-      "state": "learnt",
-      "projects": [
-        "cassoulet",
-        "office",
-        "virtualpet"
-      ],
-      "evidence": "Autonomous physics benchmarking & automated study execution.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "OpenAI agent CLI for mechanics, physics & study validation"
-    },
-    {
-      "id": "gemini",
-      "name": "Gemini CLI",
-      "logo": "/media/logos/skills/googlegemini.svg",
-      "domain": "agents",
-      "state": "learnt",
-      "projects": [
-        "office",
-        "animus"
-      ],
-      "evidence": "Workflow orchestration, multi-agent synthesis & coordination.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Google Gemini agent CLI for orchestration & verification"
-    },
-    {
-      "id": "antigravity",
-      "name": "Antigravity",
-      "logo": "/media/logos/antigravity.svg",
-      "domain": "agents",
-      "state": "learnt",
-      "projects": [
-        "kage",
-        "virtualpet"
-      ],
-      "evidence": "Peer review verification, agent telemetry & multi-model pairing.",
-      "kind": "Tool",
-      "years": "Active",
-      "role": "Google DeepMind pair-programming & verification agent"
-    },
-    {
-      "id": "ollama",
-      "name": "Ollama (Llama 3.2, Gemma)",
-      "logo": "/media/logos/skills/ollama.svg",
-      "domain": "agents",
-      "state": "learnt",
-      "projects": [
-        "office",
-        "course"
-      ],
-      "evidence": "On-premise private LLM deployment (Llama 3.2, Gemma) for clinical data.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Local inference runtime for private on-device LLMs"
-    },
-    {
-      "id": "whisper",
-      "name": "Whisper",
-      "logo": "/media/logos/skills/openai.svg",
-      "domain": "agents",
-      "state": "learnt",
-      "projects": [
-        "office"
-      ],
-      "evidence": "Speech-to-text automated meeting transcription & protocol generation.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Automatic speech recognition & meeting transcription"
-    },
-    {
-      "id": "colab",
-      "name": "Google Colab GPUs",
-      "logo": "/media/logos/skills/googlecolab.svg",
-      "domain": "agents",
-      "state": "learnt",
-      "projects": [
-        "cassoulet"
-      ],
-      "evidence": "Agent-orchestrated cloud GPU clusters (A100/T4) for heavy compute.",
-      "kind": "Tool",
-      "years": "4 yrs",
-      "role": "Cloud GPU environment for heavy parallel simulation"
-    },
-    {
-      "id": "workers",
-      "name": "Cloudflare Workers",
-      "logo": "/media/logos/skills/cloudflareworkers.svg",
-      "domain": "agents",
-      "state": "learnt",
-      "projects": [
-        "site"
-      ],
-      "evidence": "Edge serverless proxy, caching & security behind interactive web tools.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Serverless edge compute proxy & API gateway"
+      "evidence": "Containerised inference package, course day 42."
     },
     {
       "id": "hitl",
       "name": "Human-in-the-loop agent frameworks",
+      "short": "Human-gated agents",
+      "kind": "competency",
       "domain": "agents",
-      "state": "learning",
-      "projects": [
+      "state": "learnt",
+      "since": 2026,
+      "uses": [
+        "virtualpet",
+        "virtualpetms",
+        "office",
+        "kage"
+      ],
+      "evidence": "Agent teams with explicit human QC gates and audit logs."
+    },
+    {
+      "id": "claude",
+      "name": "Claude Code",
+      "kind": "tool",
+      "domain": "agents",
+      "state": "learnt",
+      "since": 2026,
+      "confirm": true,
+      "logo": "/media/logos/skills/claude.svg",
+      "uses": [
+        "kage",
+        "animus",
+        "site"
+      ],
+      "evidence": "Architecture and engineering agent for Kage, ANIMUS and this site."
+    },
+    {
+      "id": "codex",
+      "name": "Codex CLI",
+      "kind": "tool",
+      "domain": "agents",
+      "state": "learnt",
+      "since": 2026,
+      "confirm": true,
+      "logo": "/media/logos/codex.svg",
+      "uses": [
+        "cassoulet",
+        "virtualpet",
+        "office",
+        "kage",
+        "animus"
+      ],
+      "evidence": "Runs and checks CASSOULET studies; department heads in the Office."
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini CLI",
+      "kind": "tool",
+      "domain": "agents",
+      "state": "learnt",
+      "since": 2026,
+      "logo": "/media/logos/skills/googlegemini.svg",
+      "uses": [
+        "office",
+        "animus"
+      ],
+      "evidence": "Coordination and synthesis across agent teams."
+    },
+    {
+      "id": "antigravity",
+      "name": "Antigravity",
+      "kind": "tool",
+      "domain": "agents",
+      "state": "learnt",
+      "since": 2026,
+      "logo": "/media/logos/antigravity.svg",
+      "uses": [
+        "kage",
         "virtualpet"
       ],
-      "evidence": "Multi-agent frameworks with human quality control gates for auditability.",
-      "kind": "Skill",
-      "years": "2 yrs",
-      "role": "Multi-agent autonomous choreography with human QC gates"
+      "evidence": "Peer review between agents before a human merge."
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama (Llama 3.2, Gemma)",
+      "short": "Ollama",
+      "kind": "tool",
+      "domain": "agents",
+      "state": "learnt",
+      "since": 2026,
+      "logo": "/media/logos/skills/ollama.svg",
+      "uses": [
+        "office",
+        "course"
+      ],
+      "evidence": "Private local models for cheap and sensitive tasks."
+    },
+    {
+      "id": "whisper",
+      "name": "Whisper",
+      "kind": "tool",
+      "domain": "agents",
+      "state": "learnt",
+      "since": 2026,
+      "logo": "/media/logos/skills/openai.svg",
+      "uses": [
+        "office"
+      ],
+      "evidence": "Meeting transcription in the Virtual Office."
+    },
+    {
+      "id": "colab",
+      "name": "Google Colab GPUs",
+      "short": "Colab",
+      "kind": "tool",
+      "domain": "agents",
+      "state": "learnt",
+      "since": 2025,
+      "confirm": true,
+      "logo": "/media/logos/skills/googlecolab.svg",
+      "uses": [
+        "cassoulet",
+        "cassouletms"
+      ],
+      "evidence": "Agent-orchestrated A100/T4 runs for CASSOULET."
+    },
+    {
+      "id": "workers",
+      "name": "Cloudflare Workers",
+      "kind": "tool",
+      "domain": "agents",
+      "state": "learnt",
+      "since": 2026,
+      "logo": "/media/logos/skills/cloudflareworkers.svg",
+      "uses": [
+        "site"
+      ],
+      "evidence": "Edge proxy behind the interactive tools on this site."
     },
     {
       "id": "godot",
       "name": "Godot",
-      "logo": "/media/logos/skills/godotengine.svg",
+      "kind": "tool",
       "domain": "creative",
       "state": "learnt",
-      "projects": [
+      "since": 2026,
+      "logo": "/media/logos/skills/godotengine.svg",
+      "uses": [
         "kage"
       ],
-      "evidence": "Godot 4.7 physics, 3D village mechanics & character gameplay systems.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Open-source 3D game engine & gameplay scripting"
+      "evidence": "Game engine for Kage."
     },
     {
       "id": "blender",
       "name": "Blender",
-      "logo": "/media/logos/skills/blender.svg",
+      "kind": "tool",
       "domain": "creative",
       "state": "learnt",
-      "projects": [
+      "since": 2026,
+      "confirm": true,
+      "logo": "/media/logos/skills/blender.svg",
+      "uses": [
         "kage"
       ],
-      "evidence": "Headless Python scripting, procedural asset processing, rigging & cleanup.",
-      "kind": "Tool",
-      "years": "3 yrs",
-      "role": "Headless Python rigging, mesh retopology & geometry"
+      "evidence": "Headless Python scripts for rigging and clean-up."
     },
     {
       "id": "meshy",
       "name": "Meshy",
-      "logo": "/media/logos/meshy.svg",
+      "kind": "tool",
       "domain": "creative",
       "state": "learnt",
-      "projects": [
+      "since": 2026,
+      "logo": "/media/logos/meshy.svg",
+      "uses": [
         "kage"
       ],
-      "evidence": "Text-to-3D low-poly character generation & high-fidelity mesh pipelines.",
-      "kind": "Tool",
-      "years": "2 yrs",
-      "role": "Generative 3D AI character modeling & remeshing"
+      "evidence": "Text-to-3D characters for the Kage pipeline."
     },
     {
       "id": "three",
       "name": "Three.js",
-      "logo": "/media/logos/skills/threedotjs.svg",
+      "kind": "tool",
       "domain": "creative",
       "state": "learnt",
-      "projects": [
+      "since": 2026,
+      "logo": "/media/logos/skills/threedotjs.svg",
+      "uses": [
         "site",
-        "kage"
+        "kage",
+        "digitaltwin",
+        "virtualpet"
       ],
-      "evidence": "Interactive Three.js WebGL scenes, custom shader materials & 3D portals.",
-      "kind": "Tool",
-      "years": "3 yrs",
-      "role": "WebGL 3D graphics, shaders & interactive web canvases"
+      "evidence": "This site, the FDG atlas and the virtual-patient review viewer."
     },
     {
       "id": "print",
       "name": "3D printing (FDM phantoms)",
+      "short": "3D printing",
+      "kind": "competency",
       "domain": "lab",
       "state": "learnt",
-      "projects": [
+      "since": 2022,
+      "uses": [
         "phd",
+        "dynapet",
         "ppvi",
-        "electrodes"
+        "electrodes",
+        "pesm2025",
+        "dualcentre",
+        "quantreality",
+        "geoanchored",
+        "e4h2024",
+        "eanm2025",
+        "sfpm2024"
       ],
-      "evidence": "Precision FDM porous PET/CT grids, wall-less lesions & anatomical benches.",
-      "kind": "Skill",
-      "years": "3 yrs (PhD)",
-      "role": "Fused Deposition Modeling for porous radiotracer phantoms"
+      "evidence": "Porous PET/CT grids, wall-less lesions and a patient-specific heart bench."
     },
     {
       "id": "phantoms",
       "name": "PET/CT phantom experiments",
+      "short": "Phantom experiments",
+      "kind": "competency",
       "domain": "lab",
       "state": "learnt",
-      "projects": [
-        "phd"
+      "since": 2023,
+      "confirm": true,
+      "uses": [
+        "phd",
+        "dynapet",
+        "pesm2025",
+        "dualcentre",
+        "quantreality",
+        "geoanchored",
+        "e4h2024",
+        "eanm2025",
+        "ecr2025",
+        "sfpm2024"
       ],
-      "evidence": "[18F]FDG and [68Ga]PSMA clinical scanner phantom preparation & scanning.",
-      "kind": "Skill",
-      "years": "3 yrs (PhD)",
-      "role": "Dual-centre radiopharmaceutical scan protocol execution"
+      "evidence": "[18F]FDG and [68Ga]PSMA phantom scans at two centres."
     },
     {
       "id": "microfluidics",
       "name": "Microfluidics",
+      "kind": "competency",
       "domain": "lab",
       "state": "learnt",
-      "projects": [
+      "since": 2021,
+      "uses": [
         "ladhyx",
         "rbc"
       ],
-      "evidence": "Microfluidic chip fabrication & soft-particle suspension dynamics at LadHyX.",
-      "kind": "Skill",
-      "years": "2 yrs",
-      "role": "Microfluidic chip soft-particle suspension assay testing"
-    },
-    {
-      "id": "afm",
-      "name": "AFM & soft-material moulding",
-      "domain": "lab",
-      "state": "learnt",
-      "projects": [
-        "electrodes"
-      ],
-      "evidence": "Atomic Force Microscopy surface characterisation of PDMS electrodes.",
-      "kind": "Skill",
-      "years": "1 yr",
-      "role": "Atomic Force Microscopy nanoscale surface indentation"
+      "evidence": "Soft-particle suspensions in chips at LadHyX."
     },
     {
       "id": "exvivo",
       "name": "Ex vivo ablation & radiometry",
+      "short": "Ex vivo ablation",
+      "kind": "competency",
       "domain": "lab",
       "state": "learnt",
-      "projects": [
+      "since": 2023,
+      "uses": [
         "masters"
       ],
-      "evidence": "Ex vivo liver tissue microwave ablation testing & radiometer calibration.",
-      "kind": "Skill",
-      "years": "1 yr",
-      "role": "Ex vivo tissue ablation fixture operation & radiometry"
+      "evidence": "Bovine and porcine burns and radiometer calibration at Hepta."
+    },
+    {
+      "id": "fusion",
+      "name": "Fusion 360",
+      "kind": "tool",
+      "domain": "lab",
+      "state": "learnt",
+      "since": 2022,
+      "confirm": true,
+      "logo": "/media/logos/tools/autodesk.svg",
+      "uses": [
+        "phd",
+        "ppvi",
+        "electrodes",
+        "pesm2025",
+        "dualcentre"
+      ],
+      "evidence": "CAD for phantom inserts, bench connectors and electrode moulds."
+    },
+    {
+      "id": "afm",
+      "name": "Atomic force microscope",
+      "short": "AFM",
+      "kind": "tool",
+      "domain": "lab",
+      "state": "learnt",
+      "since": 2022,
+      "emblem": "afm",
+      "uses": [
+        "electrodes"
+      ],
+      "evidence": "Surface and Young's modulus of PDMS electrodes."
+    },
+    {
+      "id": "imagej",
+      "name": "ImageJ",
+      "kind": "tool",
+      "domain": "lab",
+      "state": "learnt",
+      "since": 2022,
+      "confirm": true,
+      "logo": "/media/logos/skills/imagej.svg",
+      "uses": [
+        "ladhyx"
+      ],
+      "evidence": "Particle image analysis alongside the Python tracking pipeline."
     }
   ]
 }

@@ -1,0 +1,544 @@
+{
+  "name": "VeriTomiX",
+  "tagline": "Defining the limits of confidence",
+  "mission": "A physics-based test bench for medical imaging: simulated patients and phantoms with known truth, used to show where imaging software and AI can be trusted, and where they cannot.",
+  "status": "Independent research entity",
+  "team": [
+    {
+      "name": "Sai Kiran Kumar Nalla",
+      "role": "PhD · medical imaging, creator of CASSOULET"
+    },
+    {
+      "name": "Olivier Caselles",
+      "role": "PhD"
+    }
+  ],
+  "why": {
+    "title": "Imaging AI needs an answer key",
+    "lede": "A patient scan is realistic, but nobody knows the true size or uptake of every lesion in it. Without that ground truth, an average score on a dataset cannot say when a tool stops being reliable.",
+    "compare": [
+      {
+        "name": "Patient scans",
+        "good": "Realistic",
+        "gap": "Truth unknown"
+      },
+      {
+        "name": "Standard phantoms",
+        "good": "Truth known",
+        "gap": "Often too simple"
+      },
+      {
+        "name": "Pure simulation",
+        "good": "Flexible",
+        "gap": "Needs grounding"
+      }
+    ],
+    "answer": "VeriTomiX designs the truth first: the lesion, the activity and the scanner are all known, so every output can be scored against the right answer. 3D-printed phantoms scanned on real scanners keep the simulation honest."
+  },
+  "cassoulet": {
+    "name": "Named after the cassoulet of Toulouse, where it was built: many ingredients (masks, STL, TACs, sinograms, reconstructions) slow-cooked in one pot, a single linked session.",
+    "expansion": "Compositional Anthropomorphic Spatial Synthesizer for ground-truth Lesion Export and Tomography",
+    "motto": "Design known PET lesion truth. Simulate digitally. Validate physically.",
+    "lede": "CASSOULET is the simulation engine inside VeriTomiX. It creates lesions with known geometry, activity, heterogeneity and time behaviour, and the same truth object can be tested digitally in simulated PET or physically as a 3D-printed phantom insert.",
+    "modules": [
+      {
+        "name": "Designer",
+        "text": "Lesion masks, heterogeneity maps and reusable STL truth objects."
+      },
+      {
+        "name": "Modeller",
+        "text": "Printable inserts and geometry, plus the MuPET multiphysics route."
+      },
+      {
+        "name": "Simulator",
+        "text": "3D PET experiments: projection, noise and reconstruction, static or dynamic."
+      },
+      {
+        "name": "Analyser",
+        "text": "Measures every output against the truth it came from."
+      }
+    ],
+    "physics": [
+      "DICOM in: a CT gives the anatomy and the 511 keV attenuation map; PET headers give dose, timing, prompts and delays",
+      "Depth of interaction (3 × 3 sub-LORs), F-18 positron range, 0.5° photon non-collinearity and residual detector blur",
+      "Time of flight (385 ps, 29 bins on the Discovery MI), TOF single-scatter simulation and singles-product randoms",
+      "Poisson counting noise, then GPU reconstruction (OSEM, or BSREM with an edge-preserving prior) and DICOM export",
+      "Reconstruction never sees the model that made the data: it assumes simpler endpoints and a Gaussian PSF",
+      "Numerical checks: gradient and projector adjoint tests agree to about 10⁻⁹"
+    ],
+    "twoTests": [
+      {
+        "name": "Digital PET test",
+        "steps": "Insert → project → reconstruct → quantify"
+      },
+      {
+        "name": "Physical phantom test",
+        "steps": "Export STL → print insert → scan phantom"
+      }
+    ],
+    "compare": "Both measured outputs are compared with the original truth: detectability, SUV recovery, segmentation, heterogeneity and radiomics.",
+    "library": [
+      "Uniform",
+      "Malignant",
+      "Necrotic",
+      "Multifocal",
+      "Infiltrative",
+      "Inflammatory",
+      "Mixed response",
+      "Printable"
+    ],
+    "session": "One session map links the four modules, so every result keeps its lineage: which truth, which settings, which outputs.",
+    "main": {
+      "src": "/media/veritomix/py-mask-editor.webp",
+      "caption": "CASSOULET Designer workbench (Python desktop app): mask editor with axial, coronal and sagittal views and a marching-cubes surface of a lesion."
+    },
+    "app": [
+      {
+        "src": "/media/veritomix/py-startup.webp",
+        "caption": "Desktop app start screen: new or recent CASSOULET sessions."
+      },
+      {
+        "src": "/media/veritomix/py-session-map.webp",
+        "caption": "Session map: Design, Modeller, Simulation and Analysis sessions linked into one experiment."
+      },
+      {
+        "src": "/media/veritomix/app-modeller-gyroid.webp",
+        "caption": "Modeller: a sphere lesion filled with a gyroid lattice (6 mm pores, 1 mm struts) for 3D printing."
+      },
+      {
+        "src": "/media/veritomix/lesions-in-liver.webp",
+        "caption": "Lesion models of different contrasts placed in a liver geometry."
+      }
+    ],
+    "mupet": {
+      "text": "MuPET (Multiphysics PET) combines computational mass-transport physics with image-domain PET noise modelling. It gives CASSOULET a fast image-level route for phantom and lesion studies, next to the projection-domain simulator.",
+      "figs": [
+        {
+          "src": "/media/veritomix/mupet-noise.webp",
+          "caption": "MuPET workflow: multiphysics activity maps combined with scanner-derived noise statistics."
+        },
+        {
+          "src": "/media/veritomix/mupet-dynamic.webp",
+          "caption": "MuPET dynamic images of a phantom after noise addition."
+        }
+      ]
+    },
+    "ai": "Built with AI-assisted coding for interface work and migration, with core algorithms, scientific assumptions and data handling checked by hand and through tests. The original MATLAB version was written manually."
+  },
+  "pipeline": {
+    "title": "From phantom to evaluation dataset",
+    "lede": "Every case follows the same chain, and every setting is logged, so a result can always be traced back to its cause.",
+    "steps": [
+      {
+        "name": "Phantom or patient model",
+        "text": "An anthropomorphic phantom or a virtual patient: anatomy, attenuation and background activity."
+      },
+      {
+        "name": "Lesion insertion",
+        "text": "Lesions of known size, shape, contrast and texture are placed where they are needed."
+      },
+      {
+        "name": "Scanner simulation",
+        "text": "A scanner model turns activity into measured data: attenuation, resolution, scatter, randoms and noise."
+      },
+      {
+        "name": "Reconstruction",
+        "text": "The data are reconstructed with clinical-style algorithms and settings."
+      },
+      {
+        "name": "Evaluation dataset",
+        "text": "Images, truth masks and settings are exported together, ready to score any tool."
+      }
+    ]
+  },
+  "goals": [
+    {
+      "kicker": "Goal 1",
+      "name": "Evaluate AI and imaging software",
+      "text": "Test segmentation, detection, quantification and reconstruction tools against cases where the right answer is known, and map the conditions where they fail rather than reporting one average score."
+    },
+    {
+      "kicker": "Goal 2",
+      "name": "Create new datasets",
+      "text": "Build controlled, privacy-free imaging datasets with exact truth and full provenance: sizes, contrasts, count levels, scanners and reconstructions that real cohorts rarely cover."
+    },
+    {
+      "kicker": "Goal 3 · future",
+      "name": "Physics-informed AI digital twins",
+      "text": "Combine the physics of the scanner and the tracer with learned models, so a digital twin of a patient or a phantom can be simulated quickly and still respect the physics."
+    }
+  ],
+  "closing": "VeriTomiX is an independent research effort. It adds a controlled technical-evidence layer; it does not replace clinical validation.",
+  "scanners": {
+    "title": "Scanner models",
+    "badge": "Emulated, research-based",
+    "lede": "CASSOULET carries research models of two clinical PET/CT scanners. They are built from published specifications and NEMA data, and every assumption is written down. They are not vendor system models.",
+    "models": [
+      {
+        "id": "dmi",
+        "name": "GE Discovery MI 5-ring",
+        "facts": [
+          "34 modules × 4 blocks × 4 crystals",
+          "45 crystal rows × 544 crystals",
+          "761 mm ring, 25 mm LBS crystals",
+          "TOF 385 ps · 3 × 3 DOI sub-LORs"
+        ]
+      },
+      {
+        "id": "omni",
+        "name": "GE Omni Legend 32 cm",
+        "facts": [
+          "22 modules × 24 blocks",
+          "72 crystal rows × 528 crystals",
+          "725 mm face separation, 4.1 × 4.1 × 30 mm BGO",
+          "Non-TOF · 320 mm axial FOV"
+        ]
+      }
+    ],
+    "notes": [
+      "Published: module and block counts, crystal sizes, ring diameter, axial field of view, energy window, timing.",
+      "Derived: crystal rows and crystals per ring from the published hierarchy.",
+      "Assumed and labelled: polygon packing, some block gaps (no public gap dimensions for the Omni), detector efficiency profile.",
+      "The CT section is drawn for context only; attenuation comes from the μ-map."
+    ],
+    "figures": [
+      {
+        "src": "/media/veritomix/ev-dmi-twin-render.webp",
+        "caption": "Rendered Discovery MI 5-ring research model."
+      },
+      {
+        "src": "/media/veritomix/abd-on-dmi.webp",
+        "caption": "The abdominal phantom positioned on the Discovery MI model."
+      }
+    ]
+  },
+  "cases": {
+    "validation": {
+      "title": "Case studies: physical validation",
+      "lede": "A simulator is only useful if it is trusted. These studies put CASSOULET next to real scans of physical phantoms on both scanner models.",
+      "items": [
+        {
+          "kicker": "Multicentre · Discovery MI and Omni Legend",
+          "name": "Digital twins against a printed phantom at two centres",
+          "chips": [
+            "27 paired configurations",
+            "DMI ρc 0.905, bias +1.8 %",
+            "Omni ρc 0.925, bias +1.3 %"
+          ],
+          "lede": "The same 36-insert gyroid phantom was 3D-printed and scanned at two facilities, and simulated on both scanner models. Overall recovery agreed within the ±10 % equivalence margin (TOST, α = 0.05) for both scanners.",
+          "fig": {
+            "src": "/media/fig-27config-tost.webp",
+            "caption": "Paired 27-configuration analysis: in-silico vs physical recovery, Bland–Altman agreement and TOST equivalence."
+          },
+          "more": [
+            "Physical scans: IUCT Oncopole (Toulouse) and Rambam Health Care Campus (Haifa), from shared print files.",
+            "Against each facility separately the agreement is lower (DMI ρc 0.778, mean difference +7.4 %; Omni ρc 0.899, +3.5 %), and some size subsets fall outside the ±10 % bound.",
+            "Status: research result; multicentre manuscripts in preparation."
+          ],
+          "figs": [
+            {
+              "src": "/media/fig-multicentre-validation.webp",
+              "caption": "Exact configuration matching across the 27 printed geometries, per facility."
+            },
+            {
+              "src": "/media/veritomix/ev-36insert-facilities.webp",
+              "caption": "36-insert cube phantom: simulation and the two experimental facilities, same display scale."
+            }
+          ]
+        },
+        {
+          "kicker": "Image and voxel level",
+          "name": "Physical vs simulated images, voxel by voxel",
+          "chips": [
+            "36 cubes",
+            "> 87,000 voxels",
+            "peak voxel ρc 0.52"
+          ],
+          "lede": "Side-by-side images and line profiles of physical and simulated scans, then a direct voxel-level comparison inside matched 3D Slicer volumes of interest.",
+          "fig": {
+            "src": "/media/fig-physical-vs-sim-gallery.webp",
+            "caption": "Physical vs in-silico images on both scanners, with matched line profiles."
+          },
+          "more": [
+            "Mean recovery agrees well; voxel-level agreement is moderate (peak-voxel Lin's ρc 0.523, R² 0.689), as expected from different noise textures.",
+            "Intra-VOI heterogeneity and noise follow the physical trend; Bland–Altman bias on peak voxels is small.",
+            "Status: research result; part of the multicentre analysis."
+          ],
+          "figs": [
+            {
+              "src": "/media/fig-voxel-voi.webp",
+              "caption": "Voxel-level VOI validation: Slicer VOIs, peak-voxel correlation, voxel distributions and Bland–Altman agreement."
+            }
+          ]
+        },
+        {
+          "kicker": "NEMA IEC body phantom · Discovery MI",
+          "name": "Small-sphere recovery and background noise",
+          "chips": [
+            "4 contrasts × 3 frames",
+            "12 simulated frames",
+            "vs experimental DMI"
+          ],
+          "lede": "The NEMA IEC body phantom with micro-spheres was simulated frame by frame, following the physical timing and F-18 decay, and compared with experimental Discovery MI scans in the same planes and on the same display scale.",
+          "fig": {
+            "src": "/media/veritomix/ev-nema-spheres.webp",
+            "caption": "Rows: contrasts 8:1 to 2:1. Columns: activity truth, experimental DMI image, CASSOULET simulation."
+          },
+          "more": [
+            "Recovery follows the experimental trend with sphere size; background noise is in the same range and slightly higher in simulation.",
+            "Reconstruction settings are on CASSOULET's internal β scale, not GE Q.Clear; several results are single noise realisations."
+          ],
+          "figs": [
+            {
+              "src": "/media/veritomix/ev-nema-recovery.webp",
+              "caption": "Recovery against sphere diameter, simulation vs experiment, per contrast."
+            },
+            {
+              "src": "/media/veritomix/ev-nema-cov.webp",
+              "caption": "Background coefficient of variation per contrast, experiment vs CASSOULET."
+            }
+          ]
+        }
+      ]
+    },
+    "simulation": {
+      "title": "Case studies: simulation and models",
+      "lede": "Studies that use the known truth directly: lesions in the abdominal phantom, reconstruction settings and the scanner models themselves.",
+      "items": [
+        {
+          "kicker": "Abdominal phantom · Discovery MI",
+          "name": "Eleven synthetic lesions, OSEM vs BSREM",
+          "chips": [
+            "11 lesions",
+            "6–21 mm",
+            "truth known per voxel"
+          ],
+          "lede": "Liver, lung and retroperitoneal lesions were inserted into the abdominal phantom: spheres from 6 to 20 mm plus a necrotic ring, a spiculated nodule, matted nodes and a satellite cluster. Each was reconstructed with OSEM and BSREM and scored against its truth.",
+          "fig": {
+            "src": "/media/veritomix/ev-abd-mip.webp",
+            "caption": "Coronal MIP of the simulated abdominal phantom: activity truth, OSEM and BSREM."
+          },
+          "more": [
+            "Organ metrics (recovery, variability, NRMSE, bias) are reported per organ for both reconstructions.",
+            "Lesion cards show truth, OSEM and BSREM side by side with profiles and contrast recovery.",
+            "Dynamic FDG frames and a vessel-transit surrogate were also simulated; these are exploratory, not validated circulation."
+          ],
+          "figs": [
+            {
+              "src": "/media/veritomix/ev-abd-lesion-necrotic.webp",
+              "caption": "Lesion L8: a 21 mm necrotic-ring liver lesion, truth vs reconstructions with a central profile."
+            },
+            {
+              "src": "/media/veritomix/ev-abd-organ-metrics.webp",
+              "caption": "Whole-VOI metrics by organ: OSEM vs BSREM."
+            },
+            {
+              "src": "/media/veritomix/abd-dynamic-pet.webp",
+              "caption": "Synthetic dynamic FDG PET of the phantom across the examination."
+            }
+          ]
+        },
+        {
+          "kicker": "Reconstruction",
+          "name": "OSEM, BSREM and Q.Clear-style settings",
+          "chips": [
+            "β on an internal scale",
+            "artefact fixed and documented"
+          ],
+          "lede": "Reconstruction choices change what a tool sees. CASSOULET reconstructs the same simulated data with different strategies and compares them with the ground truth and the physical console image.",
+          "fig": {
+            "src": "/media/veritomix/recon-qclear-comparison.webp",
+            "caption": "NEMA phantom slices: ground truth, an early run with an edge artefact, a matched Q.Clear-style run, and the physical scanner console image."
+          },
+          "more": [
+            "β values are on CASSOULET's internal scale, not GE Q.Clear: an equivalent value has to be found by a sweep for each scanner and count level.",
+            "A ring/edge artefact in early runs was removed with a Tukey taper and a safe preconditioner."
+          ],
+          "figs": []
+        },
+        {
+          "kicker": "Scanner models",
+          "name": "Audits of the Discovery MI and Omni models",
+          "chips": [
+            "NEMA count curves",
+            "Monte Carlo transport",
+            "gap audit"
+          ],
+          "lede": "The scanner models are audited like any other result: geometry against publications, count rates against published NEMA curves, and scatter against an independent Monte Carlo code.",
+          "fig": null,
+          "more": [
+            "Count calibration to published NEMA curves (DMI 20.84 cps/kBq, Omni 47.30 cps/kBq): withheld points reproduced within 1.1 / 1.0 / 3.9 % (DMI trues / scatter / randoms) and 0.7 / 1.0 / 0.5 % (Omni).",
+            "Scatter fraction in a 20 cm water cylinder: 27.1 % vs 28.0 % from SimSET, an independent code, with no tuning to that target.",
+            "Omni gap audit: no public block-gap dimensions were found, so the model states its packing assumptions instead of copying Discovery MI values.",
+            "These are research checks against published data, not vendor validation."
+          ],
+          "figs": []
+        }
+      ]
+    }
+  },
+  "timeline": {
+    "title": "How CASSOULET grew",
+    "lede": "From a MATLAB proof of concept to a 3D, GPU-based Python platform. Dates come from the project files; approximate ones are marked.",
+    "items": [
+      {
+        "date": "2024–2025",
+        "approx": true,
+        "tool": "matlab",
+        "name": "2D analytical simulator in MATLAB",
+        "text": "Command-line simulator on a PETSTEP-style architecture: 2D Radon projection, approximate corrections, 2.5D OSEM and a generic scanner, about 2–3 minutes per benchmark. Used for the PhD lesion-insertion and printed-phantom studies.",
+        "img": {
+          "src": "/media/veritomix/matlab-case-study.webp",
+          "caption": "MATLAB case study: lesion models to STL and masks, synthetic insertion in sinograms, and matching 3D-printed inserts."
+        }
+      },
+      {
+        "date": "Nov 2025",
+        "tool": "matlab",
+        "name": "CASSOULET V1 desktop GUI (MATLAB)",
+        "text": "A launcher with shared lesion and STL workspaces: lesion editor, image-domain insertion, STL browser, printable insert modeller with gyroid lattices and an STL-to-mask voxelizer.",
+        "img": {
+          "src": "/media/veritomix/matlab-launcher.webp",
+          "caption": "The MATLAB launcher, Version 1, 1 November 2025."
+        },
+        "more": [
+          {
+            "src": "/media/veritomix/matlab-stl-modeller.webp",
+            "caption": "STL modeller: primitives, boolean operations and gyroid meshing for printable inserts."
+          },
+          {
+            "src": "/media/veritomix/matlab-lesion-editor.webp",
+            "caption": "Lesion editor: modifier and designer tools with orthogonal and 3D views."
+          },
+          {
+            "src": "/media/veritomix/matlab-insertion.webp",
+            "caption": "Lesion insertion workbench on a phantom image."
+          },
+          {
+            "src": "/media/veritomix/matlab-voxelizer.webp",
+            "caption": "STL-to-mask voxelizer: masks generated from an STL surface."
+          },
+          {
+            "src": "/media/veritomix/matlab-stl-browser.webp",
+            "caption": "STL browser with mesh measurements."
+          }
+        ]
+      },
+      {
+        "date": "2025",
+        "tool": "paper",
+        "name": "MuPET preprint",
+        "text": "Multiphysics PET: mass-transport physics with image-domain noise modelling, a fast image-level route that later joined CASSOULET as a module.",
+        "img": {
+          "src": "/media/veritomix/mupet-noise.webp",
+          "caption": "MuPET noise calibration workflow."
+        }
+      },
+      {
+        "date": "Jun 2026",
+        "tool": "python",
+        "name": "Python rebuild begins",
+        "text": "A clean rebuild rather than a line-by-line port: a written blueprint, a PySide6 desktop shell with session folders, and a projection lab with scanner presets.",
+        "img": {
+          "src": "/media/veritomix/py-startup.webp",
+          "caption": "Python desktop app start screen."
+        }
+      },
+      {
+        "date": "Jul 2026",
+        "tool": "python",
+        "name": "Desktop app alpha: four modules, one session",
+        "text": "Designer workbench and mask editor, modeller, simulator and session map. The simulator switches between fast 2D Radon tests and 3D projection with parallelproj and PyTomography.",
+        "img": {
+          "src": "/media/veritomix/py-session-map.webp",
+          "caption": "Session map linking Design, Modeller, Simulation and Analysis."
+        }
+      },
+      {
+        "date": "Oct 2026",
+        "tool": "gpu",
+        "name": "3D physics on GPU and scanner models",
+        "text": "CASSOULET physics v2: Discovery MI 5-ring polygon model with depth of interaction, TOF single scatter and BSREM on A100 GPUs; an Omni Legend 32 cm model; the abdominal phantom; a multicentre virtual testbench. More than 150 dated studies by the end of October 2026.",
+        "img": {
+          "src": "/media/veritomix/ev-dmi-twin-render.webp",
+          "caption": "Discovery MI 5-ring research model."
+        }
+      },
+      {
+        "date": "Next",
+        "tool": "next",
+        "name": "A shared library, then digital twins",
+        "text": "One documented simulation and reconstruction library behind every study, then physics-informed AI digital twins."
+      }
+    ]
+  },
+  "phantoms": {
+    "title": "Phantoms",
+    "lede": "Every study starts from an object whose truth is known. VeriTomiX uses three kinds, from standard to anthropomorphic.",
+    "items": [
+      {
+        "name": "CASSOULET abdominal phantom",
+        "text": "Organs, vessels, bones, muscle and skin rebuilt from a public abdominal CT dataset (CC BY 4.0, Zenodo 10.5281/zenodo.17407158), then given synthetic activity. It is the phantom in the 3D view.",
+        "fig": {
+          "src": "/media/veritomix/abd-assembly.webp",
+          "caption": "Assembled anatomy, organs in position, bones and muscles."
+        },
+        "figs": [
+          {
+            "src": "/media/veritomix/abd-vessels.webp",
+            "caption": "Arteries, veins and predicted hepatic vessels."
+          }
+        ]
+      },
+      {
+        "name": "NEMA IEC body phantom",
+        "text": "The standard image-quality phantom, rebuilt as a CASSOULET template: D-shaped tank, lung insert and six micro-spheres from 4 to 12.4 mm, with PET activity, synthetic CT and a 511 keV μ-map.",
+        "fig": {
+          "src": "/media/veritomix/html-nema-viewer.webp",
+          "caption": "NEMA IEC template viewer: PET activity, synthetic CT and μ-map."
+        },
+        "figs": []
+      },
+      {
+        "name": "36-insert printed phantom",
+        "text": "Porous 3D-printed cubes whose solidity sets the PET contrast, printed independently at two facilities from shared files and used as a common physical reference for the digital twins.",
+        "fig": {
+          "src": "/media/graphical-abstract.webp",
+          "caption": "A common reference for multicentre PET: shared phantom geometry, independent experiments, matched assessment."
+        },
+        "figs": []
+      }
+    ]
+  },
+  "nav": [
+    [
+      "mission",
+      "Mission"
+    ],
+    [
+      "cassoulet",
+      "CASSOULET"
+    ],
+    [
+      "scanners",
+      "Scanners"
+    ],
+    [
+      "phantoms",
+      "Phantoms"
+    ],
+    [
+      "cases",
+      "Case studies"
+    ],
+    [
+      "timeline",
+      "Timeline"
+    ],
+    [
+      "team",
+      "Team"
+    ]
+  ],
+  "footer": "VeriTomiX — independent research entity · Sai Kiran Kumar Nalla & Olivier Caselles"
+}

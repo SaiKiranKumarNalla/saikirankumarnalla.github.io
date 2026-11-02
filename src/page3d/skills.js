@@ -1,105 +1,115 @@
-// Skills & Tools: a 3D constellation. Six domains sit on a ring; each skill is a star with its logo.
-// Learnt skills are solid lit rings, Learning skills have a turning, pulsing arc, Next skills are dashed.
-// Faint threads tie every skill to the projects that used it. Scrolling the cards flies the camera to
-// each domain; hovering a star (or a card row) shows its evidence and lights up its projects.
+// Skills & Tools: a timeline of how the toolkit grew, then a 3D network. Six domains sit on a ring.
+// Tools are logo discs, competencies are cut gems tinted by domain. A ring around each shows its state:
+// solid = learnt, turning arc = learning, dashed = next. Threads tie skills to the projects that used them.
+// Scrolling the cards flies the camera to each domain; hovering a node or a row shows its evidence.
 import data from '../../content/skills.json';
 import { runPage } from './engine.js';
+import { iconUrl, DOMAIN_HUE } from './skills-emblems.js';
+import { mountTimeline } from './skills-timeline.js';
 import './skills.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ORDER = { learnt: 0, learning: 1, next: 2 };
-const projById = Object.fromEntries(data.projects.map((p) => [p.id, p]));
-const skillsOf = (d) => data.skills.filter((s) => s.domain === d).sort((a, b) => ORDER[a.state] - ORDER[b.state]);
-const count = (st) => data.skills.filter((s) => s.state === st).length;
+const NOW = data.now;
+const workById = Object.fromEntries(data.works.map((w) => [w.id, w]));
+const domName = Object.fromEntries(data.domains.map((d) => [d.id, d.name]));
+const sortSk = (a, b) => ORDER[a.state] - ORDER[b.state] || b.uses.length - a.uses.length;
+const skillsOf = (d) => data.skills.filter((s) => s.domain === d).sort(sortSk);
+const count = (f) => data.skills.filter(f).length;
 
-// ---------- Text column ----------
-// Methods and lab skills have no brand logo: they get a small line icon for their domain instead
-// (scanner ring, wave, brackets, agent graph, cube, flask), always shown with the full skill name.
-const GLYPH = {
-  imaging: '<circle cx="12" cy="11" r="7.5"/><circle cx="12" cy="11" r="3"/><path d="M3 20h18"/>',
-  sim: '<path d="M2 12c2.5-6 5-6 7.5 0s5 6 7.5 0 3.5-4 5-2"/><path d="M2 20h20"/>',
-  code: '<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 5l-3 14"/>',
-  agents: '<circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M10.8 7.2l-4.6 8.6M13.2 7.2l4.6 8.6M7.5 18h9"/>',
-  creative: '<path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/>',
-  lab: '<path d="M9 2h6M10 2v6L4 19a2 2 0 0 0 1.8 3h12.4a2 2 0 0 0 1.8-3L14 8V2"/><path d="M7 15h10"/>',
+// Years shown are computed from the first-use year, never stored.
+const yrs = (s) => {
+  if (s.state === 'next') return 'Planned';
+  if (s.state === 'learning') return `Started ${s.since}`;
+  const n = NOW - s.since;
+  return n <= 0 ? 'Under 1 yr' : `${n} yr${n === 1 ? '' : 's'}`;
 };
-const glyphSvg = (d) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${GLYPH[d]}</svg>`;
-const icon = (s) => s.logo || `data:image/svg+xml,${encodeURIComponent(glyphSvg(s.domain))}`;
-const mark = (s) => `<img src="${esc(icon(s))}" alt="" width="18" height="18" loading="lazy" decoding="async">`;
-const badge = (st) => `<span class="sk-badge sk-${st}">${esc(data.states[st].name)}</span>`;
-const kindBadge = (k) => {
-  if (!k) return '';
-  const cls = k.toLowerCase().replace(/[^a-z]/g, '');
-  return `<span class="sk-kind sk-kind-${cls}">${esc(k)}</span>`;
-};
-const yrsBadge = (y) => y ? `<span class="sk-yrs">${esc(y)}</span>` : '';
+const usesTxt = (s) => `${s.uses.length} project${s.uses.length === 1 ? '' : 's'}`;
+const ico = (s) => `<span class="sk-ico sk-ico-${s.kind}" aria-hidden="true"><img src="${esc(iconUrl(s))}" alt="" loading="lazy" decoding="async"></span>`;
+const stateMark = (s) => `<span class="sk-st sk-${s.state}" title="${esc(data.states[s.state].name)}">${s.state === 'learnt' ? '<i></i>' : esc(data.states[s.state].name)}</span>`;
+const TYPE = { project: 'Projects', thesis: 'Theses', paper: 'Papers & posters' };
+const detail = (s) => `<p>${esc(s.evidence)}</p>${['project', 'thesis', 'paper'].map((t) => {
+  const ws = s.uses.map((u) => workById[u]).filter((w) => w.type === t);
+  return ws.length ? `<div class="sk-uses"><span>${TYPE[t]}</span>${ws.map((w) => `<a href="${esc(w.href)}">${esc(w.name)}</a>`).join('')}</div>` : '';
+}).join('')}`;
 
-const row = (s, i, showDomain = false) => `<li class="sk-row" data-skill="${s.id}" data-state="${s.state}" tabindex="0" style="--i:${i}">
-    <span class="sk-logo" aria-hidden="true">${mark(s)}</span>
-    <div class="sk-body">
-      <div class="sk-head">
-        <b>${esc(s.name)}</b>
-        <div class="sk-pills">
-          ${kindBadge(s.kind)}
-          ${yrsBadge(s.years)}
-          ${badge(s.state)}
-        </div>
-      </div>
-      <p class="sk-punchline">${esc(s.role || s.evidence)}</p>
-      <span class="sk-used">${showDomain ? `${esc(data.domains.find((d) => d.id === s.domain).name)} · ` : ''}${s.projects.length} ${s.projects.length === 1 ? 'project' : 'projects'}: ${s.projects.map((p) => `<a href="${esc(projById[p].href)}">${esc(projById[p].name)}</a>`).join(', ')}</span>
-    </div>
+const row = (s, showDomain = false) => `<li class="sk-row" data-skill="${s.id}" data-state="${s.state}" data-kind="${s.kind}">
+    <button type="button" class="sk-rowbtn" aria-expanded="false">
+      ${ico(s)}
+      <span class="sk-nm"><b>${esc(s.name)}</b><small>${showDomain ? `${esc(domName[s.domain])} · ` : ''}${esc(yrs(s))} · ${usesTxt(s)}</small></span>
+      ${stateMark(s)}<span class="sk-chev" aria-hidden="true"></span>
+    </button>
+    <div class="sk-detail" hidden>${detail(s)}</div>
   </li>`;
 
-// Small legend glyphs that match the 3D rings.
-const glyph = (st) => ({
+const group = (kind, list, showDomain) => list.length ? `<div class="sk-group" data-kind="${kind}">
+    <div class="sk-ghead"><span class="sk-shape sk-shape-${kind}" aria-hidden="true"></span>${esc(data.kinds[kind].name)}<em>${list.length}</em></div>
+    <ul class="sk-list">${list.map((s) => row(s, showDomain)).join('')}</ul></div>` : '';
+const groups = (list, showDomain = false) => group('competency', list.filter((s) => s.kind === 'competency'), showDomain) + group('tool', list.filter((s) => s.kind === 'tool'), showDomain);
+
+const ringSvg = {
   learnt: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>',
   learning: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3a7 7 0 1 1-6.6 4.7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
   next: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2.6 2.6"/></svg>',
-}[st]);
-
-const skillsGrouped = (d) => {
-  const all = skillsOf(d);
-  const domainKnowledge = all.filter((s) => s.kind === 'Domain Knowledge');
-  const workflows = all.filter((s) => s.kind === 'Skill');
-  const tools = all.filter((s) => s.kind === 'Tool' || !s.kind);
-  let html = '';
-  if (domainKnowledge.length) {
-    html += `<div class="sk-section-header"><span>Domain Knowledge &amp; Theory</span></div><ul class="sk-list">${domainKnowledge.map((s, i) => row(s, i)).join('')}</ul>`;
-  }
-  if (workflows.length) {
-    html += `<div class="sk-section-header" style="margin-top:1.1rem"><span>Engineering Workflows &amp; Skills</span></div><ul class="sk-list">${workflows.map((s, i) => row(s, i)).join('')}</ul>`;
-  }
-  if (tools.length) {
-    html += `<div class="sk-section-header" style="margin-top:1.1rem"><span>Software Tools &amp; Instrumentation</span></div><ul class="sk-list">${tools.map((s, i) => row(s, i)).join('')}</ul>`;
-  }
-  return html || `<ul class="sk-list">${all.map((s, i) => row(s, i)).join('')}</ul>`;
 };
 
+const D0 = 2; // index of the first domain step
 const STEPS = [
-  { title: 'Skills & Tools', domain: null, html: `<p class="s-kicker">Competencies &amp; Tools</p>
-      <h1>Scientific methods &amp; hands-on tools</h1>
+  { title: 'Skills & Tools', html: `<p class="s-kicker">Competencies &amp; tools</p>
+      <h1>Skills &amp; tools</h1>
       <p class="s-lede">${esc(data.intro)}</p>
-      <div class="s-stat">${['learnt', 'learning', 'next'].map((st) => `<div><b>${count(st)}</b><span>${esc(data.states[st].name)}</span></div>`).join('')}</div>
-      <ul class="sk-legend">${['learnt', 'learning', 'next'].map((st) => `<li class="sk-${st}">${glyph(st)}<div><b>${esc(data.states[st].name)}</b><span>${esc(data.states[st].text)}</span></div></li>`).join('')}</ul>
+      <div class="s-stat"><div><b>${count((s) => s.kind === 'competency')}</b><span>Competencies</span></div><div><b>${count((s) => s.kind === 'tool')}</b><span>Tools</span></div><div><b>${count((s) => s.state !== 'learnt')}</b><span>Learning &amp; next</span></div></div>
+      <ul class="sk-legend">
+        <li><span class="sk-shape sk-shape-competency" aria-hidden="true"></span><div><b>Competency</b><span>${esc(data.kinds.competency.text)}</span></div></li>
+        <li><span class="sk-shape sk-shape-tool" aria-hidden="true"></span><div><b>Tool</b><span>${esc(data.kinds.tool.text)}</span></div></li>
+      </ul>
+      <ul class="sk-states">${['learnt', 'learning', 'next'].map((st) => `<li class="sk-${st}" title="${esc(data.states[st].text)}">${ringSvg[st]}${esc(data.states[st].name)}</li>`).join('')}</ul>
       <span class="pj-label">Jump to a domain</span>
-      <div class="sk-jump">${data.domains.map((d, i) => `<button type="button" data-jump="${i + 1}">${esc(d.name)}</button>`).join('')}</div>
-      <p class="s-meta sk-hint">Hover or tap a star to see where the skill was used.</p>
-      <p class="s-scroll">Scroll through the six domains</p>` },
+      <div class="sk-jump">${data.domains.map((d, i) => `<button type="button" data-jump="${i + D0}" data-domain="${d.id}">${esc(d.name)}</button>`).join('')}</div>
+      <p class="s-scroll">Scroll: first the timeline, then the six domains</p>` },
+  { title: 'Over the years', timeline: true, html: `<p class="s-kicker">2016 to ${NOW}</p><h2>How the toolkit grew</h2>
+      <p class="sk-short">One lane per skill, from the year it was first used. Thicker lanes were used in more projects.</p>
+      <div class="sk-tl" id="skTimeline"></div>` },
   ...data.domains.map((d, k) => ({ title: d.name, domain: d.id, html: `<p class="s-kicker">${k + 1} / ${data.domains.length} · ${esc(d.kicker)}</p>
-      <h2>${esc(d.name)}</h2><p>${esc(d.text)}</p>
-      ${skillsGrouped(d.id)}` })),
-  { title: 'In progress', domain: null, focus: 'growing', html: `<p class="s-kicker">Right now</p><h2>Learning and next</h2>
-      <p>The direction: from simulating PET/CT to learning it. Small generative and surrogate models trained on CASSOULET, run by agent teams with human gates.</p>
-      <ul class="sk-list">${data.skills.filter((s) => s.state !== 'learnt').sort((a, b) => ORDER[a.state] - ORDER[b.state]).map((s, i) => row(s, i, true)).join('')}</ul>
+      <h2>${esc(d.name)}</h2><p class="sk-short">${esc(d.text)}</p>
+      ${groups(skillsOf(d.id))}` })),
+  { title: 'Learning and next', focus: 'growing', html: `<p class="s-kicker">Right now</p><h2>Learning and next</h2>
+      <p class="sk-short">From simulating PET/CT to learning it: small generative and surrogate models trained on CASSOULET, run by agent teams with human gates.</p>
+      ${groups(data.skills.filter((s) => s.state !== 'learnt').sort(sortSk), true)}
       <a class="s-more" href="/sections/builder.html">How the agent teams work</a>` },
 ];
 
 const main = document.getElementById('main');
-main.innerHTML = `<div class="sk-bar" role="toolbar" aria-label="Filter skills by state">
-    ${[['all', 'All'], ['learnt', 'Learnt'], ['learning', 'Learning'], ['next', 'Next']].map(([v, n]) => `<button type="button" data-filter="${v}" aria-pressed="${v === 'all'}">${v === 'all' ? '' : `<i class="sk-dot sk-${v}"></i>`}${n}</button>`).join('')}
+main.innerHTML = `<div class="sk-bar" role="toolbar" aria-label="Show tools or competencies">
+    ${[['all', 'All'], ['tool', 'Tools'], ['competency', 'Competencies']].map(([v, n]) => `<button type="button" data-filter="${v}" aria-pressed="${v === 'all'}">${v === 'all' ? '' : `<span class="sk-shape sk-shape-${v}" aria-hidden="true"></span>`}${n}</button>`).join('')}
   </div>
   ${STEPS.map((s, i) => `<section class="sk-step${i === 0 ? ' s-hero' : ''}" data-title="${esc(s.title)}" id="step-${i}"><div class="s-card">${s.html}</div></section>`).join('')}
   <p class="sk-foot s-meta">© 2026 Sai Kiran Kumar Nalla · <a href="/">Back to the village</a></p>`;
+
+// Rows expand to show evidence and links.
+main.addEventListener('click', (e) => {
+  const b = e.target.closest('.sk-rowbtn'); if (!b) return;
+  const open = b.getAttribute('aria-expanded') !== 'true';
+  b.setAttribute('aria-expanded', String(open));
+  b.nextElementSibling.hidden = !open;
+});
+
+// Hooks the 3D scene fills in, so the DOM parts work even without WebGL.
+const hooks = { hover: () => {}, filter: () => {} };
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const timeline = mountTimeline(document.getElementById('skTimeline'), {
+  skills: data.skills, milestones: data.milestones, now: NOW, iconUrl, reduceMotion: reduce,
+  onHover: (s, e, tap) => hooks.hover(s, e, tap),
+});
+
+let filter = 'all';
+main.querySelectorAll('[data-filter]').forEach((b) => b.addEventListener('click', () => {
+  filter = b.dataset.filter;
+  main.querySelectorAll('[data-filter]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  document.documentElement.dataset.skKind = filter;
+  timeline.setKind(filter);
+  hooks.filter();
+}));
 
 runPage({
   active: 'skills',
@@ -118,7 +128,6 @@ runPage({
     const ring = (dash, arc) => tex((g, n) => {
       g.strokeStyle = '#fff'; g.lineCap = 'round';
       if (arc) {
-        // A comet arc: bright head, fading tail.
         for (let k = 0; k < 40; k++) {
           const a0 = -Math.PI / 2 + (k / 40) * Math.PI * 1.45;
           g.globalAlpha = 0.08 + 0.92 * (k / 40); g.lineWidth = 6;
@@ -135,46 +144,49 @@ runPage({
       r.addColorStop(0, 'rgba(255,255,255,.55)'); r.addColorStop(0.45, 'rgba(255,255,255,.12)'); r.addColorStop(1, 'rgba(255,255,255,0)');
       g.fillStyle = r; g.fillRect(0, 0, n, n);
     }).t;
-    // The star's face: white disc, thin rim, the brand logo (or the domain's line icon).
+    // A tool's face: white disc, thin rim, its logo or emblem (aspect kept, so wide logos fit).
     const disc = (s) => {
       const { t, g } = tex((g2, n) => {
         g2.fillStyle = '#fff'; g2.beginPath(); g2.arc(n / 2, n / 2, n * 0.34, 0, Math.PI * 2); g2.fill();
         g2.strokeStyle = 'rgba(0,0,0,.12)'; g2.lineWidth = 2; g2.stroke();
       });
       const img = new Image();
-      img.onload = () => { const n = 128, w = 42; g.drawImage(img, n / 2 - w / 2, n / 2 - w / 2, w, w); t.needsUpdate = true; };
-      img.src = icon(s);
+      img.onload = () => {
+        const n = 128, w = 46, iw0 = img.naturalWidth || w, ih0 = img.naturalHeight || w, k = Math.min(w / iw0, w / ih0);
+        g.drawImage(img, n / 2 - (iw0 * k) / 2, n / 2 - (ih0 * k) / 2, iw0 * k, ih0 * k); t.needsUpdate = true;
+      };
+      img.src = iconUrl(s);
       return t;
     };
+    // A competency: a cut gem (pavilion, girdle, crown, table) with flat facets, tinted by its domain.
+    const gemGeo = new THREE.LatheGeometry([[0, -0.52], [0.44, 0.06], [0.46, 0.12], [0.3, 0.3], [0, 0.3]].map(([x, y]) => new THREE.Vector2(x, y)), 8);
 
     // ---------- Layout ----------
     const R = 9.5;
     const domains = data.domains.map((d, i) => {
       const a = (i / data.domains.length) * Math.PI * 2 - Math.PI / 2 - Math.PI / 6;
       const center = V(Math.cos(a) * R, (i % 2 ? 0.9 : -0.9), Math.sin(a) * R);
-      // Each cluster is a disc whose face turns halfway between 'outward' and the overview camera,
-      // so no domain is seen edge-on from the overview and each has a clean front for its close-up.
       const out = V(Math.cos(a), 0, Math.sin(a)).add(V(0, 22, 36).sub(center).normalize()).normalize();
       const side = V(0, 1, 0).cross(out).normalize();
       const up = out.clone().cross(side).normalize();
-      // Faint orbit around the cluster, facing outward.
       const pts = []; for (let k = 0; k <= 64; k++) { const t = (k / 64) * Math.PI * 2; pts.push(center.clone().addScaledVector(side, Math.cos(t) * 4.3).addScaledVector(up, Math.sin(t) * 4.3)); }
       const orbit = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ transparent: true, opacity: 0.18, depthWrite: false }));
       root.add(orbit);
       const lbl = label(`<b>${esc(d.name)}</b><span>${skillsOf(d.id).length} skills</span>`, () => center.clone().add(V(0, 4.6, 0)), 's-pin sk-dlabel');
       return { ...d, i, center, out, side, up, orbit, lbl };
     });
-    const domById = Object.fromEntries(domains.map((d) => [d.id, d]));
 
     const golden = Math.PI * (3 - Math.sqrt(5));
     const nodes = [];
     domains.forEach((d) => {
       skillsOf(d.id).forEach((s, k) => {
-        // Phyllotaxis disc in the plane facing out from the ring, with a little depth.
         const r = 1.0 * Math.sqrt(k + 0.4), th = k * golden;
         const pos = d.center.clone().addScaledVector(d.side, Math.cos(th) * r).addScaledVector(d.up, Math.sin(th) * r).addScaledVector(d.out, Math.sin(k * 2.3) * 0.35);
         const size = s.state === 'learnt' ? 0.92 : s.state === 'learning' ? 0.84 : 0.74;
-        const face = new THREE.Sprite(new THREE.SpriteMaterial({ map: disc(s), transparent: true, depthWrite: false }));
+        const gem = s.kind === 'competency';
+        const face = gem
+          ? new THREE.Mesh(gemGeo, new THREE.MeshStandardMaterial({ color: DOMAIN_HUE[s.domain], flatShading: true, roughness: 0.28, metalness: 0.35, transparent: true }))
+          : new THREE.Sprite(new THREE.SpriteMaterial({ map: disc(s), transparent: true, depthWrite: false }));
         const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: RING[s.state], transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
         const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
         face.renderOrder = 3; halo.renderOrder = 2; glow.renderOrder = 1;
@@ -182,30 +194,31 @@ runPage({
         face.userData.node = nodes.length;
         const name = label(`<b>${esc(s.name)}</b>`, () => face.position, 's-pin sk-slabel');
         name.visible = false;
-        nodes.push({ s, d, pos, size, face, halo, glow, name, em: 1, show: 0, lines: [], seed: nodes.length * 0.73 });
+        nodes.push({ s, d, pos, size, gem, face, halo, glow, name, em: 1, show: 0, tl: 1, lines: [], seed: nodes.length * 0.73 });
       });
     });
     const nodeById = Object.fromEntries(nodes.map((n) => [n.s.id, n]));
 
-    // Projects: small diamonds pulled toward the centre of the skills that used them.
+    // Projects and theses (papers are counted on the cards, not drawn): small diamonds near their skills.
     const projGeo = new THREE.OctahedronGeometry(0.2, 0);
-    const projects = data.projects.map((p) => {
-      const used = nodes.filter((n) => n.s.projects.includes(p.id));
+    const projects = data.works.filter((w) => w.type !== 'paper').map((p) => {
+      const used = nodes.filter((n) => n.s.uses.includes(p.id));
       const c = V(); used.forEach((n) => c.add(n.pos)); c.divideScalar(Math.max(1, used.length));
       const pos = c.multiplyScalar(used.length > 1 && new Set(used.map((n) => n.d.id)).size > 1 ? 0.42 : 0.68);
       pos.y -= 1.6;
+      return { ...p, pos, used };
+    }).filter((p) => p.used.length).map((p) => {
       const mesh = new THREE.Mesh(projGeo, new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x000000, roughness: 0.4, metalness: 0.1, transparent: true }));
-      mesh.position.copy(pos); root.add(mesh);
-      const lbl = label(`<b>${esc(p.name)}</b>`, () => pos, 's-pin sk-plabel');
+      mesh.position.copy(p.pos); root.add(mesh);
+      const lbl = label(`<b>${esc(p.name)}</b>`, () => p.pos, 's-pin sk-plabel');
       lbl.visible = false;
-      return { ...p, pos, mesh, used, lbl, em: 0.3 };
+      return { ...p, mesh, lbl, em: 0.3 };
     });
-    const projByIdMap = Object.fromEntries(projects.map((p) => [p.id, p]));
+    const projMap = Object.fromEntries(projects.map((p) => [p.id, p]));
 
-    // Threads: one line per skill-project link, so each can fade on its own.
     const links = [];
-    nodes.forEach((n) => n.s.projects.forEach((pid) => {
-      const p = projByIdMap[pid];
+    nodes.forEach((n) => n.s.uses.forEach((pid) => {
+      const p = projMap[pid]; if (!p) return;
       const mid = n.pos.clone().lerp(p.pos, 0.5).add(V(0, 0.6, 0));
       const curve = new THREE.QuadraticBezierCurve3(n.pos, mid, p.pos);
       const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(lowPower ? 8 : 16)), new THREE.LineBasicMaterial({ transparent: true, opacity: 0.06, depthWrite: false }));
@@ -214,7 +227,6 @@ runPage({
       links.push(l); n.lines.push(l);
     }));
 
-    // Centre: a quiet wireframe core with spokes to each domain.
     const core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.7, 1), new THREE.MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0.5 }));
     root.add(core);
     const spokes = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(domains.flatMap((d) => [V(), d.center])), new THREE.LineBasicMaterial({ transparent: true, opacity: 0.08, depthWrite: false }));
@@ -222,8 +234,8 @@ runPage({
 
     // ---------- Theme ----------
     const COL = {
-      dark: { learnt: [1.0, 0.32, 0.3], learning: [1.0, 0.7, 0.3], next: [0.55, 0.53, 0.62], face: 0.8, line: 0xe8b0a8, core: 0xd24a4a, proj: 0xf2ece4, projE: 0x6a1a1a },
-      light: { learnt: [0.64, 0.14, 0.14], learning: [0.8, 0.46, 0.0], next: [0.42, 0.4, 0.46], face: 1.0, line: 0x8b1a1a, core: 0xa32424, proj: 0xb04a3c, projE: 0x000000 },
+      dark: { learnt: [1.0, 0.32, 0.3], learning: [1.0, 0.7, 0.3], next: [0.55, 0.53, 0.62], face: 0.8, gemE: 0.32, line: 0xe8b0a8, core: 0xd24a4a, proj: 0xf2ece4, projE: 0x6a1a1a },
+      light: { learnt: [0.64, 0.14, 0.14], learning: [0.8, 0.46, 0.0], next: [0.42, 0.4, 0.46], face: 1.0, gemE: 0.06, line: 0x8b1a1a, core: 0xa32424, proj: 0xb04a3c, projE: 0x000000 },
     };
     let pal = COL.dark, night = true;
     function onTheme(p) {
@@ -232,7 +244,8 @@ runPage({
         n.halo.material.color.setRGB(...pal[n.s.state]);
         n.glow.material.color.setRGB(...pal[n.s.state]).multiplyScalar(night ? 0.22 : 0);
         n.halo.material.blending = night ? THREE.AdditiveBlending : THREE.NormalBlending;
-        n.face.material.color.setScalar(pal.face);
+        if (n.gem) n.face.material.emissive.set(DOMAIN_HUE[n.s.domain]).multiplyScalar(pal.gemE);
+        else n.face.material.color.setScalar(pal.face);
         n.halo.material.needsUpdate = true;
       });
       links.forEach((l) => l.line.material.color.set(pal.line));
@@ -244,24 +257,24 @@ runPage({
 
     // ---------- Interaction ----------
     const tip = document.getElementById('skTip');
-    let hoverNode = null, rowNode = null, filter = 'all', pinned = false;
+    let hoverNode = null, rowNode = null, pinned = false;
     const raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
     const faces = nodes.map((n) => n.face);
     const canvas = renderer.domElement;
+    const passes = (n) => filter === 'all' || n.s.kind === filter;
     const pick = (x, y) => {
       pointer.set((x / innerWidth) * 2 - 1, -(y / innerHeight) * 2 + 1);
       raycaster.setFromCamera(pointer, camera);
-      const hit = raycaster.intersectObjects(faces).find((h) => nodes[h.object.userData.node].show > 0.5 && passes(nodes[h.object.userData.node]));
+      const hit = raycaster.intersectObjects(faces).find((h) => { const n = nodes[h.object.userData.node]; return n.show * n.tl > 0.5 && passes(n); });
       return hit ? nodes[hit.object.userData.node] : null;
     };
-    const passes = (n) => filter === 'all' || n.s.state === filter;
     function showTip(n, x, y) {
       if (!n) { tip.hidden = true; return; }
       const s = n.s;
-      tip.innerHTML = `<div class="sk-tip-head"><span class="sk-logo" aria-hidden="true">${mark(s)}</span><div><b>${esc(s.name)}</b>
-        <div class="sk-pills" style="margin-top:2px">${kindBadge(s.kind)}${yrsBadge(s.years)}${badge(s.state)}</div>
-      </div></div>
-        <p>${esc(s.evidence)}</p><span class="sk-used">${esc(n.d.name)} · ${s.projects.length} ${s.projects.length === 1 ? 'project' : 'projects'}: ${s.projects.map((p) => esc(projById[p].name)).join(', ')}</span>`;
+      const names = s.uses.map((u) => workById[u].name);
+      tip.innerHTML = `<div class="sk-tip-head">${ico(s)}<div><b>${esc(s.name)}</b>
+        <span>${esc(data.kinds[s.kind].one)} · ${s.since ? `since ${s.since} · ` : ''}${esc(data.states[s.state].name)}</span></div></div>
+        <p>${esc(s.evidence)}</p><span class="sk-tip-uses">${usesTxt(s)}: ${esc(names.slice(0, 5).join(', '))}${names.length > 5 ? ` and ${names.length - 5} more` : ''}</span>`;
       tip.hidden = false;
       const w = tip.offsetWidth, h = tip.offsetHeight;
       const maxY = innerWidth <= 860 ? innerHeight * 0.42 : innerHeight - 12;
@@ -281,30 +294,25 @@ runPage({
       hoverNode = n; pinned = !!n && e.pointerType === 'touch';
       showTip(n, e.clientX, e.clientY);
       if (!n) { pinned = false; return; }
-      // Bring the matching card row into view and flash it.
-      const stepIdx = data.domains.findIndex((d) => d.id === n.d.id) + 1;
+      const stepIdx = data.domains.findIndex((d) => d.id === n.d.id) + D0;
       if (Math.round(progress) !== stepIdx) goTo(stepIdx);
       const r = document.querySelector(`#step-${stepIdx} [data-skill="${n.s.id}"]`);
       if (r) { r.classList.remove('flash'); void r.offsetWidth; r.classList.add('flash'); }
     });
-    // Card rows light up their star.
-    main.addEventListener('pointerover', (e) => { const r = e.target.closest('.sk-row'); rowNode = r ? nodeById[r.dataset.skill] : null; });
+    main.addEventListener('pointerover', (e) => { const r = e.target.closest('.sk-row'); if (r) rowNode = nodeById[r.dataset.skill]; else if (!e.target.closest('.sk-lane')) rowNode = null; });
     main.addEventListener('pointerleave', () => { rowNode = null; });
     main.addEventListener('focusin', (e) => { const r = e.target.closest('.sk-row'); rowNode = r ? nodeById[r.dataset.skill] : null; });
     main.addEventListener('focusout', () => { rowNode = null; });
+    // Timeline lanes light their node and show the same card.
+    hooks.hover = (s, e) => {
+      rowNode = s ? nodeById[s.id] : null;
+      if (s && e) showTip(rowNode, e.clientX, e.clientY); else showTip(null);
+    };
+    hooks.filter = () => { if (hoverNode && !passes(hoverNode)) { hoverNode = null; showTip(null); } };
 
-    // State filter.
-    main.querySelectorAll('[data-filter]').forEach((b) => b.addEventListener('click', () => {
-      filter = b.dataset.filter;
-      main.querySelectorAll('[data-filter]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      document.documentElement.dataset.skFilter = filter;
-      if (hoverNode && !passes(hoverNode)) { hoverNode = null; showTip(null); }
-    }));
-
-    // ---------- Scroll steps (own measure: the column scrolls the window on desktop, itself on phones) ----------
+    // ---------- Scroll steps (the column scrolls the window on desktop, itself on phones) ----------
     const steps = [...main.querySelectorAll('.sk-step')];
     const narrow = () => innerWidth <= 860;
-    const scroller = () => (narrow() ? main : window);
     function measure() {
       const box = narrow() ? main.getBoundingClientRect() : { top: 0, height: innerHeight };
       const anchor = box.top + box.height * (narrow() ? 0.35 : 0.5);
@@ -321,7 +329,7 @@ runPage({
     const goTo = (i) => {
       const el = steps[i]; if (!el) return;
       if (narrow()) main.scrollTo({ top: el.offsetTop - 8, behavior: reduceMotion ? 'auto' : 'smooth' });
-      else el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      else el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     };
     main.querySelectorAll('[data-jump]').forEach((b) => b.addEventListener('click', () => goTo(+b.dataset.jump)));
     const dots = document.getElementById('dots');
@@ -335,15 +343,17 @@ runPage({
     if (deep && steps[+deep[1]]) requestAnimationFrame(() => { goTo(+deep[1]); });
     requestAnimationFrame(() => { target = progress = measure(); });
 
-    // Camera frames: an overview, one per domain (from outside the ring), and a high view for "in progress".
+    // Camera frames: overview, a lower view for the timeline, one per domain, and a high view for "learning".
     const frames = [
       { pos: V(0, 25, 40), look: V(0, -1.5, 0), sh: 1 },
+      { pos: V(4, 13, 38), look: V(0, -0.5, 0), sh: 1 },
       ...domains.map((d) => ({ pos: d.center.clone().addScaledVector(d.out, 19.5).addScaledVector(d.side, -0.6).addScaledVector(d.up, 1.2), look: d.center.clone().addScaledVector(d.up, -0.3), sh: 0 })),
       { pos: V(-7, 24, 25), look: V(0, -2, 0), sh: 1 },
     ];
     const smooth = (x) => x * x * (3 - 2 * x);
     const camPos = frames[0].pos.clone(), camLook = frames[0].look.clone(), wantPos = V(), wantLook = V();
     let wasNarrow = null, currentStep = -1, introT = 0;
+    const tiny = (v) => Math.max(0.0001, v);
 
     return {
       keyframes: [{ pos: [0, 11, 30], look: [0, 0, 0] }],
@@ -351,7 +361,6 @@ runPage({
       update(t, _p, dt) {
         const time = reduceMotion ? 0 : t;
         const nar = narrow();
-        // Phones: the cards fill the lower part of the screen, so the scene is framed in the band above.
         if (nar !== wasNarrow) { wasNarrow = nar; camera.fov = nar ? 48 : 35; }
         if (nar) camera.setViewOffset(innerWidth, innerHeight, 0, innerHeight * 0.25, innerWidth, innerHeight);
         else camera.updateProjectionMatrix();
@@ -361,14 +370,13 @@ runPage({
         const f = smooth(Math.max(0, Math.min(1, progress - i)));
         wantPos.lerpVectors(frames[i].pos, frames[i + 1].pos, f);
         wantLook.lerpVectors(frames[i].look, frames[i + 1].look, f);
-        // Overviews sit right of the text column on desktop; phones frame them centred and farther back.
         const sh = frames[i].sh + (frames[i + 1].sh - frames[i].sh) * f;
         if (nar) wantPos.sub(wantLook).multiplyScalar(sh ? 1.3 : 1.45).add(wantLook);
         else { wantPos.x -= 1.5 * sh; wantLook.x -= 1.5 * sh; }
         camPos.copy(wantPos); camLook.copy(wantLook);
         if (!reduceMotion) camPos.x += Math.sin(t * 0.21) * 0.35, camPos.y += Math.sin(t * 0.29) * 0.2;
         camera.position.copy(camPos); camera.lookAt(camLook);
-        camera.updateMatrixWorld(); // the engine projects the 3D labels right after this; keep them in sync
+        camera.updateMatrixWorld();
 
         const step = Math.round(progress);
         if (step !== currentStep) {
@@ -378,10 +386,11 @@ runPage({
         }
         const stepDef = STEPS[Math.max(0, Math.min(STEPS.length - 1, step))];
         const activeDom = stepDef.domain, growing = stepDef.focus === 'growing';
+        // In the timeline step the network grows with the playhead.
+        const tlYear = stepDef.timeline ? timeline.year : Infinity;
         const focus = hoverNode || rowNode;
 
-        // Emphasis per star: filter > hover > step.
-        introT = reduceMotion ? 10 : t; // wall-clock, so slow frames do not stall the reveal
+        introT = reduceMotion ? 10 : t;
         const k = 1 - Math.exp(-dt * 7);
         nodes.forEach((n, idx) => {
           let em = 1;
@@ -390,23 +399,25 @@ runPage({
           if (focus) em = n === focus ? 1.25 : Math.min(em, 0.35);
           if (!passes(n)) em = 0.05;
           n.em += (em - n.em) * k;
+          const born = (n.s.state === 'next' ? timeline.end - 0.02 : n.s.since) <= tlYear ? 1 : 0;
+          n.tl += (born - n.tl) * (reduceMotion ? 1 : 1 - Math.exp(-dt * 9));
           n.show = reduceMotion ? 1 : smooth(Math.max(0, Math.min(1, (introT - 0.25 - idx * 0.028) / 0.7)));
           const pulse = n.s.state === 'learning' && !reduceMotion ? 1 + Math.sin(time * 2.4 + n.seed) * 0.07 : 1;
-          const sz = n.size * n.show * (n === focus ? 1.18 : 1) * (growing && n.s.state !== 'learnt' ? 1.4 : 1);
+          const sz = n.size * n.show * n.tl * (n === focus ? 1.18 : 1) * (growing && n.s.state !== 'learnt' ? 1.4 : 1);
           const bob = reduceMotion ? 0 : Math.sin(time * 0.8 + n.seed) * 0.06;
           [n.face, n.halo, n.glow].forEach((m) => { m.position.set(n.pos.x, n.pos.y + bob, n.pos.z); });
-          n.face.scale.setScalar(sz);
-          n.halo.scale.setScalar(sz * 1.45 * pulse);
-          n.glow.scale.setScalar(sz * (n.s.state === 'learnt' ? 3.0 : n.s.state === 'learning' ? 2.6 * pulse : 1.6));
+          if (n.gem) { n.face.scale.setScalar(tiny(sz * 0.95)); n.face.rotation.set(0.42, time * 0.5 + n.seed, 0); }
+          else n.face.scale.setScalar(tiny(sz));
+          n.halo.scale.setScalar(tiny(sz * 1.45 * pulse));
+          n.glow.scale.setScalar(tiny(sz * (n.s.state === 'learnt' ? 3.0 : n.s.state === 'learning' ? 2.6 * pulse : 1.6)));
           if (n.s.state === 'learning' && !reduceMotion) n.halo.material.rotation = -time * 1.1 - n.seed;
           const a = Math.min(1, n.em);
           n.face.material.opacity = a * (n.s.state === 'next' ? 0.72 : 1);
           n.halo.material.opacity = a * (n.s.state === 'next' ? 0.7 : 1);
-          n.name.visible = n.show > 0.9 && passes(n) && (focus ? n === focus : (rowNode ? n === rowNode : false));
+          n.name.visible = n.show * n.tl > 0.9 && passes(n) && focus === n;
           n.glow.material.opacity = a * (n.s.state === 'learning' ? 0.75 + 0.25 * Math.sin(time * 2.4 + n.seed) : 0.8);
         });
 
-        // Threads and projects follow their stars.
         const lit = new Set();
         links.forEach((l) => {
           let o = lowPower ? 0.05 : 0.07;
@@ -416,7 +427,7 @@ runPage({
           if (focus) o = l.n === focus ? 0.9 : 0.02;
           if (o >= 0.3) lit.add(l.p.id);
           l.o += (o - l.o) * k;
-          l.line.material.opacity = l.o * (night ? 1 : 0.9) * Math.min(1, l.n.show * 1.5);
+          l.line.material.opacity = l.o * (night ? 1 : 0.9) * Math.min(1, l.n.show * l.n.tl * 1.5);
         });
         projects.forEach((p) => {
           const on = lit.has(p.id);
@@ -424,10 +435,10 @@ runPage({
           p.mesh.material.opacity = p.em;
           p.mesh.rotation.y = time * 0.6; p.mesh.rotation.x = 0.4;
           p.mesh.scale.setScalar((0.8 + p.em * 0.6) * Math.min(1, introT / 1.4));
-          p.lbl.visible = on && !!focus; // only for the star being looked at, to keep the scene quiet
+          p.lbl.visible = on && !!focus;
         });
         domains.forEach((d) => {
-          d.lbl.visible = !focus && !activeDom && !nar; // in a domain step the card names it
+          d.lbl.visible = !focus && !activeDom && !nar && !stepDef.timeline;
           d.orbit.material.opacity = (activeDom === d.id ? 0.32 : 0.12) * (night ? 1 : 0.8);
         });
         core.rotation.y = time * 0.15; core.rotation.x = time * 0.07;
