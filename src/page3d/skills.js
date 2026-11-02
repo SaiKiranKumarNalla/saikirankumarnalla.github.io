@@ -5,7 +5,7 @@
 import data from '../../content/skills.json';
 import { runPage } from './engine.js';
 import { iconUrl, DOMAIN_HUE } from './skills-emblems.js';
-import { mountTimeline } from './skills-timeline.js';
+import { mountTimeline, periodText } from './skills-timeline.js';
 import './skills.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -21,11 +21,12 @@ const count = (f) => data.skills.filter(f).length;
 const yrs = (s) => {
   if (s.state === 'next') return 'Planned';
   if (s.state === 'learning') return `Started ${s.since}`;
+  if (s.periods && s.periods.length > 1) return periodText(s, NOW);
   if (s.until) return s.until === s.since ? `${s.since}` : `${s.since}–${s.until}`;
   const n = NOW - s.since;
   return n <= 0 ? 'Under 1 yr' : `${n} yr${n === 1 ? '' : 's'}`;
 };
-const usesTxt = (s) => `${s.uses.length} project${s.uses.length === 1 ? '' : 's'}`;
+const usesTxt = (s) => (s.uses.length ? `${s.uses.length} project${s.uses.length === 1 ? '' : 's'}` : 'no project yet');
 const ico = (s) => `<span class="sk-ico sk-ico-${s.kind}" aria-hidden="true"><img src="${esc(iconUrl(s))}" alt="" loading="lazy" decoding="async"></span>`;
 const stateMark = (s) => `<span class="sk-st sk-${s.state}" title="${esc(data.states[s.state].name)}">${s.state === 'learnt' ? '<i></i>' : esc(data.states[s.state].name)}</span>`;
 const TYPE = { project: 'Projects', thesis: 'Theses', paper: 'Papers & posters' };
@@ -65,8 +66,8 @@ const STEPS = [
       <ul class="sk-states">${['learnt', 'learning', 'next'].map((st) => `<li class="sk-${st}" title="${esc(data.states[st].text)}">${ringSvg[st]}${esc(data.states[st].name)}</li>`).join('')}</ul>
       <div class="sk-jump">${data.domains.map((d, i) => `<button type="button" data-jump="${i + D0}" data-domain="${d.id}">${esc(d.name)}</button>`).join('')}</div>
       <p class="s-scroll">Scroll for the timeline and the six domains</p>` },
-  { title: 'Over the years', timeline: true, wide: true, html: `<p class="s-kicker">2016 to ${NOW}</p><h2>How the toolkit grew</h2>
-      <p class="sk-short">Each bar starts the year a skill was first used. Dotted: not used since.</p>
+  { title: 'Over the years', timeline: true, html: `<p class="s-kicker">2016 to ${NOW}</p><h2>How the toolkit grew</h2>
+      <p class="sk-short">One domain at a time. Each bar is a period of use; a thin line is a break.</p>
       <div class="sk-tl" id="skTimeline"></div>` },
   ...data.domains.map((d, k) => ({ title: d.name, domain: d.id, html: `<p class="s-kicker">${k + 1} / ${data.domains.length} · ${esc(d.kicker)}</p>
       <h2>${esc(d.name)}</h2><p class="sk-short">${esc(d.text)}</p>
@@ -101,9 +102,8 @@ main.addEventListener('click', (e) => {
 
 // Hooks the 3D scene fills in, so the DOM parts work even without WebGL.
 const hooks = { hover: () => {}, filter: () => {} };
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const timeline = mountTimeline(document.getElementById('skTimeline'), {
-  skills: data.skills, domains: data.domains, milestones: data.milestones, now: NOW, iconUrl, reduceMotion: reduce,
+  skills: data.skills, domains: data.domains, now: NOW, iconUrl,
   onHover: (s, e, tap) => hooks.hover(s, e, tap),
 });
 
@@ -278,7 +278,7 @@ runPage({
       const s = n.s;
       const names = s.uses.map((u) => workById[u].name);
       tip.innerHTML = `<div class="sk-tip-head">${ico(s)}<div><b>${esc(s.name)}</b>
-        <span>${esc(data.kinds[s.kind].one)} · ${s.until ? `${s.since}–${s.until} · ` : s.since ? `since ${s.since} · ` : ''}${esc(data.states[s.state].name)}</span></div></div>
+        <span>${esc(data.kinds[s.kind].one)} · ${s.periods?.length > 1 ? `${periodText(s, NOW)} · ` : s.until ? `${s.since}–${s.until} · ` : s.since ? `since ${s.since} · ` : ''}${esc(data.states[s.state].name)}</span></div></div>
         <p>${esc(s.evidence)}</p><span class="sk-tip-uses">${usesTxt(s)}: ${esc(names.slice(0, 5).join(', '))}${names.length > 5 ? ` and ${names.length - 5} more` : ''}</span>`;
       tip.hidden = false;
       const w = tip.offsetWidth, h = tip.offsetHeight;

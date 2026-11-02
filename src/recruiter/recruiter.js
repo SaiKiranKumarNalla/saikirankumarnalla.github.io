@@ -81,101 +81,195 @@ const listed = pubs.filter((p) => ['published', 'preprint'].includes(p.status)).
 const sc = metrics.googleScholar, rg = metrics.researchGate;
 
 const L = profile.links;
+const defended = thesis.defended === '2026-09' ? 'September 2026' : thesis.defended;
+const nPub = statusCount('published'), nPre = statusCount('preprint');
+const vxLogo = (t) => `/media/veritomix/veritomix-logo-${t}.webp`;
+
+// "Where I fit": role types matched to proof on this page.
+const FIT = [
+  ['Imaging Research Scientist', 'PET/CT, phantoms, simulation, quantitative validation and publications.', 'Proof: publications, thesis, CASSOULET'],
+  ['Clinical AI / Imaging Product', 'A ground-truth validation mindset for explainable medical-imaging AI.', 'Proof: VeriTomiX, CASSOULET, agentic builds'],
+  ['MedTech / Life Sciences Strategy', 'Technical fluency with market, IP and stakeholder translation exposure.', 'Proof: Hepta Medical, VC and strategy programmes'],
+  ['Healthcare Venture / Analyst', 'Deep-tech curiosity, medtech exposure and scientific communication.', 'Proof: toolkit, experience, programmes'],
+];
+const PIPE = [
+  ['Need', 'Clinical, technical or translational gap.'],
+  ['Model', 'Physical, computational or analytical model.'],
+  ['Prototype', 'Code, CAD, simulation or fabrication.'],
+  ['Validate', 'Data, metrics and experiments against known truth.'],
+  ['Translate', 'Papers, posters, tools and product artifacts.'],
+];
+
 document.getElementById('bar').innerHTML = `
   <a class="r-brand" href="/">NALLA<span>.</span></a>
-  <span class="r-bar-title">Single-page portfolio</span>
+  <nav class="r-links" aria-label="Sections">
+    <a href="#fit">Fit</a><a href="#evidence">Evidence</a><a href="#cases">Cases</a><a href="#veritomix">VeriTomiX</a><a href="#proof">Proof</a><a href="#toolkit">Toolkit</a><a href="#experience">Experience</a>
+  </nav>
   <div class="r-bar-right">
     <button class="r-btn r-ghost" id="printBtn" type="button">Print / PDF</button>
     <button class="r-btn r-ghost" id="themeBtn" type="button" aria-label="Toggle light and dark">Dark</button>
     <a class="r-btn r-ghost" href="/">Full portfolio</a>
   </div>`;
 
+const head = (kicker, title, copy) => `<div class="r-head"><div><span class="r-kicker">${kicker}</span><h2 class="r-title">${title}</h2></div>${copy ? `<p class="r-headcopy">${copy}</p>` : ''}</div>`;
+
+const skillTile = (s) => `<li class="r-tile${s.state === 'learning' ? ' r-learning' : ''}"><span class="r-tileicon"><img src="${esc(iconUrl(s))}" alt="" width="28" height="28" loading="lazy" decoding="async"></span><b>${esc(s.short || s.name)}</b><small>${esc(years(s))}</small></li>`;
+
 document.getElementById('main').innerHTML = `
-<section class="r-hero">
+<header class="r-hero">
   <div>
-    <h1>${esc(profile.displayName)}</h1>
+    <span class="r-kicker">Single-page portfolio &middot; 3-minute scan</span>
+    <h1>${esc(profile.displayName.replace(', PhD', ''))}<span class="r-phd">PhD</span></h1>
     <p class="r-role">${esc(profile.headline)}</p>
     <p class="r-pitch">${esc(profile.tagline)}</p>
     <p class="r-now"><b>Now:</b> ${esc(profile.now)}</p>
     <div class="r-cta">
-      <a class="r-btn" href="mailto:${esc(profile.email)}">Email</a>
+      <a class="r-btn" href="mailto:${esc(profile.email)}">Email Sai</a>
       <a class="r-btn r-ghost" href="/${esc(L.cv)}" ${ext}>Download CV</a>
       <a class="r-btn r-ghost" href="${esc(L.linkedin)}" ${ext}>LinkedIn</a>
       <a class="r-btn r-ghost" href="${esc(L.github)}" ${ext}>GitHub</a>
     </div>
   </div>
-  <dl class="r-facts">
-    <div><dt>Based in</dt><dd>${esc(profile.location)}</dd></div>
-    <div><dt>Open to</dt><dd><ul class="r-open">${profile.openTo.map((o) => `<li>${esc(o)}</li>`).join('')}</ul></dd></div>
-    <div><dt>Languages</dt><dd>${esc(profile.languages.join(' · '))}</dd></div>
-    <div><dt>Email</dt><dd>${esc(profile.email)}</dd></div>
-  </dl>
+  <aside class="r-glass r-facts" aria-label="Quick facts">
+    <div class="r-bigstat"><b>${esc(defended)}</b><span>PhD defended &middot; open to roles</span></div>
+    <dl>
+      <div><dt>Based in</dt><dd>${esc(profile.location)}</dd></div>
+      <div><dt>Open to</dt><dd><ul class="r-open">${profile.openTo.map((o) => `<li>${esc(o)}</li>`).join('')}</ul></dd></div>
+      <div><dt>Languages</dt><dd>${esc(profile.languages.join(' · '))}</dd></div>
+    </dl>
+  </aside>
+</header>
+
+<section class="r-sec" id="fit" aria-labelledby="h-fit">
+  ${head('Best-fit roles', '<span id="h-fit">Where I fit</span>', 'A quick map for recruiters: role type, why it fits, and where to check the proof first.')}
+  <ul class="r-grid r-grid4">${FIT.map(([t, d, p]) => `<li class="r-card r-glass"><b>${esc(t)}</b><p>${esc(d)}</p><small>${esc(p)}</small></li>`).join('')}</ul>
 </section>
 
-<div class="r-cols">
-  <section class="r-sec" aria-labelledby="h-exp"><h2 id="h-exp">Experience</h2><ol class="r-timeline">${experience}</ol></section>
-  <section class="r-sec" aria-labelledby="h-edu"><h2 id="h-edu">Education</h2><ol class="r-timeline">${education}</ol>
-    <h2 class="r-h2b">Programmes</h2>
-    <ul class="r-plain">${profile.programmes.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>
-  </section>
-</div>
+<section class="r-sec" id="evidence" aria-labelledby="h-ev">
+  <div class="r-evgrid">
+    <article class="r-glass r-pitchcard"><span class="r-kicker">30-second pitch</span><h2 id="h-ev">Research depth, builder speed, translation instinct.</h2>
+      <p>${esc(thesis.abstractShort)}</p></article>
+    <ul class="r-stats">
+      <li class="r-glass"><b>${nPub}</b><span>Published papers</span></li>
+      <li class="r-glass"><b>${nPre}</b><span>Preprints</span></li>
+      <li class="r-glass"><b>${sc.citations}</b><span>Scholar citations, h-index ${sc.hIndex}</span></li>
+      <li class="r-glass"><b>${profile.experience.length}</b><span>Roles across labs, hospital and startups</span></li>
+    </ul>
+  </div>
+</section>
 
-<div class="r-cols">
-  <section class="r-sec" aria-labelledby="h-phd"><h2 id="h-phd">PhD in one breath</h2>
-    <p class="r-lede">${esc(thesis.eli5)}</p>
-    <p class="r-meta">${esc(thesis.title)}<br>${esc(thesis.university)} · defended September 2026</p>
-    <a class="r-more" href="/sections/research.html">The PhD studies</a>
-  </section>
-  <section class="r-sec" aria-labelledby="h-vx"><h2 id="h-vx">${esc(veritomix.name)}</h2>
-    <p class="r-lede">${esc(veritomix.mission)}</p>
-    <p class="r-meta">${esc(veritomix.status)} &mdash; ${veritomix.team.map((t) => esc(t.name)).join(' &amp; ')}</p>
-    <p class="r-meta"><b>CASSOULET</b> is its simulation engine: ${esc(veritomix.cassoulet.motto)}</p>
-    <a class="r-more" href="/sections/veritomix.html">About VeriTomiX</a>
-  </section>
-</div>
-
-<section class="r-sec" aria-labelledby="h-proj"><h2 id="h-proj">Selected projects</h2>
+<section class="r-sec" id="cases" aria-labelledby="h-proj">
+  ${head('Portfolio evidence', '<span id="h-proj">Case studies</span>', 'Each card opens the full project, with methods, figures and tools.')}
   <ul class="r-grid">${repos.map(repoCard).join('')}</ul>
   <a class="r-more" href="/sections/projects.html">All projects</a>
 </section>
 
-<section class="r-sec" aria-labelledby="h-ai"><h2 id="h-ai">Agentic AI systems</h2>
-  <p class="r-lede">${esc(builder.headline)}</p>
-  <ul class="r-grid r-grid3">${builds.map((p) => `<li class="r-card r-static"><span class="r-tag">${esc(p.kind)} · ${p.year}</span><b>${esc(p.name)}</b><p>${esc(p.eli5)}</p></li>`).join('')}</ul>
-  <ul class="r-plain r-inline">${builder.principles.map((p) => `<li><b>${esc(p.title)}.</b> ${esc(p.text)}</li>`).join('')}</ul>
+<section class="r-sec" id="phd" aria-labelledby="h-phd">
+  <article class="r-glass r-phdcard">
+    <span class="r-kicker">The PhD in one breath</span>
+    <h2 class="r-title" id="h-phd">${esc(thesis.title)}</h2>
+    <p class="r-lede">${esc(thesis.eli5)}</p>
+    <p class="r-meta">${esc(thesis.university)} &middot; defended ${esc(defended)}</p>
+    <a class="r-more" href="/sections/research.html">The PhD studies</a>
+  </article>
+</section>
+
+<section class="r-sec" id="veritomix" aria-labelledby="h-vx">
+  <article class="r-glass r-vx">
+    <div class="r-vxmain">
+      <img class="r-vxlogo r-onlight" src="${vxLogo('onlight')}" alt="${esc(veritomix.name)}" width="240" height="82" decoding="async">
+      <img class="r-vxlogo r-ondark" src="${vxLogo('ondark')}" alt="" width="240" height="82" decoding="async">
+      <span class="r-kicker">${esc(veritomix.status)}</span>
+      <h2 class="r-title" id="h-vx">${esc(veritomix.tagline)}</h2>
+      <p class="r-lede">${esc(veritomix.mission)}</p>
+      <p class="r-meta">${veritomix.team.map((t) => esc(t.name)).join(' &amp; ')}</p>
+      <a class="r-more" href="/sections/veritomix.html">About VeriTomiX</a>
+    </div>
+    <div class="r-vxengine">
+      <img src="/media/cassoulet-logo.webp" alt="CASSOULET" width="320" height="84" loading="lazy" decoding="async">
+      <span class="r-tag">Simulation engine</span>
+      <p>${esc(veritomix.cassoulet.motto)}</p>
+      <p class="r-meta">${esc(veritomix.cassoulet.expansion)}</p>
+    </div>
+  </article>
+</section>
+
+<section class="r-sec" id="ai" aria-labelledby="h-ai">
+  ${head('Agentic AI', '<span id="h-ai">Agent systems</span>', esc(builder.headline))}
+  <ul class="r-grid r-grid3">${builds.map((p) => `<li class="r-card r-glass r-static"><span class="r-tag">${esc(p.kind)} · ${p.year}</span><b>${esc(p.name)}</b><p>${esc(p.eli5)}</p></li>`).join('')}</ul>
+  <ul class="r-principles">${builder.principles.map((p) => `<li><b>${esc(p.title)}.</b> ${esc(p.text)}</li>`).join('')}</ul>
   <a class="r-more" href="/sections/builder.html">How the agent systems are built</a>
 </section>
 
-<section class="r-sec" aria-labelledby="h-sk"><h2 id="h-sk">Skills</h2>
-  <div class="r-cols r-cols-tight">
-    <div><h3 class="r-h3">Tools</h3><ul class="r-chips">${topSkills('tool', 10).map(chip).join('')}</ul></div>
-    <div><h3 class="r-h3">Competencies</h3><ul class="r-chips">${topSkills('competency', 10).map(chip).join('')}</ul></div>
-  </div>
-  <p class="r-meta">Ordered by number of projects that used them. Years are first use; a range means not used since.</p>
-  <a class="r-more" href="/sections/skills.html">Full skills timeline</a>
+<section class="r-sec" id="pipeline" aria-labelledby="h-pipe">
+  ${head('How I work', '<span id="h-pipe">Pipeline</span>')}
+  <ol class="r-pipeline">${PIPE.map(([t, d], i) => `<li class="r-glass"><b>0${i + 1}</b><h3>${t}</h3><p>${d}</p></li>`).join('')}</ol>
 </section>
 
-<section class="r-sec" aria-labelledby="h-pub"><h2 id="h-pub">Publications</h2>
+<section class="r-sec" id="proof" aria-labelledby="h-pub">
+  ${head('Research outputs', '<span id="h-pub">Proof</span>', 'Clickable publications, with the numbers on top for a quick scan.')}
   <div class="r-pubhead">
-    <ul class="r-counts">${STATUS.map(([k, n]) => `<li><b>${statusCount(k)}</b><span>${n}</span></li>`).join('')}</ul>
-    <ul class="r-metrics">
-      <li><b>${sc.citations}</b><span>Scholar citations</span></li>
-      <li><b>${sc.hIndex}</b><span>h-index</span></li>
-      <li><b>${rg.reads}</b><span>ResearchGate reads</span></li>
+    <ul class="r-counts">${STATUS.map(([k, n]) => `<li class="r-glass"><b>${statusCount(k)}</b><span>${n}</span></li>`).join('')}</ul>
+    <ul class="r-counts r-metrics">
+      <li class="r-glass"><b>${sc.citations}</b><span>Scholar citations</span></li>
+      <li class="r-glass"><b>${sc.hIndex}</b><span>h-index</span></li>
+      <li class="r-glass"><b>${rg.reads}</b><span>ResearchGate reads</span></li>
     </ul>
   </div>
-  <ul class="r-pubs">${listed.map((p) => `<li>
-    <span class="r-badge r-${esc(p.status)}">${p.status === 'published' ? 'Published' : 'Preprint'}</span>
-    <div><b>${esc(p.title)}</b>
+  <ul class="r-grid r-pubgrid">${listed.map((p) => `<li class="r-card r-glass r-static r-pub">
+    <span class="r-badge r-${esc(p.status)}">${p.status === 'published' ? 'Published' : 'Preprint'} &middot; ${p.year}</span>
+    <b>${esc(p.title)}</b>
     ${p.statusText ? `<span class="r-dual">${esc(p.statusText)}</span>` : ''}
-    <p>${esc(p.venue)} · ${p.year}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" ${ext}>doi.org/${esc(p.doi)}</a>` : ''}</p></div></li>`).join('')}</ul>
+    <p>${esc(p.venue)}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" ${ext}>doi.org/${esc(p.doi)}</a>` : ''}</p></li>`).join('')}</ul>
   <p class="r-meta">Metrics as of ${esc(metrics.updated)}: <a href="${esc(sc.profile)}" ${ext}>Google Scholar</a> · <a href="${esc(rg.profile)}" ${ext}>ResearchGate</a> · <a href="${esc(metrics.orcid.profile)}" ${ext}>ORCID</a></p>
   <a class="r-more" href="/sections/publications.html">All papers, preprints, posters and manuscripts</a>
 </section>
 
-<section class="r-sec r-contact" aria-labelledby="h-ct"><h2 id="h-ct">Contact</h2>
-  <p><a href="mailto:${esc(profile.email)}">${esc(profile.email)}</a> · <a href="${esc(L.linkedin)}" ${ext}>LinkedIn</a> · <a href="${esc(L.github)}" ${ext}>GitHub</a> · <a href="/${esc(L.cv)}" ${ext}>CV (PDF)</a> · <a href="/sections/contact.html">Contact page</a></p>
-  <p class="r-meta">${esc(profile.location)} · Open to ${esc(profile.openTo.join(', '))}</p>
+<section class="r-sec" id="proofpack" aria-labelledby="h-pp">
+  ${head('Decision shortcuts', '<span id="h-pp">Proof pack</span>')}
+  <div class="r-pack">
+    <article class="r-glass r-packlead"><b>Everything a recruiter usually needs, in one place.</b><p>Open the strongest evidence directly: case studies, publications, CV, GitHub and contact. The full portfolio holds the creative side.</p></article>
+    <div class="r-actions">
+      <a class="r-glass" href="#cases"><b>Case studies</b><span>work evidence</span></a>
+      <a class="r-glass" href="#proof"><b>Publications</b><span>research proof</span></a>
+      <a class="r-glass" href="/${esc(L.cv)}" ${ext}><b>CV</b><span>download PDF</span></a>
+      <a class="r-glass" href="${esc(L.github)}" ${ext}><b>GitHub</b><span>code and work</span></a>
+      <a class="r-glass" href="mailto:${esc(profile.email)}"><b>Contact</b><span>email Sai</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="r-sec" id="toolkit" aria-labelledby="h-sk">
+  ${head('Tools mapped to work', '<span id="h-sk">Toolkit</span>', 'Ordered by number of projects that used them. Years are first use; a range means not used since.')}
+  <div class="r-toolgrid">
+    <article class="r-glass r-toolsec"><h3>Tools</h3><ul class="r-tiles">${topSkills('tool', 12).map(skillTile).join('')}</ul></article>
+    <article class="r-glass r-toolsec"><h3>Competencies</h3><ul class="r-tiles">${topSkills('competency', 12).map(skillTile).join('')}</ul></article>
+  </div>
+  <a class="r-more" href="/sections/skills.html">Full skills timeline</a>
+</section>
+
+<section class="r-sec" id="experience" aria-labelledby="h-exp">
+  ${head('Professional journey', '<span id="h-exp">Experience</span>')}
+  <ol class="r-timeline r-glass">${experience}</ol>
+</section>
+
+<section class="r-sec" id="education" aria-labelledby="h-edu">
+  ${head('Academic foundation', '<span id="h-edu">Education</span>')}
+  <ol class="r-edu">${education}</ol>
+  <ul class="r-chips r-prog">${profile.programmes.map((p) => `<li class="r-chip">${esc(p)}</li>`).join('')}</ul>
+</section>
+
+<section class="r-sec r-contact" id="contact" aria-labelledby="h-ct">
+  <div class="r-glass r-contactpanel">
+    <h2 id="h-ct">Let&rsquo;s talk.</h2>
+    <p>Open to roles in ${esc(profile.openTo.join(', '))}. ${esc(profile.location)}.</p>
+    <div class="r-cta r-center">
+      <a class="r-btn" href="mailto:${esc(profile.email)}">${esc(profile.email)}</a>
+      <a class="r-btn r-ghost" href="/${esc(L.cv)}" ${ext}>Download CV</a>
+      <a class="r-btn r-ghost" href="${esc(L.linkedin)}" ${ext}>LinkedIn</a>
+      <a class="r-btn r-ghost" href="/sections/contact.html">Contact page</a>
+    </div>
+  </div>
 </section>`;
 
 const themeBtn = document.getElementById('themeBtn');

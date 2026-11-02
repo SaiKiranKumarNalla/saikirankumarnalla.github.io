@@ -597,31 +597,55 @@
       "kind": "tool",
       "domain": "sim",
       "state": "learnt",
-      "since": 2021,
+      "since": 2016,
       "logo": "/media/logos/tools/comsol.webp",
       "uses": [
         "rbc",
         "masters"
       ],
-      "evidence": "Coupled electromagnetic and bioheat ablation models: 30 fixture simulations.",
-      "until": 2023
+      "evidence": "Coupled electromagnetic and bioheat ablation models: 30 fixture simulations."
     },
     {
       "id": "ansys",
-      "name": "ANSYS & STAR-CCM+",
-      "short": "ANSYS",
+      "name": "ANSYS Fluent",
+      "short": "Fluent",
       "kind": "tool",
       "domain": "sim",
       "state": "learnt",
-      "since": 2020,
-      "confirm": true,
+      "since": 2016,
       "logo": "/media/logos/skills/ansys.svg",
       "uses": [
         "carotid",
         "jbme2022"
       ],
-      "evidence": "Numerical flow modelling listed on the CV; carotid CFD.",
+      "evidence": "CFD solver for the carotid gas-bubble study (J Biomech Eng 2022).",
       "until": 2022
+    },
+    {
+      "id": "starccm",
+      "name": "STAR-CCM+",
+      "kind": "tool",
+      "domain": "sim",
+      "state": "learnt",
+      "since": 2016,
+      "logo": "/media/logos/skills/siemens.svg",
+      "uses": [],
+      "evidence": "Commercial CFD package, listed on the CV next to Fluent.",
+      "short": "STAR-CCM+",
+      "until": 2021
+    },
+    {
+      "id": "solidworks",
+      "name": "SolidWorks",
+      "kind": "tool",
+      "domain": "sim",
+      "state": "learnt",
+      "since": 2016,
+      "logo": "/media/logos/skills/dassaultsystemes.svg",
+      "uses": [],
+      "evidence": "Mechanical CAD used during the BTech and the AUV years.",
+      "short": "SolidWorks",
+      "until": 2021
     },
     {
       "id": "python",
@@ -1002,12 +1026,36 @@
       "evidence": "Text-to-3D characters for the Kage pipeline."
     },
     {
+      "id": "unity",
+      "name": "Unity",
+      "kind": "tool",
+      "domain": "creative",
+      "state": "learnt",
+      "since": 2017,
+      "logo": "/media/logos/skills/unity.svg",
+      "uses": [],
+      "evidence": "Game engine, first steps in real-time 3D.",
+      "until": 2018
+    },
+    {
+      "id": "gimp",
+      "name": "GIMP",
+      "kind": "tool",
+      "domain": "creative",
+      "state": "learnt",
+      "since": 2017,
+      "logo": "/media/logos/skills/gimp.svg",
+      "uses": [],
+      "evidence": "Image editing and textures, alongside Unity.",
+      "until": 2018
+    },
+    {
       "id": "three",
       "name": "Three.js",
       "kind": "tool",
       "domain": "creative",
       "state": "learnt",
-      "since": 2026,
+      "since": 2017,
       "logo": "/media/logos/skills/threedotjs.svg",
       "uses": [
         "site",
@@ -1015,7 +1063,17 @@
         "digitaltwin",
         "virtualpet"
       ],
-      "evidence": "This site, the FDG atlas and the virtual-patient review viewer."
+      "evidence": "Learnt in 2017–2018, picked up again for this site, the FDG atlas and the virtual-patient review viewer.",
+      "periods": [
+        [
+          2017,
+          2018
+        ],
+        [
+          2026,
+          2026
+        ]
+      ]
     },
     {
       "id": "print",

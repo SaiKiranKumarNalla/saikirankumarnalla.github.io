@@ -76,48 +76,38 @@ html[data-sk-kind="competency"] .sk-group[data-kind="tool"]{display:none}
 .sk-uses a{color:var(--accent);text-decoration:none;padding:1px 7px;border-radius:9px;border:1px solid var(--line);background:var(--chip)}
 .sk-uses a:hover{border-color:var(--accent)}
 
-/* Timeline: six small dashboards in one row, one shared playhead. */
-.sk-wide .s-card{width:calc(100vw - 8vw)}
-#stage{transition:opacity .5s}
-html.sk-tl-on #stage{opacity:.1}
+/* Timeline: one large chart at a time, domain tabs above, scrolls sideways inside the card when narrow. */
 .sk-tl{margin-top:.5rem}
-.sk-tl-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:10px}
-.sk-tl-year b{display:block;font-family:'Zen Antique',serif;font-weight:400;font-size:1.9rem;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
-.sk-tl-year span{font-size:.74rem;color:var(--faint)}
-.sk-tl-year i{font-style:normal;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
-.sk-tl-play{font:inherit;font-size:.76rem;font-weight:600;padding:5px 12px;border-radius:14px;border:1px solid var(--line);background:var(--chip);color:var(--text);cursor:pointer}
-.sk-tl-play:hover{border-color:var(--accent)}
-.sk-tl-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(176px,1fr);gap:22px;align-items:start;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding-bottom:4px;scrollbar-width:thin}
-.sk-mini{scroll-snap-align:start;min-width:0}
-.sk-mini[hidden]{display:none}
-.sk-mini h3{margin:0 0 6px !important;padding-bottom:5px;border-bottom:1px solid var(--line);font-size:.72rem !important;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sk-mini-chart{width:100%}
-.sk-tl-svg{display:block;overflow:visible;font-family:'DM Sans',sans-serif}
-.sk-tl-tick{stroke:var(--line);stroke-width:1;opacity:.7}
-.sk-tl-yr{font-size:9px;fill:var(--faint)}
-.sk-tl-ms{stroke:var(--accent);stroke-width:1;stroke-dasharray:1 4;opacity:.3}
-.sk-tl-head-line{stroke:var(--accent);stroke-width:1.2;opacity:.7}
-.sk-tl-svg.done .sk-tl-head-line{opacity:0}
-.sk-lane{transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .3s;opacity:0;cursor:default}
-.sk-lane.shown{opacity:1}
-.sk-lane.off{opacity:0;pointer-events:none}
-.sk-lane-hit{fill:transparent}
-.sk-lane:hover .sk-lane-hit{fill:var(--chip)}
-.sk-lane-bar{stroke-linecap:round}
-.sk-lane-tail{stroke-linecap:round;stroke-width:1.4;stroke-dasharray:.1 3.6;opacity:.55}
-.sk-tool .sk-lane-bar,.sk-tool .sk-lane-tail{stroke:var(--sk-tool)}
-.sk-competency .sk-lane-bar,.sk-competency .sk-lane-tail{stroke:var(--sk-comp)}
-.sk-st-next .sk-lane-bar{stroke:var(--sk-next);stroke-dasharray:2 2.5}
-.sk-lane-end{fill:none;stroke:none}
-.sk-tl-svg.done .sk-st-learning .sk-lane-end{fill:var(--sk-learning);animation:sk-blink 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
-@keyframes sk-blink{50%{opacity:.25;transform:scale(1.6)}}
-.sk-lane-disc{fill:#fff;stroke:rgba(0,0,0,.18);stroke-width:.8}
-.sk-st-next .sk-lane-disc{stroke:var(--sk-next);stroke-dasharray:1.6 1.4;stroke-width:1}
-.sk-st-next .sk-lane-mark image{opacity:.7}
-.sk-lapsed .sk-lane-mark,.sk-lapsed .sk-lane-txt{opacity:.7}
-.sk-lane-txt{font-size:9.5px;fill:var(--muted)}
-.sk-lane:hover .sk-lane-txt{fill:var(--text)}
-.sk-tl-scrub{width:100%;margin:10px 0 0;accent-color:var(--accent)}
+.sk-tl-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.sk-tl-tabs button{font:inherit;font-size:.8rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--muted);cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.sk-tl-tabs button:hover{color:var(--text);border-color:var(--accent)}
+.sk-tl-tabs button[aria-selected="true"]{background:var(--pill-on);border-color:var(--pill-on-line);color:var(--text)}
+.sk-tl-scroll{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;border-radius:10px;max-width:100%}
+.sk-tl-svg{display:block;font-family:'DM Sans',sans-serif}
+.sk-tl-tick{stroke:var(--line);stroke-width:1}
+.sk-tl-tick.minor{opacity:.35}
+.sk-tl-yr{font-size:12px;fill:var(--faint);font-variant-numeric:tabular-nums}
+.sk-lane-band{fill:var(--chip);opacity:.55}
+.sk-lane-hit{fill:transparent;cursor:default}
+.sk-lane:hover .sk-lane-band{opacity:1}
+.sk-lane-txt{font-size:13px;fill:var(--text)}
+.sk-lane-disc{fill:#fff;stroke:rgba(0,0,0,.15);stroke-width:1}
+.sk-lane-bar{fill:var(--sk-tool)}
+.sk-competency .sk-lane-bar{fill:var(--sk-comp)}
+.sk-lane-gap{stroke:var(--faint);stroke-width:1.5;opacity:.35}
+.sk-lane-arrow{fill:none;stroke:var(--sk-tool);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
+.sk-competency .sk-lane-arrow{stroke:var(--sk-comp)}
+.sk-lane-pulse{fill:var(--sk-learning);transform-box:fill-box;transform-origin:center;animation:sk-blink 1.8s ease-in-out infinite}
+@keyframes sk-blink{50%{opacity:.35;transform:scale(1.5)}}
+.sk-lane-plan{fill:none;stroke:var(--sk-next);stroke-width:1.5;stroke-dasharray:3 3}
+.sk-tl-key{list-style:none;display:flex;flex-wrap:wrap;gap:6px 16px;padding:0;margin:10px 0 0;font-size:.76rem;color:var(--faint)}
+.sk-tl-key li{display:inline-flex;align-items:center;gap:6px}
+.sk-tl-key i{display:inline-block}
+.k-bar{width:20px;height:8px;border-radius:4px;background:var(--sk-tool)}
+.k-gap{width:20px;height:0;border-top:1.5px solid var(--faint);opacity:.5}
+.k-now{width:20px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--sk-tool),transparent)}
+.k-learn{width:9px;height:9px;border-radius:50%;background:var(--sk-learning)}
+.k-next{width:16px;height:8px;border-radius:4px;border:1.5px dashed var(--sk-next)}
 
 /* 3D labels */
 .sk-dlabel b{font-family:'Zen Antique',serif;font-weight:400;font-size:1.05rem}
@@ -154,16 +144,12 @@ html.sk-tl-on #stage{opacity:.1}
   .sk-dlabel b{font-size:.92rem}.sk-plabel b{font-size:.68rem}
   .sk-slabel b{font-size:.6rem;transform:translate(-50%,20px)}
   .sk-detail{padding-left:8px}
-  .sk-wide .s-card{width:auto}
-  html.sk-tl-on #stage{opacity:1}
-  .sk-tl-row{grid-auto-columns:80%;gap:16px}
   /* world.css gives the phone Thesis submenu pointer-events:auto while closed, which swallows taps on the 3D band. */
   .sk-page body:not(.menu-open) .w-dd-menu{pointer-events:none}
 }
 
 @media (prefers-reduced-motion:reduce){
   .sk-row,.sk-step .s-card{transition:none;opacity:1;transform:none}
-  .sk-lane{transition:none}
-  .sk-states .sk-learning svg,.sk-tl-svg.done .sk-st-learning .sk-lane-end{animation:none}
+  .sk-states .sk-learning svg,.sk-lane-pulse{animation:none}
   .sk-row.flash{animation:none;background:var(--pill-on)}
 }
