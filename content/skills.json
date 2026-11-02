@@ -1,5 +1,5 @@
 {
-  "intro": "What I use in real work, what I am learning now and what comes next. Tools are software and instruments; competencies are the physics and methods behind them.",
+  "intro": "What I use in real work, what I am learning and what comes next. Tools are software and instruments; competencies are the methods behind them.",
   "now": 2026,
   "kinds": {
     "tool": {
@@ -587,7 +587,8 @@
         "auv",
         "oceans2021"
       ],
-      "evidence": "V-cycle design of a student AUV, published at OCEANS 2021."
+      "evidence": "V-cycle design of a student AUV, published at OCEANS 2021.",
+      "until": 2021
     },
     {
       "id": "comsol",
@@ -602,7 +603,8 @@
         "rbc",
         "masters"
       ],
-      "evidence": "Coupled electromagnetic and bioheat ablation models: 30 fixture simulations."
+      "evidence": "Coupled electromagnetic and bioheat ablation models: 30 fixture simulations.",
+      "until": 2023
     },
     {
       "id": "ansys",
@@ -618,7 +620,8 @@
         "carotid",
         "jbme2022"
       ],
-      "evidence": "Numerical flow modelling listed on the CV; carotid CFD."
+      "evidence": "Numerical flow modelling listed on the CV; carotid CFD.",
+      "until": 2022
     },
     {
       "id": "python",
@@ -748,13 +751,15 @@
       "name": "PyTorch",
       "kind": "tool",
       "domain": "code",
-      "state": "learning",
-      "since": 2026,
+      "state": "learnt",
+      "since": 2022,
       "logo": "/media/logos/skills/pytorch.svg",
       "uses": [
         "course"
       ],
-      "evidence": "Deep-learning days of the 45-day course: not started yet."
+      "evidence": "Used during the MSc years, 2022 to 2023; not used since. The medical-AI course brings it back.",
+      "until": 2023,
+      "confirm": true
     },
     {
       "id": "sklearn",
@@ -1069,7 +1074,8 @@
         "ladhyx",
         "rbc"
       ],
-      "evidence": "Soft-particle suspensions in chips at LadHyX."
+      "evidence": "Soft-particle suspensions in chips at LadHyX.",
+      "until": 2022
     },
     {
       "id": "exvivo",
@@ -1082,7 +1088,8 @@
       "uses": [
         "masters"
       ],
-      "evidence": "Bovine and porcine burns and radiometer calibration at Hepta."
+      "evidence": "Bovine and porcine burns and radiometer calibration at Hepta.",
+      "until": 2023
     },
     {
       "id": "fusion",
@@ -1114,7 +1121,8 @@
       "uses": [
         "electrodes"
       ],
-      "evidence": "Surface and Young's modulus of PDMS electrodes."
+      "evidence": "Surface and Young's modulus of PDMS electrodes.",
+      "until": 2023
     },
     {
       "id": "imagej",
@@ -1128,7 +1136,8 @@
       "uses": [
         "ladhyx"
       ],
-      "evidence": "Particle image analysis alongside the Python tracking pipeline."
+      "evidence": "Particle image analysis alongside the Python tracking pipeline.",
+      "until": 2022
     }
   ]
 }

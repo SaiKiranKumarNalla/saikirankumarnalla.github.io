@@ -17,10 +17,11 @@ const sortSk = (a, b) => ORDER[a.state] - ORDER[b.state] || b.uses.length - a.us
 const skillsOf = (d) => data.skills.filter((s) => s.domain === d).sort(sortSk);
 const count = (f) => data.skills.filter(f).length;
 
-// Years shown are computed from the first-use year, never stored.
+// Years shown come from the first-use year (and the last-use year when a skill has gone quiet), never stored.
 const yrs = (s) => {
   if (s.state === 'next') return 'Planned';
   if (s.state === 'learning') return `Started ${s.since}`;
+  if (s.until) return s.until === s.since ? `${s.since}` : `${s.since}–${s.until}`;
   const n = NOW - s.since;
   return n <= 0 ? 'Under 1 yr' : `${n} yr${n === 1 ? '' : 's'}`;
 };
@@ -42,9 +43,11 @@ const row = (s, showDomain = false) => `<li class="sk-row" data-skill="${s.id}" 
     <div class="sk-detail" hidden>${detail(s)}</div>
   </li>`;
 
+const SHOW = 4; // rows visible per group before "Show all"
 const group = (kind, list, showDomain) => list.length ? `<div class="sk-group" data-kind="${kind}">
     <div class="sk-ghead"><span class="sk-shape sk-shape-${kind}" aria-hidden="true"></span>${esc(data.kinds[kind].name)}<em>${list.length}</em></div>
-    <ul class="sk-list">${list.map((s) => row(s, showDomain)).join('')}</ul></div>` : '';
+    <ul class="sk-list">${list.map((s, i) => { const x = list.length > SHOW + 1 && i >= SHOW; return row(s, showDomain).replace('<li class="sk-row"', `<li class="sk-row${x ? ' sk-extra' : ''}"${x ? ' hidden' : ''}`); }).join('')}</ul>
+    ${list.length > SHOW + 1 ? `<button type="button" class="sk-more" aria-expanded="false" data-n="${list.length}">Show all ${list.length}</button>` : ''}</div>` : '';
 const groups = (list, showDomain = false) => group('competency', list.filter((s) => s.kind === 'competency'), showDomain) + group('tool', list.filter((s) => s.kind === 'tool'), showDomain);
 
 const ringSvg = {
@@ -59,22 +62,17 @@ const STEPS = [
       <h1>Skills &amp; tools</h1>
       <p class="s-lede">${esc(data.intro)}</p>
       <div class="s-stat"><div><b>${count((s) => s.kind === 'competency')}</b><span>Competencies</span></div><div><b>${count((s) => s.kind === 'tool')}</b><span>Tools</span></div><div><b>${count((s) => s.state !== 'learnt')}</b><span>Learning &amp; next</span></div></div>
-      <ul class="sk-legend">
-        <li><span class="sk-shape sk-shape-competency" aria-hidden="true"></span><div><b>Competency</b><span>${esc(data.kinds.competency.text)}</span></div></li>
-        <li><span class="sk-shape sk-shape-tool" aria-hidden="true"></span><div><b>Tool</b><span>${esc(data.kinds.tool.text)}</span></div></li>
-      </ul>
       <ul class="sk-states">${['learnt', 'learning', 'next'].map((st) => `<li class="sk-${st}" title="${esc(data.states[st].text)}">${ringSvg[st]}${esc(data.states[st].name)}</li>`).join('')}</ul>
-      <span class="pj-label">Jump to a domain</span>
       <div class="sk-jump">${data.domains.map((d, i) => `<button type="button" data-jump="${i + D0}" data-domain="${d.id}">${esc(d.name)}</button>`).join('')}</div>
-      <p class="s-scroll">Scroll: first the timeline, then the six domains</p>` },
-  { title: 'Over the years', timeline: true, html: `<p class="s-kicker">2016 to ${NOW}</p><h2>How the toolkit grew</h2>
-      <p class="sk-short">One lane per skill, from the year it was first used. Thicker lanes were used in more projects.</p>
+      <p class="s-scroll">Scroll for the timeline and the six domains</p>` },
+  { title: 'Over the years', timeline: true, wide: true, html: `<p class="s-kicker">2016 to ${NOW}</p><h2>How the toolkit grew</h2>
+      <p class="sk-short">Each bar starts the year a skill was first used. Dotted: not used since.</p>
       <div class="sk-tl" id="skTimeline"></div>` },
   ...data.domains.map((d, k) => ({ title: d.name, domain: d.id, html: `<p class="s-kicker">${k + 1} / ${data.domains.length} · ${esc(d.kicker)}</p>
       <h2>${esc(d.name)}</h2><p class="sk-short">${esc(d.text)}</p>
       ${groups(skillsOf(d.id))}` })),
   { title: 'Learning and next', focus: 'growing', html: `<p class="s-kicker">Right now</p><h2>Learning and next</h2>
-      <p class="sk-short">From simulating PET/CT to learning it: small generative and surrogate models trained on CASSOULET, run by agent teams with human gates.</p>
+      <p class="sk-short">Generative and surrogate models trained on CASSOULET, run by agent teams with human gates.</p>
       ${groups(data.skills.filter((s) => s.state !== 'learnt').sort(sortSk), true)}
       <a class="s-more" href="/sections/builder.html">How the agent teams work</a>` },
 ];
@@ -83,11 +81,18 @@ const main = document.getElementById('main');
 main.innerHTML = `<div class="sk-bar" role="toolbar" aria-label="Show tools or competencies">
     ${[['all', 'All'], ['tool', 'Tools'], ['competency', 'Competencies']].map(([v, n]) => `<button type="button" data-filter="${v}" aria-pressed="${v === 'all'}">${v === 'all' ? '' : `<span class="sk-shape sk-shape-${v}" aria-hidden="true"></span>`}${n}</button>`).join('')}
   </div>
-  ${STEPS.map((s, i) => `<section class="sk-step${i === 0 ? ' s-hero' : ''}" data-title="${esc(s.title)}" id="step-${i}"><div class="s-card">${s.html}</div></section>`).join('')}
+  ${STEPS.map((s, i) => `<section class="sk-step${i === 0 ? ' s-hero' : ''}${s.wide ? ' sk-wide' : ''}" data-title="${esc(s.title)}" id="step-${i}"><div class="s-card">${s.html}</div></section>`).join('')}
   <p class="sk-foot s-meta">© 2026 Sai Kiran Kumar Nalla · <a href="/">Back to the village</a></p>`;
 
 // Rows expand to show evidence and links.
+const expandGroup = (g, open) => {
+  g.querySelectorAll('.sk-extra').forEach((r) => { r.hidden = !open; });
+  const m = g.querySelector('.sk-more');
+  if (m) { m.setAttribute('aria-expanded', String(open)); m.textContent = open ? 'Show fewer' : `Show all ${m.dataset.n}`; }
+};
 main.addEventListener('click', (e) => {
+  const m = e.target.closest('.sk-more');
+  if (m) { expandGroup(m.closest('.sk-group'), m.getAttribute('aria-expanded') !== 'true'); return; }
   const b = e.target.closest('.sk-rowbtn'); if (!b) return;
   const open = b.getAttribute('aria-expanded') !== 'true';
   b.setAttribute('aria-expanded', String(open));
@@ -98,7 +103,7 @@ main.addEventListener('click', (e) => {
 const hooks = { hover: () => {}, filter: () => {} };
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const timeline = mountTimeline(document.getElementById('skTimeline'), {
-  skills: data.skills, milestones: data.milestones, now: NOW, iconUrl, reduceMotion: reduce,
+  skills: data.skills, domains: data.domains, milestones: data.milestones, now: NOW, iconUrl, reduceMotion: reduce,
   onHover: (s, e, tap) => hooks.hover(s, e, tap),
 });
 
@@ -273,7 +278,7 @@ runPage({
       const s = n.s;
       const names = s.uses.map((u) => workById[u].name);
       tip.innerHTML = `<div class="sk-tip-head">${ico(s)}<div><b>${esc(s.name)}</b>
-        <span>${esc(data.kinds[s.kind].one)} · ${s.since ? `since ${s.since} · ` : ''}${esc(data.states[s.state].name)}</span></div></div>
+        <span>${esc(data.kinds[s.kind].one)} · ${s.until ? `${s.since}–${s.until} · ` : s.since ? `since ${s.since} · ` : ''}${esc(data.states[s.state].name)}</span></div></div>
         <p>${esc(s.evidence)}</p><span class="sk-tip-uses">${usesTxt(s)}: ${esc(names.slice(0, 5).join(', '))}${names.length > 5 ? ` and ${names.length - 5} more` : ''}</span>`;
       tip.hidden = false;
       const w = tip.offsetWidth, h = tip.offsetHeight;
@@ -297,6 +302,7 @@ runPage({
       const stepIdx = data.domains.findIndex((d) => d.id === n.d.id) + D0;
       if (Math.round(progress) !== stepIdx) goTo(stepIdx);
       const r = document.querySelector(`#step-${stepIdx} [data-skill="${n.s.id}"]`);
+      if (r?.hidden) expandGroup(r.closest('.sk-group'), true);
       if (r) { r.classList.remove('flash'); void r.offsetWidth; r.classList.add('flash'); }
     });
     main.addEventListener('pointerover', (e) => { const r = e.target.closest('.sk-row'); if (r) rowNode = nodeById[r.dataset.skill]; else if (!e.target.closest('.sk-lane')) rowNode = null; });
@@ -385,6 +391,7 @@ runPage({
           [...dots.children].forEach((d, k) => d.classList.toggle('on', k === step));
         }
         const stepDef = STEPS[Math.max(0, Math.min(STEPS.length - 1, step))];
+        document.documentElement.classList.toggle('sk-tl-on', !!stepDef.timeline);
         const activeDom = stepDef.domain, growing = stepDef.focus === 'growing';
         // In the timeline step the network grows with the playhead.
         const tlYear = stepDef.timeline ? timeline.year : Infinity;
