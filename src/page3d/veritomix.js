@@ -85,7 +85,7 @@ document.getElementById('main').innerHTML = `
     <h3>Four modules, one session</h3>
     <div class="vx-modules vx-modules-4">${C5.modules.map((m, i) => `<div><span>${String(i + 1).padStart(2, '0')}</span><b>${esc(m.name)}</b><p>${esc(m.text)}</p></div>`).join('')}</div>
     <p class="vx-small">${esc(C5.session)}</p>
-    ${fig(C5.main)}
+    ${C5.main ? fig(C5.main) : ''}
     <details class="s-know"><summary>Inside the desktop app <span class="s-meta">${C5.app.length} screens</span></summary>${C5.app.map(fig).join('')}</details>
     <details class="s-know"><summary>Physics in the data model <span class="s-meta">what is simulated</span></summary>${list(C5.physics)}</details>
     <details class="s-know"><summary>MuPET <span class="s-meta">the multiphysics route</span></summary><p>${esc(C5.mupet.text)}</p>${C5.mupet.figs.map(fig).join('')}

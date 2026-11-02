@@ -88,10 +88,6 @@
       "Printable"
     ],
     "session": "One session map links the four modules, so every result keeps its lineage: which truth, which settings, which outputs.",
-    "main": {
-      "src": "/media/veritomix/py-mask-editor.webp",
-      "caption": "CASSOULET Designer workbench (Python desktop app): mask editor with axial, coronal and sagittal views and a marching-cubes surface of a lesion."
-    },
     "app": [
       {
         "src": "/media/veritomix/py-startup.webp",
@@ -255,10 +251,6 @@
             "peak voxel ρc 0.52"
           ],
           "lede": "Side-by-side images and line profiles of physical and simulated scans, then a direct voxel-level comparison inside matched 3D Slicer volumes of interest.",
-          "fig": {
-            "src": "/media/fig-physical-vs-sim-gallery.webp",
-            "caption": "Physical vs in-silico images on both scanners, with matched line profiles."
-          },
           "more": [
             "Mean recovery agrees well; voxel-level agreement is moderate (peak-voxel Lin's ρc 0.523, R² 0.689), as expected from different noise textures.",
             "Intra-VOI heterogeneity and noise follow the physical trend; Bland–Altman bias on peak voxels is small.",
@@ -346,10 +338,6 @@
             "artefact fixed and documented"
           ],
           "lede": "Reconstruction choices change what a tool sees. CASSOULET reconstructs the same simulated data with different strategies and compares them with the ground truth and the physical console image.",
-          "fig": {
-            "src": "/media/veritomix/recon-qclear-comparison.webp",
-            "caption": "NEMA phantom slices: ground truth, an early run with an edge artefact, a matched Q.Clear-style run, and the physical scanner console image."
-          },
           "more": [
             "β values are on CASSOULET's internal scale, not GE Q.Clear: an equivalent value has to be found by a sweep for each scanner and count level.",
             "A ring/edge artefact in early runs was removed with a Tukey taper and a safe preconditioner."

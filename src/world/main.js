@@ -37,7 +37,7 @@ const camera = new THREE.PerspectiveCamera(40, 1, 0.5, 520);
 let composer = null, bloom = null;
 
 if (renderer) {
-  renderer.setPixelRatio(Math.min(devicePixelRatio, lowPower ? 1.5 : 1.75));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, lowPower ? 1.25 : 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.shadowMap.enabled = !lowPower;
@@ -164,7 +164,7 @@ scene.add(kage);
 const kageLight = new THREE.PointLight(0xffc89a, 14, 9, 1.6);
 scene.add(kageLight);
 let kageYawTarget = 0;
-const KAGE_SPEED = 6.5; // a relaxed jog, units per second (Kage is 3 units tall)
+const KAGE_SPEED = 9; // a brisk jog, units per second (Kage is 3 units tall)
 let kageSpeed = 0;
 let route = []; // waypoints: the most direct line, bending only around what is in the way
 // Things Kage must not walk through: buildings, the pond and its bridge, bamboo, lanterns, banners.
@@ -487,7 +487,7 @@ function step(fixedDt) {
       let left = dist;
       for (let i = 1; i < route.length; i++) left += route[i].distanceTo(route[i - 1]);
       const want = Math.min(cruise, Math.sqrt(2 * 9 * left) + 0.6); // brake smoothly before the door
-      kageSpeed += (want - kageSpeed) * Math.min(1, dt * (want < kageSpeed ? 10 : 3.5));
+      kageSpeed += (want - kageSpeed) * Math.min(1, dt * (want < kageSpeed ? 10 : 5));
       moved = Math.min(dist, kageSpeed * dt);
       kage.position.addScaledVector(tmp.normalize(), moved);
       walking = true;
