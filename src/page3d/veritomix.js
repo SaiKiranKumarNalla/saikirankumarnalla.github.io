@@ -99,7 +99,7 @@ document.getElementById('main').innerHTML = `
     <div class="vx-toggle" role="group" aria-label="Scanner model in the 3D view">
       ${SC.models.map((m, i) => `<button type="button" data-scanner="${m.id}" aria-pressed="${i === 0}">${esc(m.name)}</button>`).join('')}
     </div>
-    <div class="vx-scanners">${SC.models.map((m) => `<div data-model="${m.id}"><b>${esc(m.name)}</b>${list(m.facts)}</div>`).join('')}</div>
+    <div class="vx-scanners">${SC.models.map((m) => `<div data-model="${m.id}"><b>${esc(m.name)}</b></div>`).join('')}</div>
     ${fig(SC.figures[0])}
     <details class="s-know"><summary>Published, derived, assumed <span class="s-meta">how the models are built</span></summary>
       ${list(SC.notes)}${SC.figures.slice(1).map(fig).join('')}
@@ -582,7 +582,6 @@ runPage({
     // ── Labels on the scanners and phantoms
     scanners.forEach((s, i) => {
       tag(nm(s.spec.name, 'emulated, research-based model'), wp(s.group, V(0, s.rOut + 0.22, 0)), () => (i ? scanMix : 1 - scanMix) * (band(prog, 0, 0.2) + band(prog, 3, 3.2)), 'vx-up');
-      tag(nm(`${s.spec.modules} modules × ${s.spec.rings} block rings`, `${s.spec.facts[1]}`), wp(s.group, V(0.05, Math.sin(0.62) * s.rDet, Math.cos(0.62) * s.rDet + 0.04)), () => (i ? scanMix : 1 - scanMix) * band(prog, 3, 3.2), 'vx-right', 'vx-sm');
     });
     tag(nm('Abdominal phantom', 'CT-derived · organs, vessels, bones'), wp(abd, V(0, 0.42, 0)), () => band(prog, 0, 1.15), 'vx-up');
     tag(`${ico('/media/cassoulet-icon.webp')}${nm('CASSOULET', 'simulates the acquisition')}`, wp(scanners[0].group, V(0.4, -0.95, 0.9)), () => band(prog, 2, 2.2), 'vx-down');

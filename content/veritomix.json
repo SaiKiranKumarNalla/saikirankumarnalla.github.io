@@ -172,23 +172,11 @@
     "models": [
       {
         "id": "dmi",
-        "name": "GE Discovery MI 5-ring",
-        "facts": [
-          "34 modules × 4 blocks × 4 crystals",
-          "45 crystal rows × 544 crystals",
-          "761 mm ring, 25 mm LBS crystals",
-          "TOF 385 ps · 3 × 3 DOI sub-LORs"
-        ]
+        "name": "GE Discovery MI 5-ring"
       },
       {
         "id": "omni",
-        "name": "GE Omni Legend 32 cm",
-        "facts": [
-          "22 modules × 24 blocks",
-          "72 crystal rows × 528 crystals",
-          "725 mm face separation, 4.1 × 4.1 × 30 mm BGO",
-          "Non-TOF · 320 mm axial FOV"
-        ]
+        "name": "GE Omni Legend 32 cm"
       }
     ],
     "notes": [
