@@ -27,14 +27,29 @@ const glyphSvg = (d) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24
 const icon = (s) => s.logo || `data:image/svg+xml,${encodeURIComponent(glyphSvg(s.domain))}`;
 const mark = (s) => `<img src="${esc(icon(s))}" alt="" width="18" height="18" loading="lazy" decoding="async">`;
 const badge = (st) => `<span class="sk-badge sk-${st}">${esc(data.states[st].name)}</span>`;
+const kindBadge = (k) => {
+  if (!k) return '';
+  const cls = k.toLowerCase().replace(/[^a-z]/g, '');
+  return `<span class="sk-kind sk-kind-${cls}">${esc(k)}</span>`;
+};
+const yrsBadge = (y) => y ? `<span class="sk-yrs">${esc(y)}</span>` : '';
+
 const row = (s, i, showDomain = false) => `<li class="sk-row" data-skill="${s.id}" data-state="${s.state}" tabindex="0" style="--i:${i}">
     <span class="sk-logo" aria-hidden="true">${mark(s)}</span>
     <div class="sk-body">
-      <div class="sk-head"><b>${esc(s.name)}</b>${badge(s.state)}</div>
-      <p>${esc(s.evidence)}</p>
-      <span class="sk-used">${showDomain ? `${esc(data.domains.find((d) => d.id === s.domain).name)} · ` : ''}${s.projects.map((p) => `<a href="${esc(projById[p].href)}">${esc(projById[p].name)}</a>`).join(', ')}</span>
+      <div class="sk-head">
+        <b>${esc(s.name)}</b>
+        <div class="sk-pills">
+          ${kindBadge(s.kind)}
+          ${yrsBadge(s.years)}
+          ${badge(s.state)}
+        </div>
+      </div>
+      <p class="sk-punchline">${esc(s.role || s.evidence)}</p>
+      <span class="sk-used">${showDomain ? `${esc(data.domains.find((d) => d.id === s.domain).name)} · ` : ''}${s.projects.length} ${s.projects.length === 1 ? 'project' : 'projects'}: ${s.projects.map((p) => `<a href="${esc(projById[p].href)}">${esc(projById[p].name)}</a>`).join(', ')}</span>
     </div>
   </li>`;
+
 // Small legend glyphs that match the 3D rings.
 const glyph = (st) => ({
   learnt: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>',
@@ -42,9 +57,27 @@ const glyph = (st) => ({
   next: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2.6 2.6"/></svg>',
 }[st]);
 
+const skillsGrouped = (d) => {
+  const all = skillsOf(d);
+  const domainKnowledge = all.filter((s) => s.kind === 'Domain Knowledge');
+  const workflows = all.filter((s) => s.kind === 'Skill');
+  const tools = all.filter((s) => s.kind === 'Tool' || !s.kind);
+  let html = '';
+  if (domainKnowledge.length) {
+    html += `<div class="sk-section-header"><span>Domain Knowledge &amp; Theory</span></div><ul class="sk-list">${domainKnowledge.map((s, i) => row(s, i)).join('')}</ul>`;
+  }
+  if (workflows.length) {
+    html += `<div class="sk-section-header" style="margin-top:1.1rem"><span>Engineering Workflows &amp; Skills</span></div><ul class="sk-list">${workflows.map((s, i) => row(s, i)).join('')}</ul>`;
+  }
+  if (tools.length) {
+    html += `<div class="sk-section-header" style="margin-top:1.1rem"><span>Software Tools &amp; Instrumentation</span></div><ul class="sk-list">${tools.map((s, i) => row(s, i)).join('')}</ul>`;
+  }
+  return html || `<ul class="sk-list">${all.map((s, i) => row(s, i)).join('')}</ul>`;
+};
+
 const STEPS = [
-  { title: 'Skills & Tools', domain: null, html: `<p class="s-kicker">Skills &amp; Tools</p>
-      <h1>What I know, and what I am learning</h1>
+  { title: 'Skills & Tools', domain: null, html: `<p class="s-kicker">Competencies &amp; Tools</p>
+      <h1>Scientific methods &amp; hands-on tools</h1>
       <p class="s-lede">${esc(data.intro)}</p>
       <div class="s-stat">${['learnt', 'learning', 'next'].map((st) => `<div><b>${count(st)}</b><span>${esc(data.states[st].name)}</span></div>`).join('')}</div>
       <ul class="sk-legend">${['learnt', 'learning', 'next'].map((st) => `<li class="sk-${st}">${glyph(st)}<div><b>${esc(data.states[st].name)}</b><span>${esc(data.states[st].text)}</span></div></li>`).join('')}</ul>
@@ -54,7 +87,7 @@ const STEPS = [
       <p class="s-scroll">Scroll through the six domains</p>` },
   ...data.domains.map((d, k) => ({ title: d.name, domain: d.id, html: `<p class="s-kicker">${k + 1} / ${data.domains.length} · ${esc(d.kicker)}</p>
       <h2>${esc(d.name)}</h2><p>${esc(d.text)}</p>
-      <ul class="sk-list">${skillsOf(d.id).map((s, i) => row(s, i)).join('')}</ul>` })),
+      ${skillsGrouped(d.id)}` })),
   { title: 'In progress', domain: null, focus: 'growing', html: `<p class="s-kicker">Right now</p><h2>Learning and next</h2>
       <p>The direction: from simulating PET/CT to learning it. Small generative and surrogate models trained on CASSOULET, run by agent teams with human gates.</p>
       <ul class="sk-list">${data.skills.filter((s) => s.state !== 'learnt').sort((a, b) => ORDER[a.state] - ORDER[b.state]).map((s, i) => row(s, i, true)).join('')}</ul>
@@ -225,8 +258,10 @@ runPage({
     function showTip(n, x, y) {
       if (!n) { tip.hidden = true; return; }
       const s = n.s;
-      tip.innerHTML = `<div class="sk-tip-head"><span class="sk-logo" aria-hidden="true">${mark(s)}</span><div><b>${esc(s.name)}</b>${badge(s.state)}</div></div>
-        <p>${esc(s.evidence)}</p><span class="sk-used">${esc(n.d.name)} · ${s.projects.map((p) => esc(projById[p].name)).join(', ')}</span>`;
+      tip.innerHTML = `<div class="sk-tip-head"><span class="sk-logo" aria-hidden="true">${mark(s)}</span><div><b>${esc(s.name)}</b>
+        <div class="sk-pills" style="margin-top:2px">${kindBadge(s.kind)}${yrsBadge(s.years)}${badge(s.state)}</div>
+      </div></div>
+        <p>${esc(s.evidence)}</p><span class="sk-used">${esc(n.d.name)} · ${s.projects.length} ${s.projects.length === 1 ? 'project' : 'projects'}: ${s.projects.map((p) => esc(projById[p].name)).join(', ')}</span>`;
       tip.hidden = false;
       const w = tip.offsetWidth, h = tip.offsetHeight;
       const maxY = innerWidth <= 860 ? innerHeight * 0.42 : innerHeight - 12;
@@ -367,7 +402,7 @@ runPage({
           const a = Math.min(1, n.em);
           n.face.material.opacity = a * (n.s.state === 'next' ? 0.72 : 1);
           n.halo.material.opacity = a * (n.s.state === 'next' ? 0.7 : 1);
-          n.name.visible = n.show > 0.9 && passes(n) && !focus && (activeDom === n.d.id || (growing && n.s.state !== 'learnt'));
+          n.name.visible = n.show > 0.9 && passes(n) && (focus ? n === focus : (rowNode ? n === rowNode : false));
           n.glow.material.opacity = a * (n.s.state === 'learning' ? 0.75 + 0.25 * Math.sin(time * 2.4 + n.seed) : 0.8);
         });
 

@@ -34,6 +34,9 @@
 .sk-jump button:hover{border-color:var(--accent);transform:translateY(-1px)}
 .sk-hint{margin-top:1rem}
 
+.sk-section-header{margin:1rem 0 0.4rem;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.sk-section-header span{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+
 /* Skill rows */
 .sk-list{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:2px}
 .sk-row{display:flex;gap:12px;align-items:flex-start;padding:10px 10px;margin:0 -10px;border-radius:12px;outline:none;transition:background .25s,opacity .5s,transform .5s;opacity:0;transform:translateY(8px)}
@@ -48,13 +51,19 @@
 .sk-row[data-state="learning"] .sk-logo{box-shadow:0 0 0 2px var(--sk-learning)}
 .sk-row[data-state="next"] .sk-logo{outline:1.5px dashed var(--sk-next);outline-offset:1px}
 .sk-body{min-width:0;flex:1}
-.sk-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.sk-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px}
 .sk-head b{color:var(--text);font-weight:600;font-size:.93rem}
-.sk-body p{margin:.15rem 0 .2rem !important;font-size:.86rem !important;line-height:1.5 !important}
-.sk-used{display:block;font-size:.76rem;color:var(--faint)}
+.sk-pills{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+.sk-kind{font-size:.65rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:6px;border:1px solid var(--line)}
+.sk-kind-domainknowledge{color:#d24a4a;border-color:rgba(210,74,74,0.3);background:rgba(210,74,74,0.08)}
+.sk-kind-skill{color:#2a9d8f;border-color:rgba(42,157,143,0.35);background:rgba(42,157,143,0.08)}
+.sk-kind-tool{color:var(--muted);background:var(--chip)}
+.sk-yrs{font-size:.68rem;font-weight:600;padding:1px 6px;border-radius:6px;background:var(--chip);color:var(--text);border:1px solid var(--line)}
+.sk-punchline{margin:.2rem 0 .25rem !important;font-size:.84rem !important;line-height:1.4 !important;color:var(--muted)}
+.sk-used{display:block;font-size:.75rem;color:var(--faint);margin-top:2px}
 .sk-used a{color:var(--accent);text-decoration:none}
 .sk-used a:hover{text-decoration:underline}
-.sk-badge{font-size:.66rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:8px;line-height:1.4}
+.sk-badge{font-size:.65rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:6px;line-height:1.3}
 .sk-badge.sk-learnt{color:var(--sk-learnt);background:color-mix(in srgb,var(--sk-learnt) 14%,transparent)}
 .sk-badge.sk-learning{color:var(--sk-learning);background:color-mix(in srgb,var(--sk-learning) 16%,transparent)}
 .sk-badge.sk-next{color:var(--muted);border:1px dashed var(--sk-next)}
