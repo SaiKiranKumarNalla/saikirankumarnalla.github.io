@@ -1,0 +1,9 @@
+{
+  // Deploys to https://kage-proxy.<your-subdomain>.workers.dev (the URL in src/kage/widget.js).
+  "name": "kage-proxy",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-01",
+  "ai": { "binding": "AI" },
+  "vars": { "GEMINI_MODEL": "gemini-2.5-flash" },
+  "observability": { "enabled": true }
+}

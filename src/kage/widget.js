@@ -7,15 +7,17 @@ import thesis from '../../content/thesis.json';
 import repos from '../../content/repos.json';
 import pubs from '../../content/publications.json';
 import builder from '../../content/ai-builder.json';
+import vtx from '../../content/veritomix.json';
 import './widget.css';
 
-const PROXY_URL = 'https://kage-proxy.sainalla82.workers.dev';
+const PROXY_URL = 'https://kage-proxy.kage-proxy.workers.dev';
 const PAGES = {
   home: ['/', 'the village (home)'], about: ['/sections/about.html', 'About'], phd: ['/sections/research.html', 'PhD thesis'],
   masters: ['/sections/masters.html', "Master's thesis"], bachelors: ['/sections/auv.html', "Bachelor's: Black Pearl AUV"],
   projects: ['/sections/projects.html', 'Projects'], publications: ['/sections/publications.html', 'Publications'],
   agentic: ['/sections/builder.html', 'Agentic AI'], contact: ['/sections/contact.html', 'Contact'],
-  life: ['/sections/life.html', 'Off the Clock'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
+  skills: ['/sections/skills.html', 'Skills & Tools'], veritomix: ['/sections/veritomix.html', 'VeriTomiX'],
+  game: ['/sections/game.html', 'Kage: the game'], life: ['/sections/life.html', 'Off the Clock'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
 };
 const PROMPTS = ['Who is Sai, in two lines?', 'Explain the PhD like I am five', 'What has Sai built?', 'Is Sai a fit for my role?'];
 
@@ -35,6 +37,8 @@ Studies: ${thesis.chapters.filter((c) => c.n > 0).map((c) => `${c.title}: ${c.de
 
 PROJECTS
 ${repoList}
+
+VERITOMIX: ${vtx.mission} An independent research entity of Sai Kiran Kumar Nalla and Olivier Caselles; CASSOULET is its PET/CT simulation engine.
 
 AGENTIC AI: ${builder.headline} Principles: ${builder.principles.map((p) => p.title).join(', ')}. Tools: ${builder.stack.join(', ')}.
 
