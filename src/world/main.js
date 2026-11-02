@@ -15,6 +15,7 @@ import { makeKoi, makeSkyLanterns, makeClouds, makeShootingStars, makeButterflie
 import { makeKage } from './kageModel.js';
 import { makeSky, makeMoon, makeStars, makeMountains, makeFireflies, makePond, makeBamboo, makeBanner, makeRocks } from './atmosphere.js';
 import { makeSpeech } from './companion.js';
+import { makeEntranceMarkers, MARKER_RADIUS } from './markers.js';
 import { thesisDropdown, wireDropdown } from '../page3d/nav.js';
 
 const $ = (id) => document.getElementById(id);
@@ -211,6 +212,13 @@ groves.forEach((g) => obstacles.push({ x: g.x, z: g.z, r: 2.8 }));
 for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2 + Math.PI / 12; obstacles.push({ x: Math.cos(a) * 19.6, z: Math.sin(a) * 19.6, r: 0.9 }); }
 for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 + Math.PI / 8; obstacles.push({ x: Math.cos(a) * 8.6, z: Math.sin(a) * 8.6, r: 0.7 }); }
 const doorOf = (b) => new THREE.Vector3(Math.cos(b.angle), 0, Math.sin(b.angle)).multiplyScalar(RADIUS - b.def.footprint - 2.2);
+// Entrance markers: the ring's radius is the door trigger, so standing in it opens the building.
+const DOOR_R = MARKER_RADIUS + 0.1;
+buildings.forEach((b) => { b.door = doorOf(b); });
+const doorMarks = buildings.map((b) => ({ b, pos: b.door }));
+const markers = makeEntranceMarkers(doorMarks, { reduceMotion, lowPower });
+const markFor = (b) => doorMarks.find((d) => d.b === b);
+scene.add(markers.group);
 
 const goldenNow = () => { const d = new Date(); return location.search.includes('golden') || d.getMinutes() === 0 && d.getSeconds() < 20; };
 let golden = goldenNow();
@@ -227,7 +235,7 @@ function applyTheme() {
   hemi.color.set(p.hemiSky); hemi.groundColor.set(p.hemiGround); hemi.intensity = p.hemi;
   moonLight.color.set(p.moon); moonLight.intensity = p.moonI;
   mountains.userData.mats.forEach((m, i) => m.color.set(p.mountains[i]));
-  stream.setNight(p.night); village.setNight(p.night); pondObj.userData.setNight?.(p.night); moon.setNight(p.night); stars.visible = p.night; fireflies?.setVisible(p.night);
+  markers.setNight(p.night); stream.setNight(p.night); village.setNight(p.night); pondObj.userData.setNight?.(p.night); moon.setNight(p.night); stars.visible = p.night; fireflies?.setVisible(p.night);
   skyLanterns?.setVisible(p.night); shooting?.setVisible(p.night); clouds.setVisible(!p.night); butterflies?.setVisible(!p.night);
   if (renderer) renderer.toneMappingExposure = p.exposure;
   if (bloom) bloom.strength = p.bloom;
@@ -312,6 +320,7 @@ function openPanel(id, { push = true } = {}) {
   document.title = `${def.title} | Sai Kiran Kumar Nalla, PhD`;
   focus = byPanel[id] || null;
   if (focus) {
+    markers.flash(markFor(focus));
     routeTo(doorOf(focus));
     kage.userData.setPresenting(false);
   } else presentPending = clock.elapsedTime - 9; // menu items without a building open at once
@@ -335,7 +344,7 @@ addEventListener('keydown', (e) => { if (e.key === 'Escape') { closePanel(); clo
 const KEYS = { w: [0, 1], arrowup: [0, 1], s: [0, -1], arrowdown: [0, -1], a: [-1, 0], arrowleft: [-1, 0], d: [1, 0], arrowright: [1, 0] };
 const held = new Set();
 const typing = (e) => /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable;
-const nearDoor = () => buildings.find((b) => doorOf(b).distanceTo(kage.position) < 4.5);
+const nearDoor = () => buildings.find((b) => b.door.distanceTo(kage.position) < DOOR_R + 0.4);
 const keyOf = (e) => { const c = (e.code || '').toLowerCase(); return KEYS[c] ? c : c.startsWith('key') && KEYS[c.slice(3)] ? c.slice(3) : e.key.toLowerCase(); };
 let autoDoor = null; // the door Kage last walked into, so it opens once, not every frame
 addEventListener('keydown', (e) => {
@@ -392,6 +401,18 @@ setInterval(() => {
 // ── Kage's voice ──
 const kageEl = $('wKage');
 const speech = makeSpeech(kageEl);
+
+// ── Recruiter nudge: once per session Kage points recruiters to the one-page summary ──
+function recruiterNudge() {
+  try { if (sessionStorage.getItem('sai-recruiter-nudge')) return; sessionStorage.setItem('sai-recruiter-nudge', '1'); } catch (e) { /* storage blocked: show once per load */ }
+  setTimeout(() => {
+    if (heroEl.classList.contains('gone') || focus) return;
+    const btn = $('wRecruiter');
+    btn.classList.add('nudge');
+    speech.say('Recruiter in a hurry? The one-page summary has everything at a glance.', clock.elapsedTime, 7000);
+    setTimeout(() => btn.classList.remove('nudge'), 6500);
+  }, 1500);
+}
 
 // ── Pointer: drag to look around, click a building to open it ──
 const raycaster = new THREE.Raycaster();
@@ -517,7 +538,7 @@ function step(fixedDt) {
       });
     }
     // Walking up to a building's door opens it.
-    const door = buildings.find((b) => tmp.subVectors(kage.position, b.group.position).setY(0).length() < b.def.footprint + 2.6);
+    const door = buildings.find((b) => tmp.subVectors(kage.position, b.door).setY(0).length() < DOOR_R);
     if (door && door !== autoDoor && !focus) { autoDoor = door; held.clear(); openPanel(door.def.panel); }
     else if (!door) autoDoor = null;
   }
@@ -558,6 +579,7 @@ function step(fixedDt) {
     fireflies?.update(t);
   }
   lanterns.flicker(t);
+  markers.update(t, dt, (d) => d.b.hovered || d.b === focus);
 
   // Labels follow their buildings; hidden behind the hero.
   const showLabels = document.body.classList.contains('exploring');
@@ -581,7 +603,7 @@ function step(fixedDt) {
   }
 
   if (composer) composer.render(); else renderer.render(scene, camera);
-  if (++frames === 2) $('wLoader').classList.add('done');
+  if (++frames === 2) { $('wLoader').classList.add('done'); recruiterNudge(); }
 }
 
 if (renderer) {

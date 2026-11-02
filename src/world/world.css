@@ -58,6 +58,10 @@ a{color:inherit}
 .w-btn-primary:hover{background:var(--accent)}
 .w-btn-secondary{background:transparent;color:var(--text);border:1px solid var(--line)}
 .w-btn-secondary:hover{border-color:var(--accent)}
+.w-btn-recruiter{border-color:var(--accent);background:var(--chip)}
+.w-btn-recruiter.nudge{animation:w-nudge 1.6s ease-in-out infinite}
+@keyframes w-nudge{0%,100%{box-shadow:0 0 0 0 rgba(210,74,74,.55)}50%{box-shadow:0 0 0 7px rgba(210,74,74,0)}}
+@media (prefers-reduced-motion:reduce){.w-btn-recruiter.nudge{animation:none;outline:2px solid var(--accent);outline-offset:3px}}
 
 /* Building labels */
 .w-labels{position:fixed;inset:0;pointer-events:none;z-index:5}
