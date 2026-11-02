@@ -4,6 +4,6 @@
   "main": "worker.js",
   "compatibility_date": "2026-10-01",
   "ai": { "binding": "AI" },
-  "vars": { "GEMINI_MODEL": "gemini-2.5-flash" },
+  "vars": { "GEMINI_MODEL": "gemini-flash-latest" },
   "observability": { "enabled": true }
 }

@@ -35,22 +35,36 @@ function cors(origin) {
 
 const json = (body, status, headers) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', ...headers } });
 
+// Model names come and go, so try the configured one, then Google's "latest" aliases.
+// A 404 moves on to the next name; a 400 retries once without the thinking setting.
 async function askGemini(env, system, messages) {
-  const model = env.GEMINI_MODEL || 'gemini-2.5-flash';
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: system }] },
-      contents: messages.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })),
-      generationConfig: { maxOutputTokens: MAX_TOKENS, temperature: 0.6, thinkingConfig: { thinkingBudget: 0 } },
-    }),
-  });
-  if (!res.ok) throw new Error(`Gemini ${res.status}`);
-  const data = await res.json();
-  const text = (data.candidates?.[0]?.content?.parts || []).map((p) => p.text || '').join('').trim();
-  if (!text) throw new Error('Gemini empty');
-  return text;
+  const models = [...new Set([env.GEMINI_MODEL, 'gemini-flash-latest', 'gemini-flash-lite-latest'].filter(Boolean))];
+  const base = {
+    systemInstruction: { parts: [{ text: system }] },
+    contents: messages.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })),
+  };
+  let last = 'Gemini: no model';
+  for (const model of models) {
+    for (const thinking of [true, false]) {
+      const generationConfig = { maxOutputTokens: MAX_TOKENS, temperature: 0.6, ...(thinking ? { thinkingConfig: { thinkingBudget: 0 } } : {}) };
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
+        body: JSON.stringify({ ...base, generationConfig }),
+        signal: AbortSignal.timeout(25000), // never let a slow model stall the chat
+      }).catch((e) => ({ ok: false, status: e.name === 'TimeoutError' ? 504 : 502 }));
+      if (res.ok) {
+        const data = await res.json();
+        const text = (data.candidates?.[0]?.content?.parts || []).map((p) => p.text || '').join('').trim();
+        if (text) return text;
+        last = `Gemini ${model}: empty`;
+        break;
+      }
+      last = `Gemini ${model}: ${res.status}`;
+      if (res.status !== 400) break; // 404 → next model; 429/5xx → next model too
+    }
+  }
+  throw new Error(last);
 }
 
 async function askWorkersAI(env, system, messages) {
