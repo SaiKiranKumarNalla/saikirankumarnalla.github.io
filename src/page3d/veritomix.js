@@ -25,10 +25,10 @@ const chips = (a) => `<div class="s-chips vx-chips">${a.map((x) => `<span>${esc(
 const C5 = vtx.cassoulet, SC = vtx.scanners, PHS = vtx.phantoms, TL = vtx.timeline;
 const caseCard = (c) => `<article class="vx-case">
     <p class="vx-case-k">${esc(c.kicker)}</p><h3>${esc(c.name)}</h3>${chips(c.chips)}
-    <p>${esc(c.lede)}</p>${c.fig ? fig(c.fig) : ''}
-    <details class="s-know"><summary>Know more <span class="s-meta">${c.figs.length ? `details and ${c.figs.length} more figure${c.figs.length > 1 ? 's' : ''}` : 'details'}</span></summary>
+    ${c.lede ? `<p>${esc(c.lede)}</p>` : ''}${c.gsr ? `<dl class="vx-gsr"><dt>Goal</dt><dd>${esc(c.gsr.goal)}</dd><dt>Simulated</dt><dd>${esc(c.gsr.simulated)}</dd><dt>Results</dt><dd>${esc(c.gsr.results)}</dd></dl>` : ''}${c.fig ? fig(c.fig) : ''}
+    ${c.more.length || c.figs.length ? `<details class="s-know"><summary>Know more <span class="s-meta">${c.figs.length ? `details and ${c.figs.length} more figure${c.figs.length > 1 ? 's' : ''}` : 'details'}</span></summary>
       ${list(c.more)}${c.figs.map(fig).join('')}
-    </details></article>`;
+    </details>` : ''}</article>`;
 const TOOL = { matlab: ['/media/logos/tools/matlab.webp', 'MATLAB'], python: ['/media/logos/tools/python.svg', 'Python'], gpu: ['/media/logos/tools/cuda.svg', 'Python + GPU'], paper: ['', 'Preprint'], next: ['', 'Next'] };
 const tlItem = (t) => {
   const [logo, label] = TOOL[t.tool] || ['', ''];

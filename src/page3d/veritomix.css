@@ -144,6 +144,9 @@ html.vx .s-dots button.on{background:var(--accent);border-color:var(--accent)}
 .vx-case>p{font-size:.9rem !important;line-height:1.6 !important}
 .vx-chips span{font-weight:600}
 .vx-case .s-fig{margin:.7rem 0 .2rem}
+.vx-gsr{display:grid;grid-template-columns:max-content 1fr;gap:.35rem .8rem;margin:.5rem 0 .2rem;font-size:.88rem;line-height:1.55}
+.vx-gsr dt{font-weight:600;color:var(--accent);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding-top:.15rem}
+.vx-gsr dd{margin:0;color:var(--text)}
 .vx-case .s-know{margin-top:.5rem}
 
 @media (max-width:860px){

@@ -205,30 +205,60 @@
           "kicker": "Multicentre · Discovery MI and Omni Legend",
           "name": "Digital twins against a printed phantom at two centres",
           "chips": [
-            "27 paired configurations",
-            "DMI ρc 0.905, bias +1.8 %",
-            "Omni ρc 0.925, bias +1.3 %"
+            "2 centres × 2 scanners",
+            "720 / 864 within ±10 %",
+            "recovery error 4–5 %"
           ],
           "lede": "The same 36-insert gyroid phantom was 3D-printed and scanned at two facilities, and simulated on both scanner models. Overall recovery agreed within the ±10 % equivalence margin (TOST, α = 0.05) for both scanners.",
           "fig": {
-            "src": "/media/fig-27config-tost.webp",
-            "caption": "Paired 27-configuration analysis: in-silico vs physical recovery, Bland–Altman agreement and TOST equivalence."
+            "src": "/media/veritomix/case-36insert-two-centres.webp",
+            "caption": "Theoretical design, CASSOULET simulation, Toulouse and Rambam, on both scanner models."
           },
           "more": [
             "Physical scans: IUCT Oncopole (Toulouse) and Rambam Health Care Campus (Haifa), from shared print files.",
-            "Against each facility separately the agreement is lower (DMI ρc 0.778, mean difference +7.4 %; Omni ρc 0.899, +3.5 %), and some size subsets fall outside the ±10 % bound.",
-            "Status: research result; multicentre manuscripts in preparation."
+            "Only 14 of 27 designs stay within ±10 % for TOF TBRmax in every session; one design has a 22 % median error.",
+            "An earlier pooled analysis gave DMI ρc 0.905 (bias +1.8 %) and Omni ρc 0.925 (bias +1.3 %).",
+            "Status: manuscript in revision (31 Oct 2026)."
           ],
           "figs": [
             {
-              "src": "/media/fig-multicentre-validation.webp",
-              "caption": "Exact configuration matching across the 27 printed geometries, per facility."
+              "src": "/media/fig-27config-tost.webp",
+              "caption": "Earlier pooled 27-configuration analysis: recovery, Bland–Altman agreement and TOST equivalence."
             },
             {
-              "src": "/media/veritomix/ev-36insert-facilities.webp",
-              "caption": "36-insert cube phantom: simulation and the two experimental facilities, same display scale."
+              "src": "/media/fig-multicentre-validation.webp",
+              "caption": "Exact configuration matching across the 27 printed geometries, per facility."
             }
-          ]
+          ],
+          "gsr": {
+            "goal": "Check whether one simulation per scanner reproduces a 3D-printed porous phantom scanned at two hospitals.",
+            "simulated": "36 gyroid insert designs (27 with 10–20 mm targets) on 25 cm TOF and 32 cm non-TOF models, five frames each, against four measured sessions per scanner.",
+            "results": "720 of 864 endpoint comparisons within ±10 %. Mean recovery error 4.4–5.0 %, local-contrast error 6.2–7.9 %. Background texture and some local contrasts are not yet matched."
+          }
+        },
+        {
+          "kicker": "Whole body · public volunteer data",
+          "name": "A Siemens patient scanned again on a virtual Discovery MI",
+          "chips": [
+            "6 bed positions",
+            "organ recovery 0.97–1.04",
+            "vs measured Siemens PET"
+          ],
+          "lede": "",
+          "gsr": {
+            "goal": "Test whether a real body's anatomy and uptake survive a different, virtual scanner.",
+            "simulated": "A healthy volunteer's total-body CT rebuilt as about 150 structures, organ uptake from the measured PET, 11 synthetic lesions, six DMI beds, OSEM and BSREM.",
+            "results": "Organ recovery against the input 0.97–1.04 (bias −2.6 % to +3.9 %). Simulated organ SUVs within about 6 % of the measured Siemens scan; tissue texture is smoother."
+          },
+          "fig": {
+            "src": "/media/veritomix/case-wholebody-pet.webp",
+            "caption": "Measured Siemens PET, activity input, OSEM-style and BSREM simulations at four body levels."
+          },
+          "more": [
+            "Source: sub-000, DEPICT-RH / Multimodal-HC dataset, CC BY 4.0 (Hinge et al.).",
+            "Uniform uptake per organ, so measured tissue texture is absent by design."
+          ],
+          "figs": []
         },
         {
           "kicker": "Image and voxel level",
@@ -317,6 +347,88 @@
               "caption": "Synthetic dynamic FDG PET of the phantom across the examination."
             }
           ]
+        },
+        {
+          "kicker": "Dynamic PET · public volunteer data",
+          "name": "FDG from first pass to one hour",
+          "chips": [
+            "3 frames",
+            "26 s to 65 min",
+            "recovery 93–103 %"
+          ],
+          "lede": "",
+          "gsr": {
+            "goal": "See whether time-varying uptake survives simulation and reconstruction.",
+            "simulated": "Organ uptake matched to a measured dynamic scan at 26–28 s, 5–6 min and 60–65 min, on an extended-length research scanner model.",
+            "results": "Heart and kidney recovery 93–103 % across frames (median 101 %). Research geometry, not a commercial scanner."
+          },
+          "fig": {
+            "src": "/media/veritomix/case-dynamic-frames.webp",
+            "caption": "Measured PET, matched input and simulation at three time points."
+          },
+          "more": [],
+          "figs": []
+        },
+        {
+          "kicker": "Reconstruction · Omni Legend",
+          "name": "Choosing the Omni reconstruction strength",
+          "chips": [
+            "β 15 · 17.5 · 20 · 25",
+            "identical noisy data",
+            "β 17.5 adopted"
+          ],
+          "lede": "",
+          "gsr": {
+            "goal": "Pick an internal β for the Omni model that behaves like the clinical Q.Clear setting.",
+            "simulated": "The 36-insert cube on the Omni model, reconstructed at four β values from the same noisy data.",
+            "results": "β 17.5 gave recovery 0.85 / 0.78 / 0.64 for 20 / 15 / 10 mm inserts and 3.7 % background noise; adopted as the Q.Clear 350 operating point for this protocol."
+          },
+          "fig": null,
+          "more": [
+            "A protocol-specific choice, not a general vendor β conversion."
+          ],
+          "figs": []
+        },
+        {
+          "kicker": "CT simulator",
+          "name": "Simulated CT for attenuation and display",
+          "chips": [
+            "120 kVp fan beam",
+            "median 0.6 HU off",
+            "16 organ regions"
+          ],
+          "lede": "",
+          "gsr": {
+            "goal": "Make a CT that both looks clinical and gives the right attenuation for PET.",
+            "simulated": "A polychromatic 120 kVp fan-beam CT of the abdominal phantom with bowtie, quantum and electronic noise, FBP plus iterative refinement.",
+            "results": "Organ CT numbers within 2.3 HU of the assigned reference (median 0.6 HU) across 16 regions on three slices. Some streaks remain."
+          },
+          "fig": {
+            "src": "/media/veritomix/case-ct-comparison.webp",
+            "caption": "Reference, clinical patient CT and simulated CT on matched slices."
+          },
+          "more": [],
+          "figs": []
+        },
+        {
+          "kicker": "Patient models · in progress",
+          "name": "Simulation-ready patients, built by AI agents with human review",
+          "chips": [
+            "10 patient models",
+            "7 accepted",
+            "human in the loop"
+          ],
+          "lede": "",
+          "gsr": {
+            "goal": "Turn routine PET/CT into simulation-ready patient models without losing control of quality.",
+            "simulated": "AI segmentation (TotalSegmentator, MONAI, MOOSE), human correction queries, PET hot-spot extraction and organ uptake, applied by agents and reviewed by a human.",
+            "results": "10 patient models built: 7 accepted, 3 awaiting review, one case set aside. Simulations on both scanner models are next."
+          },
+          "fig": null,
+          "more": [
+            "Patient images are not shown here."
+          ],
+          "figs": []
         },
         {
           "kicker": "Reconstruction",
