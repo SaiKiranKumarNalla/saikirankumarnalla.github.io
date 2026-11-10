@@ -14,6 +14,6 @@ Style rules from the owner:
 - Professional 3D, not gamey.
 - No emoji in the UI.
 - English names first; Japanese only as an accent.
-- Each page puts the 3D on the right and the text cards on the left, and the 3D never sits behind the cards.
+- Each page puts the 3D on the right and the text cards on the left, and the 3D never sits behind the cards. Exception: the VeriTomiX page (`sections/veritomix.html`) is a standalone organisation page with its own full-width layouts.
 - Don't duplicate content across pages.
 - Keep styles in the page's CSS file, not inline.

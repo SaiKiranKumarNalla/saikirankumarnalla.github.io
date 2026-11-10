@@ -9,6 +9,7 @@ import builder from '../../content/ai-builder.json';
 import projects from '../../content/projects.json';
 import { runPage } from './engine.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { certById, certCard } from './certs.js';
 import './builder.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -57,7 +58,9 @@ document.getElementById('main').innerHTML = `
   <section class="s-step" data-title="Toolbelt"><div class="s-card"><h2>Toolbelt &amp; next</h2>
     <div class="s-chips">${builder.stack.map((s) => `<span>${esc(s)}</span>`).join('')}</div>
     <h3>Next on the bench</h3>${list(builder.roadmap)}
-    <div class="s-cert"><span>Certifications</span><b>Anthropic certifications</b><p>Coming soon</p></div>
+    <h3>AI certifications</h3>
+    <div class="ct-grid">${certById(['claude-fluency', 'gcloud-agents', 'deepmind-slm']).map(certCard).join('')}</div>
+    <a class="s-more" href="/sections/skills.html#step-9">All certifications</a>
   </div></section>`;
 
 const NSTEPS = 2 + builds.length;

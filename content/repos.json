@@ -29,6 +29,10 @@
     ],
     "links": [
       {
+        "label": "Full story: VeriTomiX validation",
+        "href": "/sections/veritomix.html"
+      },
+      {
         "label": "CASSOULET website",
         "status": "soon"
       },
@@ -49,13 +53,21 @@
       {
         "src": "/media/projects/cassoulet-phantom-slice.webp",
         "caption": "A simulated slice of the heterogeneous-insert phantom."
+      },
+      {
+        "src": "/media/thesis/s4-phantom-vs-sim.webp",
+        "caption": "The same inserts: physical phantom versus CASSOULET simulation (thesis, chapter 4)."
+      },
+      {
+        "src": "/media/thesis/s4-gini.webp",
+        "caption": "Gini index of heterogeneity: theory, FDG and Ga-68 follow the same trend."
       }
     ],
     "headline": "An analytical PET/CT simulator that inserts uniform, heterogeneous and patient-shaped lesions into phantom or patient data, modelled on three current clinical scanners.",
     "brief": {
       "problem": "Vendor simulators are closed and could not insert heterogeneous or necrotic lesions, or patient-derived shapes, on the scanners in use.",
-      "built": "A GPU pipeline that projects background and lesion separately, adds calibrated noise, mixes the data and reconstructs it (BSREM/OSEM) with DICOM export, for the GE Discovery MI, GE OMNI Legend and Siemens Biograph Vision Quadra.",
-      "result": "Reproduced the heterogeneous-insert trends measured in physical experiments; more than 150 dated studies by October 2026, with multicentre manuscripts in preparation."
+      "built": "Two connected modules. A design module builds the lesion truth object (draw or import a mask, upsample it to sub-voxels, split rim, core and hotspots, assign uptake or time-activity curves, export to simulation or an STL for printing). A GPU simulator projects background and lesion separately, adds calibrated noise, mixes the data and reconstructs it (BSREM/OSEM) with DICOM export, for the GE Discovery MI, GE OMNI Legend and Siemens Biograph Vision Quadra.",
+      "result": "Reproduced the heterogeneous-insert trends measured in physical experiments, with similar CoV and Gini-index trends across nine configurations. On eight patient-derived lesion geometries the simulated and printed-phantom results were broadly similar, with one outlier. More than 150 dated studies by October 2026; multicentre manuscripts in preparation."
     },
     "stats": [
       {
@@ -73,14 +85,22 @@
       "CUDA",
       "PyTomography",
       "parallelproj"
-    ]
+    ],
+    "domain": "imaging",
+    "cover": "/media/projects/cassoulet-phantom-slice.webp",
+    "cardStat": {
+      "value": "150+",
+      "label": "dated studies"
+    },
+    "role": "Designed and wrote the simulator, then ran the thesis studies with it: cross-validation against 3D-printed porous phantoms on the GE Discovery MI and OMNI Legend, and a feasibility study on eight patient-derived lesion geometries.",
+    "team": "PhD at IUCT Oncopole, Université de Toulouse. Related papers with Q. Maronnier, J. A. Kennedy and O. Caselles."
   },
   {
     "id": "mupet",
     "name": "MuPET: Multiphysics PET",
     "kind": "Synthetic data",
     "years": "2025",
-    "context": "PhD side project · preprint",
+    "context": "PhD side project · medRxiv preprint (2025)",
     "eli5": "Use the physics of how things spread through tissue to make realistic, fully known fake PET scans.",
     "summary": "Couples computational mass-transport physics with PET simulation to generate synthetic PET data whose ground-truth activity is known.",
     "abstract": "Purpose: Robust positron emission tomography (PET) research increasingly requires reliable ground-truth activity distributions, yet clinical data and physical phantoms cannot provide them fully. This work introduces MuPET (multiphysics PET), a computational framework that bridges mass-transport physics simulation with image domain noise modeling to generate realistic, synthetic PET images.\n\nMethods: Tracer transport and radioactive decay within a custom phantom geometry were modeled via decay diffusion physics. The simulated activity concentrations were converted into PET equivalent count maps, followed by a pseudo-Poisson noise model calibrated to scanner-specific characteristics. MuPET generated images were compared with experimental PET acquisitions and a conventional synthetic lesion insertion pipeline. VOI (volume of interest) and ROI (region interest) data extraction was performed on all the data. The quantitative metrics included the recovery coefficient (RC), target contrast ratio (TCR), coefficient of variability (COV), and activity profile.\n\nResults: The simulated effective activities matched the decay-corrected measurements within 0.4-1.2%, confirming high physics-model fidelity. The optimized noise model achieved COV values (3.9-4.0%) comparable to those of the acquisitions (3.8-3.9%). MuPET demonstrated strong agreement with the experimental profiles and quantitative metrics, with mean biases within 10% of the acquisition.\n\nConclusion: MuPET establishes a fast (approximately 15 min), physically grounded pipeline that combines transport modeling with PET image simulation, enabling generation of realistic datasets. This approach provides a practical foundation for future dynamic PET simulations.",
@@ -100,8 +120,8 @@
     ],
     "headline": "Synthetic PET images with a known ground truth, generated from tracer-transport physics in about 15 minutes and checked against real scanner acquisitions.",
     "brief": {
-      "problem": "PET research needs ground-truth activity distributions, which clinical data and physical phantoms cannot fully provide.",
-      "built": "A framework that models tracer transport and radioactive decay (decay diffusion) in a custom phantom geometry, converts the activity to PET-equivalent counts and adds a pseudo-Poisson noise model calibrated to the scanner.",
+      "problem": "PET research needs ground-truth activity distributions that clinical data and physical phantoms cannot fully provide, and 3D-printed phantom designs are only tested after they have been printed and scanned.",
+      "built": "A multiphysics framework: tracer transport and radioactive decay (decay diffusion) are simulated inside a custom phantom geometry, the activity is converted to PET-equivalent count maps, and a pseudo-Poisson noise model calibrated to the scanner makes the images realistic. VOI and ROI analysis gives recovery coefficient, target contrast ratio, coefficient of variability and activity profiles.",
       "result": "Simulated activities matched decay-corrected measurements within 0.4–1.2 %; image noise (COV 3.9–4.0 %) matched the acquisitions (3.8–3.9 %), with mean biases within 10 %."
     },
     "stats": [
@@ -121,7 +141,25 @@
     "tools": [
       "MATLAB",
       "Python"
-    ]
+    ],
+    "domain": "imaging",
+    "cover": "/media/veritomix/mupet-dynamic.webp",
+    "cardStat": {
+      "value": "~15 min",
+      "label": "per dataset"
+    },
+    "figures": [
+      {
+        "src": "/media/projects/mupet/fig-phantom-setup.webp",
+        "caption": "The experimental reference: a 3D-printed grid of cubes in a Jaszczak phantom on a GE Discovery MI, and the conventional synthetic-insertion workflow it is compared with (thesis, chapter 4)."
+      },
+      {
+        "src": "/media/veritomix/mupet-dynamic.webp",
+        "caption": "MuPET-generated dynamic PET images after noise addition."
+      }
+    ],
+    "role": "First and corresponding author. The preprint compares MuPET images with experimental PET acquisitions of a 3D-printed phantom and with a conventional synthetic lesion insertion pipeline.",
+    "team": "Nalla, Maronnier, Kennedy, Uppapalli, Caselles. IUCT and Oncopole Toulouse, Rambam Health Care Campus and Technion (Haifa), Mahindra University, Tachyons SAS."
   },
   {
     "id": "ppvi",
@@ -150,14 +188,38 @@
     ],
     "headline": "A redesigned bench for rehearsing catheter pulmonary valve implantation on 3D-printed, patient-specific outflow tracts, built to set up faster and leak less.",
     "brief": {
-      "problem": "Before percutaneous pulmonary valve implantation, landing-zone size and coronary compression are hard to judge. Existing benches reproduced the geometry but not the flow, took long to set up and leaked.",
-      "built": "A pipeline from patient CT/MR to segmentation and a printed outflow tract, and a bench that reproduces the cath-lab steps (flow inlet and outlet, contrast injection, balloon dilation) with a new connector and holder.",
+      "problem": "In congenital right-ventricular outflow tract dysfunction, a valve is implanted by catheter. Landing-zone diameter, balloon size, feasibility and the absence of coronary compression are hard to judge beforehand. Available simulation benches reproduce the geometry well but the flow poorly.",
+      "built": "A review of the image-guided pipeline (CT/MR/angiography, segmentation, 3D model, fusion imaging) and of the current bench: heart and oesophagus holders in a plexiglass tank, ultrasound access, flow inlet and outlet, contrast injection and balloon dilation. Its fixed connectors made set-up slow and leaked. The proposed PPVI bench keeps the materials of the current bench, borrows the compactness of the Biomodex device and improves the connections.",
       "result": "A compact bench concept with lower setup time, benchmarked against a commercial bench (4–6 min setup, negligible leakage), plus clinical needs gathered by observing live procedures."
     },
     "tools": [
       "Autodesk Meshmixer"
     ],
-    "knowMore": false
+    "knowMore": false,
+    "domain": "devices",
+    "cover": "/media/projects/ppvi/cover-bench-cad.webp",
+    "role": "Studied the existing congenital-heart simulation bench against the cath-lab procedure, benchmarked a commercial bench, and proposed a PPVI bench concept with a faster set-up and better connections. Presented as an M1 project.",
+    "team": "M1 BME, École Polytechnique. Advisor Dr Sébastien Hascoët, Hôpital Marie Lannelongue.",
+    "figures": [
+      {
+        "src": "/media/projects/ppvi/fig-bench-parts.webp",
+        "caption": "The existing bench (CAD): heart and oesophagus holders, plexiglass walls and connectors."
+      },
+      {
+        "src": "/media/projects/ppvi/fig-bench-circuit.webp",
+        "caption": "Hydraulic circuit: flow inlet and outlet, contrast injection and balloon dilation."
+      },
+      {
+        "src": "/media/projects/ppvi/fig-connectors.webp",
+        "caption": "Fixed connectors of various sizes: the source of the long set-up and the leaks."
+      }
+    ],
+    "stats": [
+      {
+        "value": "4–6 min",
+        "label": "set-up of the commercial bench used as benchmark"
+      }
+    ]
   },
   {
     "id": "ladhyx",
@@ -184,15 +246,19 @@
     ],
     "headline": "Flow experiments on soft gel particles as stand-ins for deformable drug carriers, with an automated pipeline that tracks particles across the recorded image sequences.",
     "brief": {
-      "problem": "Drug carriers deform and interact as they flow; soft gel particles are a controllable model for studying that.",
-      "built": "Flow-resistance experiments with soft gels and particle suspensions, and a tracking pipeline that follows and analyses many particles in an image sequence at once.",
+      "problem": "Drug carriers deform and interact as they flow. A soft hydrogel microparticle pushed through a constriction is a controllable model, but each test produces long image sequences at several flow rates that are slow to measure by hand.",
+      "built": "MATLAB tools for the experiments. Image sequences are cleaned with a median image, and circle detection finds the microgels. A line ROI on thresholded images tracks interface displacement, with the frame rate as input. For each microgel tested at several flow rates in the same gap, elongation is measured semi-automatically, PIV gives the flow and hydrodynamic resistance, pressure follows, and the elastic modulus is estimated iteratively as the combined modulus of the microgel and the trap walls.",
       "result": "Faster, reproducible analysis of the experimental videos, which sped up the synthesis of results."
     },
     "tools": [
       "MATLAB",
       "Python"
     ],
-    "knowMore": false
+    "knowMore": false,
+    "domain": "fluids",
+    "cover": "/media/projects/cover-ladhyx.svg",
+    "role": "Wrote MATLAB analysis scripts (the gel-detection and interface-displacement scripts carry his author header): image pre-processing, microgel detection, semi-automated length and interface measurements. The elasticity and resistance script builds on PIVlab.",
+    "team": "Research internship, LadHyX, École Polytechnique (2022)."
   },
   {
     "id": "electrodes",
@@ -221,12 +287,48 @@
     ],
     "headline": "Gel-free, flexible pin electrodes in PDMS with PEDOT:PSS and graphite, designed for the sleep-monitoring startup Manitty to record while the wearer moves.",
     "brief": {
-      "problem": "Wet gel electrodes are uncomfortable over long recordings, and dry electrodes struggle with skin impedance and motion artefacts.",
-      "built": "Flexible pin electrodes moulded in PDMS with conductive PEDOT:PSS and graphite, plus 3D-printed variants, characterised by atomic force microscopy (surface, Young's modulus) and in vitro electrical tests.",
-      "result": "Designs assessed against targets of 20–40 kΩ contact impedance, 95–98 % correlation with wet electrodes at rest (85–90 % in motion) and €10–30 per electrode, with options for human and veterinary use."
+      "problem": "Wet gel electrodes are uncomfortable over long recordings, and dry electrodes struggle with the skin's stratum corneum (10–20 µm), skin impedance and motion artefacts. Hair adds to the pin length needed on animals.",
+      "built": "Targets from the literature: contact diameter under 10–20 mm, at least 6 cm² of skin contact, 20–40 kΩ contact impedance, 4–6 h of fabrication, 1–2 years of use, EUR 10–30 per electrode, and 95–98 % correlation with wet electrodes at rest (85–90 % in motion). Flexible pin electrodes were moulded in PDMS with PEDOT:PSS and graphite, alongside 3D-printed, silver-coated and composite versions.",
+      "result": "AFM gave average Young's moduli of 2.3 MPa (PDMS base) to 4.8 MPa (PDMS pins), and 3.9 to 4.5 MPa with graphite. Impedance spectroscopy on the first prototypes pointed to a capacitance problem. The prototypes were then scored against the constraints in a design evaluation."
     },
     "tools": [],
-    "knowMore": false
+    "knowMore": false,
+    "domain": "devices",
+    "cover": "/media/projects/electrodes/cover-printed-gold.webp",
+    "cardStat": {
+      "value": "20–40 kΩ",
+      "label": "impedance target"
+    },
+    "role": "Team project: literature review and design constraints, mould trials, PDMS and PEDOT:PSS pin electrodes, 3D-printed and coated variants, mechanical characterisation by atomic force microscopy and electrical impedance spectroscopy, and a final design evaluation.",
+    "team": "Sai Kiran Kumar Nalla, Yuhui Wang and Koohyar Habibi (Master BME, École Polytechnique) with Manitty, a start-up building human and veterinary sensors.",
+    "stats": [
+      {
+        "value": "2.3–4.8 MPa",
+        "label": "AFM Young's modulus, PDMS"
+      },
+      {
+        "value": "20–40 kΩ",
+        "label": "impedance target"
+      }
+    ],
+    "figures": [
+      {
+        "src": "/media/projects/electrodes/fig-fabrication.webp",
+        "caption": "Mould and fabrication trials for the flexible pin electrodes."
+      },
+      {
+        "src": "/media/projects/electrodes/fig-afm-modulus.webp",
+        "caption": "AFM measurements: Young's modulus of PDMS and PDMS with graphite samples."
+      },
+      {
+        "src": "/media/projects/electrodes/fig-silver-coated.webp",
+        "caption": "Silver-coated electrodes and their impedance spectra."
+      },
+      {
+        "src": "/media/projects/electrodes/fig-composite.webp",
+        "caption": "Composite electrodes: PDMS with PEDOT:PSS or silver ink."
+      }
+    ]
   },
   {
     "id": "rbc",
@@ -253,11 +355,19 @@
     ],
     "headline": "A model of loading drugs into red blood cells with shear flow: about 30 % average encapsulation while around 80 % of cells survive in the worst cases.",
     "brief": {
-      "problem": "Shear has to open membrane pores long enough for a drug to diffuse in, but too much shear destroys the cell (haemolysis).",
-      "built": "A multiphase (Euler–Euler) and species-transport model of RBC mechanics, shear-induced poration and diffusion through the cytoplasm, compared with published microfluidic experiments.",
-      "result": "About 30 % average encapsulation with around 80 % of cells preserved in the worst cases. Still open: physiological haematocrit (~40 %), pulsatile flow, biocompatibility and circulation time."
+      "problem": "Shear can open transient pores in red blood cell membranes so a drug can diffuse in, but too much shear or exposure damages the cell. RBCs last about 120 days in circulation and make up 45 % of blood volume, which makes them attractive carriers.",
+      "built": "An analysis of four studies (Piergiovanni 2019 on encapsulation, Rahman 2021 on controlled shear deformation, Wu 2015 and Jung & Hassanein 2008 on blood-flow models). The two-fluid (Euler-Euler) and mixture models, with the drag, lift and viscosity closures, were compared with the experiments through a normalised encapsulation index built from velocity, shear stress and cell volume fraction.",
+      "result": "The model's best encapsulation index is 0.36 (about 36 %), against 22.4 ± 19.0 % (men) and 21.8 ± 13.3 % (women) measured, and 25 ± 5 % of human cells in the second study. Optimal shear was about 80 Pa in the model and 83.44 Pa measured, in the sub-hemolytic zone. About 30 % average encapsulation with around 80 % of cells preserved in the worst cases. Open issues: haematocrit of 1–5 % versus about 40 % in vivo, pulsatile flow, biocompatibility and circulation time."
     },
     "stats": [
+      {
+        "value": "0.36",
+        "label": "peak model encapsulation index"
+      },
+      {
+        "value": "83 Pa",
+        "label": "optimal shear (measured)"
+      },
       {
         "value": "~30 %",
         "label": "average encapsulation"
@@ -270,7 +380,21 @@
     "tools": [
       "COMSOL"
     ],
-    "knowMore": false
+    "knowMore": false,
+    "domain": "fluids",
+    "cover": "/media/projects/cover-rbc.svg",
+    "cardStat": {
+      "value": "~30 %",
+      "label": "encapsulation"
+    },
+    "role": "Co-authored the report and slides: compared the computational models (Euler-Euler and mixture) with the two experimental encapsulation studies, and set out the open issues.",
+    "team": "Camille Awade and Sai Kiran Kumar Nalla. MEC 550 Biofluid Mechanics and Mass Transport, École Polytechnique (Prof. Barakat, 2021).",
+    "figures": [
+      {
+        "src": "/media/projects/rbc/fig-why-rbc.webp",
+        "caption": "Why red blood cells as carriers: surface area, circulation time, availability, natural carriers."
+      }
+    ]
   },
   {
     "id": "carotid",
@@ -293,12 +417,34 @@
     ],
     "headline": "Two-phase CFD of a gas bubble travelling through an image-based human carotid artery under pulsatile flow, published in the Journal of Biomechanical Engineering (2022).",
     "brief": {
-      "problem": "Gas emboli disturb normal blood flow and can lead to occlusion and ischaemia; the study set out to quantify how they change carotid haemodynamics.",
-      "built": "Coupled Newtonian two-phase laminar flow simulations with interface tracking, in an anatomical image-based geometry with near-physiological pulsatile inflow.",
-      "result": "Emboli raised time-averaged shear stress and enlarged regions of high oscillatory shear index. Depending on contact angle, the bubble lodged in the carotid sinus or left the artery."
+      "problem": "Gas emboli (surgery, lung trauma, blast injury) can block arteries; in the carotid they threaten the brain. Single-phase CFD of the carotid is well studied, but gas embolism in an image-based carotid geometry with a bifurcation had not been simulated.",
+      "built": "Coupled Newtonian two-phase laminar simulations with the level-set method (Navier-Stokes with interfacial tension and contact angle) in an MRI-based carotid with a bubble placed in the common carotid. Inlet flow rate and outlet pressure waveforms at 60 bpm give pulsatile flow. The single-phase model was checked against the known carotid flow pattern (about 69 % of inflow to the ICA, sinus vortex), and the two-phase model against microfluidic T-junction droplet experiments.",
+      "result": "The bubble creates transverse pressure gradients in the common carotid and changes the recirculation zone in the sinus. This gives lower, oscillating wall shear stress and more regions prone to atherosclerosis. At small contact angles the bubble is trapped in the carotid sinus, where it could disturb blood-pressure control; at large angles it leaves the artery. Bubble size mattered only when it touched the wall. Published in J Biomech Eng 2022."
     },
     "tools": [
       "COMSOL"
+    ],
+    "domain": "fluids",
+    "cover": "/media/projects/carotid/cover-pressure.webp",
+    "role": "First author of the paper (corresponding author: Sebastian Uppapalli), written during the research associate post at Mahindra University.",
+    "team": "Nalla Sai Kiran Kumar and Sebastian Uppapalli, École Centrale School of Engineering, Mahindra University (research associate, 2020–2021).",
+    "figures": [
+      {
+        "src": "/media/projects/carotid/fig-geometry.webp",
+        "caption": "Carotid geometry from MRI: common, internal and external carotid arteries and the apex."
+      },
+      {
+        "src": "/media/projects/carotid/fig-waveforms.webp",
+        "caption": "Pulsatile boundary conditions: inlet flow rate and outlet pressure."
+      },
+      {
+        "src": "/media/projects/carotid/fig-flow-ratio.webp",
+        "caption": "Volume outflow ratio with and without the bubble."
+      },
+      {
+        "src": "/media/projects/carotid/fig-pressure-bubble.webp",
+        "caption": "Pressure field with the bubble, and cross-sections."
+      }
     ]
   }
 ]

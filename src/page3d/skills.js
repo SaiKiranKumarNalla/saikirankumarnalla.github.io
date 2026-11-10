@@ -6,6 +6,7 @@ import data from '../../content/skills.json';
 import { runPage } from './engine.js';
 import { iconUrl, DOMAIN_HUE } from './skills-emblems.js';
 import { mountTimeline, periodText } from './skills-timeline.js';
+import { certs, certGroup } from './certs.js';
 import './skills.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -76,6 +77,10 @@ const STEPS = [
       <p class="sk-short">Generative and surrogate models trained on CASSOULET, run by agent teams with human gates.</p>
       ${groups(data.skills.filter((s) => s.state !== 'learnt').sort(sortSk), true)}
       <a class="s-more" href="/sections/builder.html">How the agent teams work</a>` },
+  { title: 'Certifications', html: `<p class="s-kicker">Training</p><h2>Certifications &amp; training</h2>
+      <p class="sk-short">${esc(certs.intro)}</p>
+      ${certs.groups.map(certGroup).join('')}
+      <a class="s-more" href="${esc(certs.profiles.google)}" target="_blank" rel="noopener">Google Skills public profile</a>` },
 ];
 
 const main = document.getElementById('main');

@@ -1,0 +1,2 @@
+.w-dev-link{align-self:center;font-family:'Space Mono','JetBrains Mono',ui-monospace,monospace;font-size:.82rem;color:var(--muted);text-decoration:none;padding:6px 4px;border-bottom:1px dashed var(--line);transition:color .2s,border-color .2s}
+.w-dev-link:hover,.w-dev-link:focus-visible{color:var(--accent);border-color:var(--accent);outline:none}

@@ -1,126 +1,244 @@
-// Projects & Repos: a 3D wall of project tiles. Choosing one brings up its own 3D explainer and
-// swaps the side card for its details. No long scroll; each project has a #id deep link.
+// Projects gallery: a filterable grid of project cards and a full-width detail view per project
+// (#id deep links). The per-project 3D explainer is shown in a framed window inside the detail hero;
+// the window is the only part of the page left transparent, so the 3D never sits behind text.
 import repos from '../../content/repos.json';
 import { runPage } from './engine.js';
 import './projects.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const list = (items) => `<ul class="s-list">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
-const paras = (t) => String(t).split(/\n\s*\n/).map((x) => `<p>${esc(x.trim())}</p>`).join('');
-const fig = (f) => `<figure class="s-fig"><img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy"><figcaption>${esc(f.caption)}</figcaption></figure>`;
+const byId = Object.fromEntries(repos.map((r) => [r.id, r]));
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isNarrow = () => innerWidth <= 860;
 
-// Tool badges: name -> logo in /media/logos/tools. Unknown names fall back to a monogram.
+const DOMAINS = {
+  imaging: { label: 'Imaging & simulation', icon: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>' },
+  devices: { label: 'Biomedical devices', icon: '<rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 12h2l1.5-3 2 6 1.5-3H17"/>' },
+  fluids: { label: 'Fluids & biomechanics', icon: '<path d="M12 3C8 8 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6-6-11z"/>' },
+};
+const icon = (k) => `<svg class="pj-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${DOMAINS[k].icon}</svg>`;
+
 const TOOL_LOGOS = {
-  MATLAB: 'matlab.webp',
-  Python: 'python.svg',
-  COMSOL: 'comsol.webp',
-  CUDA: 'cuda.svg',
-  PyTomography: 'pytomography.webp',
-  parallelproj: 'parallelproj.webp',
-  'Autodesk Meshmixer': 'autodesk.svg',
+  MATLAB: 'matlab.webp', Python: 'python.svg', COMSOL: 'comsol.webp', CUDA: 'cuda.svg',
+  PyTomography: 'pytomography.webp', parallelproj: 'parallelproj.webp', 'Autodesk Meshmixer': 'autodesk.svg',
 };
-const toolBadge = (name) => {
-  const file = TOOL_LOGOS[name];
-  const mark = file
-    ? `<img src="/media/logos/tools/${file}" alt="" width="16" height="16" loading="lazy">`
-    : `<span class="pj-mono">${esc(name.slice(0, 2))}</span>`;
-  return `<li><span class="pj-logo" aria-hidden="true">${mark}</span>${esc(name)}</li>`;
+const toolMark = (name) => (TOOL_LOGOS[name]
+  ? `<img src="/media/logos/tools/${TOOL_LOGOS[name]}" alt="" width="16" height="16" loading="lazy">`
+  : `<span class="pj-mono">${esc(name.slice(0, 2))}</span>`);
+const toolPill = (name) => `<li><span class="pj-logo" aria-hidden="true">${toolMark(name)}</span>${esc(name)}</li>`;
+const toolIcons = (r) => (r.tools?.length
+  ? `<ul class="pj-tico" aria-label="Tools">${r.tools.map((t) => `<li title="${esc(t)}"><span class="pj-logo">${toolMark(t)}</span><span class="pj-sr">${esc(t)}</span></li>`).join('')}</ul>`
+  : `<ul class="pj-tags" aria-label="Methods">${(r.stack || []).slice(0, 3).map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`);
+
+const allTools = (() => {
+  const n = {};
+  repos.forEach((r) => (r.tools || []).forEach((t) => { n[t] = (n[t] || 0) + 1; }));
+  return Object.keys(n).sort((a, b) => n[b] - n[a] || a.localeCompare(b));
+})();
+
+// ── Grid view
+const card = (r) => `<a class="pj-card" href="#${esc(r.id)}" data-id="${esc(r.id)}" data-domain="${r.domain}" data-tools="${esc((r.tools || []).join('|'))}">
+  <span class="pj-cover"><img src="${esc(r.cover)}" alt="" width="800" height="500" loading="lazy">
+    <span class="pj-badge">${icon(r.domain)}${DOMAINS[r.domain].label}</span>
+    ${r.cardStat ? `<span class="pj-key"><b>${esc(r.cardStat.value)}</b><span>${esc(r.cardStat.label)}</span></span>` : ''}
+  </span>
+  <span class="pj-card-body">
+    <span class="pj-meta">${esc(r.kind)} · ${esc(r.years)}</span>
+    <h3>${esc(r.name)}</h3>
+    <p>${esc(r.headline || r.eli5)}</p>
+    ${toolIcons(r)}
+    <span class="pj-open">View project <span aria-hidden="true">→</span></span>
+  </span></a>`;
+
+const foot = '<footer class="pj-foot"><span>© 2026 Sai Kiran Kumar Nalla</span><a href="/">Back to the village</a></footer>';
+const gridHTML = () => `<div class="pj-wrap">
+  <header class="pj-head"><p class="s-kicker">Projects &amp; repos</p><h1>Things I've built</h1>
+  <p class="pj-lede">PET/CT simulation, cardiovascular CFD, a surgical bench and wearable electrodes. Open one for the problem, what I built and the result.</p></header>
+  <div class="pj-filters" role="group" aria-label="Filter projects">
+    <div class="pj-chiprow" data-group="domain"><span class="pj-flabel">Domain</span>
+      <button class="pj-chip on" data-val="">All</button>${Object.entries(DOMAINS).map(([k, d]) => `<button class="pj-chip" data-val="${k}" data-domain="${k}">${icon(k)}${d.label}</button>`).join('')}</div>
+    <div class="pj-chiprow" data-group="tool"><span class="pj-flabel">Tool</span>
+      <button class="pj-chip on" data-val="">Any</button>${allTools.map((t) => `<button class="pj-chip" data-val="${esc(t)}"><span class="pj-logo" aria-hidden="true">${toolMark(t)}</span>${esc(t)}</button>`).join('')}</div>
+    <p class="pj-count" id="pjCount" aria-live="polite"></p>
+  </div>
+  <div class="pj-grid" id="pjGrid">${repos.map(card).join('')}</div>
+  <p class="pj-empty" id="pjEmpty" hidden>No project matches both filters.</p>
+  <p class="pj-note">AI agent systems live on the <a href="/sections/builder.html">Agentic AI</a> page.</p>
+  ${foot}</div>`;
+
+// ── Detail view
+const fmtLink = (l) => {
+  if (!l.href) return `<span class="pj-link soon">${esc(l.label)} · coming soon</span>`;
+  const ext = /^https?:/.test(l.href);
+  return `<a class="pj-link${ext ? '' : ' primary'}" href="${esc(l.href)}"${ext ? ' target="_blank" rel="noopener"' : ''}>${esc(l.label)} <span aria-hidden="true">${ext ? '↗' : '→'}</span></a>`;
 };
-const tools = (a) => (a?.length ? `<span class="pj-label">Tools</span><ul class="pj-tools">${a.map(toolBadge).join('')}</ul>` : '');
-const stats = (a) => (a?.length ? `<div class="pj-stats">${a.map((x) => `<div><b>${esc(x.value)}</b><span>${esc(x.label)}</span></div>`).join('')}</div>` : '');
-const brief = (b) => (b ? `<dl class="pj-brief">${[['Problem', b.problem], ['Built', b.built], ['Result', b.result]]
-  .filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : '');
+const imagesOf = (r) => [{ src: r.cover, caption: r.name }, ...(r.figures || []).filter((f) => f.src !== r.cover)];
+const para = (t) => String(t).split(/\n\s*\n/).map((x) => `<p>${esc(x.trim())}</p>`).join('');
 
-const intro = () => `<p class="s-kicker">Projects &amp; repos</p><h1>Things I've built</h1>
-  <p class="s-lede">PET/CT simulation, cardiovascular CFD, a surgical bench and wearable electrodes. Each one sets out the problem, what I built and the result.</p>
-  <div class="s-pick">${repos.map((r) => `<button data-id="${r.id}"><b>${esc(r.name)}</b><span>${esc(r.kind)} · ${esc(r.years)}</span></button>`).join('')}</div>
-  <p class="s-meta">AI agent systems live on the <a href="/sections/builder.html">Agentic AI</a> page.</p>`;
-
-function detail(r) {
-  const links = (r.links || []).map((l) => (l.href
-    ? `<a class="s-link" href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`
-    : `<span class="s-link soon">${esc(l.label)} · coming soon</span>`)).join('');
+function detailHTML(r, mode) {
+  const i = repos.indexOf(r), prev = repos[(i + repos.length - 1) % repos.length], next = repos[(i + 1) % repos.length];
   const m = r.more;
-  // Methods that are not already shown as tool badges.
   const methods = (r.stack || []).filter((x) => !(r.tools || []).some((t) => x.toLowerCase().startsWith(t.toLowerCase())));
-  return `<button class="s-back" data-back>← All projects</button>
-    <p class="s-kicker">${esc(r.kind)} · ${esc(r.years)} · ${esc(r.context)}</p>
-    <h2>${esc(r.name)}</h2>
-    <p class="s-lede">${esc(r.headline || r.eli5)}</p>
-    ${r.brief ? brief(r.brief) : `<p>${esc(r.summary)}</p>`}
-    ${stats(r.stats)}
-    ${tools(r.tools)}
-    ${methods.length ? `<span class="pj-label">Methods</span><div class="s-chips pj-methods">${methods.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
-    ${links ? `<div class="s-links">${links}</div>` : ''}
-    ${r.figures?.[0] ? fig(r.figures[0]) : ''}
-    ${m && r.knowMore !== false ? `<details class="s-know"><summary>Know more <span class="s-meta">${r.brief ? 'method details' : 'problem, approach, outcome'}</span></summary>
-      ${r.brief ? '' : `<h3>The problem</h3><p>${esc(m.problem)}</p>`}<h3>How</h3>${list(m.approach)}
-      ${r.brief ? '' : `<h3>Outcome</h3>${list(m.outcome)}`}
-      ${(r.figures || []).slice(1).map(fig).join('')}
-    </details>` : ''}
-    ${r.abstract ? `<details class="s-know"><summary>Abstract</summary>${paras(r.abstract)}</details>` : ''}`;
+  const figs = (r.figures || []).filter((f) => f.src !== r.cover);
+  const imgs = imagesOf(r);
+  const nav = (p, dir) => `<a class="pj-pn ${dir}" href="#${p.id}" data-domain="${p.domain}"><img src="${esc(p.cover)}" alt="" width="160" height="100" loading="lazy"><span><em>${dir === 'prev' ? 'Previous project' : 'Next project'}</em><b>${esc(p.name)}</b></span></a>`;
+  return `<div class="pj-bar"><div class="pj-bar-in">
+      <button class="pj-back" data-back><span aria-hidden="true">←</span> All projects</button>
+      <span class="pj-count2">${i + 1} / ${repos.length}</span>
+      <span class="pj-steps"><a class="pj-step-btn" href="#${prev.id}" aria-label="Previous project: ${esc(prev.name)}">←</a><a class="pj-step-btn" href="#${next.id}" aria-label="Next project: ${esc(next.name)}">→</a></span>
+    </div></div>
+    <section class="pj-hero" data-domain="${r.domain}">
+      <div class="pj-hero-text">
+        <span class="pj-badge flat">${icon(r.domain)}${DOMAINS[r.domain].label}</span>
+        <p class="pj-meta">${esc(r.kind)} · ${esc(r.years)} · ${esc(r.context)}</p>
+        <h2 id="pjTitle" tabindex="-1">${esc(r.name)}</h2>
+        <p class="pj-hl">${esc(r.headline || r.eli5)}</p>
+        ${r.team ? `<p class="pj-team"><b>Team</b> ${esc(r.team)}</p>` : ''}
+        ${r.stats?.length ? `<div class="pj-stats">${r.stats.map((x) => `<div><b>${esc(x.value)}</b><span>${esc(x.label)}</span></div>`).join('')}</div>` : ''}
+        ${r.links?.length ? `<div class="pj-links">${r.links.map(fmtLink).join('')}</div>` : ''}
+      </div>
+      <div class="pj-hero-media">
+        <div class="pj-tabs" role="tablist" aria-label="Project visual">
+          <button role="tab" data-mode="fig" aria-selected="${mode === 'fig'}">Figure</button>
+          <button role="tab" data-mode="3d" aria-selected="${mode === '3d'}">3D explainer</button>
+        </div>
+        <button class="pj-hero-img" data-lb="0" aria-label="Enlarge image"><img src="${esc(r.cover)}" alt="${esc(r.name)}" width="800" height="500"></button>
+        <div class="pj-stage" id="pjStage" role="img" aria-label="Animated 3D explainer of ${esc(r.name)}"></div>
+      </div>
+    </section>
+    <section class="pj-sec"><div class="pj-wrap">
+      ${r.brief ? `<div class="pj-brief">${[['Problem', r.brief.problem], ['What I built', r.brief.built], ['Result', r.brief.result]].filter(([, v]) => v)
+        .map(([k, v], n) => `<div class="pj-bcard"><span>0${n + 1}</span><h3>${k}</h3><p>${esc(v)}</p></div>`).join('')}</div>` : `<p class="pj-plain">${esc(r.summary)}</p>`}
+      ${r.role ? `<div class="pj-role"><h3>What I did</h3><p>${esc(r.role)}</p></div>` : ''}
+      ${r.tools?.length ? `<h3 class="pj-h">Tools</h3><ul class="pj-tools">${r.tools.map(toolPill).join('')}</ul>` : ''}
+      ${methods.length ? `<h3 class="pj-h">Methods</h3><ul class="pj-tags big">${methods.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+    </div></section>
+    ${figs.length ? `<section class="pj-sec alt"><div class="pj-wrap"><h3 class="pj-h first">Figures</h3><div class="pj-figs">${figs.map((f) => `<figure><button data-lb="${imgs.findIndex((x) => x.src === f.src)}" aria-label="Enlarge: ${esc(f.caption)}"><img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy"></button><figcaption>${esc(f.caption)}</figcaption></figure>`).join('')}</div></div></section>` : ''}
+    ${(m && r.knowMore !== false) || r.abstract ? `<section class="pj-sec"><div class="pj-wrap pj-read">
+      ${m && r.knowMore !== false ? `<details class="pj-know"><summary>Know more <span>method details</span></summary>${r.brief ? '' : `<h4>The problem</h4><p>${esc(m.problem)}</p>`}<h4>How</h4><ul>${m.approach.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>${r.brief ? '' : `<h4>Outcome</h4><ul>${m.outcome.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`}</details>` : ''}
+      ${r.abstract ? `<details class="pj-know"><summary>Abstract</summary>${para(r.abstract)}</details>` : ''}
+    </div></section>` : ''}
+    <section class="pj-sec alt"><div class="pj-wrap pj-pns">${nav(prev, 'prev')}${nav(next, 'next')}</div></section>
+    <section class="pj-sec pj-last"><div class="pj-wrap">${foot}</div></section>`;
 }
 
-document.documentElement.classList.add('s-gallery');
-document.getElementById('main').innerHTML = `<section class="s-step s-hero" data-title="Projects"><div class="s-card" id="card">${intro()}</div></section>`;
-const card = document.getElementById('card');
+document.documentElement.classList.add('pj-lock', 'pj-grid-mode');
+const main = document.getElementById('main');
+main.innerHTML = `<section class="pj-view pj-gridview" id="gridView">${gridHTML()}</section><article class="pj-view pj-detail" id="detailView" hidden aria-live="polite"></article>`;
+const gridView = document.getElementById('gridView'), detailView = document.getElementById('detailView');
 
-let select = () => {};
-card.addEventListener('click', (e) => {
-  const pick = e.target.closest('[data-id]');
-  if (pick) select(pick.dataset.id);
-  if (e.target.closest('[data-back]')) select(null);
+// Lightbox
+const lb = document.createElement('div');
+lb.className = 'pj-lb'; lb.hidden = true;
+lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Image viewer');
+lb.innerHTML = '<button class="pj-lb-x" aria-label="Close">×</button><button class="pj-lb-n prev" aria-label="Previous image">←</button><figure><img alt=""><figcaption></figcaption></figure><button class="pj-lb-n next" aria-label="Next image">→</button>';
+document.body.appendChild(lb);
+let lbItems = [], lbIdx = 0, lbFrom = null;
+const lbShow = () => { const it = lbItems[lbIdx]; lb.querySelector('img').src = it.src; lb.querySelector('img').alt = it.caption; lb.querySelector('figcaption').textContent = it.caption; lb.classList.toggle('single', lbItems.length < 2); };
+const lbOpen = (items, i, from) => { lbItems = items; lbIdx = i; lbFrom = from; lbShow(); lb.hidden = false; requestAnimationFrame(() => lb.classList.add('on')); lb.querySelector('.pj-lb-x').focus(); };
+const lbClose = () => { lb.classList.remove('on'); setTimeout(() => { lb.hidden = true; }, reduceMotion ? 0 : 200); lbFrom?.focus(); };
+lb.addEventListener('click', (e) => {
+  if (e.target.closest('.pj-lb-x') || e.target === lb) lbClose();
+  else if (e.target.closest('.next')) { lbIdx = (lbIdx + 1) % lbItems.length; lbShow(); }
+  else if (e.target.closest('.prev')) { lbIdx = (lbIdx + lbItems.length - 1) % lbItems.length; lbShow(); }
+});
+
+// Filters
+const filt = { domain: '', tool: '' };
+function applyFilters(animate = true) {
+  let n = 0;
+  gridView.querySelectorAll('.pj-card').forEach((c) => {
+    const ok = (!filt.domain || c.dataset.domain === filt.domain) && (!filt.tool || c.dataset.tools.split('|').includes(filt.tool));
+    c.hidden = !ok;
+    if (ok) { n += 1; if (animate) { c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); } }
+  });
+  document.getElementById('pjCount').textContent = `Showing ${n} of ${repos.length} projects`;
+  document.getElementById('pjEmpty').hidden = n > 0;
+}
+gridView.addEventListener('click', (e) => {
+  const chip = e.target.closest('.pj-chip');
+  if (!chip) return;
+  const row = chip.parentElement;
+  filt[row.dataset.group] = chip.dataset.val;
+  row.querySelectorAll('.pj-chip').forEach((c) => c.classList.toggle('on', c === chip));
+  applyFilters();
+});
+applyFilters(false);
+
+// Routing
+let view = null, mode = 'fig', gridTop = 0, swapTimer = 0, current = null;
+const setTitle = (r) => { document.title = `${r ? r.name : 'Projects'} | Sai Kiran Kumar Nalla, PhD`; };
+const goto = (id) => {
+  if (id) location.hash = id;
+  else { history.pushState(null, '', location.pathname); route(); }
+};
+function replay(el) { el.classList.remove('is-in'); void el.offsetWidth; el.classList.add('is-in'); }
+function route() {
+  const r = byId[location.hash.slice(1)] || null;
+  clearTimeout(swapTimer);
+  setTitle(r);
+  const first = view === null, quick = first || reduceMotion;
+  if (r) {
+    if (view === 'grid') gridTop = gridView.scrollTop;
+    current = r.id;
+    detailView.innerHTML = detailHTML(r, mode);
+    detailView.dataset.domain = r.domain;
+    detailView.hidden = false;
+    detailView.scrollTop = 0;
+    document.documentElement.classList.remove('pj-grid-mode');
+    replay(detailView);
+    gridView.classList.add('is-out');
+    swapTimer = setTimeout(() => { gridView.hidden = true; }, quick ? 0 : 260);
+    if (quick) gridView.hidden = true;
+    detailView.querySelector('#pjTitle')?.focus({ preventScroll: true });
+    view = 'detail';
+  } else {
+    const was = current;
+    current = null;
+    gridView.hidden = false;
+    document.documentElement.classList.add('pj-grid-mode');
+    void gridView.offsetWidth;
+    gridView.classList.remove('is-out');
+    gridView.scrollTop = first ? 0 : gridTop;
+    detailView.classList.remove('is-in');
+    swapTimer = setTimeout(() => { detailView.hidden = true; }, quick ? 0 : 260);
+    if (quick) detailView.hidden = true;
+    if (view === 'detail' && was) gridView.querySelector(`[data-id="${was}"]`)?.focus({ preventScroll: true });
+    view = 'grid';
+  }
+  setMode(mode);
+}
+function setMode(m) {
+  mode = m;
+  detailView.dataset.mode = m;
+  detailView.querySelectorAll('.pj-tabs button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.mode === m)));
+}
+detailView.addEventListener('click', (e) => {
+  if (e.target.closest('[data-back]')) { goto(null); return; }
+  const tab = e.target.closest('.pj-tabs button');
+  if (tab) { setMode(tab.dataset.mode); return; }
+  const b = e.target.closest('[data-lb]');
+  if (b && current) lbOpen(imagesOf(byId[current]), +b.dataset.lb, b);
+});
+addEventListener('hashchange', route);
+addEventListener('popstate', route);
+addEventListener('keydown', (e) => {
+  if (!lb.hidden) {
+    if (e.key === 'Escape') lbClose();
+    else if (e.key === 'ArrowRight') lb.querySelector('.next').click();
+    else if (e.key === 'ArrowLeft') lb.querySelector('.prev').click();
+    return;
+  }
+  if (e.key === 'Escape' && current) goto(null);
 });
 
 runPage({
   active: 'projects',
-  build({ THREE, scene, camera, reduceMotion }) {
+  build({ THREE, scene, camera, renderer, lowPower }) {
     const V = (x, y, z) => new THREE.Vector3(x, y, z);
     const std = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.5, ...o });
     const glow = (color, o = {}) => new THREE.MeshBasicMaterial({ color, transparent: true, ...o });
-
-    // ── The wall of tiles.
-    function tileTexture(r) {
-      const c = document.createElement('canvas');
-      c.width = 640; c.height = 400;
-      const g = c.getContext('2d');
-      const grd = g.createLinearGradient(0, 0, 640, 400);
-      grd.addColorStop(0, '#26161c'); grd.addColorStop(1, '#0e0a0e');
-      g.fillStyle = grd; g.fillRect(0, 0, 640, 400);
-      g.strokeStyle = 'rgba(210,74,74,0.75)'; g.lineWidth = 4; g.strokeRect(8, 8, 624, 384);
-      g.fillStyle = '#d24a4a'; g.font = '600 24px "DM Sans", sans-serif'; g.fillText(r.kind.toUpperCase(), 40, 70);
-      g.fillStyle = '#f2ece4'; g.font = '46px "Zen Antique", serif';
-      let line = '', y = 140;
-      for (const w of r.name.split(' ')) { if (g.measureText(line + w).width > 560) { g.fillText(line, 40, y); line = ''; y += 54; } line += w + ' '; }
-      g.fillText(line, 40, y);
-      g.fillStyle = 'rgba(242,236,228,0.6)'; g.font = '24px "DM Sans", sans-serif';
-      g.fillText(`${r.years} · ${r.context}`.slice(0, 46), 40, 350);
-      const t = new THREE.CanvasTexture(c);
-      t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
-      return t;
-    }
-    const wall = new THREE.Group();
-    scene.add(wall);
-    // Three columns; the last row is centred.
-    const COLS = 3, rows = Math.ceil(repos.length / COLS);
-    const tiles = repos.map((r, i) => {
-      const row = Math.floor(i / COLS), col = i % COLS, n = Math.min(COLS, repos.length - row * COLS);
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 1.625), new THREE.MeshBasicMaterial({ map: tileTexture(r), transparent: true }));
-      const x = (col - (n - 1) / 2) * 2.85 + 1.1;
-      m.userData = { id: r.id, home: V(x, ((rows - 1) / 2 - row) * 1.85, -Math.abs(x - 1.1) * 0.15) };
-      m.position.copy(m.userData.home);
-      m.rotation.y = -(x - 1.1) * 0.05;
-      wall.add(m);
-      return m;
-    });
-    document.fonts?.ready.then(() => tiles.forEach((m, i) => { m.material.map = tileTexture(repos[i]); }));
-
-    // ── One explainer per project; only the selected one is shown.
     const explainers = {};
-    // Explainers share one stage to the right of the card.
     const stage = new THREE.Group();
-    stage.position.set(1.4, 0, 0);
-    stage.scale.setScalar(0.72);
     scene.add(stage);
     const make = (id, build) => { const g = new THREE.Group(); g.visible = false; stage.add(g); explainers[id] = { g, tick: build(g), s: 0 }; };
 
@@ -260,54 +378,41 @@ runPage({
     });
     Object.values(explainers).forEach((ex) => { ex.base = ex.g.scale.x; });
 
-    // ── Selection, hover and deep links.
-    let current = null, hover = null;
-    const raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
-    const canvas = document.getElementById('stage');
-    const pickTile = (e) => { pointer.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); raycaster.setFromCamera(pointer, camera); return raycaster.intersectObjects(tiles)[0]?.object || null; };
-    canvas.addEventListener('pointermove', (e) => { if (current) return; hover = pickTile(e); canvas.style.cursor = hover ? 'pointer' : 'default'; });
-    canvas.addEventListener('click', (e) => { if (current) return; const tl = pickTile(e); if (tl) select(tl.userData.id); });
-    select = (id) => {
-      current = id && explainers[id] ? id : null;
-      hover = null;
-      const r = repos.find((x) => x.id === current);
-      card.innerHTML = r ? detail(r) : intro();
-      card.scrollTop = 0;
-      document.title = `${r ? r.name : 'Projects'} | Sai Kiran Kumar Nalla, PhD`;
-      if ((location.hash.slice(1) || null) !== current) history.pushState(null, '', current ? `#${current}` : location.pathname);
-    };
-    addEventListener('popstate', () => select(location.hash.slice(1) || null));
-    addEventListener('keydown', (e) => { if (e.key === 'Escape' && current) select(null); });
-    if (location.hash.length > 1) select(location.hash.slice(1));
+    // The page starts on the 3D explainer where the machine can afford it.
+    if (!lowPower && !reduceMotion && !isNarrow()) { mode = '3d'; if (view === 'detail') setMode('3d'); }
 
-    const camPos = V(0, 0.4, 17), want = V();
+    const ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit = V(0, 0, 0);
+    const DIST = 13;
+    const baseRatio = Math.min(devicePixelRatio, lowPower ? 1.5 : 1.75);
+    let lowRes = false;
     return {
-      keyframes: [{ pos: [0, 0.4, 17], look: [0, 0, 0] }],
+      keyframes: [{ pos: [0, 0, DIST], look: [0, 0, 0] }],
       update(t, p, dt) {
-        const time = reduceMotion ? 0 : t, k = Math.min(1, dt * 3);
-        // On phones the card fills the bottom 55 % of the screen, so the wall and the explainers
-        // move up into the free band above it instead of sitting behind the card.
-        const narrow = innerWidth <= 860;
-        wall.position.set(narrow ? -0.6 : 0, narrow ? 2.4 : 0, 0);
-        wall.scale.setScalar(narrow ? 0.55 : 1);
-        stage.position.set(narrow ? 0 : 1.4, narrow ? 1.9 : 0, 0);
-        stage.scale.setScalar(narrow ? 0.4 : 0.72);
-        tiles.forEach((m) => {
-          const tgt = current ? m.userData.home.clone().multiplyScalar(1.1).add(V(0, 0, -7)) : m.userData.home.clone().add(V(0, 0, m === hover ? 0.4 : 0));
-          m.position.lerp(tgt, k);
-          m.material.opacity += ((current ? 0.04 : m === hover ? 1 : 0.9) - m.material.opacity) * k;
-        });
+        const time = reduceMotion ? 0 : t, k = reduceMotion ? 1 : Math.min(1, dt * 4);
+        // Cheap rendering while the grid is showing; the canvas is hidden then.
+        const wantLow = view !== 'detail';
+        if (wantLow !== lowRes) { lowRes = wantLow; renderer.setPixelRatio(wantLow ? 0.25 : baseRatio); }
+        camera.position.set(0, 0, DIST); camera.lookAt(0, 0, 0); camera.updateMatrixWorld();
+        const el = document.getElementById('pjStage');
+        let live = view === 'detail' && mode === '3d' && !isNarrow() && el;
+        if (live) {
+          const rc = el.getBoundingClientRect();
+          live = rc.width > 40 && rc.height > 40 && rc.bottom > 0 && rc.top < innerHeight;
+          if (live) {
+            ray.setFromCamera({ x: ((rc.left + rc.width / 2) / innerWidth) * 2 - 1, y: -(((rc.top + rc.height / 2) / innerHeight) * 2 - 1) }, camera);
+            if (ray.ray.intersectPlane(plane, hit)) stage.position.copy(hit);
+            const upp = (2 * Math.tan((camera.fov * Math.PI) / 360) * DIST) / innerHeight;
+            stage.scale.setScalar(Math.min((rc.width * upp) / 11, (rc.height * upp) / 6.2));
+          }
+        }
         for (const [id, ex] of Object.entries(explainers)) {
-          ex.s += ((id === current ? 1 : 0) - ex.s) * k;
+          ex.s += ((live && id === current ? 1 : 0) - ex.s) * k;
           ex.g.visible = ex.s > 0.01;
           if (ex.g.visible) { ex.g.scale.setScalar(ex.s * ex.base); ex.tick(time, dt); }
         }
-        // The page drives its own camera: a gentle drift, a little closer in the detail view.
-        want.set(Math.sin(time * 0.1) * 0.6, 0.4 + Math.sin(time * 0.13) * 0.2, current ? 13 : 17);
-        camPos.lerp(want, k);
-        camera.position.copy(camPos);
-        camera.lookAt(0, 0, 0);
       },
     };
   },
 });
+
+route();

@@ -1,42 +1,81 @@
 // VeriTomiX: a physics-based test bench for medical imaging, with CASSOULET as its simulation engine.
-// One continuous 3D scene, driven by scroll:
-//   Hero        the scanner model and the CASSOULET abdominal phantom waiting on the couch.
-//   Why         lesions of known size and uptake appear inside the phantom (the answer key).
-//   CASSOULET   the phantom slides into the gantry; photon pairs fire on the detector ring.
-//   Scanners    emulated, research-based Discovery MI 5-ring and Omni Legend 32 models (toggle).
-//   Pipeline    data leave the scanner: sinogram -> reconstructed slice -> evaluation dataset.
-//   Validation  the NEMA IEC phantom takes the phantom's place (physical validation case studies).
-//   Simulation  the abdominal phantom returns with its lesions (simulation case studies).
-//   Goals       the dataset grid is scored against truth (gauge).
-//   Team        scanner and phantom become a glowing physics-informed digital twin (future goal).
+// Organisation-style page: full-bleed hero, alternating split sections, wide bands, a case-study grid with a
+// study viewer, a horizontal timeline and a closing band. One 3D scene drives every "stage" on the page:
+// each section carries a .vx-stage window; the scene is composed into whichever window is in view and the
+// canvas is clipped to it, so the 3D never sits behind body text.
+//   0 Hero        the scanner model and the CASSOULET abdominal phantom waiting on the couch.
+//   1 Why         lesions of known size and uptake appear inside the phantom (the answer key).
+//   2 CASSOULET   the phantom slides into the gantry; photon pairs fire on the detector ring.
+//   3 Scanners    emulated, research-based Discovery MI 5-ring and Omni Legend 32 models (tabs).
+//   4 Phantoms    the abdominal phantom and its lesions, or the NEMA IEC phantom (picker).
+//   5 Pipeline    data leave the scanner: sinogram -> reconstructed slice -> evaluation dataset.
+//   6 Validation  the NEMA IEC phantom takes the phantom's place (physical validation case studies).
+//   7 Simulation  reconstruction and dataset (simulation case studies).
+//   8 Timeline    one 2D slice (MATLAB) against the full 3D volume (Python, GPU).
+//   9 Goals       the dataset grid is scored against truth (gauge).
+//  10 Team        scanner and phantom become a glowing physics-informed digital twin (future goal).
 // The real phantom mesh loads lazily; a light procedural stand-in is shown until it arrives.
-// Reduced motion shows one still, fully labelled frame per step; low-power devices get fewer effects.
+// Reduced motion shows one still, fully labelled frame per stage; low-power devices get fewer effects,
+// and the scene is not drawn at all while no stage is on screen.
 import vtx from '../../content/veritomix.json';
 import { runPage } from './engine.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { SCANNERS, buildScanner } from './veritomix-scanners.js';
 import { loadAbdominalPhantom, buildNema } from './veritomix-phantom.js';
+import { initUI } from './veritomix-ui.js';
 import './veritomix.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const fig = (f) => `<figure class="s-fig vx-fig"><img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy" decoding="async"><figcaption>${esc(f.caption)}</figcaption></figure>`;
-const list = (a) => `<ul class="s-list">${a.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
-const chips = (a) => `<div class="s-chips vx-chips">${a.map((x) => `<span>${esc(x)}</span>`).join('')}</div>`;
+const list = (a, cls = 'vx-list') => `<ul class="${cls}">${a.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
+const chips = (a) => `<div class="vx-chips">${a.map((x) => `<span>${esc(x)}</span>`).join('')}</div>`;
+// A figure that opens large in the lightbox; figures with the same group page through together.
+const zoom = (f, group, cls = '') => `<figure class="vx-f ${cls}"><button type="button" class="vx-zoom" data-src="${esc(f.src)}" data-cap="${esc(f.caption)}" data-group="${esc(group)}" aria-label="Enlarge figure: ${esc(f.caption)}">
+    <img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy" decoding="async"><span class="vx-zoom-i" aria-hidden="true"></span></button><figcaption>${esc(f.caption)}</figcaption></figure>`;
 const C5 = vtx.cassoulet, SC = vtx.scanners, PHS = vtx.phantoms, TL = vtx.timeline;
-const caseCard = (c) => `<article class="vx-case">
-    <p class="vx-case-k">${esc(c.kicker)}</p><h3>${esc(c.name)}</h3>${chips(c.chips)}
-    ${c.lede ? `<p>${esc(c.lede)}</p>` : ''}${c.gsr ? `<dl class="vx-gsr"><dt>Goal</dt><dd>${esc(c.gsr.goal)}</dd><dt>Simulated</dt><dd>${esc(c.gsr.simulated)}</dd><dt>Results</dt><dd>${esc(c.gsr.results)}</dd></dl>` : ''}${c.fig ? fig(c.fig) : ''}
-    ${c.more.length || c.figs.length ? `<details class="s-know"><summary>Know more <span class="s-meta">${c.figs.length ? `details and ${c.figs.length} more figure${c.figs.length > 1 ? 's' : ''}` : 'details'}</span></summary>
-      ${list(c.more)}${c.figs.map(fig).join('')}
-    </details>` : ''}</article>`;
+const WN = C5.whatsNew;
+const feat = (f) => `<article class="vx-feat${f.fig ? ' vx-feat-im' : ''}">${f.fig ? zoom(f.fig, 'new') : ''}<div class="vx-feat-b"><span>${esc(f.kicker)}</span><b>${esc(f.name)}</b><p>${esc(f.text)}</p></div></article>`;
+const logo = (cls) => `<span class="${cls}" role="img" aria-label="VeriTomiX">
+    <img class="vx-logo-d" src="/media/veritomix/veritomix-logo-ondark.webp" alt="" width="960" height="326">
+    <img class="vx-logo-l" src="/media/veritomix/veritomix-logo-onlight.webp" alt="" width="960" height="326"></span>`;
+// stage(step, focus, focusPhone): focus = "left top right bottom" fractions of the window where the subject is composed.
+const stage = (step, focus = '0.04 0.06 0.96 0.94', focusM = focus, cls = '') => `<div class="vx-stage ${cls}" data-step="${step}" data-focus="${focus}" data-focus-m="${focusM}" aria-hidden="true"></div>`;
+const head = (kicker, title, lede, cls = '') => `<header class="vx-sh ${cls} vx-rv">
+    <p class="vx-k">${kicker}</p><h2>${title}</h2>${lede ? `<p class="vx-lede">${esc(lede)}</p>` : ''}</header>`;
+
+// Pipeline icons (simple line drawings, theme-coloured through currentColor).
+const ICON = [
+  '<path d="M9 3h6l1.5 4-1 5 1 9h-9l1-9-1-5z"/><path d="M10 9h4"/>',
+  '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
+  '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M5 7l3 2M19 17l-3-2"/>',
+  '<rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><circle cx="14" cy="10" r="2.5"/><path d="M3.5 16l5-4 4 3 3-2 5 4"/>',
+  '<path d="M12 3l8.5 4.2L12 11.4 3.5 7.2z"/><path d="M3.5 12l8.5 4.2 8.5-4.2"/><path d="M3.5 16.6l8.5 4.2 8.5-4.2"/>',
+];
+const svg = (d) => `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+
+// Case-study cards (grid) and their full view (opened in the study viewer).
+const CASES = ['validation', 'simulation'].flatMap((k) => vtx.cases[k].items.map((c, i) => ({ ...c, id: `${k[0]}${i}`, set: k })));
+const caseImg = (c) => c.fig || c.figs?.[0] || null;
+const caseCard = (c) => {
+  const im = caseImg(c);
+  return `<article class="vx-cc">
+    <div class="vx-cc-im${im ? '' : ' vx-cc-none'}">${im ? `<img src="${esc(im.src)}" alt="" loading="lazy" decoding="async">` : `<span>${esc(c.chips[0] || c.kicker)}</span>`}</div>
+    <div class="vx-cc-b">
+      <p class="vx-cc-k">${esc(c.kicker)}</p><h3>${esc(c.name)}</h3>
+      ${c.gsr ? `<p class="vx-cc-g"><b>Goal</b> ${esc(c.gsr.goal)}</p>` : `<p class="vx-cc-g">${esc(c.lede)}</p>`}
+      ${chips(c.chips.slice(0, 3))}
+      <button type="button" class="vx-cc-open" data-case="${c.id}">Open the study<span aria-hidden="true">→</span></button>
+    </div></article>`;
+};
 const TOOL = { matlab: ['/media/logos/tools/matlab.webp', 'MATLAB'], python: ['/media/logos/tools/python.svg', 'Python'], gpu: ['/media/logos/tools/cuda.svg', 'Python + GPU'], paper: ['', 'Preprint'], next: ['', 'Next'] };
-const tlItem = (t) => {
-  const [logo, label] = TOOL[t.tool] || ['', ''];
-  return `<li class="vx-tl-${t.tool}"><div class="vx-tl-dot" aria-hidden="true">${logo ? `<img src="${logo}" alt="" width="16" height="16" loading="lazy">` : ''}</div>
-    <p class="vx-tl-date">${esc(t.date)}${t.approx ? ' <em>approx.</em>' : ''} · <span>${esc(label)}</span></p>
-    <b>${esc(t.name)}</b><p>${esc(t.text)}</p>
-    ${t.img ? `<figure class="vx-tl-img"><img src="${esc(t.img.src)}" alt="${esc(t.img.caption)}" loading="lazy" decoding="async"><figcaption>${esc(t.img.caption)}</figcaption></figure>` : ''}
-    ${t.more ? `<details class="s-know"><summary>More screens <span class="s-meta">${t.more.length}</span></summary>${t.more.map(fig).join('')}</details>` : ''}</li>`;
+const tlItem = (t, i) => {
+  const [lg, label] = TOOL[t.tool] || ['', ''];
+  const g = `tl${i}`;
+  return `<li class="vx-tl-i vx-tl-${t.tool}">
+    <div class="vx-tl-dot" aria-hidden="true">${lg ? `<img src="${lg}" alt="" width="18" height="18" loading="lazy">` : ''}</div>
+    <p class="vx-tl-date">${esc(t.date)}${t.approx ? ' <em>approx.</em>' : ''}<span>${esc(label)}</span></p>
+    <h3>${esc(t.name)}</h3><p>${esc(t.text)}</p>
+    ${t.img ? zoom(t.img, g, 'vx-tl-f') : ''}
+    ${t.more ? `<div class="vx-tl-more">${t.more.map((f) => zoom(f, g, 'vx-thumb')).join('')}</div>` : ''}</li>`;
 };
 
 // ── Standalone organisation header (the shared portfolio nav is hidden on this page).
@@ -52,105 +91,158 @@ document.getElementById('vxHead').innerHTML = `
     <a class="vx-back" href="/">← Sai's portfolio</a>
   </div>`;
 
-// ── Cards (left column)
+const VAL = vtx.cases.validation, SIM = vtx.cases.simulation;
+const caseTitle = (k) => esc(vtx.cases[k].title.replace('Case studies: ', '').replace(/^./, (c) => c.toUpperCase()));
+
 document.getElementById('main').innerHTML = `
-  <section class="s-step s-hero" id="mission" data-title="VeriTomiX"><div class="s-card">
-    <p class="s-kicker">${esc(vtx.status)}</p>
-    <h1 class="vx-h1"><span class="vx-logo" role="img" aria-label="VeriTomiX">
-      <img class="vx-logo-d" src="/media/veritomix/veritomix-logo-ondark.webp" alt="" width="960" height="326">
-      <img class="vx-logo-l" src="/media/veritomix/veritomix-logo-onlight.webp" alt="" width="960" height="326">
-    </span></h1>
-    <p class="s-lede">${esc(vtx.mission)}</p>
-    <p class="vx-team-line">${esc(vtx.status)} · ${vtx.team.map((t) => esc(t.name)).join(' &amp; ')}</p>
-    <p class="s-scroll">Scroll to follow a case through the test bench</p>
-  </div></section>
-
-  <section class="s-step" data-title="Why ground truth"><div class="s-card">
-    <p class="s-kicker">The problem</p><h2>${esc(vtx.why.title)}</h2>
-    <p class="s-lede">${esc(vtx.why.lede)}</p>
-    <ul class="vx-compare">${vtx.why.compare.map((c) => `<li><b>${esc(c.name)}</b><span>${esc(c.good)}</span><em>${esc(c.gap)}</em></li>`).join('')}</ul>
-    <p>${esc(vtx.why.answer)}</p>
-    <p class="vx-watch"><span>In the 3D</span>The CASSOULET abdominal phantom, with lesions of known size and uptake placed in the liver, a para-aortic node and the lung.</p>
-  </div></section>
-
-  <section class="s-step" id="cassoulet" data-title="CASSOULET"><div class="s-card">
-    <p class="s-kicker">The engine inside VeriTomiX</p>
-    <h2 class="vx-cass-h"><img class="vx-cass-logo" src="/media/cassoulet-logo.webp" alt="CASSOULET" width="1600" height="419" loading="lazy"></h2>
-    <p class="s-meta vx-exp">${esc(C5.expansion)}</p>
-    <p class="vx-motto">${esc(C5.motto)}</p>
-    <p class="s-lede">${esc(C5.lede)}</p>
-    <div class="vx-tests">${C5.twoTests.map((t) => `<div><b>${esc(t.name)}</b><span>${esc(t.steps)}</span></div>`).join('<i aria-hidden="true">+</i>')}</div>
-    <p class="vx-small">${esc(C5.compare)}</p>
-    <h3>Lesion library</h3>${chips(C5.library)}
-    <h3>Four modules, one session</h3>
-    <div class="vx-modules vx-modules-4">${C5.modules.map((m, i) => `<div><span>${String(i + 1).padStart(2, '0')}</span><b>${esc(m.name)}</b><p>${esc(m.text)}</p></div>`).join('')}</div>
-    <p class="vx-small">${esc(C5.session)}</p>
-    ${C5.main ? fig(C5.main) : ''}
-    <details class="s-know"><summary>Inside the desktop app <span class="s-meta">${C5.app.length} screens</span></summary>${C5.app.map(fig).join('')}</details>
-    <details class="s-know"><summary>Physics in the data model <span class="s-meta">what is simulated</span></summary>${list(C5.physics)}</details>
-    <details class="s-know"><summary>MuPET <span class="s-meta">the multiphysics route</span></summary><p>${esc(C5.mupet.text)}</p>${C5.mupet.figs.map(fig).join('')}
-      <a class="s-more" href="/sections/publications.html">MuPET preprint on the Publications page →</a></details>
-    <details class="s-know"><summary>Name and method <span class="s-meta">why "cassoulet"</span></summary><p>${esc(C5.name)}</p><p>${esc(C5.ai)}</p></details>
-  </div></section>
-
-  <section class="s-step" id="scanners" data-title="Scanner models"><div class="s-card">
-    <p class="s-kicker">${esc(SC.title)}</p><h2>Two scanners, one method <span class="vx-badge">${esc(SC.badge)}</span></h2>
-    <p class="s-lede">${esc(SC.lede)}</p>
-    <div class="vx-toggle" role="group" aria-label="Scanner model in the 3D view">
-      ${SC.models.map((m, i) => `<button type="button" data-scanner="${m.id}" aria-pressed="${i === 0}">${esc(m.name)}</button>`).join('')}
+  <section class="vx-sec vx-hero" id="mission" data-nav="mission">
+    ${stage(0, '0.30 0.10 1 0.80', '0 0.16 1 0.56', 'vx-bleed')}
+    <div class="vx-hero-in">
+      <div class="vx-hero-l vx-rv">
+        <p class="vx-k">${esc(vtx.status)}</p>
+        <h1 class="vx-h1">${logo('vx-logo')}</h1>
+      </div>
+      <div class="vx-hero-r vx-rv">
+        <p class="vx-lede">${esc(vtx.mission)}</p>
+        <p class="vx-team-line">${vtx.team.map((t) => esc(t.name)).join(' &amp; ')}</p>
+        <div class="vx-cta"><a class="vx-btn" href="#cassoulet">Inside the test bench</a><a class="vx-btn vx-btn-g" href="#cases">Case studies</a></div>
+      </div>
     </div>
-    <div class="vx-scanners">${SC.models.map((m) => `<div data-model="${m.id}"><b>${esc(m.name)}</b></div>`).join('')}</div>
-    ${fig(SC.figures[0])}
-    <details class="s-know"><summary>Published, derived, assumed <span class="s-meta">how the models are built</span></summary>
-      ${list(SC.notes)}${SC.figures.slice(1).map(fig).join('')}
-    </details>
-  </div></section>
+    <p class="vx-cue" aria-hidden="true">Scroll</p>
+  </section>
 
-  <section class="s-step" id="phantoms" data-title="Phantoms"><div class="s-card">
-    <p class="s-kicker">${esc(PHS.title)}</p><h2>Objects with known truth</h2>
-    <p class="s-lede">${esc(PHS.lede)}</p>
-    ${PHS.items.map((it) => `<article class="vx-case"><h3>${esc(it.name)}</h3><p>${esc(it.text)}</p>${fig(it.fig)}
-      ${it.figs.length ? `<details class="s-know"><summary>More figures <span class="s-meta">${it.figs.length}</span></summary>${it.figs.map(fig).join('')}</details>` : ''}</article>`).join('')}
-  </div></section>
-
-  <section class="s-step" data-title="Pipeline"><div class="s-card">
-    <p class="s-kicker">The method</p><h2>${esc(vtx.pipeline.title)}</h2>
-    <p class="s-lede">${esc(vtx.pipeline.lede)}</p>
-    <ol class="vx-flow">${vtx.pipeline.steps.map((s) => `<li><b>${esc(s.name)}</b><p>${esc(s.text)}</p></li>`).join('')}</ol>
-    <p class="vx-watch"><span>In the 3D</span>Photon pairs hit the detector ring, the counts build a sinogram, the sinogram is reconstructed into a slice, and each slice joins a dataset with its truth.</p>
-  </div></section>
-
-  ${['validation', 'simulation'].map((k, i) => `<section class="s-step"${i ? '' : ' id="cases"'} data-title="${esc(vtx.cases[k].title)}"><div class="s-card">
-    <p class="s-kicker">Case studies</p><h2>${esc(vtx.cases[k].title.replace('Case studies: ', '').replace(/^./, (c) => c.toUpperCase()))}</h2>
-    <p class="s-lede">${esc(vtx.cases[k].lede)}</p>
-    ${vtx.cases[k].items.map(caseCard).join('')}
-  </div></section>`).join('')}
-
-  <section class="s-step" id="timeline" data-title="Timeline"><div class="s-card">
-    <p class="s-kicker">Development timeline</p><h2>${esc(TL.title)}</h2>
-    <p class="s-lede">${esc(TL.lede)}</p>
-    <ol class="vx-tl">${TL.items.map(tlItem).join('')}</ol>
-    <p class="vx-watch"><span>In the 3D</span>The ring alternates between one 2D slice, as in the MATLAB version, and the full 3D volume of the Python GPU engine.</p>
-  </div></section>
-
-  <section class="s-step" data-title="Goals"><div class="s-card">
-    <p class="s-kicker">What it is for</p><h2>Three goals</h2>
-    <div class="vx-goals">${vtx.goals.map((g) => `<div><span>${esc(g.kicker)}</span><b>${esc(g.name)}</b><p>${esc(g.text)}</p></div>`).join('')}</div>
-  </div></section>
-
-  <section class="s-step" id="team" data-title="Team and status"><div class="s-card">
-    <p class="s-kicker">Team &amp; status</p><h2>Who is behind it</h2>
-    <p class="vx-status"><span></span>${esc(vtx.status)}</p>
-    <ul class="vx-team">${vtx.team.map((t) => `<li><b>${esc(t.name)}</b><span>${esc(t.role)}</span></li>`).join('')}</ul>
-    <p>${esc(vtx.closing)}</p>
-    <p class="vx-watch"><span>In the 3D</span>The future goal: a physics-informed digital twin of the scanner and the phantom.</p>
-    <div class="s-links">
-      <a class="s-link" href="/sections/projects.html#cassoulet">CASSOULET on Projects</a>
-      <a class="s-link" href="/sections/research.html">PhD thesis</a>
-      <a class="s-link" href="/sections/builder.html">VeriTomiX Office (Agentic AI)</a>
-      <a class="s-link" href="/sections/contact.html">Contact</a>
+  <section class="vx-sec vx-split" id="why" data-nav="mission">
+    <div class="vx-split-t vx-rv">
+      <p class="vx-k">The problem</p><h2>${esc(vtx.why.title)}</h2>
+      <p class="vx-lede">${esc(vtx.why.lede)}</p>
+      <ul class="vx-compare vx-rv-g">${vtx.why.compare.map((c) => `<li><b>${esc(c.name)}</b><span>${esc(c.good)}</span><em>${esc(c.gap)}</em></li>`).join('')}</ul>
+      <p>${esc(vtx.why.answer)}</p>
     </div>
-  </div></section>`;
+    <div class="vx-split-s">${stage(1, '0.06 0.08 0.94 0.84')}<p class="vx-cap">The CASSOULET abdominal phantom, with lesions of known size and uptake in the liver, a para-aortic node and the lung.</p></div>
+  </section>
+
+  <section class="vx-sec vx-band-sec" id="cassoulet" data-nav="cassoulet">
+    <div class="vx-band">
+      ${stage(2, '0.44 0.08 0.98 0.92', '0 0.04 1 0.96')}
+      <div class="vx-over vx-rv">
+        <p class="vx-k">The engine inside VeriTomiX</p>
+        <h2 class="vx-cass-h"><img class="vx-cass-logo" src="/media/cassoulet-logo.webp" alt="CASSOULET" width="1600" height="419" loading="lazy"></h2>
+        <p class="vx-meta">${esc(C5.expansion)}</p>
+        <p class="vx-motto">${esc(C5.motto)}</p>
+        <p>${esc(C5.lede)}</p>
+      </div>
+    </div>
+    <div class="vx-wrap">
+      <div class="vx-tests vx-rv-g">${C5.twoTests.map((t, i) => `<div><span>Test ${i + 1}</span><b>${esc(t.name)}</b><p>${esc(t.steps)}</p></div>`).join('<i aria-hidden="true">+</i>')}</div>
+      <p class="vx-note vx-rv">${esc(C5.compare)}</p>
+      <h3 class="vx-h3 vx-rv">Four modules, one session</h3>
+      <div class="vx-modules vx-rv-g">${C5.modules.map((m, i) => `<div><span>${String(i + 1).padStart(2, '0')}</span><b>${esc(m.name)}</b><p>${esc(m.text)}</p></div>`).join('')}</div>
+      <p class="vx-note vx-rv">${esc(C5.session)}</p>
+      <div class="vx-lib vx-rv"><h3 class="vx-h3">Lesion library</h3>${chips(C5.library)}</div>
+      <h3 class="vx-h3 vx-rv">Inside the desktop app</h3>
+      <div class="vx-gallery vx-rv-g">${C5.app.map((f) => zoom(f, 'app')).join('')}</div>
+      <div class="vx-new vx-rv"><p class="vx-k">New</p><h3 class="vx-h3">${esc(WN.title)}</h3><p class="vx-note">${esc(WN.lede)}</p></div>
+      <div class="vx-feats vx-feats-top vx-rv-g">${WN.items.filter((f) => f.fig).map(feat).join('')}</div>
+      <div class="vx-feats vx-rv-g">${WN.items.filter((f) => !f.fig).map(feat).join('')}</div>
+      <div class="vx-acc vx-rv">
+        <details class="vx-d"><summary>Physics in the data model<span>what is simulated</span></summary>${list(C5.physics)}</details>
+        <details class="vx-d"><summary>MuPET<span>the multiphysics route</span></summary><p>${esc(C5.mupet.text)}</p>
+          <div class="vx-gallery vx-g2">${C5.mupet.figs.map((f) => zoom(f, 'mupet')).join('')}</div>
+          <a class="vx-more" href="/sections/publications.html">MuPET preprint on the Publications page →</a></details>
+        <details class="vx-d"><summary>Name and method<span>why "cassoulet"</span></summary><p>${esc(C5.name)}</p><p>${esc(C5.ai)}</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="vx-sec vx-scan" id="scanners" data-nav="scanners">
+    ${head(esc(SC.title), `Two scanners, one method <span class="vx-badge">${esc(SC.badge)}</span>`, SC.lede, 'vx-c')}
+    <div class="vx-tabs vx-toggle vx-rv" role="group" aria-label="Scanner model in the 3D view">
+      ${SC.models.map((m, i) => `<button type="button" data-scanner="${m.id}" aria-pressed="${i === 0}"><span>Model ${String.fromCharCode(65 + i)}</span><b>${esc(m.name)}</b></button>`).join('')}
+    </div>
+    <div class="vx-scanners" hidden>${SC.models.map((m) => `<div data-model="${m.id}"></div>`).join('')}</div>
+    <div class="vx-wide">${stage(3, '0.08 0.06 0.92 0.94')}</div>
+    <div class="vx-wrap vx-cols">
+      <div class="vx-rv"><h3 class="vx-h3">Published, derived, assumed</h3><p class="vx-meta">How the models are built</p>${list(SC.notes)}</div>
+      <div class="vx-gallery vx-g2 vx-rv-g">${SC.figures.map((f) => zoom(f, 'scan')).join('')}</div>
+    </div>
+  </section>
+
+  <section class="vx-sec vx-split vx-flip vx-phan" id="phantoms" data-nav="phantoms">
+    <div class="vx-split-s">${stage(4, '0.06 0.08 0.94 0.92')}</div>
+    <div class="vx-split-t vx-rv">
+      <p class="vx-k">${esc(PHS.title)}</p><h2>Objects with known truth</h2>
+      <p class="vx-lede">${esc(PHS.lede)}</p>
+      <div class="vx-ptabs" role="tablist" aria-label="Phantoms">${PHS.items.map((it, i) => `<button type="button" role="tab" id="vxPt${i}" aria-controls="vxPp${i}" aria-selected="${i === 0}" tabindex="${i ? -1 : 0}" data-phantom="${i}">${esc(it.name)}</button>`).join('')}</div>
+      ${PHS.items.map((it, i) => `<div class="vx-ppanel" role="tabpanel" id="vxPp${i}" aria-labelledby="vxPt${i}"${i ? ' hidden' : ''}>
+        <p>${esc(it.text)}</p>
+        <div class="vx-gallery ${it.figs.length ? 'vx-g2' : 'vx-g1'}">${[it.fig, ...it.figs].map((f) => zoom(f, `ph${i}`)).join('')}</div></div>`).join('')}
+    </div>
+  </section>
+
+  <section class="vx-sec vx-pipe-sec" id="pipeline" data-nav="cassoulet">
+    ${head('The method', esc(vtx.pipeline.title), vtx.pipeline.lede, 'vx-c')}
+    <div class="vx-wide vx-wide-s">${stage(5, '0.02 0.08 0.98 0.92', '0.02 0.06 0.98 0.94')}</div>
+    <ol class="vx-pipe vx-rv-g">${vtx.pipeline.steps.map((s, i) => `<li><span class="vx-pipe-ic">${svg(ICON[i])}</span><span class="vx-pipe-n">${String(i + 1).padStart(2, '0')}</span><b>${esc(s.name)}</b><p>${esc(s.text)}</p></li>`).join('')}</ol>
+  </section>
+
+  <section class="vx-sec vx-cases" id="cases" data-nav="cases">
+    <div class="vx-split vx-flip vx-inner">
+      <div class="vx-split-s">${stage(6, '0.06 0.1 0.94 0.9')}</div>
+      <div class="vx-split-t vx-rv"><p class="vx-k">Case studies</p><h2>${caseTitle('validation')}</h2><p class="vx-lede">${esc(VAL.lede)}</p>
+        <p class="vx-meta">${VAL.items.length} studies · open any card for the goal, the simulation, the results and every figure.</p></div>
+    </div>
+    <div class="vx-grid vx-rv-g">${CASES.filter((c) => c.set === 'validation').map(caseCard).join('')}</div>
+  </section>
+
+  <section class="vx-sec vx-cases" id="simulation" data-nav="cases">
+    <div class="vx-split vx-inner">
+      <div class="vx-split-t vx-rv"><p class="vx-k">Case studies</p><h2>${caseTitle('simulation')}</h2><p class="vx-lede">${esc(SIM.lede)}</p>
+        <p class="vx-meta">${SIM.items.length} studies</p></div>
+      <div class="vx-split-s">${stage(7, '0.04 0.1 0.96 0.9')}</div>
+    </div>
+    <div class="vx-grid vx-rv-g">${CASES.filter((c) => c.set === 'simulation').map(caseCard).join('')}</div>
+  </section>
+
+  <section class="vx-sec vx-tl-sec" id="timeline" data-nav="timeline">
+    <div class="vx-split vx-inner">
+      <div class="vx-split-t vx-rv"><p class="vx-k">Development timeline</p><h2>${esc(TL.title)}</h2><p class="vx-lede">${esc(TL.lede)}</p>
+        <p class="vx-cap vx-cap-l">In the 3D: the ring alternates between one 2D slice, as in the MATLAB version, and the full 3D volume of the Python GPU engine.</p></div>
+      <div class="vx-split-s vx-short">${stage(8, '0.06 0.1 0.94 0.9')}</div>
+    </div>
+    <div class="vx-tl-wrap">
+      <div class="vx-tl-nav"><button type="button" class="vx-tl-btn" data-dir="-1" aria-label="Earlier">←</button><button type="button" class="vx-tl-btn" data-dir="1" aria-label="Later">→</button></div>
+      <ol class="vx-tl" tabindex="0" aria-label="Timeline, scroll sideways">${TL.items.map(tlItem).join('')}</ol>
+    </div>
+  </section>
+
+  <section class="vx-sec vx-goals-sec" id="goals" data-nav="team">
+    ${head('What it is for', 'Three goals', '', 'vx-c')}
+    <div class="vx-wide vx-wide-g">${stage(9, '0.1 0.04 0.9 0.74', '0.04 0.04 0.96 0.96')}</div>
+    <div class="vx-goals vx-rv-g">${vtx.goals.map((g) => `<div><span>${esc(g.kicker)}</span><b>${esc(g.name)}</b><p>${esc(g.text)}</p></div>`).join('')}</div>
+  </section>
+
+  <section class="vx-sec vx-close" id="team" data-nav="team">
+    <div class="vx-band vx-band-c">
+      ${stage(10, '0.36 0.06 0.98 0.94', '0 0.04 1 0.96')}
+      <div class="vx-over vx-over-c vx-rv">
+        <p class="vx-k">Team &amp; status</p><h2>Who is behind it</h2>
+        <p class="vx-status"><span></span>${esc(vtx.status)}</p>
+        <p class="vx-cap vx-cap-l">The future goal: a physics-informed digital twin of the scanner and the phantom.</p>
+      </div>
+    </div>
+    <div class="vx-closing vx-rv-g">
+      <ul class="vx-team">${vtx.team.map((t) => `<li><b>${esc(t.name)}</b><span>${esc(t.role)}</span></li>`).join('')}</ul>
+      <p>${esc(vtx.closing)}</p>
+      <div class="vx-links">
+        <a href="/sections/projects.html#cassoulet">CASSOULET on Projects</a>
+        <a href="/sections/research.html">PhD thesis</a>
+        <a href="/sections/builder.html">VeriTomiX Office (Agentic AI)</a>
+        <a href="/sections/contact.html">Contact</a>
+      </div>
+    </div>
+  </section>`;
+
+initUI({ cases: CASES, esc, zoom, list, chips });
 
 // Theme toggle in the VeriTomiX header drives the engine's (hidden) portfolio toggle.
 {
@@ -563,13 +655,9 @@ runPage({
       const s = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 10), m); stations.add(s);
       return { s, m };
     });
-    const PIPE = ['Phantom', 'Lesions', 'Scanner', 'Reconstruction', 'Dataset'];
-    const stepper = document.createElement('div');
-    stepper.className = 'vx-label vx-mid';
-    stepper.innerHTML = `<ol class="vx-steps">${PIPE.map((x, i) => `<li data-n="${i + 1}">${x}</li>`).join('')}</ol>`;
-    layer.appendChild(stepper);
-    const stepItems = [...stepper.querySelectorAll('li')];
-    let stepCur = -2, stepOp = -1;
+    // The five pipeline cards under the stage light up in step with the packets travelling through the chain.
+    const stepItems = [...document.querySelectorAll('.vx-pipe li')];
+    let stepCur = -2;
     const setStep = (idx) => { if (idx === stepCur) return; stepCur = idx; stepItems.forEach((li, i) => { li.classList.toggle('on', i === idx); li.classList.toggle('done', i < idx); }); };
 
     // ════════ Digital twin overlays (phantom wireframe and activity field; scanner wireframes live in each model)
@@ -586,8 +674,8 @@ runPage({
     tag(nm('Abdominal phantom', 'CT-derived · organs, vessels, bones'), wp(abd, V(0, 0.42, 0)), () => band(prog, 0, 1.15), 'vx-up');
     tag(`${ico('/media/cassoulet-icon.webp')}${nm('CASSOULET', 'simulates the acquisition')}`, wp(scanners[0].group, V(0.4, -0.95, 0.9)), () => band(prog, 2, 2.2), 'vx-down');
     tag(nm('Detector ring', 'photon pairs land here'), () => tmpL.set(0.05, Math.sin(0.62) * 0.78, Math.cos(0.62) * 0.78 + 0.04), () => band(prog, 2, 2.2), 'vx-right', 'vx-sm');
-    lesions.forEach((L, i) => tag(nm(L.name, 'known size and uptake'), () => L.world.clone().add(V(0, 0.03, 0)), () => (band(prog, 1, 1.15) + band(prog, 4, 4.2)) * seg(prog, 0.7 + i * 0.08, 0.95 + i * 0.08), L.side, 'vx-sm'));
-    tag(nm('NEMA IEC body phantom', 'six hot spheres, lung insert'), wp(nema.group, V(0, 0.36, 0)), () => nemaA * band(prog, 6, 6.15), 'vx-up');
+    lesions.forEach((L, i) => tag(nm(L.name, 'known size and uptake'), () => L.world.clone().add(V(0, 0.03, 0)), () => (band(prog, 1, 1.15) + band(prog, 4, 4.2) * (1 - nemaA)) * seg(prog, 0.7 + i * 0.08, 0.95 + i * 0.08), L.side, 'vx-sm'));
+    tag(nm('NEMA IEC body phantom', 'six hot spheres, lung insert'), wp(nema.group, V(0, 0.36, 0)), () => nemaA * (band(prog, 6, 6.15) + band(prog, 4, 4.15)), 'vx-up');
     tag(nm('2D · one slice', 'MATLAB V1: Radon + 2.5D OSEM'), () => tmpL.set(0, 0.82, 0), () => tlA * (mode2D ? 1 : 0), 'vx-up');
     tag(nm('3D · full volume', 'Python + GPU: every line of response'), () => tmpL.set(0, 0.82, 0), () => tlA * (mode2D ? 0 : 1), 'vx-up');
     tag(nm('Digital twin', 'physics-informed · future'), wp(abd, V(0.1, 0.42, 0)), () => seg(prog, 9.6, 10), 'vx-up');
@@ -607,14 +695,43 @@ runPage({
       { c: [8.3, -0.45, 0], dir: [-0.18, 0.12, 1], w: 3.6, h: 4.6 }, // goals: dataset and score
       { c: [-0.6, -0.1, 0], dir: [-0.48, 0.36, 1], w: 6.4, h: 4.7 }, // twin
     ].map((f) => ({ c: V(...f.c), dir: V(...f.dir).normalize(), w: f.w, h: f.h }));
-    // Phone band: the pipeline frame closes in on the data products (no cards beside it to avoid).
+    // Phone stages are narrow: the pipeline and simulation frames close in on the data products.
     const FRP = FR.map((f, i) => (i === ST.pipe || i === ST.sim ? { c: V(5.55, 0.05, 0), dir: f.dir, w: 7.8, h: 3.9 } : f));
     const narrow = matchMedia('(max-width: 860px)');
     const headEl = document.getElementById('vxHead');
-    // Header anchors: highlight the section being read.
-    const ANCH = ['mission', 'mission', 'cassoulet', 'scanners', 'phantoms', null, 'cases', 'cases', 'timeline', null, 'team'];
-    const anchorEls = [...headEl.querySelectorAll('.vx-anchors a')];
-    let anchorCur = -1;
+    const canvas = document.getElementById('stage');
+
+    // ── Stages: windows in the page that the scene is composed into. Only the one in view is drawn;
+    //    the canvas and the label layer are clipped to it.
+    const stages = [...document.querySelectorAll('.vx-stage')].map((el) => {
+      const f = (k) => (el.dataset[k] || '0 0 1 1').split(' ').map(Number);
+      return { el, step: +el.dataset.step, focus: f('focus'), focusM: f('focusM'), bleed: el.classList.contains('vx-bleed'), r: null };
+    }).sort((x, y) => x.step - y.step);
+    let live = null, clipKey = '';
+    const R = { x: 0, y: 0, w: 1, h: 1 };
+    function measureStages() {
+      const H = innerHeight;
+      let best = null, bestA = 0;
+      for (const s of stages) {
+        s.r = s.el.getBoundingClientRect();
+        const vis = Math.max(0, Math.min(H, s.r.bottom) - Math.max(0, s.r.top));
+        if (vis > bestA + 1) { bestA = vis; best = s; }
+      }
+      return best;
+    }
+    // Scroll position -> continuous stage index: a plateau while a stage is in view, an eased hand-over between.
+    function readProgress() {
+      const H = innerHeight, a = H * 0.5;
+      const cs = stages.map((s) => (s.r ? s.r.top + s.r.height / 2 : 0));
+      if (a <= cs[0]) return 0;
+      for (let i = 0; i < cs.length - 1; i++) {
+        if (a >= cs[i + 1]) continue;
+        // Stage centres move up as the page scrolls: cs[i] < a < cs[i + 1].
+        const span = cs[i + 1] - cs[i], plateau = Math.min(H * 0.3, span * 0.3);
+        return i + clamp01((a - cs[i] - plateau) / Math.max(1, span - 2 * plateau));
+      }
+      return cs.length - 1;
+    }
     const fc = V(0, 0, 0), fd = V(0, 0, 0), look = V(0, 0, 0);
     const TAN = Math.tan((camera.fov * Math.PI) / 360);
     function frameCamera(p, t) {
@@ -626,22 +743,12 @@ runPage({
       fd.lerpVectors(A.dir, B.dir, f).normalize();
       // Interpolate the frame size in log space, so close-ups and wide shots hand over evenly.
       const w = Math.exp(Math.log(A.w) + (Math.log(B.w) - Math.log(A.w)) * f), h = Math.exp(Math.log(A.h) + (Math.log(B.h) - Math.log(A.h)) * f);
-      const W = innerWidth, H = layer.clientHeight || innerHeight;
-      const aspect = W / H;
-      let dist, sx = 0, sy = 0;
-      if (narrow.matches) {
-        camera.aspect = aspect; // the canvas is squeezed into the band; render at the band's aspect
-        camera.updateProjectionMatrix();
-        const nav = Math.min(0.36, (headEl.offsetHeight || 64) / H);
-        dist = Math.max(w / 0.88 / (2 * TAN * aspect), h / (0.9 - nav) / (2 * TAN));
-        sy = (nav / 2) * 2 * TAN * dist;
-      } else {
-        const cardR = (Math.min(520, W * 0.38) + W * 0.04 + 24) / W;
-        const avail = 1 - cardR - 0.06;
-        dist = Math.max(w / avail / (2 * TAN * aspect), h / 0.8 / (2 * TAN));
-        sx = ((cardR + 0.95) / 2 - 0.62) * 2 * TAN * aspect * dist; // engine view offset centres at 62%
-      }
-      look.set(fc.x - sx, fc.y + sy, fc.z);
+      const W = innerWidth, H = innerHeight, aspect = W / H;
+      camera.aspect = aspect;
+      // Fit the frame into the stage's focus area, and shift the projection so it is centred there.
+      const dist = Math.max(w / ((R.w / W) * 2 * TAN * aspect), h / ((R.h / H) * 2 * TAN));
+      camera.setViewOffset(W, H, W / 2 - (R.x + R.w / 2), H / 2 - (R.y + R.h / 2), W, H);
+      look.copy(fc);
       camera.position.copy(look).addScaledVector(fd, dist);
       if (!reduceMotion) { camera.position.x += Math.sin(t * 0.21) * 0.12 * (dist / 10); camera.position.y += Math.sin(t * 0.29) * 0.08 * (dist / 10); }
       camera.near = Math.max(0.02, dist * 0.02);
@@ -649,34 +756,30 @@ runPage({
       camera.lookAt(look);
       camera.updateMatrixWorld();
     }
-
-    // ── Scroll position: a plateau while a card is read, an eased hand-over between cards.
-    const stepEls = [...document.querySelectorAll('.s-step')];
-    function readProgress() {
-      const top = narrow.matches ? layer.clientHeight : 0;
-      const anchor = scrollY + top + (innerHeight - top) * 0.42;
-      const T = innerHeight * 0.4;
-      const tops = stepEls.map((el) => el.getBoundingClientRect().top + scrollY);
-      let i = 0;
-      while (i < tops.length - 1 && anchor >= tops[i + 1]) i++;
-      if (i < tops.length - 1 && anchor > tops[i + 1] - T / 2) return i + (anchor - (tops[i + 1] - T / 2)) / T;
-      if (i > 0 && anchor < tops[i] + T / 2) return i - 0.5 + (anchor - tops[i]) / T;
-      return i;
+    // Focus rectangle (viewport px) of the live stage; the hero keeps clear of the fixed header.
+    function focusRect(s) {
+      const r = s.r, [l, t, rr, b] = narrow.matches ? s.focusM : s.focus;
+      let y0 = r.top + r.height * t;
+      if (s.bleed) y0 = Math.max(y0, r.top + (headEl.offsetHeight || 64) + 8);
+      R.x = r.left + r.width * l; R.w = Math.max(40, r.width * (rr - l));
+      R.y = y0; R.h = Math.max(40, r.top + r.height * b - y0);
     }
+    function clipTo(s) {
+      let key;
+      if (!s) key = 'inset(50% 50% 50% 50%)';
+      else {
+        const r = s.r, W = innerWidth, H = innerHeight, rad = s.bleed ? 0 : narrow.matches ? 14 : 20;
+        key = `inset(${Math.max(0, r.top).toFixed(0)}px ${Math.max(0, W - r.right).toFixed(0)}px ${Math.max(0, H - r.bottom).toFixed(0)}px ${Math.max(0, r.left).toFixed(0)}px round ${rad}px)`;
+      }
+      if (key === clipKey) return;
+      clipKey = key;
+      canvas.style.clipPath = key; canvas.style.webkitClipPath = key;
+      layer.style.clipPath = key; layer.style.webkitClipPath = key;
+    }
+    measureStages();
     let prog = readProgress();
-    const toStep = (i, smoothScroll) => {
-      const y = () => stepEls[i].getBoundingClientRect().top + scrollY;
-      scrollTo({ top: y(), behavior: smoothScroll && !reduceMotion ? 'smooth' : 'auto' });
-      addEventListener('scrollend', () => { if (Math.abs(y() - scrollY) > 4) scrollTo({ top: y(), behavior: 'auto' }); }, { once: true });
-    };
-    document.getElementById('dots')?.addEventListener('click', (ev) => {
-      const b = ev.target.closest('button');
-      if (!narrow.matches || !b) return;
-      ev.stopPropagation();
-      toStep([...b.parentNode.children].indexOf(b), true);
-    }, true);
-    const deep = /^#step-(\d+)$/.exec(location.hash);
-    if (deep && stepEls[+deep[1]] && narrow.matches) requestAnimationFrame(() => { toStep(+deep[1], false); prog = readProgress(); });
+    let phPick = 0; // phantom picker in the Phantoms section: 0 abdominal, 1 NEMA IEC
+    document.addEventListener('vx-phantom', (e) => { phPick = e.detail; });
 
     const tmp = V(0, 0, 0);
     const place = (el, pos, op, prev, W, H) => {
@@ -694,7 +797,7 @@ runPage({
     const lights = { rim: null, key: null };
     scene.children.filter((o) => o.isDirectionalLight).forEach((l) => { if (l.position.x < 0) lights.rim = l; else lights.key = l; });
     let reducedFired = false;
-    let scanAuto = 0;
+    let scanAuto = 0, pickA = 0;
 
     return {
       keyframes: [...Array(NSTEPS)].map(() => ({ pos: [0, 1, 20], look: [0, 0, 0] })),
@@ -715,13 +818,17 @@ runPage({
         scanners.forEach((s) => s.heat.fill(-1)); // force the detector colours to refresh
       },
       update(t, _p, dt = 0.016) {
+        const was = live;
+        live = measureStages();
+        if (was !== live) { was?.el.classList.remove('live'); live?.el.classList.add('live'); }
+        clipTo(live);
+        scene.visible = !!live; // nothing on screen to draw into: skip the scene entirely
         const target = readProgress();
         prog += (target - prog) * (reduceMotion ? 1 : 1 - Math.exp(-dt * 4.5));
         const p = Math.abs(target - prog) < 1e-4 ? target : prog;
+        if (live) focusRect(live);
         frameCamera(p, t);
         const time = reduceMotion ? 0 : t;
-        const si = Math.max(0, Math.min(NSTEPS - 1, Math.round(target)));
-        if (si !== anchorCur) { anchorCur = si; anchorEls.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === `#${ANCH[si]}`)); }
 
         // Scanner choice: the toggle wins; otherwise the scanner step alternates the two models.
         if (!userPicked && !reduceMotion && band(p, 3, 3, 0.2) > 0.5) {
@@ -745,7 +852,8 @@ runPage({
 
         // Couch slides into the bore between "Why" and "CASSOULET"; NEMA swaps in for the validation step.
         carriage.position.x = -3.5 + 3.5 * eio(seg(p, 1.3, 2.15));
-        nemaA = eio(seg(p, 5.55, 5.95)) * (1 - eio(seg(p, 6.05, 6.45)));
+        pickA += ((phPick === 1 ? 1 : 0) - pickA) * (reduceMotion ? 1 : 1 - Math.exp(-dt * 5));
+        nemaA = Math.max(eio(seg(p, 5.55, 5.95)) * (1 - eio(seg(p, 6.05, 6.45))), pickA * band(p, 4, 4, 0.4));
         const abdA = 1 - nemaA;
         abd.visible = abdA > 0.01; nema.group.visible = nemaA > 0.01;
         fade(nema.mats, nemaA * solidK);
@@ -840,11 +948,10 @@ runPage({
             if (vis) q.s.position.copy(path.getPointAt(clamp01((r - 0.42) / 0.58)));
           });
           setStep(u < 0.14 ? 0 : u < 0.3 ? 1 : u < 0.46 ? 2 : u < 0.72 ? 3 : 4);
-          stepOp = place(stepper, tmp.set(narrow.matches ? 5.55 : 4.3, narrow.matches ? -0.85 : -1.6, 0.4), pipeA * pipeA, stepOp, innerWidth, layer.clientHeight || innerHeight);
-        } else if (stepOp !== 0) { stepper.style.opacity = 0; stepOp = 0; }
+        } else setStep(-1);
 
         scene.updateMatrixWorld();
-        const W = innerWidth, H = layer.clientHeight || innerHeight;
+        const W = innerWidth, H = innerHeight;
         for (const l of labels) l.op = place(l.el, l.getPos(), clamp01(l.vis()), l.op, W, H);
       },
     };

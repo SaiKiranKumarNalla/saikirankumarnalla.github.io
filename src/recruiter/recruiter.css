@@ -274,3 +274,12 @@ a.r-card:hover,li.r-card:hover{transform:translateY(-3px);box-shadow:var(--shado
   .r-vxlogo{width:140px;margin-bottom:8px}
   *{transition:none !important;animation:none !important}
 }
+
+/* Certifications: compact glass cards, two columns on wide screens. */
+.r-certs .ct-ghead{color:var(--gold-deep)}
+.r-certs .ct-grid{grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.r-certs .ct-card{background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--shadow);-webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8);border-radius:var(--r-sm)}
+.r-certs .ct-pips i{background:var(--gold)}
+.r-certs .ct-verify{color:var(--gold-deep);border-color:var(--line)}
+@media (max-width:640px){.r-certs .ct-grid{grid-template-columns:1fr}}
+@media print{.r-certs .ct-card{box-shadow:none;break-inside:avoid;background:#fff;border:1px solid #ccc}}

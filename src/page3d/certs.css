@@ -1,0 +1,26 @@
+/* Certification cards shared by Skills, Agentic AI and Recruiter. Uses each page's own colour tokens. */
+.ct-group{margin-top:1rem}
+.ct-ghead{margin:0 0 .5rem;padding-bottom:5px;border-bottom:1px solid var(--line);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.ct-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.ct-card{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:12px;padding:12px 14px;border-radius:12px;background:var(--chip);border:1px solid var(--line);transition:border-color .2s}
+.ct-card:hover{border-color:var(--accent)}
+.ct-logo{flex:none;display:flex;align-items:center;justify-content:center;gap:3px;width:40px;height:40px;border-radius:10px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+.ct-logo img{width:24px;height:24px;object-fit:contain}
+.ct-logo-2{flex-direction:column;gap:2px}
+.ct-logo-2 img{width:16px;height:16px;border-radius:3px}
+.ct-body{min-width:0}
+.ct-card h4{margin:0;font-size:.92rem;line-height:1.3;font-weight:600;color:var(--text)}
+.ct-meta,.ct-note,.ct-count{margin:.15rem 0 0;font-size:.78rem;line-height:1.4;color:var(--muted)}
+.ct-pips{display:flex;gap:4px;margin-top:.5rem}
+.ct-pips i{width:18px;height:5px;border-radius:3px;background:var(--accent)}
+.ct-verify{align-self:center;font-size:.76rem;font-weight:600;color:var(--accent);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.ct-verify:hover,.ct-verify:focus-visible{border-color:var(--accent)}
+.ct-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ct-badges{margin-top:.4rem;font-size:.78rem}
+.ct-badges summary{cursor:pointer;color:var(--muted);list-style:none}
+.ct-badges summary::before{content:'+ '}
+.ct-badges[open] summary::before{content:'- '}
+.ct-badges ul{list-style:none;margin:.35rem 0 0;padding:0;display:grid;gap:4px}
+.ct-badges li{display:flex;justify-content:space-between;gap:10px;color:var(--text)}
+.ct-badges em{font-style:normal;color:var(--faint);white-space:nowrap}
+@media (max-width:480px){.ct-card{grid-template-columns:auto 1fr}.ct-verify{grid-column:2;justify-self:start}}

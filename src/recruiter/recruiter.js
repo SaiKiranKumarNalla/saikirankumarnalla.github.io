@@ -9,6 +9,7 @@ import veritomix from '../../content/veritomix.json';
 import skills from '../../content/skills.json';
 import metrics from '../../content/research-metrics.json';
 import { iconUrl } from '../page3d/skills-emblems.js';
+import { certs, certGroup } from '../page3d/certs.js';
 import './recruiter.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -103,7 +104,7 @@ const PIPE = [
 document.getElementById('bar').innerHTML = `
   <a class="r-brand" href="/">NALLA<span>.</span></a>
   <nav class="r-links" aria-label="Sections">
-    <a href="#fit">Fit</a><a href="#evidence">Evidence</a><a href="#cases">Cases</a><a href="#veritomix">VeriTomiX</a><a href="#proof">Proof</a><a href="#toolkit">Toolkit</a><a href="#experience">Experience</a>
+    <a href="#fit">Fit</a><a href="#evidence">Evidence</a><a href="#cases">Cases</a><a href="#veritomix">VeriTomiX</a><a href="#proof">Proof</a><a href="#toolkit">Toolkit</a><a href="#certifications">Training</a><a href="#experience">Experience</a>
   </nav>
   <div class="r-bar-right">
     <button class="r-btn r-ghost" id="printBtn" type="button">Print / PDF</button>
@@ -246,6 +247,11 @@ document.getElementById('main').innerHTML = `
     <article class="r-glass r-toolsec"><h3>Competencies</h3><ul class="r-tiles">${topSkills('competency', 12).map(skillTile).join('')}</ul></article>
   </div>
   <a class="r-more" href="/sections/skills.html">Full skills timeline</a>
+</section>
+
+<section class="r-sec" id="certifications" aria-labelledby="h-ct2">
+  ${head('Training', '<span id="h-ct2">Certifications</span>', certs.intro)}
+  <div class="r-certs">${certs.groups.map(certGroup).join('')}</div>
 </section>
 
 <section class="r-sec" id="experience" aria-labelledby="h-exp">

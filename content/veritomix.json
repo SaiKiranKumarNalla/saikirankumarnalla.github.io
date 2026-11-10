@@ -119,7 +119,61 @@
         }
       ]
     },
-    "ai": "Built with AI-assisted coding for interface work and migration, with core algorithms, scientific assumptions and data handling checked by hand and through tests. The original MATLAB version was written manually."
+    "ai": "Built with AI-assisted coding for interface work and migration, with core algorithms, scientific assumptions and data handling checked by hand and through tests. The original MATLAB version was written manually.",
+    "whatsNew": {
+      "title": "What's new in the desktop app",
+      "lede": "The Python rebuild now runs the whole digital test inside one Simulator workbench, with an editing toolkit for masks and a CAD workbench for printable inserts. Status: work in progress, July 2026.",
+      "items": [
+        {
+          "kicker": "Simulator",
+          "name": "One workbench, eight linked steps",
+          "text": "Session and images, CT registration, lesion insertion, scanner and protocol, forward projection, dynamic TAC, outputs and QA, all kept in one session.",
+          "fig": {
+            "src": "/media/veritomix/cass-sim-workbench.webp",
+            "caption": "Simulator workbench: the linked steps, the session inputs tree and the lesion-insertion protocol panel (image views left out)."
+          }
+        },
+        {
+          "kicker": "Simulator",
+          "name": "CT registration",
+          "text": "A CT is registered onto the PET reference grid, giving the registered CT and the attenuation (μ-map) input for the projection."
+        },
+        {
+          "kicker": "Simulator",
+          "name": "Hybrid lesion insertion",
+          "text": "Lesions from files, design masks, STL assets, modeller meshes or generated shapes; uniform, textured, speckled or spiculated patterns; activity set by SUV target, contrast or a time-activity curve; placed at the crosshair, several per image."
+        },
+        {
+          "kicker": "Simulator",
+          "name": "Forward projection and noise",
+          "text": "Projection with attenuation, scatter, randoms and normalisation, then Poisson noise with a noise factor and seed; every intermediate sinogram can be inspected, with a bed plan for multi-bed coverage."
+        },
+        {
+          "kicker": "Simulator",
+          "name": "Reconstruction and outputs",
+          "text": "OSEM reconstruction with iterations and subsets, run in the background on the projection bundle; outputs and QA stay attached to the session, static or frame by frame for dynamic studies."
+        },
+        {
+          "kicker": "Designer",
+          "name": "Mask editor toolkit",
+          "text": "Slicer-style editing on the slice views: paint, erase, spline, scissors, flood fill, shape drawing, boolean operations, grow and shrink, smoothing, split labels, crop and resample, with layers, per-layer 3D opacity and maximised views."
+        },
+        {
+          "kicker": "Modeller",
+          "name": "CAD workbench",
+          "text": "Sketch, extrude, fillet, chamfer and boolean steps on a feature timeline, primitives and construction planes, porous lattice infill, several display modes and export to STL, STEP, OBJ or IGES.",
+          "fig": {
+            "src": "/media/veritomix/cass-modeller-cad.webp",
+            "caption": "Modeller test render: a sketch on the XY plane extruded into a body, with the feature timeline below."
+          }
+        },
+        {
+          "kicker": "Analyser",
+          "name": "Analyser workbench",
+          "text": "A first Analyser window: simulation outputs and ground-truth masks as data nodes, compare and metrics tools, and generated reports. Early stage."
+        }
+      ]
+    }
   },
   "pipeline": {
     "title": "From phantom to evaluation dataset",

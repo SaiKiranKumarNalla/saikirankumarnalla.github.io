@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Developer mode | Sai Kiran Kumar Nalla, PhD</title>
+<meta name="description" content="Developer mode: a terminal and GitHub view of Sai Kiran Kumar Nalla's work, stack and open-source activity, for developers and technical recruiters.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap">
+<script>
+  try { var h = new Date().getHours(); document.documentElement.dataset.theme = localStorage.getItem('sai-theme') || 'dark'; } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+</script>
+</head>
+<body class="dv-page">
+  <a class="dv-skip" href="#terminal">Skip to terminal</a>
+  <header class="dv-bar">
+    <a class="dv-brand" href="/">NALLA<span>.</span></a>
+    <span class="dv-title">Developer mode</span>
+    <nav class="dv-bar-links" aria-label="Site">
+      <a href="/">Home</a>
+      <a href="/recruiter.html">Recruiter mode</a>
+      <button type="button" class="dv-btn" id="dvLayout" aria-label="Toggle GitHub panel">Layout</button>
+      <button type="button" class="dv-btn" id="dvTheme" aria-label="Toggle light and dark theme">Theme</button>
+    </nav>
+  </header>
+
+  <main class="dv-main">
+    <section class="dv-term" id="terminal" aria-label="Terminal">
+      <div class="dv-term-head">
+        <span class="dv-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="dv-term-title">sai@portfolio: ~</span>
+        <span class="dv-term-hint">type help, or press Tab</span>
+      </div>
+      <div class="dv-screen" id="dvScreen" role="log" aria-live="polite" tabindex="-1">
+        <div id="dvOut"></div>
+        <form class="dv-line" id="dvForm" autocomplete="off">
+          <label class="dv-prompt" for="dvInput">sai@portfolio:~$</label>
+          <input id="dvInput" class="dv-input" type="text" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" aria-label="Terminal command">
+        </form>
+      </div>
+      <div class="dv-chips" id="dvChips" aria-label="Quick commands"></div>
+    </section>
+
+    <aside class="dv-side" aria-label="GitHub and site architecture">
+      <section class="dv-card" id="ghProfile" aria-labelledby="ghTitle">
+        <h2 class="dv-h" id="ghTitle">GitHub</h2>
+        <div class="dv-profile">
+          <img class="dv-avatar" id="ghAvatar" alt="" width="64" height="64" loading="lazy" referrerpolicy="no-referrer">
+          <div class="dv-profile-text">
+            <p class="dv-name" id="ghName">Sai Kiran Kumar Nalla</p>
+            <a class="dv-login" id="ghLogin" href="https://github.com/SaiKiranKumarNalla" target="_blank" rel="noopener">SaiKiranKumarNalla</a>
+            <p class="dv-meta" id="ghMeta"></p>
+          </div>
+        </div>
+        <p class="dv-source" id="ghSource" role="status">Loading repositories...</p>
+      </section>
+
+      <section class="dv-card" aria-labelledby="langTitle">
+        <h2 class="dv-h" id="langTitle">Languages</h2>
+        <svg class="dv-langbar" id="ghLangBar" viewBox="0 0 100 3" preserveAspectRatio="none" role="img" aria-label="Language share across repositories"></svg>
+        <ul class="dv-legend" id="ghLegend"></ul>
+      </section>
+
+      <section class="dv-card" aria-labelledby="repoTitle">
+        <h2 class="dv-h" id="repoTitle">Repositories</h2>
+        <ul class="dv-repos" id="ghRepos"></ul>
+      </section>
+
+      <section class="dv-card" aria-labelledby="actTitle">
+        <h2 class="dv-h" id="actTitle">Activity</h2>
+        <svg class="dv-strip" id="ghStrip" viewBox="0 0 312 28" role="img" aria-label="Approximate repository push activity over the last 52 weeks"></svg>
+        <p class="dv-note" id="ghStripNote"></p>
+      </section>
+
+      <section class="dv-card" aria-labelledby="archTitle">
+        <h2 class="dv-h" id="archTitle">How this site is built</h2>
+        <svg class="dv-arch" viewBox="0 0 640 250" role="img" aria-labelledby="archDesc">
+          <desc id="archDesc">Static pages are built by Vite and published to GitHub Pages by GitHub Actions. The Kage chat calls a Cloudflare Worker which calls Gemini or Workers AI.</desc>
+          <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="a-head"/></marker></defs>
+          <text x="8" y="16" class="a-cap">Publishing</text>
+          <rect x="8" y="26" width="140" height="48" rx="6" class="a-box"/><text x="78" y="46" class="a-t" text-anchor="middle">Pages</text><text x="78" y="62" class="a-s" text-anchor="middle">HTML, Three.js, JSON</text>
+          <rect x="250" y="26" width="140" height="48" rx="6" class="a-box a-hot"/><text x="320" y="46" class="a-t" text-anchor="middle">Vite build</text><text x="320" y="62" class="a-s" text-anchor="middle">GitHub Actions</text>
+          <rect x="492" y="26" width="140" height="48" rx="6" class="a-box"/><text x="562" y="46" class="a-t" text-anchor="middle">GitHub Pages</text><text x="562" y="62" class="a-s" text-anchor="middle">static hosting</text>
+          <path d="M148 50H246" class="a-line" marker-end="url(#arr)"/><path d="M390 50H488" class="a-line" marker-end="url(#arr)"/>
+          <text x="8" y="120" class="a-cap">Kage assistant</text>
+          <rect x="8" y="130" width="140" height="48" rx="6" class="a-box"/><text x="78" y="150" class="a-t" text-anchor="middle">Kage chat</text><text x="78" y="166" class="a-s" text-anchor="middle">in the browser</text>
+          <rect x="250" y="130" width="140" height="48" rx="6" class="a-box a-hot"/><text x="320" y="150" class="a-t" text-anchor="middle">Cloudflare Worker</text><text x="320" y="166" class="a-s" text-anchor="middle">no keys in the client</text>
+          <rect x="492" y="130" width="140" height="48" rx="6" class="a-box"/><text x="562" y="150" class="a-t" text-anchor="middle">Gemini / Workers AI</text><text x="562" y="166" class="a-s" text-anchor="middle">model inference</text>
+          <path d="M148 154H246" class="a-line" marker-end="url(#arr)"/><path d="M390 154H488" class="a-line" marker-end="url(#arr)"/>
+          <text x="8" y="214" class="a-s">The site is static; only Kage needs a backend.</text>
+        </svg>
+        <p class="dv-links">
+          <a href="https://github.com/SaiKiranKumarNalla/saikirankumarnalla.github.io" target="_blank" rel="noopener">Source of this site on GitHub</a>
+        </p>
+      </section>
+    </aside>
+  </main>
+
+  <script type="module" src="/src/dev/dev.js"></script>
+</body>
+</html>

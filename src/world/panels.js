@@ -120,7 +120,7 @@ export const PANELS = {
         ${profile.links.youtube ? `<li><span>YouTube</span><a href="${esc(profile.links.youtube)}" target="_blank" rel="noopener">Dev &amp; Game Reels</a></li>` : ''}
         <li><span>CV</span><a href="${esc(profile.links.cv)}" target="_blank" rel="noopener">Download (PDF)</a></li>
       </ul>
-      <div class="p-actions">${more('/?ask=kage', 'Or ask Kage, my AI assistant')}${more('/recruiter.html', 'Recruiter mode')}${more('/sections/contact.html', 'Contact page')}</div>`,
+      <div class="p-actions">${more('/?ask=kage', 'Or ask Kage, my AI assistant')}${more('/recruiter.html', 'Recruiter mode')}${more('/dev.html', 'Developer mode')}${more('/sections/contact.html', 'Contact page')}</div>`,
   },
   life: {
     title: 'Off the Clock',

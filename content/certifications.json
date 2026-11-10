@@ -1,0 +1,72 @@
+{
+  "intro": "Short courses, specializations and programmes, grouped by what they cover. Dates are shown only where the issuer gives one.",
+  "profiles": {
+    "google": "https://www.skills.google/public_profiles/9659e776-f246-42a0-a265-34bc91ac24f7"
+  },
+  "groups": [
+    { "id": "ai", "name": "AI and machine learning" },
+    { "id": "venture", "name": "Innovation and venture" }
+  ],
+  "items": [
+    {
+      "id": "deepmind-slm", "group": "ai", "type": "path",
+      "title": "Google DeepMind: Small Language Models",
+      "issuer": "Google DeepMind", "logo": "googledeepmind.svg", "date": "Nov 2026",
+      "verify": "https://www.skills.google/public_profiles/9659e776-f246-42a0-a265-34bc91ac24f7",
+      "badges": [
+        { "title": "01 Build Your Own Small Language Model", "date": "Nov 8, 2026" },
+        { "title": "Train A Small Language Model", "date": "Nov 8, 2026" },
+        { "title": "02 Represent Your Language Data", "date": "Nov 9, 2026" },
+        { "title": "03 Design And Train Neural Networks", "date": "Nov 10, 2026" }
+      ]
+    },
+    {
+      "id": "gcloud-agents", "group": "ai", "type": "path",
+      "title": "Google Cloud: Agents and Gemini Enterprise",
+      "issuer": "Google Cloud", "logo": "googlecloud.svg", "date": "Nov 2026",
+      "verify": "https://www.skills.google/public_profiles/9659e776-f246-42a0-a265-34bc91ac24f7",
+      "badges": [
+        { "title": "Agent Fundamentals", "date": "Nov 9, 2026" },
+        { "title": "Enterprise Agents and Use Cases", "date": "Nov 9, 2026" },
+        { "title": "Create Your First Gemini Enterprise Application", "date": "Nov 9, 2026" }
+      ]
+    },
+    {
+      "id": "claude-fluency", "group": "ai", "type": "course",
+      "title": "AI Fluency: Framework and foundations",
+      "issuer": "Claude Academy, Anthropic", "logo": "claude.svg", "date": "Nov 4, 2026",
+      "verify": "https://academy.claude.com/verify/00bd98dd0739d574f82b2ba454f1fd15"
+    },
+    {
+      "id": "dl-spec", "group": "ai", "type": "course",
+      "title": "Deep Learning Specialization",
+      "issuer": "Coursera, DeepLearning.AI", "logo": "coursera.svg", "logo2": "deeplearningai.svg"
+    },
+    {
+      "id": "ai-medicine", "group": "ai", "type": "course",
+      "title": "AI for Medicine Specialization",
+      "issuer": "Coursera, DeepLearning.AI", "logo": "coursera.svg", "logo2": "deeplearningai.svg"
+    },
+    {
+      "id": "nucleate", "group": "venture", "type": "course",
+      "title": "Nucleate France VC Mentorship Programme",
+      "issuer": "Nucleate France", "logo": "nucleate.svg", "date": "2026",
+      "note": "Mentee, 3-month programme"
+    },
+    {
+      "id": "newtons", "group": "venture", "type": "course",
+      "title": "Venture Capital Introduction",
+      "issuer": "Newtons Foundation", "logo": "newtons.svg", "date": "Sep 2025"
+    },
+    {
+      "id": "satt-e4h", "group": "venture", "type": "course",
+      "title": "From Research to Market",
+      "issuer": "SATT Paris-Saclay and Engineering for Health (E4H)", "logo": "satt.svg", "date": "Feb to Jun 2023"
+    },
+    {
+      "id": "mckinsey", "group": "venture", "type": "course",
+      "title": "Leadership in Digital Workspaces",
+      "issuer": "McKinsey", "logo": "mckinsey.svg"
+    }
+  ]
+}
