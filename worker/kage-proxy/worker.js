@@ -7,11 +7,13 @@
 //   npx wrangler secret put GEMINI_API_KEY   (optional: a free key from Google AI Studio)
 //   npx wrangler deploy
 
+import { buildPrompt } from '../../src/kage/prompt.js';
+
 const ORIGINS = ['https://saikirankumarnalla.github.io'];
 const LOCAL = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
-const RATE_LIMIT = 30; // requests per IP per hour (per worker instance)
-const MAX_SYSTEM = 16000; // characters
-const MAX_TOKENS = 400;
+const RATE_LIMIT = 30; // requests per IP per hour (per worker instance; LIMITER below is the global per-minute cap)
+const MAX_MESSAGE = 600; // characters per visitor message
+const MAX_TOKENS = 320;
 const WORKERS_AI_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 
 const rate = new Map();
@@ -80,16 +82,19 @@ export default {
     const headers = cors(origin);
     if (request.method === 'OPTIONS') return new Response(null, { headers });
     if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405, headers);
-    if (origin && !ORIGINS.includes(origin) && !LOCAL.test(origin)) return json({ error: 'Forbidden' }, 403, headers);
-    if (!allowed(request.headers.get('CF-Connecting-IP') || 'unknown')) return json({ error: 'Rate limit exceeded. Try again later.' }, 429, headers);
+    // Browsers always send Origin on this cross-site POST; scripts without it are turned away.
+    if (!origin || (!ORIGINS.includes(origin) && !LOCAL.test(origin))) return json({ error: 'Forbidden' }, 403, headers);
+    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+    if (env.LIMITER && !(await env.LIMITER.limit({ key: ip })).success) return json({ error: 'Rate limit exceeded. Try again later.' }, 429, headers);
+    if (!allowed(ip)) return json({ error: 'Rate limit exceeded. Try again later.' }, 429, headers);
 
     let body;
     try { body = await request.json(); } catch { return json({ error: 'Invalid request' }, 400, headers); }
     if (!Array.isArray(body.messages)) return json({ error: 'Invalid request' }, 400, headers);
-    const system = String(body.system || '').slice(0, MAX_SYSTEM);
+    const system = buildPrompt(body.page); // built here, never taken from the visitor
     const messages = body.messages.slice(-12)
       .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
-      .map((m) => ({ role: m.role, content: m.content.slice(0, 2000) }));
+      .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE) }));
     if (!messages.length || messages[messages.length - 1].role !== 'user') return json({ error: 'Invalid request' }, 400, headers);
 
     let text = '', model = '';

@@ -2,51 +2,11 @@
 // Answers come from the existing Cloudflare worker; Kage can also take the visitor to a page.
 import * as THREE from 'three';
 import { makeKage } from '../world/kageModel.js';
-import profile from '../../content/profile.json';
-import thesis from '../../content/thesis.json';
-import repos from '../../content/repos.json';
-import pubs from '../../content/publications.json';
-import builder from '../../content/ai-builder.json';
-import vtx from '../../content/veritomix.json';
+import { PAGES } from './prompt.js';
 import './widget.css';
 
 const PROXY_URL = 'https://kage-proxy.kage-proxy.workers.dev';
-const PAGES = {
-  home: ['/', 'the village (home)'], about: ['/sections/about.html', 'About'], phd: ['/sections/research.html', 'PhD thesis'],
-  masters: ['/sections/masters.html', "Master's thesis"], bachelors: ['/sections/auv.html', "Bachelor's: Black Pearl AUV"],
-  projects: ['/sections/projects.html', 'Projects'], publications: ['/sections/publications.html', 'Publications'],
-  agentic: ['/sections/builder.html', 'Agentic AI'], contact: ['/sections/contact.html', 'Contact'],
-  skills: ['/sections/skills.html', 'Skills & Tools'], veritomix: ['/sections/veritomix.html', 'VeriTomiX'],
-  game: ['/sections/game.html', 'Kage: the game'], life: ['/sections/life.html', 'Off the Clock'], cv: ['/Assets/Sai_Nalla_CV.pdf', 'CV (PDF)'],
-};
 const PROMPTS = ['Who is Sai, in two lines?', 'Explain the PhD like I am five', 'What has Sai built?', 'Is Sai a fit for my role?'];
-
-function systemPrompt() {
-  const pubList = pubs.map((p) => `- ${p.title} (${p.venue}, ${p.year}, ${p.status}${p.doi ? `, doi:${p.doi}` : ''})`).join('\n');
-  const repoList = repos.map((r) => `- ${r.name}: ${r.summary}`).join('\n');
-  return `You are Kage (影), the assistant on Sai Kiran Kumar Nalla's portfolio. Be warm, concise and professional; answer in 2-5 sentences unless asked for more. Refer to him as Sai. Never invent facts: if unsure, say so and suggest the Contact page.
-
-ABOUT SAI
-${profile.displayName}. ${profile.headline}. ${profile.tagline} Now: ${profile.now}
-Based in ${profile.location}; open to ${profile.openTo.join(', ')}. Email ${profile.email}.
-Education: ${profile.education.map((e) => `${e.degree}, ${e.school} (${e.years})`).join('; ')}.
-Experience: ${profile.experience.map((e) => `${e.role}, ${e.org} (${e.years})`).join('; ')}.
-
-PHD: ${thesis.title}. In simple words: ${thesis.eli5}
-Studies: ${thesis.chapters.filter((c) => c.n > 0).map((c) => `${c.title}: ${c.detail}`).join(' | ')}
-
-PROJECTS
-${repoList}
-
-VERITOMIX: ${vtx.mission} An independent research entity of Sai Kiran Kumar Nalla and Olivier Caselles; CASSOULET is its PET/CT simulation engine.
-
-AGENTIC AI: ${builder.headline} Principles: ${builder.principles.map((p) => p.title).join(', ')}. Tools: ${builder.stack.join(', ')}.
-
-PUBLICATIONS
-${pubList}
-
-NAVIGATION: when the visitor wants to see something, end your reply with exactly one tag [ACTION:navigate:KEY] where KEY is one of: ${Object.keys(PAGES).join(', ')}. The visitor is currently on: ${document.title}.`;
-}
 
 export function mountKage() {
   if (document.getElementById('kageDock')) return;
@@ -87,7 +47,7 @@ export function mountKage() {
     const typing = add('kage typing', '<i></i><i></i><i></i>');
     state = 'talk';
     try {
-      const res = await fetch(PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ system: systemPrompt(), messages: history.slice(-12) }) });
+      const res = await fetch(PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: document.title, messages: history.slice(-12) }) });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       typing.remove();
@@ -110,6 +70,8 @@ export function mountKage() {
   }
   // Pages can hand Kage a question directly (e.g. the story pages' "Ask Kage for a summary").
   window.KageAsk = (text) => { toggle(true); send(text); return true; };
+  // Links like "?ask=kage" open the chat on arrival.
+  if (new URLSearchParams(location.search).get('ask') === 'kage') toggle(true);
   dock.querySelector('.kg-form').addEventListener('submit', (e) => { e.preventDefault(); const v = input.value; input.value = ''; send(v); });
   dock.querySelectorAll('.kg-quick button').forEach((b) => b.addEventListener('click', () => send(b.textContent)));
 
