@@ -3,6 +3,7 @@
 //   Kage game crew:   a task is queued, built in a git worktree, peer-reviewed, merged by a human.
 //   VeriTomiX Office: founder -> Atlas -> 7 department heads (+ local specialists) -> approval gate.
 //   ANIMUS Jobs:      sources -> router (classifies into lanes) -> verifier -> board or archive.
+//   Tenglish-LM:      caption stream -> noise filter -> scene slicer (emotion, dialect) -> corpus -> small LM (in progress).
 // Scroll moves between systems (staggered reveal, eased camera); time plays each loop.
 // Reduced motion shows one still, fully labelled frame per system.
 import builder from '../../content/ai-builder.json';
@@ -15,7 +16,8 @@ import './builder.css';
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const list = (items) => `<ul class="s-list">${items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
 const fig = (f) => `<figure class="s-fig"><img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy"><figcaption>${esc(f.caption)}</figcaption></figure>`;
-const LOGO = { claude: '/media/logos/claude.svg', codex: '/media/logos/codex.svg', antigravity: '/media/logos/antigravity.svg', meshy: '/media/logos/meshy.svg', blender: '/media/logos/blender.svg' };
+const LOGO = { claude: '/media/logos/claude.svg', codex: '/media/logos/codex.svg', antigravity: '/media/logos/antigravity.svg', meshy: '/media/logos/meshy.svg', blender: '/media/logos/blender.svg',
+  python: '/media/logos/tools/python.svg', jupyter: '/media/logos/tools/jupyter.svg', colab: '/media/logos/skills/googlecolab.svg', ytdlp: '/media/logos/tools/ytdlp.svg', pytorch: '/media/logos/skills/pytorch.svg' };
 const logo = (k) => `<span class="bd-logo" aria-hidden="true"><img src="${LOGO[k]}" alt="" width="12" height="12"></span>`;
 
 const builds = builder.builds.map((id) => projects.find((p) => p.id === id)).filter(Boolean);
@@ -31,7 +33,13 @@ function buildCard(p, i) {
     ${p.id === 'kage-game' ? `<ul class="bd-agents" aria-label="Agents and tools">
         <li>${logo('claude')}Claude Code</li><li>${logo('codex')}Codex CLI</li><li>${logo('antigravity')}Antigravity</li>
         <li>${logo('meshy')}Meshy AI</li><li>${logo('blender')}Blender</li></ul>` : ''}
+    ${p.id === 'tenglish-lm' ? `<ul class="bd-agents" aria-label="Languages and tools">
+        <li>${logo('python')}Python</li><li>${logo('jupyter')}Jupyter</li><li>${logo('colab')}Google Colab</li>
+        <li>${logo('ytdlp')}yt-dlp</li><li>${logo('pytorch')}PyTorch</li></ul>` : ''}
     ${p.facts ? `<div class="s-chips">${p.facts.map((f) => `<span>${esc(f)}</span>`).join('')}</div>` : ''}
+    ${p.links?.length ? `<div class="bd-links">${p.links.map((l) => `<a class="bd-link" href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : ''}
+    ${p.id === 'tenglish-lm' && p.note ? `<p class="s-meta">${esc(p.note)}</p>` : ''}
+    ${p.id === 'tenglish-lm' ? `<a class="bd-gamelink" href="/sections/skills.html#step-9"><div><span>Related certification</span><b>Google DeepMind: Small Language Models</b></div><em aria-hidden="true">→</em></a>` : ''}
     ${p.id === 'kage-game' ? `<a class="bd-gamelink" href="/sections/game.html"><div><span>Kage, the game</span><b>Gameplay, the world and footage</b></div><em aria-hidden="true">→</em></a>` : ''}
     ${figs[0] ? fig(figs[0]) : ''}
     ${a ? `<details class="s-know"><summary>How it's built <span class="s-meta">hierarchy, models, deployment</span></summary>
@@ -44,7 +52,7 @@ function buildCard(p, i) {
     ${p.more ? `<details class="s-know"><summary>Know more <span class="s-meta">problem, approach, status</span></summary>
       <h3>The problem</h3><p>${esc(p.more.problem)}</p><h3>How it works</h3>${list(p.more.approach)}<h3>Status</h3>${list(p.more.status)}
       ${p.stack ? `<h3>Built with</h3><div class="s-chips">${p.stack.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
-      ${p.note ? `<p class="s-meta">${esc(p.note)}</p>` : ''}
+      ${p.note && p.id !== 'tenglish-lm' ? `<p class="s-meta">${esc(p.note)}</p>` : ''}
     </details>` : ''}`;
 }
 
@@ -52,7 +60,7 @@ document.getElementById('main').innerHTML = `
   <section class="s-step s-hero" data-title="Agentic AI"><div class="s-card">
     <p class="s-kicker">Agentic AI</p><h1>${esc(builder.headline)}</h1>
     <p class="s-lede">Agents do the work; I hold the gates. Every system here runs the same loop: written rules, agents that propose, evidence that is logged, and a person who accepts or sends the work back.</p>
-    <p class="s-scroll">Scroll to see three systems at work</p>
+    <p class="s-scroll">Scroll to see ${builds.length} systems at work</p>
   </div></section>
   ${builds.map((p, i) => `<section class="s-step" data-title="${esc(p.name)}"><div class="s-card">${buildCard(p, i)}</div></section>`).join('')}
   <section class="s-step" data-title="Toolbelt"><div class="s-card"><h2>Toolbelt &amp; next</h2>
@@ -596,12 +604,123 @@ runPage({
       });
     }
 
+    // ════════ Tenglish-LM: caption stream -> noise filter -> scene slicer -> corpus -> small LM (in progress) ════════
+    const teng = makeSystem(explain['tenglish-lm']?.steps || ['Captions', 'Filter', 'Scenes', 'Corpus', 'Train']);
+    const TG_S = V(-4.45, 0, 0), TG_F = V(-2.35, 0, 0), TG_C = V(0.1, 0, 0), TG_A = V(2.6, 0.68, 0), TG_B = V(2.6, -0.68, 0), TG_M = V(4.7, 0, 0);
+    const tgSrc = pod(1.4, 0.52); tgSrc.grp.position.copy(TG_S);
+    tag(teng, add(teng, tgSrc.grp, 0.05), name('Caption stream', 'Telugu captions', 'ytdlp'), [0, -0.45, 0], 'bd-down');
+    const tgIn = lineC([TG_S.x + 0.78, 0, 0], [TG_F.x - 0.42, 0, 0]);
+    const tgMid = lineC([TG_F.x + 0.42, 0, 0], [TG_C.x - 0.9, 0, 0]);
+    const tgDrop = curve([TG_F.x, 0, 0], [TG_F.x + 0.12, -0.7, 0.1], [TG_F.x + 0.1, -1.8, 0.1]);
+    const tgToA = curve([TG_C.x + 0.9, 0, 0], [1.6, 0.25, 0], [TG_A.x - 0.62, TG_A.y, 0]);
+    const tgToB = curve([TG_C.x + 0.9, 0, 0], [1.6, -0.25, 0], [TG_B.x - 0.62, TG_B.y, 0]);
+    const tgFromA = curve([TG_A.x + 0.62, TG_A.y, 0], [3.6, 0.4, 0], [TG_M.x - 0.82, 0.22, 0]);
+    const tgFromB = curve([TG_B.x + 0.62, TG_B.y, 0], [3.6, -0.4, 0], [TG_M.x - 0.82, -0.22, 0]);
+    [[tgIn, 0.12], [tgMid, 0.3], [tgToA, 0.5], [tgToB, 0.5], [tgFromA, 0.7], [tgFromB, 0.7]].forEach(([c, o]) => add(teng, track(c, 0.018, 0.22), o));
+    add(teng, track(tgDrop, 0.014, 0.18), 0.28);
+    const tgGate = gateRing(0.4); tgGate.position.copy(TG_F); tgGate.rotation.y = Math.PI / 2;
+    tag(teng, add(teng, tgGate, 0.22), name('Noise filter', 'non-dialogue lines'), [-0.6, 1.1, 0]);
+    const tgBin = new THREE.Mesh(rbox(1.3, 0.34, 0.6, 0.08), std('body'));
+    tgBin.position.set(TG_F.x + 0.1, -2.0, 0);
+    tag(teng, add(teng, tgBin, 0.35), name('Dropped', 'not dialogue'), [0.75, 0, 0], 'bd-right');
+    const tgSlice = pod(1.5, 0.6); tgSlice.grp.position.copy(TG_C);
+    const tgSliceE = add(teng, tgSlice.grp, 0.4);
+    tag(teng, tgSliceE, name('Scene slicer', '2 to 4 turns, timestamped'), [0, -0.5, 0], 'bd-down');
+    const tgChips = ['emotion', 'dialect'].map((n, i) => tag(teng, tgSliceE, `<b>${n}</b>`, [i ? 0.72 : -0.72, 0.88, 0], 'bd-mid', 'bd-chip'));
+    const tgDots = [C.lane0, C.lane1].map((c, i) => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 10), dyn());
+      return { m, c, e: add(teng, m, 1, { dyn: true }), to: V(TG_C.x + (i ? 0.72 : -0.72), 0.62, 0.15), from: V(TG_C.x, 0.1, 0.3) };
+    });
+    const tgFileA = pod(0.95, 0.42); tgFileA.grp.position.copy(TG_A);
+    const tgFileB = pod(0.95, 0.42); tgFileB.grp.position.copy(TG_B);
+    const tgFA = add(teng, tgFileA.grp, 0.55), tgFB = add(teng, tgFileB.grp, 0.58);
+    tag(teng, tgFA, name('Scene corpus', 'on Google Drive', 'colab'), [0, 0.42, 0]);
+    tag(teng, tgFA, '<b>CSV</b>', [0, 0, 0.16], 'bd-mid', 'bd-chip');
+    tag(teng, tgFB, '<b>TXT</b>', [0, 0, 0.16], 'bd-mid', 'bd-chip');
+    const tgLM = pod(1.4, 1.5, 0.3); tgLM.grp.position.copy(TG_M);
+    tag(teng, add(teng, tgLM.grp, 0.75), name('Small language model', 'QLoRA, in progress', 'pytorch'), [0, -0.95, 0], 'bd-down');
+    const tgSpin = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.026, 6, lowPower ? 24 : 40, 4.4), dyn());
+    tgSpin.position.set(TG_M.x, 0.05, 0.3);
+    add(teng, tgSpin, 1, { dyn: true });
+    const TG_T0 = [0.02, 0.07, 0.12, 0.17], TG_SLOT = [0, 1, -1, 2];
+    const tgSlots = [-0.4, 0, 0.4].map((x) => V(TG_C.x + x, -0.02, 0.34));
+    const tgCap = TG_T0.map(() => packet(teng, { round: false, w: 0.3, h: 0.2, d: 0.06 }));
+    const tgScene = packet(teng, { round: false, w: 0.7, h: 0.3, d: 0.08 });
+    const tgOut = [0, 1].map(() => packet(teng, { round: false, w: 0.3, h: 0.2, d: 0.06 }));
+    teng.steps.anchor.set(0, -2.85, 0);
+    const TENG_T = 10, tgCol = new THREE.Color(), tgV = V(0, 0, 0);
+
+    function updateTeng(time) {
+      const u = reduceMotion ? 0.79 : (time / TENG_T) % 1;
+      // Caption lines flow to the filter; non-dialogue drops out, the rest gathers at the slicer.
+      let flash = 0, bad = false;
+      tgCap.forEach((pk, i) => {
+        const t0 = TG_T0[i], tf = t0 + 0.14;
+        let pos, col = C.cream, al = 1, sc = 1;
+        if (u < t0) { pos = tgIn.getPoint(0); al = 0; }
+        else if (u < tf) { pos = tgIn.getPoint(eio(seg(u, t0, tf))); al = seg(u, t0, t0 + 0.02); }
+        else if (i === 2) {
+          pos = tgDrop.getPoint(eio(seg(u, tf, tf + 0.12)));
+          col = mix(tgCol, C.cream, C.idle, seg(u, tf, tf + 0.04));
+          al = 1 - seg(u, tf + 0.09, tf + 0.13);
+        } else {
+          const ts = tf + 0.02, ta = ts + 0.13;
+          col = C.amber;
+          if (u < ts) { pos = tgIn.getPoint(1); col = mix(tgCol, C.cream, C.amber, seg(u, tf, ts)); }
+          else if (u < ta) pos = tgMid.getPoint(eio(seg(u, ts, ta)));
+          else { pos = tgV.lerpVectors(tgMid.getPoint(1), tgSlots[TG_SLOT[i]], eio(seg(u, ta, ta + 0.03))); sc = 1 - eout(seg(u, 0.48, 0.52)); }
+        }
+        pk.set(pos, col, al, sc);
+        const f = bump(u, tf - 0.03, tf + 0.05);
+        if (f > flash) { flash = f; bad = i === 2; }
+      });
+      tgGate.material.emissive.copy(bad ? C.accent : C.ok);
+      tgGate.material.emissiveIntensity = 0.2 + 1.6 * flash;
+      // The kept lines merge into one scene, which gets an emotion and a dialect tag.
+      let sp, sCol = C.amber, sa = 0, ss = 1;
+      sp = tgV.copy(TG_C).add(front);
+      if (u >= 0.5) {
+        sa = 1; ss = eback(seg(u, 0.5, 0.54));
+        sCol = mix(tgCol, C.amber, C.lane0, seg(u, 0.54, 0.62));
+        if (u > 0.66) { const f = eio(seg(u, 0.66, 0.7)); sa = 1 - f; ss = 1 - 0.5 * f; }
+      }
+      tgScene.set(sp, sCol, sa, ss);
+      const tagged = reduceMotion || (u > 0.54 && u < 0.82);
+      tgChips.forEach((c, i) => {
+        if (tagged !== c.on) { c.on = tagged; c.tagEl.classList.toggle('on', tagged); }
+        const d = tgDots[i];
+        d.m.position.lerpVectors(d.from, d.to, reduceMotion ? 1 : eio(seg(u, 0.54 + i * 0.02, 0.6 + i * 0.02)));
+        d.m.material.color.copy(d.c);
+        d.e.alpha = reduceMotion ? 1 : seg(u, 0.54, 0.56) * (1 - seg(u, 0.8, 0.84));
+      });
+      // The scene is written to CSV and TXT, then both feed the training stage.
+      tgOut.forEach((pk, k) => {
+        const cin = k ? tgToB : tgToA, cout = k ? tgFromB : tgFromA;
+        let pos, al = 1;
+        if (u < 0.66) { pos = cin.getPoint(0); al = 0; }
+        else if (u < 0.76) { pos = cin.getPoint(eio(seg(u, 0.66, 0.76))); al = seg(u, 0.66, 0.68); }
+        else if (u < 0.82) pos = cin.getPoint(1);
+        else if (u < 0.95) { pos = cout.getPoint(eio(seg(u, 0.82, 0.95))); al = 1 - seg(u, 0.93, 0.97); }
+        else { pos = cout.getPoint(1); al = 0; }
+        pk.set(pos, C.amber, al, 1);
+      });
+      mix(tgSrc.strip.material.color, C.idle, C.amber, bump(u, 0.02, 0.3));
+      mix(tgSlice.strip.material.color, C.idle, C.amber, bump(u, 0.3, 0.64));
+      [tgFileA, tgFileB].forEach((f) => mix(f.strip.material.color, C.idle, C.ok, seg(u, 0.74, 0.78) * (1 - seg(u, 0.96, 1))));
+      // Training is not finished: the model stays amber with a slow spinner, never a green check.
+      mix(tgLM.strip.material.color, C.idle, C.amber, reduceMotion ? 0.8 : 0.35 + 0.65 * bump(u, 0.8, 1));
+      tgSpin.rotation.z = reduceMotion ? 0.6 : -time * 1.4;
+      tgSpin.material.color.copy(C.amber);
+      setStep(teng, u < 0.12 ? 0 : u < 0.4 ? 1 : u < 0.68 ? 2 : u < 0.82 ? 3 : 4);
+    }
+
     // ── Scroll: which system shows, and how far through its staggered reveal.
     const SYS = [
       { s: hero, step: 0, alt: NSTEPS - 1, update: updateHero },
       { s: kage, step: stepOf('kage-game'), update: updateKage },
       { s: office, step: stepOf('veritomix-office'), update: updateOffice },
       { s: animus, step: stepOf('animus'), update: updateAnimus },
+      { s: teng, step: stepOf('tenglish-lm'), update: updateTeng },
     ];
     SYS.forEach((x) => { if (x.step < 0) x.s.g.visible = false; });
 
@@ -633,6 +752,7 @@ runPage({
       'kage-game': { c: [0, -0.15, 0], dir: [-0.2, 0.16, 1], w: 10.4, h: 5.6 },
       'veritomix-office': { c: [0, 0.1, 0], dir: [0.08, 0.26, 1], w: 10.2, h: 7.6 },
       animus: { c: [0, 0, 0], dir: [-0.14, 0.1, 1], w: 10.4, h: 7.2 },
+      'tenglish-lm': { c: [0.1, -0.65, 0], dir: [-0.1, 0.16, 1], w: 12.6, h: 6 },
       tools: { c: [0, 0.1, 0], dir: [0, 0.5, 1], w: 10.6, h: 5.2 },
     };
     const frames = [FR.hero, ...builds.map((b) => FR[b.id] || FR['kage-game']), FR.tools].map((f) => ({ c: V(...f.c), dir: V(...f.dir).normalize(), w: f.w, h: f.h }));

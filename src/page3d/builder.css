@@ -37,13 +37,16 @@
 .bd-gamelink span{display:block;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
 .bd-gamelink b{display:block;font-weight:600;font-size:.92rem}
 .bd-gamelink em{margin-left:auto;font-style:normal;color:var(--accent);font-weight:600}
+.bd-links{display:flex;flex-wrap:wrap;gap:8px;margin:1rem 0 .2rem}
+.bd-link{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--chip);color:var(--text);font-size:.84rem;font-weight:600;text-decoration:none;transition:border-color .25s cubic-bezier(.2,.8,.2,1),color .25s cubic-bezier(.2,.8,.2,1)}
+.bd-link:hover,.bd-link:focus-visible{border-color:var(--accent);color:var(--accent)}
 .bd-agents{display:flex;flex-wrap:wrap;gap:6px;margin:.6rem 0 0;padding:0;list-style:none}
 .bd-agents li{display:inline-flex;align-items:center;gap:7px;padding:5px 11px 5px 6px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--text);font-size:.8rem;font-weight:500;line-height:1}
 .bd-agents .bd-logo{flex:none;width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
 .bd-agents .bd-logo img{width:15px;height:15px;object-fit:contain;display:block}
 
 @media (prefers-reduced-motion:reduce){
-  .bd-steps li,.bd-gamelink{transition:none}
+  .bd-steps li,.bd-gamelink,.bd-link{transition:none}
 }
 
 /* Phones and narrow windows: the 3D sits in a band at the top, the cards scroll below it. */

@@ -1,12 +1,11 @@
 import './dev.css';
 import profile from '../../content/profile.json';
-import repos from '../../content/repos.json';
 import skillsData from '../../content/skills.json';
 import pubs from '../../content/publications.json';
 import metrics from '../../content/research-metrics.json';
 import vtx from '../../content/veritomix.json';
 import certData from '../../content/certifications.json';
-import { initGithub, getCommits } from './github.js';
+import { initGithub, getCommits, repos } from './github.js';
 
 const PROXY_URL = 'https://kage-proxy.kage-proxy.workers.dev';
 const REPO_URL = 'https://github.com/SaiKiranKumarNalla/saikirankumarnalla.github.io';
@@ -156,7 +155,9 @@ const commands = {
         if (m.problem) lines.push(H('Problem'), m.problem, '');
         if (m.approach) lines.push(H('Approach'), ...m.approach.map((a) => `- ${a}`), '');
         if (m.outcome) lines.push(H('Outcome'), ...m.outcome.map((a) => `- ${a}`), '');
+        if (m.status) lines.push(H('Status'), ...m.status.map((a) => `- ${a}`), '');
       }
+      if (r.note) lines.push(M(r.note), '');
       if (r.stack) lines.push([M('stack: '), r.stack.join(', ')]);
       (r.links || []).forEach((l) => lines.push(l.href ? [M(`${l.label}: `), { t: l.href, href: l.href }] : [M(`${l.label}: `), l.status || 'n/a']));
       return printAll(lines);
@@ -258,7 +259,7 @@ const commands = {
     const hits = [];
     const add = (where, text) => { if (text && String(text).toLowerCase().includes(q)) hits.push([where, String(text)]); };
     repos.forEach((r) => {
-      [r.name, r.kind, r.context, r.summary, r.eli5, ...(r.stack || []), ...((r.more && r.more.approach) || []), ...((r.more && r.more.outcome) || []), r.more && r.more.problem].forEach((t) => add(`projects/${r.id}`, t));
+      [r.name, r.kind, r.context, r.summary, r.eli5, ...(r.stack || []), ...((r.more && r.more.approach) || []), ...((r.more && r.more.outcome) || []), ...((r.more && r.more.status) || []), r.more && r.more.problem].forEach((t) => add(`projects/${r.id}`, t));
     });
     skillsData.skills.forEach((x) => { add(`skills/${x.id}`, x.name); add(`skills/${x.id}`, x.evidence); });
     certData.items.forEach((c) => { add(`certs/${c.id}`, c.title); add(`certs/${c.id}`, c.issuer); (c.badges || []).forEach((b) => add(`certs/${c.id}`, b.title)); });

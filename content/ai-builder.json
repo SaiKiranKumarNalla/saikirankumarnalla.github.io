@@ -33,7 +33,8 @@
   "builds": [
     "kage-game",
     "veritomix-office",
-    "animus"
+    "animus",
+    "tenglish-lm"
   ],
   "roadmap": [
     "Surrogate PET simulator trained on Monte Carlo output (NASGM-style)",
@@ -71,6 +72,16 @@
         "Classify",
         "Verify",
         "Board"
+      ]
+    },
+    "tenglish-lm": {
+      "watch": "Follow one caption track: it is filtered of non-dialogue noise, sliced into a short scene that gets an emotion and a dialect tag, written out as CSV and TXT, and then joins the corpus a small language model trains on. The training stage is still in progress.",
+      "steps": [
+        "Captions",
+        "Filter",
+        "Scenes",
+        "Corpus",
+        "Train"
       ]
     }
   }

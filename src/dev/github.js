@@ -1,12 +1,27 @@
 // GitHub panel: live public repos (unauthenticated, cached 1 h) with a static fallback from content/repos.json.
 // All GitHub-supplied strings go through textContent / setAttribute only.
-import repos from '../../content/repos.json';
+import baseRepos from '../../content/repos.json';
+import projects from '../../content/projects.json';
 
 const USER = 'SaiKiranKumarNalla';
 const API = `https://api.github.com/users/${USER}`;
-const CACHE_KEY = 'dev-gh-cache-v1';
+const CACHE_KEY = 'dev-gh-cache-v2';
 const TTL = 60 * 60 * 1000;
 const NS = 'http://www.w3.org/2000/svg';
+// Featured projects that live in projects.json (Agentic AI page) are added to the terminal's project list
+// and to the offline fallback below, so they appear even when GitHub is unreachable.
+const FROM_PROJECTS = ['tenglish-lm'];
+const asRepo = (p) => ({
+  id: p.id, name: p.name, kind: p.kind, years: String(p.year), context: 'Personal research project',
+  eli5: p.eli5, summary: p.summary, stack: p.stack, note: p.note,
+  url: ((p.links || []).find((l) => l.label === 'GitHub') || {}).href || '',
+  links: p.links,
+  more: p.more ? { problem: p.more.problem, approach: p.more.approach, status: p.more.status } : undefined,
+});
+export const repos = [
+  ...baseRepos,
+  ...FROM_PROJECTS.filter((id) => !baseRepos.some((r) => r.id === id)).map((id) => projects.find((p) => p.id === id)).filter(Boolean).map(asRepo),
+];
 const STATIC_LANGS = new Set(['MATLAB', 'Python', 'CUDA']);
 
 const $ = (id) => document.getElementById(id);
@@ -65,7 +80,7 @@ async function load() {
 
 function fallback() {
   const slim = repos.map((r) => ({
-    name: r.name, url: '', desc: r.summary, lang: '', stars: 0, forks: 0, fork: false, pushed: '',
+    name: r.name, url: r.url || '', desc: r.summary, lang: '', stars: 0, forks: 0, fork: false, pushed: '',
     kind: r.kind, years: r.years, stack: r.stack,
   }));
   return { repos: slim, user: null, live: false };

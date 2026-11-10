@@ -411,5 +411,106 @@
       ]
     },
     "stack": ["Blender", "Godot", "Meshy AI", "Claude Code", "Codex CLI", "Antigravity CLI", "Three.js", "Python"]
+  },
+  {
+    "id": "tenglish-lm",
+    "name": "Tenglish-LM",
+    "kind": "NLP · small language model",
+    "status": "active",
+    "year": 2026,
+    "eli5": "A research toolkit that turns Telugu subtitle tracks into a tidy, tagged corpus, then teaches a small language model to write Telugu and Tenglish dialogue.",
+    "summary": "Tenglish-LM & Tenglish-Evo: a morphologically-aware small language model for Tenglish (Telugu-English code-mixing) and the corpus pipeline behind it. The pipeline downloads Telugu captions, strips non-dialogue noise, slices the rest into timestamped two-to-four-turn scenes with emotion and dialect tags, and exports SRT, CSV and TXT files to Google Drive from a live-synced Colab notebook. Companion notebooks benchmark off-the-shelf small models and fine-tune Sarvam-2B with QLoRA on Telugu and Tenglish text.",
+    "facts": [
+      "Corpus pipeline: captions to scene-tagged CSV/TXT",
+      "3 Tenglish spellings: natural, phonetic, chat",
+      "Movie-level split with no leakage: 60 / 8 / 8",
+      "Work in progress; no trained model released yet"
+    ],
+    "stack": [
+      "Python",
+      "Jupyter",
+      "Google Colab",
+      "yt-dlp",
+      "youtube-transcript-api",
+      "PyTorch",
+      "Transformers",
+      "PEFT / TRL",
+      "Sarvam-2B"
+    ],
+    "public": true,
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/SaiKiranKumarNalla/tenglish-lm"
+      },
+      {
+        "label": "Open in Colab",
+        "href": "https://colab.research.google.com/github/SaiKiranKumarNalla/tenglish-lm/blob/main/notebooks/01_YouTube_Movie_Corpus_Extractor.ipynb"
+      }
+    ],
+    "note": "A research corpus tool. It reads publicly available subtitle tracks and writes files to the user's own Google Drive; no extracted dialogue or film text is published on this site.",
+    "more": {
+      "problem": "Telugu speakers write and speak in a mix of Telugu and English, with English words carrying Telugu case endings. Generic language models handle that mix badly, and there is no ready, scene-structured Telugu dialogue corpus to study it with.",
+      "approach": [
+        "Download Telugu captions, manual or auto-generated, with youtube-transcript-api and yt-dlp; only Telugu-script tracks are accepted",
+        "Clean the track: drop bracketed sound and music tags, statutory health notices and pure humming lines, merge rolling auto-caption repeats and clamp overlapping timestamps",
+        "Slice into timestamped scenes of two to four turns, attach the metadata supplied per film, and tag each scene with an emotion and a dialect",
+        "Add a three-level coarse-to-fine scene representation adapted from Next-Concept Modeling: a beat trajectory, content and case-marked word anchors, then the full utterance",
+        "Convert Telugu script into three Tenglish spellings (loanword-preserving, phonetic, chat-style), keeping Telugu case suffixes on English loanwords",
+        "Split the corpus by film, not by scene, so train, validation and test scenes never share a film; benchmark Gemma-2 and Sarvam-2B, then fine-tune Sarvam-2B with 4-bit QLoRA"
+      ],
+      "status": [
+        "Working: the extractor, cleaning, scene tagging, SRT/CSV/TXT export and the live-synced Colab notebook",
+        "Working: the Tenglish converter, the split manifest (76 films, 15,597 scenes) and the zero-shot benchmark notebook",
+        "In progress: the fine-tuning notebook has run only a short demonstration on a small sample; no full training run or evaluation results are published",
+        "The repository uses the existing Sarvam-2B tokenizer and does not include a custom tokenizer or a from-scratch model; Tenglish-Evo is named in the repository description but is not documented separately yet",
+        "Builds on the Google DeepMind Small Language Models path (build, train, represent language data, design and train neural networks), completed in November 2026"
+      ]
+    },
+    "architecture": {
+      "hierarchy": [
+        {
+          "level": "Stage 1",
+          "who": "Caption stream",
+          "does": "Fetch Telugu captions for each film URL with youtube-transcript-api and yt-dlp",
+          "model": "Manual or auto-generated Telugu"
+        },
+        {
+          "level": "Stage 2",
+          "who": "Noise filter",
+          "does": "Remove sound tags, health notices and humming lines; merge repeated auto-caption lines",
+          "model": "tenglish_lm/movie_harvester.py"
+        },
+        {
+          "level": "Stage 3",
+          "who": "Scene slicer",
+          "does": "Group two to four turns into a timestamped scene and tag emotion and dialect",
+          "model": "extract_youtube_movie.py"
+        },
+        {
+          "level": "Stage 4",
+          "who": "Corpus export",
+          "does": "Write SRT, CSV, TXT and a manifest to Google Drive, one folder per film",
+          "model": "Google Drive"
+        },
+        {
+          "level": "Stage 5",
+          "who": "Small language model",
+          "does": "Benchmark and fine-tune on Telugu and Tenglish text with QLoRA",
+          "model": "Sarvam-2B · in progress"
+        }
+      ],
+      "deployment": [
+        "Runs in Google Colab; step 1 of the notebook pulls the latest code from GitHub, so repository updates apply without copy-paste",
+        "Output goes to the user's own Google Drive under a Tenglish_LM folder",
+        "Training notebooks target a single Colab GPU using 4-bit quantisation"
+      ],
+      "safeguards": [
+        "Only Telugu-script captions are extracted; English subtitle tracks are rejected",
+        "Splits are made per film so no film appears in more than one partition",
+        "Treated as a research corpus tool; extracted text is not redistributed",
+        "Results are not claimed until a full training run and evaluation exist"
+      ]
+    }
   }
 ]
