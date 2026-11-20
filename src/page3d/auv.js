@@ -1,167 +1,102 @@
-// Black Pearl (AUV MEC): a procedural model of the vehicle, the rule-book envelope,
-// a 3D V-cycle, and the final vehicle swimming; the team's videos are embedded at the end.
+// Black Pearl (AUV MEC), on the layout kit: a hero with the vehicle swimming, the brief beside the rule-book
+// envelope, the modified V-cycle as a wide 3D band with a step band, the design sections as alternating splits
+// with their figures and tables, test results as stat strips and bar charts, the final vehicle, the team,
+// and the team's videos and paper.
 import { auv as A } from '../../content/academics.json';
 import pubs from '../../content/publications.json';
-import { runPage } from './engine.js';
+import { mountPage, hero, split, band, sec, cta, head, stage, steps, grid, card, gallery, fig, stats, bars, acc, table, list, callout, btn, esc } from './layout.js';
+import { heroStage, envelopeStage, vcycleStage, stabilityStage, finalStage, VNAMES } from './auv-scene.js';
 import './auv.css';
 
-const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const list = (items) => `<ul class="s-list">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
-const table = (t) => `<table class="s-table"><thead><tr>${t.head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map((r) => `<tr>${r.map((c, j) => (j ? `<td>${esc(c)}</td>` : `<td><b>${esc(c)}</b></td>`)).join('')}</tr>`).join('')}</tbody></table>`;
-const figure = (f) => `<figure class="s-fig auv-zoom"><img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy" decoding="async"><figcaption>${esc(f.caption)}</figcaption></figure>`;
 const paper = pubs.find((p) => p.id === 'oceans2021');
+const S = Object.fromEntries(A.steps.map((s, i) => [s.title, { ...s, i }]));
+const N = A.steps.length;
+const kick = (s) => `<p class="lk-k">${String(s.i + 1).padStart(2, '0')} of ${N} · ${esc(s.title)}</p>`;
+const intro = (s, title = s.title) => `${kick(s)}<h2>${esc(title)}</h2><p class="lk-lede">${esc(s.eli5)}</p><p>${esc(s.text)}</p>`;
+const more = (s, open = false) => (s.more.length ? acc([{ title: 'Know more', sub: `${s.more.length} details`, html: list(s.more), open }]) : '');
+const figs = (s) => gallery(s.figures || [], 'auv', 'lk-one');
 
-// 3D stage for each step: hero, brief, V-cycle, the vehicle (all design and results steps), team, watch.
-const KF = [
-  { pos: [1.5, 2.5, 18], look: [2.2, 0, 0] },
-  { pos: [2, 4, 18], look: [2.4, 0, 0] },
-  { pos: [1.5, 1, 15], look: [2.2, 0, -1] },
-  { pos: [2.5, 2.5, 15], look: [2.4, 0.3, 0] },
-  { pos: [1.5, 2, 19], look: [2.4, 0, 0] },
-  { pos: [1.5, 2.5, 18], look: [2.2, 0, 0] },
-];
-const STAGE = [0, 1, 2, ...Array(A.steps.length - 3).fill(3), 4, 5];
+const brief = S['The brief'], vc = S['A modified V-cycle'], concept = S['Concept and layout'], mat = S['Materials and structure'],
+  cfd = S['Hydrodynamics (CFD)'], stab = S['Stability and buoyancy'], fab = S['Fabrication and iteration'],
+  test = S['Testing and thermal study'], grip = S['Gripper, vision and acoustics'], fin = S['The final vehicle'], team = S['Building the team'];
 
-const STEPS = [
-  { title: 'Black Pearl', html: `<p class="s-kicker">Bachelor's · ${esc(A.team)} · ${esc(A.dates)}</p>
-      <h1>${esc(A.title)}</h1>
-      <p class="s-lede">${esc(A.eli5)}</p>
-      <p class="s-meta">${esc(A.degree)}<br>${esc(A.competition)} · ${esc(A.role)}</p>
-      <p class="s-meta">${esc(A.report)}. Supervisor: ${esc(A.supervisor)}.</p>
-      <p class="s-scroll">Scroll to build the vehicle</p>` },
-  ...A.steps.map((s, i) => ({ title: s.title, html: `<p class="s-kicker">${i + 1} of ${A.steps.length}</p><h2>${esc(s.title)}</h2>
-      <p class="s-lede">${esc(s.eli5)}</p><p>${esc(s.text)}</p>
-      ${s.table ? table(s.table) : ''}
-      ${(s.figures || []).map(figure).join('')}
-      ${s.more.length ? `<details class="s-know"><summary>Know more</summary>${list(s.more)}</details>` : ''}
-      ${i === A.steps.length - 1 ? `<h3>Team</h3><p>${A.members.map(esc).join(', ')}. Supervisor: ${esc(A.supervisor)}.</p>` : ''}` })),
-  { title: 'Watch', html: `<p class="s-kicker">Watch</p><h2>Black Pearl in action</h2>
-      ${A.videos.map((v) => `<h3>${esc(v.title)}</h3><div class="s-video"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.id)}" title="${esc(v.title)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`).join('')}
-      ${paper ? `<h3>Paper</h3><div class="s-role"><b>${esc(paper.title)}</b><p>${esc(paper.venue)} · <a href="https://doi.org/${esc(paper.doi)}" target="_blank" rel="noopener">doi.org/${esc(paper.doi)}</a></p></div>` : ''}` },
-];
-document.getElementById('main').innerHTML = STEPS.map((s, i) =>
-  `<section class="s-step${i === 0 ? ' s-hero' : ''}" data-title="${esc(s.title)}"><div class="s-card">${s.html}</div></section>`).join('');
+const heroHtml = `<p class="lk-k">Bachelor's · ${esc(A.team)} · ${esc(A.dates)}</p>
+  <h1>${esc(A.title)}</h1>
+  <p class="lk-lede">${esc(A.eli5)}</p>
+  <p class="lk-meta">${esc(A.degree)}<br>${esc(A.competition)} · ${esc(A.role)}</p>
+  <p class="lk-meta">${esc(A.report)}. Supervisor: ${esc(A.supervisor)}.</p>
+  <div class="lk-btns">${btn({ href: '#watch', label: 'Watch the videos' })}${paper ? btn({ href: `https://doi.org/${paper.doi}`, label: 'Paper (OCEANS 2021) ↗', ghost: true, ext: true }) : ''}</div>`;
 
-// Figure lightbox: click a figure to enlarge; Escape or a click closes it.
-const box = document.createElement('div');
-box.className = 'auv-lightbox'; box.hidden = true;
-box.innerHTML = '<button type="button" aria-label="Close">&times;</button><figure><img alt=""><figcaption></figcaption></figure>';
-document.body.appendChild(box);
-const closeBox = () => { box.hidden = true; };
-document.getElementById('main').addEventListener('click', (e) => {
-  const fig = e.target.closest('.auv-zoom');
-  if (!fig) return;
-  box.querySelector('img').src = fig.querySelector('img').src;
-  box.querySelector('img').alt = fig.querySelector('img').alt;
-  box.querySelector('figcaption').textContent = fig.querySelector('figcaption').textContent;
-  box.hidden = false;
-});
-box.addEventListener('click', closeBox);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBox(); });
+const html = [
+  hero({ stage: stage('hero', { cls: 'lk-bleed', focus: '0.55 0.16 0.97 0.88', focusM: '0.04 0.18 0.96 0.94' }), html: heroHtml }),
 
-runPage({
+  split({ flip: true, text: `${intro(brief)}${list(brief.more)}`, media: stage('envelope', { focus: '0.06 0.12 0.94 0.94' }) }),
+
+  band({
+    cls: 'lk-over-t',
+    stage: stage('vcycle', { cls: 'au-vband', focus: '0.4 0.1 0.97 0.92', focusM: '0.02 0.08 0.98 0.92' }),
+    over: intro(vc),
+    below: `${steps(VNAMES.map((title) => ({ title })), { id: 'vcycle', cls: 'au-vsteps' })}
+      ${grid(vc.more.map((m, i) => card({ kicker: ['Rating', 'Threshold', 'Iterations'][i] || 'Note', text: m })), 'lk-g3 au-vcards')}`,
+  }),
+
+  split({ text: `${intro(concept)}${table(concept.table)}${more(concept)}`, media: figs(concept) }),
+
+  split({
+    flip: true,
+    text: `${intro(mat)}${table(mat.table)}${more(mat)}`,
+    media: `${figs(mat)}
+      ${bars({ title: 'Beam deformation under the same load (L = 450 mm)', unit: 'mm', items: [{ label: 'Rectangular, 5 mm', value: 1.12 }, { label: 'Rectangular, 25 mm', value: 0.004 }, { label: 'T-slot extrusion', value: 0.02, mark: true }] })}
+      ${bars({ title: 'Beam mass', unit: 'g', items: [{ label: 'Rectangular, 5 mm', value: 180 }, { label: 'Rectangular, 25 mm', value: 900 }, { label: 'T-slot extrusion', value: 334, mark: true }] })}`,
+  }),
+
+  split({
+    text: `${intro(cfd)}${stats([{ value: '12.62', unit: 'N', label: 'Surge drag at 0.5 m/s' }, { value: '1.07', unit: '%', label: 'Sphere added-mass error' }, { value: '451,099', label: 'Mesh nodes (final)' }])}${table(cfd.table)}${more(cfd)}`,
+    media: `${figs(cfd)}
+      ${bars({ title: 'Added mass by direction', unit: 'kg', items: [{ label: 'Surge', value: 5.56 }, { label: 'Sway', value: 9.34, mark: true }, { label: 'Heave', value: 8.03 }] })}`,
+  }),
+
+  split({
+    flip: true,
+    text: `${intro(stab)}${stats([{ value: '45 → 30', unit: 'cm', label: 'Bottom hull shortened' }, { value: '5', unit: 'kg', label: 'Dead weights added' }, { value: '2.91', unit: '%', label: 'Final positive buoyancy' }])}${more(stab, true)}`,
+    media: stage('stability', { focus: '0.04 0.08 0.76 0.92', focusM: '0.02 0.08 0.62 0.92' }),
+  }),
+
+  split({ text: `${intro(fab)}${table(fab.table)}${more(fab)}`, media: figs(fab) }),
+
+  split({
+    flip: true,
+    text: `${intro(test)}${stats([{ value: '312', unit: 'K', label: 'Simulated peak (COMSOL)' }, { value: '353', unit: 'K', label: 'ESC failure temperature' }, { value: '1', unit: 'h', label: 'Full-load heat run' }])}${more(test)}`,
+    media: `${figs(test)}
+      ${bars({ title: 'Electronics temperature', unit: 'K', items: [{ label: 'Simulated peak', value: 312, mark: true }, { label: 'ESC failure', value: 353 }], note: 'The simulated peak stays 41 K below the point where the ESCs fail.' })}`,
+  }),
+
+  split({
+    text: `${intro(grip)}${table(grip.table)}${more(grip)}`,
+    media: `${figs(grip)}
+      ${bars({ title: 'Object detection, time per frame', unit: 'ms', items: [{ label: '1920 × 1080', value: 215 }, { label: '640 × 360', value: 20, mark: true }] })}`,
+  }),
+
+  band({
+    cls: 'lk-over-r',
+    stage: stage('final', { focus: '0.04 0.1 0.6 0.92', focusM: '0.04 0.12 0.96 0.94' }),
+    over: intro(fin),
+    below: `${stats([{ value: '60 × 47 × 37.5', unit: 'cm', label: 'Size' }, { value: '20.6', unit: 'kg', label: 'Mass in air' }, { value: '2.91', unit: '%', label: 'Positive buoyancy' }, { value: '3–6', unit: '°', label: 'Pitch' }, { value: '5', unit: 'DOF', label: 'Active degrees of freedom' }])}
+      <div class="au-final">${fig(brief.figures[0], 'auv')}<div class="lk-rv">${list(fin.more)}</div></div>`,
+  }),
+
+  sec(`${head({ kicker: `${String(team.i + 1).padStart(2, '0')} of ${N} · ${team.title}`, title: team.eli5, lede: team.text })}
+    ${grid([...A.members.map((m) => card({ kicker: 'Team', title: m })), card({ kicker: 'Supervisor', title: A.supervisor })], 'au-team')}
+    ${callout(`<p><b>Scope of the report</b></p><p>${esc(A.scope)}</p>`)}`, { cls: 'au-team-sec' }),
+
+  sec(`${head({ kicker: 'Watch', title: 'Black Pearl in action' })}
+    <div class="lk-grid au-videos lk-rv-g">${A.videos.map((v) => `<figure class="au-vid"><div class="lk-video"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.id)}" title="${esc(v.title)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><figcaption>${esc(v.title)}</figcaption></figure>`).join('')}</div>`, { id: 'watch' }),
+
+  paper ? cta({ kicker: 'Paper', title: paper.title, text: paper.venue, links: [{ href: `https://doi.org/${paper.doi}`, label: `doi.org/${paper.doi} ↗`, ext: true }, { href: '/sections/masters.html', label: "Master's thesis →", ghost: true }] }) : '',
+].join('');
+
+mountPage({
   active: 'auv',
-  build({ THREE, scene, label, reduceMotion }) {
-    const V = (x, y, z) => new THREE.Vector3(x, y, z);
-    const vis = (p, a, w) => Math.max(0, Math.min(1, 1 - Math.abs(p - a) / w));
-    const root = new THREE.Group();
-    root.position.set(2.4, 0, 0);
-    scene.add(root);
-
-    // ── The vehicle (1 unit ≈ 10 cm): 60 × 47 × 37.5 cm.
-    const auv = new THREE.Group();
-    const metal = new THREE.MeshStandardMaterial({ color: 0x2b2d3f, metalness: 0.6, roughness: 0.35 });
-    const alu = new THREE.MeshStandardMaterial({ color: 0xc9c9cf, metalness: 0.8, roughness: 0.25 });
-    const acrylic = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.05, transparent: true, opacity: 0.22, depthWrite: false });
-    const hull = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.95, 4.6, 48, 1, true), acrylic);
-    hull.rotation.z = Math.PI / 2; hull.position.y = 0.5;
-    [-2.3, 2.3].forEach((x) => { const cap = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.18, 48), alu); cap.rotation.z = Math.PI / 2; cap.position.set(x, 0.5, 0); auv.add(cap); });
-    const dome = new THREE.Mesh(new THREE.SphereGeometry(0.75, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), acrylic);
-    dome.rotation.z = -Math.PI / 2; dome.position.set(2.4, 0.5, 0);
-    const lens = new THREE.Mesh(new THREE.SphereGeometry(0.18, 16, 12), new THREE.MeshBasicMaterial({ color: 0x1a1a22 }));
-    lens.position.set(2.75, 0.5, 0);
-    // Electronics stack inside the hull.
-    const boards = [0x2e7a49, 0x2e7a49, 0x3a5a8a].map((c, i) => { const b = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.06, 1.2), new THREE.MeshStandardMaterial({ color: c, roughness: 0.6 })); b.position.set(-0.8 + i * 1.1, 0.5 + (i - 1) * 0.25, 0); auv.add(b); return b; });
-    const battery = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 3.4, 32), metal);
-    battery.rotation.z = Math.PI / 2; battery.position.y = -1.05;
-    // Frame: two side plates and cross bars.
-    [-2.2, 2.2].forEach((z) => { const plate = new THREE.Mesh(new THREE.BoxGeometry(5.6, 3.2, 0.08), new THREE.MeshStandardMaterial({ color: 0x8b1a1a, roughness: 0.5, transparent: true, opacity: 0.45, depthWrite: false, side: THREE.DoubleSide })); plate.position.set(0, -0.2, z); auv.add(plate); });
-    [-2, 2].forEach((x) => [-1.6, 1.3].forEach((y) => { const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 4.4, 8), alu); bar.rotation.x = Math.PI / 2; bar.position.set(x, y, 0); auv.add(bar); }));
-    // Thrusters: two surge, two heave, one sway (5 degrees of freedom with roll/yaw from pairs).
-    const props = [];
-    const thruster = (pos, axis) => {
-      const g = new THREE.Group();
-      g.add(new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.06, 8, 24), metal));
-      const prop = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.08, 0.02), alu);
-      g.add(prop); props.push(prop);
-      g.position.copy(pos);
-      if (axis === 'x') g.rotation.y = Math.PI / 2;
-      if (axis === 'y') g.rotation.x = Math.PI / 2;
-      auv.add(g);
-    };
-    thruster(V(-2.9, 0.2, 1.4), 'x'); thruster(V(-2.9, 0.2, -1.4), 'x');
-    thruster(V(0, 1.6, 1.6), 'y'); thruster(V(0, 1.6, -1.6), 'y');
-    thruster(V(1.6, -0.6, 2.35), 'z');
-    auv.add(hull, dome, lens, battery);
-    root.add(auv);
-
-    // ── Rule-book envelope: 70 × 50 × 50 cm.
-    const env = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(7, 5, 5)), new THREE.LineBasicMaterial({ color: 0xff6a4a, transparent: true }));
-    env.position.y = 0.1;
-    root.add(env);
-    const envLabel = label('<b>Rule book</b><span>&lt; 70 × 50 × 50 cm · &lt; 40 kg</span>', () => env.getWorldPosition(new THREE.Vector3()).add(V(0, 3, 0)), 's-pin');
-    const finalLabel = label('<b>60 × 47 × 37.5 cm</b><span>20.6 kg · +2.91 % buoyancy · 5 DOF</span>', () => auv.getWorldPosition(new THREE.Vector3()).add(V(0, 2.8, 0)), 's-pin');
-
-    // ── The V-cycle as a 3D path: verification down the left arm, validation up the right.
-    const vg = new THREE.Group();
-    const vPts = [V(-3.5, 2.2, 0), V(-2.3, 0.7, 0), V(-1.2, -0.8, 0), V(0, -2, 0), V(1.2, -0.8, 0), V(2.3, 0.7, 0), V(3.5, 2.2, 0)];
-    const vCurve = new THREE.CatmullRomCurve3(vPts, false, 'catmullrom', 0);
-    vg.add(new THREE.Mesh(new THREE.TubeGeometry(vCurve, 80, 0.05, 8), new THREE.MeshBasicMaterial({ color: 0xf2ece4, transparent: true, opacity: 0.4 })));
-    const vNames = ['Requirements', 'System design', 'Virtual prototype', 'Decision matrix', 'Physical prototype', 'System tests', 'Competition'];
-    vPts.forEach((p, i) => {
-      const n = new THREE.Mesh(new THREE.SphereGeometry(0.16, 16, 12), new THREE.MeshStandardMaterial({ color: i === 3 ? 0xffc46b : 0xd24a4a, emissive: i === 3 ? 0xffb36b : 0x8b1a1a, emissiveIntensity: 0.6 }));
-      n.position.copy(p);
-      vg.add(n);
-      const w = new THREE.Vector3();
-      vg.userData[`l${i}`] = label(`<b>${vNames[i]}</b>`, () => n.getWorldPosition(w), 's-pin');
-    });
-    const pulse = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
-    vg.add(pulse);
-    vg.position.set(0.4, 0.2, -1.5);
-    root.add(vg);
-
-    // ── Rising bubbles.
-    const B = 120, bpos = new Float32Array(B * 3);
-    for (let i = 0; i < B; i++) bpos.set([(Math.random() - 0.5) * 12, Math.random() * 10 - 5, (Math.random() - 0.5) * 6], i * 3);
-    const bgeo = new THREE.BufferGeometry();
-    bgeo.setAttribute('position', new THREE.BufferAttribute(bpos, 3));
-    const bubbles = new THREE.Points(bgeo, new THREE.PointsMaterial({ color: 0x9fd0ff, size: 0.07, transparent: true, opacity: 0.6, depthWrite: false }));
-    root.add(bubbles);
-
-    return {
-      // Text steps beyond the original six share the vehicle stage (3); stage index drives the 3D.
-      keyframes: STAGE.map((g) => KF[g]),
-      update(t, p0, dt) {
-        const lo = Math.max(0, Math.min(STAGE.length - 1, Math.floor(p0))), hi = Math.min(STAGE.length - 1, lo + 1);
-        const p = STAGE[lo] + (STAGE[hi] - STAGE[lo]) * (p0 - lo);
-        const finalAt = vis(p0, STAGE.length - 3, 0.7);
-        const time = reduceMotion ? 0 : t;
-        props.forEach((pr) => (pr.rotation.z = time * 18));
-        const swim = Math.max(vis(p, 0, 1), vis(p, 4, 1), vis(p, 5, 1));
-        const vstep = vis(p, 2, 0.75);
-        auv.scale.setScalar(Math.max(0.001, 1 - vstep * 0.65));
-        auv.position.set(swim * Math.sin(time * 0.4) * 0.6, swim * Math.sin(time * 0.7) * 0.25 + vstep * -2.2, vstep * 1.5);
-        auv.rotation.set(Math.sin(time * 0.5) * 0.05 * swim, (vis(p, 3, 0.8) ? time * 0.3 : 0.6) + swim * Math.sin(time * 0.3) * 0.2, 0);
-        const e = vis(p, 1, 0.8);
-        env.visible = e > 0.02; env.material.opacity = e; envLabel.visible = e > 0.6;
-        finalLabel.visible = finalAt > 0.6;
-        vg.visible = vstep > 0.02;
-        vg.scale.setScalar(Math.max(0.001, vstep));
-        for (let i = 0; i < vNames.length; i++) vg.userData[`l${i}`].visible = vstep > 0.6;
-        pulse.position.copy(vCurve.getPointAt((time * 0.15) % 1));
-        for (let i = 0; i < B; i++) { bpos[i * 3 + 1] += dt * (0.6 + (i % 5) * 0.15); if (bpos[i * 3 + 1] > 5) bpos[i * 3 + 1] = -5; }
-        bgeo.attributes.position.needsUpdate = true;
-      },
-    };
-  },
+  html,
+  stages: { hero: heroStage, envelope: envelopeStage, vcycle: vcycleStage, stability: stabilityStage, final: finalStage },
 });

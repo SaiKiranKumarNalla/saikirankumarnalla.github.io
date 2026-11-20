@@ -1,0 +1,10 @@
+/* Contact page: contact cards. */
+.ct-cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ct-link{font-weight:600;word-break:break-word}
+.ct-open .lk-chips{margin:0 0 1.2rem}
+.ct-open .lk-chips span{font-size:.9rem;padding:7px 15px}
+.ct-open .lk-callout{max-width:760px}
+@media (max-width:1100px){.ct-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){
+  .ct-cards{grid-template-columns:1fr}
+}

@@ -1,27 +1,32 @@
-/* About page: organisation logos beside each degree, role and partner. */
+/* About page: the path timeline with organisation logos, and the partner cards. */
 
 /* Logos sit on a small white tile so coloured or dark marks read the same in both themes. */
-.a-logo{flex:none;display:flex;align-items:center;justify-content:center;width:92px;height:42px;padding:5px 6px;box-sizing:border-box;background:#fff;border:1px solid rgba(27,23,21,.1);border-radius:10px}
-.a-logo img{display:block;max-width:100%;max-height:31px;width:auto;height:auto;object-fit:contain}
-.a-logo-none{background:transparent;border-color:transparent}
-/* Dark theme (the default): soften the white tile so it does not glare on the dark card. */
-:root:not([data-theme="light"]) .a-logo:not(.a-logo-none){border-color:rgba(255,255,255,.16);filter:brightness(.92)}
+.ab-logo{flex:none;display:flex;align-items:center;justify-content:center;width:92px;height:42px;padding:5px 6px;box-sizing:border-box;background:#fff;border:1px solid rgba(27,23,21,.1);border-radius:10px}
+.ab-logo img{display:block;max-width:100%;max-height:31px;width:auto;height:auto;object-fit:contain}
+.ab-logo-none{background:transparent;border-color:transparent}
+:root:not([data-theme="light"]) .ab-logo:not(.ab-logo-none){border-color:rgba(255,255,255,.16);filter:brightness(.92)}
 
-.a-timeline{margin-top:.2rem}
-.a-entry{display:flex;gap:14px;align-items:flex-start;padding:10px 0;line-height:1.45;font-size:.93rem}
-.a-text{min-width:0;flex:1}
-.a-years{white-space:nowrap;margin-left:2px}
-.a-group{display:block;margin-top:1px;font-size:.78rem;line-height:1.4;color:var(--faint)}
-.s-main .a-entry p{margin:.15rem 0 0;font-size:.86rem;line-height:1.5}
+.ab-path{gap:clamp(18px,2.4vw,36px)}
+.ab-path>li{display:flex;flex-direction:column;min-width:0}
+.ab-stop h3{margin:.1rem 0 .5rem;font-size:1.25rem;line-height:1.25}
+.ab-stop>p{margin:0 0 1rem;font-size:.92rem}
+.ab-roles{display:grid;gap:10px;margin:0 0 1rem}
+.ab-role{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--lk-card)}
+.ab-rt{min-width:0;display:flex;flex-direction:column;gap:1px;line-height:1.4}
+.ab-rt b{font-size:.93rem;color:var(--text)}
+.ab-org{font-size:.84rem;color:var(--muted)}
+.ab-years{font-family:'Space Mono',monospace;font-size:.74rem;color:var(--accent)}
+.ab-group{font-size:.76rem;color:var(--faint)}
+.lk-main .ab-rt p{margin:.3rem 0 0;font-size:.84rem;line-height:1.5}
+.ab-more{font-size:.88rem;font-weight:600;text-decoration:none}
+.ab-more:hover{text-decoration:underline}
 
-.a-partners{list-style:none;margin:.3rem 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.a-partners li{display:flex;flex-direction:column;gap:6px;min-width:0}
-.a-partners li b{display:block;color:var(--text);font-weight:600;font-size:.82rem;line-height:1.3}
-.a-partners li .s-meta{display:block;font-size:.74rem;line-height:1.3}
+.ab-partners .lk-card{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.ab-partners .ab-logo{margin-bottom:6px}
+.ab-pn{margin:0 !important}
 
 @media (max-width:860px){
-  .a-logo{width:74px;height:38px;padding:4px 5px;border-radius:9px}
-  .a-logo img{max-height:28px}
-  .a-entry{gap:12px}
-  .a-partners{gap:10px}
+  .ab-path{padding-left:30px}
+  .ab-logo{width:74px;height:38px;padding:4px 5px;border-radius:9px}
+  .ab-logo img{max-height:28px}
 }

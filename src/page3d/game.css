@@ -1,0 +1,23 @@
+/* Kage page: small additions to the layout kit. */
+.gm-quote{margin:1.2rem 0 0}
+.gm-quote p{font-style:italic;color:var(--text) !important;font-size:.95rem}
+.gm-story-stats{margin-top:1.4rem}
+.gm-showcase{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(20px,3vw,40px)}
+.gm-video{margin:0}
+.gm-video .lk-video{border:2px solid var(--accent);box-shadow:var(--lk-shadow)}
+.gm-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.gm-video figcaption{margin-top:.7rem;font-size:.9rem;color:var(--muted);line-height:1.55}
+.gm-shots{grid-template-columns:repeat(3,minmax(0,1fr))}
+.gm-env{grid-template-columns:repeat(6,minmax(0,1fr))}
+.gm-env .lk-fig:nth-child(-n+2){grid-column:span 3}
+.gm-env .lk-fig:nth-child(n+3){grid-column:span 2}
+.gm-env .lk-zoom{aspect-ratio:16/10}
+.gm-env .lk-zoom img,.gm-shots .lk-zoom img{object-fit:cover;padding:0}
+.gm-shots .lk-zoom{aspect-ratio:16/9}
+.gm-perf{margin-top:1.4rem}
+.gm-crew .lk-card{border-top-color:var(--accent)}
+@media (max-width:1100px){.gm-shots{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){
+  .gm-shots,.gm-env{grid-template-columns:1fr}
+  .gm-env .lk-fig:nth-child(n){grid-column:auto}
+}

@@ -1,13 +1,12 @@
-// About: a dark glass globe turns to each city of Sai's path as the visitor scrolls.
+// About, on the layout kit: a hero with the globe, a stat strip, the chronological path as a horizontal
+// timeline (Hyderabad, Paris, Toulouse) whose stops hold the degrees and roles as logo cards, the PhD partners,
+// a wide band with Europe and the cities Sai is open to, and a closing call to get in touch.
 import profile from '../../content/profile.json';
-import life from '../../content/life.json';
-import { runPage } from './engine.js';
-import { makeGlobe } from './globe.js';
+import { mountPage, hero, sec, band, cta, head, stage, stats, grid, card, chips, btn, esc } from './layout.js';
+import { heroStage, nextStage } from './about-scene.js';
 import './about.css';
 
-const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-
-// Every degree and role in profile.json, placed in the city step it belongs to and sorted oldest first.
+// Every degree and role in profile.json, placed in the city it belongs to and sorted oldest first.
 // The AUV club is not a profile entry, so it is added here.
 const EXTRA = [
   { role: 'Deputy team lead', org: 'Autonomous Underwater Vehicle club, Mahindra École Centrale', years: '2019–2020', start: '2019', city: 'hyderabad', points: ['Built the club from scratch: 25 members, finances, media.'] },
@@ -18,162 +17,56 @@ const ENTRIES = [
   ...EXTRA.map((e) => ({ ...e, title: e.role, line: e.points[0] })),
 ].sort((a, b) => a.start.localeCompare(b.start) || (b.edu ? 1 : 0) - (a.edu ? 1 : 0));
 
-const logo = (src, alt) => `<span class="a-logo${src ? '' : ' a-logo-none'}">${src ? `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async">` : ''}</span>`;
-const entry = (e) => `<div class="s-role a-entry">${logo(e.logo, e.logoAlt || e.org)}<div class="a-text">
-  <b>${esc(e.title)}</b>, ${esc(e.org)} <span class="s-meta a-years">${esc(e.years)}</span>
-  ${e.group ? `<span class="a-group">${esc(e.group)}</span>` : ''}${e.line ? `<p>${esc(e.line)}</p>` : ''}</div></div>`;
-const timeline = (city) => `<div class="a-timeline">${ENTRIES.filter((e) => e.city === city).map(entry).join('')}</div>`;
-const partners = (list = []) => list.length ? `<h3>Partners</h3><ul class="a-partners">${list.map((p) =>
-  `<li>${logo(p.logo, p.name)}<span><b>${esc(p.name)}</b><span class="s-meta">${esc(p.note)}</span></span></li>`).join('')}</ul>` : '';
-const phdPartners = profile.experience.flatMap((e) => e.partners || []);
+const logo = (src, alt) => `<span class="ab-logo${src ? '' : ' ab-logo-none'}">${src ? `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async">` : ''}</span>`;
+const role = (e) => `<article class="ab-role${e.edu ? ' ab-edu' : ''}">${logo(e.logo, e.logoAlt || e.org)}<div class="ab-rt">
+  <b>${esc(e.title)}</b><span class="ab-org">${esc(e.org)}</span><span class="ab-years">${esc(e.years)}</span>
+  ${e.group ? `<span class="ab-group">${esc(e.group)}</span>` : ''}${e.line ? `<p>${esc(e.line)}</p>` : ''}</div></article>`;
+const roles = (city) => `<div class="ab-roles">${ENTRIES.filter((e) => e.city === city).map(role).join('')}</div>`;
 
-const CITY = {
-  hyderabad: { name: 'Hyderabad', sub: 'India', lat: 17.39, lon: 78.49 },
-  paris: { name: 'Paris · Palaiseau', sub: 'France', lat: 48.71, lon: 2.25 },
-  toulouse: { name: 'Toulouse', sub: 'France', lat: 43.6, lon: 1.44 },
-  haifa: { name: 'Haifa', sub: 'Rambam Health Care Campus', lat: 32.79, lon: 34.99 },
-  london: { name: 'London', sub: 'Open to', lat: 51.51, lon: -0.13, side: 'left' },
-  amsterdam: { name: 'Amsterdam', sub: 'Open to', lat: 52.37, lon: 4.9, side: 'above' },
-  berlin: { name: 'Berlin', sub: 'Open to', lat: 52.52, lon: 13.4, side: 'right' },
-};
-
-// Each step: text, which city the globe faces, which pins are labelled, and which arcs are drawn.
-const STEPS = [
-  {
-    title: 'Intro', face: null, pins: ['hyderabad', 'paris', 'toulouse'], arcs: [],
-    html: `<p class="s-kicker">About</p>
-      <h1>Sai Kiran Kumar Nalla, PhD</h1>
-      <p class="s-lede">${esc(profile.headline)}. ${esc(profile.tagline)}</p>
-      <p>${esc(profile.now)}</p>
-      <div class="s-stat"><div><b>3</b><span>countries</span></div><div><b>6</b><span>institutions</span></div><div><b>4</b><span>languages</span></div></div>
-      <p class="s-scroll">Scroll to follow the path</p>`,
-  },
-  {
-    title: 'Hyderabad', face: 'hyderabad', pins: ['hyderabad'], arcs: [],
-    html: `<p class="s-kicker">2016–2021 · Hyderabad, India</p><h2>Engineering roots</h2>
-      <p>Mechanical engineering at Mahindra École Centrale, on an excellence scholarship. First research: simulating how gas bubbles disturb blood flow in the carotid artery, which became a journal paper.</p>
-      ${timeline('hyderabad')}
-      <a class="s-more" href="/sections/auv.html">Black Pearl, the underwater robot →</a>`,
-  },
-  {
-    title: 'Paris', face: 'paris', pins: ['paris'], arcs: [['hyderabad', 'paris']],
-    html: `<p class="s-kicker">2021–2023 · Paris & Palaiseau, France</p><h2>Biomedical engineering, hospitals and a startup</h2>
-      <p>A fully funded MSc at École Polytechnique, alongside a deep-tech startup, a fluid-mechanics lab, a hospital and a medtech company.</p>
-      ${timeline('paris')}
-      <a class="s-more" href="/sections/masters.html">Master's thesis: microwave ablation →</a>`,
-  },
-  {
-    title: 'Toulouse', face: 'toulouse', pins: ['toulouse', 'haifa'], arcs: [['paris', 'toulouse'], ['toulouse', 'haifa']],
-    html: `<p class="s-kicker">2023–2026 · Toulouse, France</p><h2>PhD in medical imaging</h2>
-      <p>At the IUCT Oncopole cancer institute: ground truth for PET/CT from 3D-printed phantoms and synthetic lesions.</p>
-      ${timeline('toulouse')}
-      ${partners(phdPartners)}
-      <a class="s-more" href="/sections/research.html">The research, explained →</a>`,
-  },
-  {
-    title: 'Next', face: 'europe', pins: ['toulouse', 'london', 'amsterdam', 'berlin'], arcs: [['toulouse', 'london'], ['toulouse', 'amsterdam'], ['toulouse', 'berlin']],
-    html: `<p class="s-kicker">Now · ${esc(profile.location)}</p><h2>What's next</h2>
-      <p>Looking for roles where physics-grade imaging meets AI: industry R&amp;D, medtech, and research groups building simulation or generative models for PET/CT.</p>
-      <h3>Open to</h3><div class="s-chips">${profile.openTo.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
-      <a class="s-more" href="/sections/life.html">Off the clock: hobbies, games &amp; life →</a>
-      <a class="s-more" style="margin-top:6px" href="/sections/contact.html">Get in touch →</a>`,
-  },
+const STOPS = [
+  { city: 'hyderabad', when: '2016–2021', place: 'Hyderabad, India', title: 'Engineering roots',
+    text: 'Mechanical engineering at Mahindra École Centrale, on an excellence scholarship. First research: simulating how gas bubbles disturb blood flow in the carotid artery, which became a journal paper.',
+    link: { href: '/sections/auv.html', label: 'Black Pearl, the underwater robot →' } },
+  { city: 'paris', when: '2021–2023', place: 'Paris & Palaiseau, France', title: 'Biomedical engineering, hospitals and a startup',
+    text: 'A fully funded MSc at École Polytechnique, alongside a deep-tech startup, a fluid-mechanics lab, a hospital and a medtech company.',
+    link: { href: '/sections/masters.html', label: "Master's thesis: microwave ablation →" } },
+  { city: 'toulouse', when: '2023–2026', place: 'Toulouse, France', title: 'PhD in medical imaging',
+    text: 'At the IUCT Oncopole cancer institute: ground truth for PET/CT from 3D-printed phantoms and synthetic lesions.',
+    link: { href: '/sections/research.html', label: 'The research, explained →' } },
 ];
+const path = `<ol class="lk-tl ab-path lk-rv-g">${STOPS.map((s) => `<li class="ab-stop"><span class="lk-tl-dot" aria-hidden="true"></span>
+  <time>${esc(s.when)} · ${esc(s.place)}</time><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p>
+  ${roles(s.city)}<a class="ab-more" href="${esc(s.link.href)}">${esc(s.link.label)}</a></li>`).join('')}</ol>`;
 
-document.getElementById('main').innerHTML = STEPS.map((s, i) =>
-  `<section class="s-step${i === 0 ? ' s-hero' : ''}" data-title="${esc(s.title)}"><div class="s-card">${s.html}</div></section>`).join('');
+const partners = profile.experience.flatMap((e) => e.partners || []);
 
-runPage({
-  active: 'about',
-  build({ THREE, scene, camera, label, reduceMotion, lowPower }) {
-    const R = 3.6;
-    const globe = new THREE.Group();
-    globe.position.set(2.2, 0, 0);
-    scene.add(globe);
+const heroHtml = `<p class="lk-k">About</p>
+  <h1>${esc(profile.displayName)}</h1>
+  <p class="lk-lede">${esc(profile.headline)}. ${esc(profile.tagline)}</p>
+  <p>${esc(profile.now)}</p>
+  <div class="lk-btns">${btn({ href: '#path', label: 'Follow the path' })}${btn({ href: '/sections/contact.html', label: 'Get in touch', ghost: true })}</div>`;
 
-    // Real country shapes; the places Sai has lived and visited are lit.
-    const earth = makeGlobe({ R, lowPower, lived: life.travel.lived.map((c) => c.id), visited: life.travel.visited.map((c) => c.id) });
-    globe.add(earth.group);
-    const halo = earth.halo;
-    const ll = earth.ll;
+const html = [
+  hero({ stage: stage('hero', { cls: 'lk-bleed', focus: '0.55 0.12 0.98 0.9', focusM: '0.04 0.08 0.96 0.94' }), html: heroHtml }),
 
-    // City pins.
-    const pins = {};
-    for (const [id, c] of Object.entries(CITY)) {
-      const p = ll(c.lat, c.lon, R);
-      const pin = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 12), new THREE.MeshBasicMaterial({ color: 0xff6a5a }));
-      pin.position.copy(p);
-      const ring = new THREE.Mesh(new THREE.RingGeometry(0.1, 0.14, 32), new THREE.MeshBasicMaterial({ color: 0xff6a5a, transparent: true, opacity: 0.6, side: THREE.DoubleSide }));
-      ring.position.copy(p).multiplyScalar(1.002);
-      ring.lookAt(p.clone().multiplyScalar(2));
-      globe.add(pin, ring);
-      const world = new THREE.Vector3();
-      const l = label(`<b>${c.name}</b><span>${c.sub}</span>`, () => pin.getWorldPosition(world), `s-pin${c.side ? ` s-pin-${c.side}` : ''}`);
-      pins[id] = { pin, ring, l, world };
-    }
+  sec(stats([{ value: '3', label: 'countries' }, { value: '6', label: 'institutions' }, { value: '4', label: 'languages' }])),
 
-    // Arcs between cities, drawn progressively.
-    const arcs = {};
-    const arcFor = (a, b) => {
-      const key = `${a}-${b}`;
-      if (arcs[key]) return arcs[key];
-      const pa = ll(CITY[a].lat, CITY[a].lon, R), pb = ll(CITY[b].lat, CITY[b].lon, R);
-      const lift = 1 + pa.distanceTo(pb) / (R * 2.2);
-      const mid = pa.clone().add(pb).normalize().multiplyScalar(R * lift);
-      const curve = new THREE.QuadraticBezierCurve3(pa, mid, pb);
-      const geo = new THREE.TubeGeometry(curve, 64, 0.022, 6, false);
-      const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0xff7a5a, transparent: true, opacity: 0.9 }));
-      geo.setDrawRange(0, 0);
-      globe.add(mesh);
-      return (arcs[key] = { mesh, geo, total: geo.index.count, shown: 0 });
-    };
-    STEPS.forEach((s) => s.arcs.forEach(([a, b]) => arcFor(a, b)));
+  sec(`${head({ kicker: '2016 to now', title: 'The path, city by city', lede: 'Degrees and roles in order, from engineering in Hyderabad to a PhD in Toulouse.' })}${path}`, { id: 'path', wide: true }),
 
-    // Where the globe faces at each step (rotation.x = lat, rotation.y = -lon brings a point to the camera).
-    const FACE = {
-      hyderabad: [17, 78.5], paris: [46, 2.3], toulouse: [40, 12], europe: [50, 5], wide: [32, 42],
-    };
-    const faceRot = (s, i) => {
-      const [lat, lon] = s.face ? FACE[s.face] : [18, 40 + i];
-      return [THREE.MathUtils.degToRad(lat * 0.85), THREE.MathUtils.degToRad(-lon)];
-    };
+  sec(`${head({ kicker: 'PhD partners', title: 'Who the PhD worked with' })}
+    ${grid(partners.map((p) => card({ html: `${logo(p.logo, p.name)}<h3 class="ab-pn">${esc(p.name)}</h3><p>${esc(p.note)}</p>` })), 'ab-partners')}`),
 
-    const normal = new THREE.Vector3(), toCam = new THREE.Vector3();
-    return {
-      keyframes: [
-        { pos: [0, 1.2, 21], look: [0.4, 0, 0] },
-        { pos: [1.2, 0.6, 17.5], look: [0.9, 0, 0] },
-        { pos: [1.2, 0.6, 17], look: [0.9, 0, 0] },
-        { pos: [1.2, 0.6, 17], look: [0.9, 0, 0] },
-        { pos: [0.6, 1.5, 18], look: [0.6, 0, 0] },
-      ],
-      onTheme(p) { earth.setTheme(p.night); },
-      update(t, progress, dt) {
-        const i = Math.min(STEPS.length - 2, Math.floor(progress));
-        const f = Math.max(0, Math.min(1, progress - i));
-        const e = f * f * (3 - 2 * f);
-        const [ax, ay] = faceRot(STEPS[i], i), [bx, by] = faceRot(STEPS[i + 1], i + 1);
-        let dy = by - ay; dy = ((dy + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
-        const spin = !reduceMotion && progress < 0.5 ? t * 0.05 * (1 - progress * 2) : 0;
-        globe.rotation.set(ax + (bx - ax) * e, ay + dy * e + spin, 0, 'XYZ');
+  band({
+    stage: stage('next', { cls: 'ab-next', focus: '0.42 0.06 0.98 0.94', focusM: '0.04 0.06 0.96 0.94' }),
+    over: `<p class="lk-k">Now · ${esc(profile.location)}</p><h2>What's next</h2>
+      <p>Looking for roles where physics-grade imaging meets AI: industry R&amp;D, medtech, and research groups building simulation or generative models for PET/CT.</p>
+      <h3>Open to</h3>${chips(profile.openTo)}`,
+  }),
 
-        const step = STEPS[Math.round(progress)];
-        for (const [id, p] of Object.entries(pins)) {
-          const on = step.pins.includes(id);
-          // Only label pins on the camera-facing side of the globe.
-          normal.copy(p.pin.getWorldPosition(p.world)).sub(globe.position).normalize();
-          p.l.visible = on && normal.dot(toCam.copy(camera.position).sub(globe.position).normalize()) > 0.2;
-          p.pin.visible = on || ['hyderabad', 'paris', 'toulouse', 'haifa'].includes(id);
-          p.ring.scale.setScalar(on ? 1 + Math.sin(t * 3) * 0.25 + 0.25 : 0.6);
-        }
-        const wanted = new Set(step.arcs.map(([a, b]) => `${a}-${b}`));
-        for (const [k, a] of Object.entries(arcs)) {
-          const goal = wanted.has(k) ? a.total : 0;
-          a.shown += (goal - a.shown) * Math.min(1, dt * (goal ? 2.2 : 6));
-          a.geo.setDrawRange(0, Math.floor(a.shown / 3) * 3);
-        }
-        halo.material.opacity = 0.07 + Math.sin(t * 1.2) * 0.02;
-      },
-    };
-  },
-});
+  cta({
+    kicker: 'Next', title: "Let's talk", text: 'Research roles, industry R&D, medtech ventures, or a good conversation about PET and AI.',
+    links: [{ href: '/sections/contact.html', label: 'Get in touch →' }, { href: '/sections/life.html', label: 'Off the clock: hobbies, games & life →', ghost: true }],
+  }),
+].join('');
+
+mountPage({ active: 'about', html, stages: { hero: heroStage, next: nextStage } });

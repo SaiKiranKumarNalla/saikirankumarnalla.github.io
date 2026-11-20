@@ -1,157 +1,94 @@
-// Publications: a stack of floating paper sheets; the group being read fans out toward the camera.
+// Publications, on the layout kit: a hero with every paper fanned out in 3D, research metrics (Scholar,
+// ResearchGate, ORCID and the citations chart), a band with one stack of sheets per status and, right under it,
+// tabs that filter the papers (cards with first-page thumbnails that open in the lightbox, status badges,
+// DOIs and abstracts), and a closing band.
 import pubs from '../../content/publications.json';
 import metrics from '../../content/research-metrics.json';
-import { runPage } from './engine.js';
+import { mountPage, hero, band, split, cta, stage, tabs, stats, bars, acc, btn, esc } from './layout.js';
+import { heroStage, stacksStage, GROUPS } from './publications-scene.js';
 import './publications.css';
 
-const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const GROUPS = [['published', 'Published'], ['preprint', 'Preprints'], ['in-preparation', 'In preparation'], ['conference', 'Conference']];
-const paras = (t) => String(t).split(/\n\s*\n/).map((x) => `<p>${esc(x.trim())}</p>`).join('');
-// First-page images exist only for items flagged firstPage in the JSON (preprints, own posters and abstracts).
-// Everything else (journal papers, unpublished manuscripts) gets the typographic placeholder.
-const paperLink = (p) => p.pdf || (p.doi ? `https://doi.org/${p.doi}` : '');
-const thumb = (p) => {
-  if (!p.firstPage) return `<span class="pub-thumb pub-ph" aria-hidden="true"><i>${esc(String(p.venue).split(' · ')[0])}</i><b>${p.year}</b></span>`;
-  return `<button type="button" class="pub-thumb" data-pid="${esc(p.id)}" aria-label="Read the first page of ${esc(p.title)}"><img src="/media/papers/${esc(p.id)}-thumb.webp" alt="" loading="lazy" width="84" height="119"></button>`;
-};
-const item = (p) => {
-  const link = paperLink(p);
-  const linkLabel = p.pdf ? 'View full poster PDF ↗' : 'Read paper / manuscript ↗';
-  const statusBadge = p.statusText ? `<span class="pub-status-badge">${esc(p.statusText)}</span>` : '';
-  return `<div class="s-role pub-item">${thumb(p)}<div>
-    <b>${esc(p.title)}</b>
-    <p>${statusBadge}${esc(p.venue)} · ${p.year}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p>
-    ${link ? `<p class="pub-read"><a class="pub-read-btn" href="${esc(link)}" target="_blank" rel="noopener">${linkLabel}</a></p>` : ''}
-    ${p.abstract ? `<details class="s-know"><summary>Abstract</summary>${paras(p.abstract)}</details>`
-      : p.summary ? `<details class="s-know"><summary>Summary</summary><p>${esc(p.summary)}</p><p class="s-meta">Full abstract on the publisher's site.</p></details>` : ''}</div></div>`;
-};
-
 const gs = metrics.googleScholar, rg = metrics.researchGate, oc = metrics.orcid;
-const chart = () => {
+const paras = (t) => String(t).split(/\n\s*\n/).map((x) => `<p>${esc(x.trim())}</p>`).join('');
+const paperLink = (p) => p.pdf || (p.doi ? `https://doi.org/${p.doi}` : '');
+const where = (p) => String(p.venue).split(' · ')[0];
+const groups = GROUPS.map(([k, name]) => ({ k, name, list: pubs.filter((p) => p.status === k).sort((a, b) => b.year - a.year) })).filter((g) => g.list.length);
+const all = groups.flatMap((g) => g.list);
+
+// First-page images exist only for items flagged firstPage in the JSON; the rest get the typographic placeholder.
+const placeholder = (p) => `<span class="pb-thumb pb-ph" aria-hidden="true"><i>${esc(where(p))}</i><b>${esc(p.year)}</b></span>`;
+const thumb = (p, group) => (p.firstPage
+  ? `<button type="button" class="lk-zoom pb-thumb" data-src="/media/papers/${esc(p.id)}.webp" data-cap="${esc(`${p.title} (${where(p)}, ${p.year})`)}" data-group="${esc(group)}" data-pid="${esc(p.id)}" aria-label="Read the first page of ${esc(p.title)}"><img src="/media/papers/${esc(p.id)}-thumb.webp" alt="" loading="lazy" decoding="async" width="84" height="119"></button>`
+  : placeholder(p));
+
+const paper = (p, group) => {
+  const link = paperLink(p);
+  const more = p.abstract ? acc([{ title: 'Abstract', html: paras(p.abstract) }], 'pb-acc')
+    : p.summary ? acc([{ title: 'Summary', html: `<p>${esc(p.summary)}</p><p class="lk-meta">Full abstract on the publisher's site.</p>` }], 'pb-acc') : '';
+  return `<article class="lk-card pb-card" data-status="${esc(p.status)}">${thumb(p, group)}<div class="pb-body">
+    ${p.statusText ? `<span class="pb-badge">${esc(p.statusText)}</span>` : ''}
+    <h3>${esc(p.title)}</h3>
+    <p class="pb-venue">${esc(p.venue)} · ${esc(p.year)}${p.doi ? ` · <a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi.org/${esc(p.doi)}</a>` : ''}</p>
+    ${link ? `<a class="pb-read" href="${esc(link)}" target="_blank" rel="noopener">${p.pdf ? 'View full poster PDF ↗' : 'Read paper / manuscript ↗'}</a>` : ''}
+    ${more}</div></article>`;
+};
+const grid = (items, group) => `<div class="lk-grid pb-grid">${items.map((p) => paper(p, group)).join('')}</div>`;
+
+// ── Hero
+const heroHtml = `<p class="lk-k">Publications</p>
+  <h1>Papers, preprints and talks</h1>
+  <p class="lk-lede">Physical ground truth for PET/CT: 3D-printed phantoms, synthetic lesion insertion, simulation, and earlier work on blood-flow modelling.</p>
+  ${stats(groups.map((g) => ({ value: String(g.list.length), label: g.name.toLowerCase() })))}
+  <div class="lk-btns">${btn({ href: '#papers', label: 'Browse the papers' })}${btn({ href: '#metrics', label: 'Research metrics', ghost: true })}</div>`;
+
+// ── Metrics
+const yearly = (() => {
   const have = Object.fromEntries((gs.yearlyCitations || []).map((y) => [y.year, +y.value]));
   const ys = (gs.yearlyCitations || []).map((y) => +y.year);
   const end = Math.max(...ys), start = Math.min(gs.sinceYear || end, ...ys);
-  const yrs = []; for (let y = start; y <= end; y++) yrs.push(y);
-  const max = Math.max(1, ...yrs.map((y) => have[y] || 0)), W = 300, H = 110, bw = W / yrs.length;
-  return `<svg class="pub-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Citations per year">${yrs.map((y, i) => {
-    const v = have[y] || 0, h = v ? Math.max(4, (v / max) * 70) : 2, x = i * bw + bw * 0.2;
-    return `<rect class="${v ? '' : 'zero'}" x="${x}" y="${88 - h}" width="${bw * 0.6}" height="${h}" rx="3"/>${v ? `<text class="v" x="${x + bw * 0.3}" y="${82 - h}" text-anchor="middle">${v}</text>` : ''}<text x="${x + bw * 0.3}" y="104" text-anchor="middle">${y}</text>`;
-  }).join('')}</svg>`;
-};
-const tile = (n, l) => `<div class="pub-tile"><b>${n}</b><span>${l}</span></div>`;
-const STATUS_LABEL = { published: 'published', preprint: 'preprints', 'in-preparation': 'in preparation', conference: 'conference' };
-const counts = GROUPS.map(([k]) => [k, pubs.filter((p) => p.status === k).length]).filter(([, n]) => n);
-const metricsStep = `<section class="s-step" data-title="Research metrics"><div class="s-card">
-  <p class="s-kicker">Research metrics</p><h2>Impact at a glance</h2>
-  <p class="pub-src">Google Scholar</p>
-  <div class="pub-tiles">${tile(gs.citations, 'citations')}${tile(gs.hIndex, 'h-index')}${tile(gs.i10Index, 'i10-index')}</div>
-  <p class="s-meta" style="margin:0">Citations per year</p>${chart()}
-  <p class="pub-src">ResearchGate</p>
-  <div class="pub-tiles">${tile(rg.researchInterestScore, 'RI score')}${tile(rg.reads, 'reads')}${tile(rg.citations, 'citations')}</div>
-  <p class="pub-src">Output</p>
-  <div class="pub-counts">${counts.map(([k, n]) => `<span><b>${n}</b> ${STATUS_LABEL[k]}</span>`).join('')}</div>
-  <div class="pub-links"><a href="${esc(gs.profile)}" target="_blank" rel="noopener">Google Scholar</a><a href="${esc(rg.profile)}" target="_blank" rel="noopener">ResearchGate</a><a href="${esc(oc.profile)}" target="_blank" rel="noopener">ORCID ${esc(oc.id)}</a></div>
-  <p class="s-meta">Updated ${esc(metrics.updated)}</p>
-</div></section>`;
+  const out = [];
+  for (let y = start; y <= end; y++) out.push({ label: String(y), value: have[y] || 0, display: String(have[y] || 0), mark: y === end });
+  return out;
+})();
+const metricsSplit = split({
+  id: 'metrics', cls: 'lk-even',
+  text: `<p class="lk-k">Research metrics</p><h2>Impact at a glance</h2>
+    <p class="lk-lede">Early-career numbers, updated ${esc(metrics.updated)}.</p>
+    <p class="pb-src">Google Scholar</p>
+    ${stats([{ value: String(gs.citations), label: 'citations' }, { value: String(gs.hIndex), label: 'h-index' }, { value: String(gs.i10Index), label: 'i10-index' }])}
+    <p class="pb-src">ResearchGate</p>
+    ${stats([{ value: String(rg.researchInterestScore), label: 'RI score' }, { value: String(rg.reads), label: 'reads' }, { value: String(rg.citations), label: 'citations' }])}
+    <div class="lk-btns">${btn({ href: gs.profile, label: 'Google Scholar ↗', ext: true })}${btn({ href: rg.profile, label: 'ResearchGate ↗', ghost: true, ext: true })}${btn({ href: oc.profile, label: `ORCID ${oc.id} ↗`, ghost: true, ext: true })}</div>`,
+  media: bars({ title: 'Citations per year (Google Scholar)', items: yearly, note: `Since ${gs.sinceYear}: ${gs.sinceCitations} citations, h-index ${gs.sinceHIndex}.` }),
+});
 
-const groups = GROUPS.map(([k, name]) => ({ k, name, list: pubs.filter((p) => p.status === k).sort((a, b) => b.year - a.year) })).filter((g) => g.list.length);
-document.getElementById('main').innerHTML = `
-  <section class="s-step s-hero" data-title="Publications"><div class="s-card">
-    <p class="s-kicker">Publications</p><h1>Papers, preprints and talks</h1>
-    <p class="s-lede">Physical ground truth for PET/CT: 3D-printed phantoms, synthetic lesion insertion, simulation, and earlier work on blood-flow modelling.</p>
-    <div class="s-stat">${groups.map((g) => `<div><b>${g.list.length}</b><span>${g.name.toLowerCase()}</span></div>`).join('')}</div>
-    <p class="s-scroll">Scroll through each group</p>
-  </div></section>
-  ${metricsStep}
-  ${groups.map((g) => `<section class="s-step" data-title="${g.name}"><div class="s-card"><p class="s-kicker">${g.list.length} ${g.list.length > 1 ? 'items' : 'item'}</p><h2>${g.name}</h2>${g.list.map(item).join('')}</div></section>`).join('')}`;
+// ── Papers: the stacks band, with the filter tabs right below it. Tab 0 is "All", then one tab per group in
+// GROUPS order, which is the order the stacks stage reads them in.
+const tabItems = [{ label: 'All', sub: `${all.length} items`, html: grid(all, 'papers-all') },
+  ...groups.map((g) => ({ label: g.name, sub: `${g.list.length} ${g.list.length > 1 ? 'items' : 'item'}`, html: grid(g.list, `papers-${g.k}`) }))];
+const papers = band({
+  id: 'papers', cls: 'pb-band',
+  stage: stage('stacks', { focus: '0.4 0.08 0.99 0.94', focusM: '0.02 0.06 0.98 0.96' }),
+  over: '<p class="lk-k">The papers</p><h2>One stack per status</h2><p>Pick a tab below: its stack lifts and fans out here. Click a first page to read it large.</p>',
+  below: tabs('papers', tabItems, { cls: 'pb-tabs' }),
+});
 
-// Lightbox: the small thumbnail opens a readable first-page image (Esc, close button or outside click to close).
+const close = cta({
+  kicker: 'Where it leads', title: 'From papers to the thesis', text: 'The published work, the preprints and the manuscripts in preparation are the five studies of the PhD.',
+  links: [{ href: '/sections/research.html', label: 'The PhD in a nutshell →' }, { href: '/sections/projects.html', label: 'What I built next', ghost: true }],
+});
+
+mountPage({
+  active: 'publications',
+  html: hero({ stage: stage('hero', { cls: 'lk-bleed', focus: '0.5 0.12 0.99 0.92', focusM: '0.02 0.1 0.98 0.96' }), html: heroHtml }) + metricsSplit + papers + close,
+  stages: { hero: heroStage, stacks: stacksStage },
+});
+
+// A first page that fails to load falls back to the placeholder.
 const byId = Object.fromEntries(pubs.map((p) => [p.id, p]));
-const lb = document.createElement('div');
-lb.className = 'pub-lb';
-lb.hidden = true;
-lb.setAttribute('role', 'dialog');
-lb.setAttribute('aria-modal', 'true');
-lb.setAttribute('aria-label', 'First page preview');
-lb.innerHTML = '<div class="pub-lb-box"><button type="button" class="pub-lb-x" aria-label="Close preview">&times;</button><div class="pub-lb-img"><img alt=""></div><div class="pub-lb-bar"><span class="pub-lb-cap"></span><a class="pub-read-btn" target="_blank" rel="noopener"></a></div></div>';
-document.body.appendChild(lb);
-const lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.pub-lb-cap'), lbLink = lb.querySelector('.pub-read-btn'), lbX = lb.querySelector('.pub-lb-x');
-let lastFocus = null;
-const closeLb = () => { if (lb.hidden) return; lb.hidden = true; document.body.classList.remove('pub-lb-open'); lbImg.removeAttribute('src'); if (lastFocus) lastFocus.focus(); };
-const openLb = (p, from) => {
-  lastFocus = from;
-  lbImg.src = `/media/papers/${p.id}.webp`;
-  lbImg.alt = `First page of ${p.title}`;
-  lbCap.textContent = `${String(p.venue).split(' · ')[0]} · ${p.year}`;
-  const link = paperLink(p);
-  lbLink.hidden = !link;
-  if (link) { lbLink.href = link; lbLink.textContent = p.pdf ? 'Read the poster' : 'Read the paper'; }
-  lb.hidden = false;
-  document.body.classList.add('pub-lb-open');
-  lbX.focus();
-};
-document.querySelectorAll('button.pub-thumb').forEach((el) => {
+document.querySelectorAll('button.pb-thumb').forEach((el) => {
   const img = el.querySelector('img');
-  const ph = () => { const p = byId[el.dataset.pid]; el.outerHTML = `<span class="pub-thumb pub-ph" aria-hidden="true"><i>${esc(String(p.venue).split(' · ')[0])}</i><b>${p.year}</b></span>`; };
+  const ph = () => { el.outerHTML = placeholder(byId[el.dataset.pid]); };
   img.addEventListener('error', ph, { once: true });
   if (img.complete && !img.naturalWidth && img.src) ph();
-  el.addEventListener('click', () => openLb(byId[el.dataset.pid], el));
-});
-lb.addEventListener('click', (e) => { if (e.target === lb || e.target.closest('.pub-lb-x')) closeLb(); });
-document.addEventListener('keydown', (e) => {
-  if (lb.hidden) return;
-  if (e.key === 'Escape') { e.preventDefault(); closeLb(); }
-  else if (e.key === 'Tab') {
-    const f = [...lb.querySelectorAll('button, a[href]')].filter((n) => !n.hidden);
-    const first = f[0], last = f[f.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-  }
-});
-
-runPage({
-  active: 'publications',
-  build({ THREE, scene, reduceMotion }) {
-    const root = new THREE.Group();
-    root.position.set(3.4, 0, 0);
-    scene.add(root);
-    const paperMat = (hot) => new THREE.MeshStandardMaterial({ color: hot ? 0xf6efe6 : 0xcfc5b8, roughness: 0.7, emissive: hot ? 0x3a0e10 : 0, emissiveIntensity: 0.3, side: THREE.DoubleSide });
-    const sheets = [];
-    groups.forEach((g, gi) => g.list.forEach((p, k) => {
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(1.35, 1.85, 1, 6), paperMat(false));
-      // Slight curl.
-      const pos = m.geometry.attributes.position;
-      for (let v = 0; v < pos.count; v++) pos.setZ(v, Math.pow(pos.getY(v) / 0.93, 2) * 0.08);
-      m.geometry.computeVertexNormals();
-      // Ink lines as thin dark strips.
-      for (let l = 0; l < 7; l++) {
-        const line = new THREE.Mesh(new THREE.PlaneGeometry(l === 0 ? 0.9 : 1.1, l === 0 ? 0.08 : 0.035), new THREE.MeshBasicMaterial({ color: l === 0 ? 0x8b1a1a : 0x4a4048 }));
-        line.position.set(l === 0 ? -0.07 : 0, 0.68 - l * 0.18, 0.02);
-        m.add(line);
-      }
-      m.userData = { gi, k, n: g.list.length };
-      root.add(m);
-      sheets.push(m);
-    }));
-    const tmp = new THREE.Vector3();
-    return {
-      keyframes: [{ pos: [0, 2, 18], look: [0.5, 0, 0] }, ...groups.map(() => ({ pos: [1, 0.8, 12], look: [1.2, 0, 0] }))],
-      update(t, p, dt) {
-        const active = Math.round(p) - 1;
-        sheets.forEach((m, i) => {
-          const { gi, k, n } = m.userData;
-          const fan = gi === active;
-          if (fan) tmp.set((k - (n - 1) / 2) * 1.05, 0, 1 - Math.abs(k - (n - 1) / 2) * 0.3);
-          else tmp.set(Math.sin(i * 2.4) * 0.2, -1.2 + i * 0.04, -2 - gi * 0.4);
-          m.position.lerp(tmp, Math.min(1, dt * 3));
-          const rx = fan ? 0 : -Math.PI / 2 + 0.05;
-          m.rotation.x += (rx - m.rotation.x) * Math.min(1, dt * 3);
-          m.rotation.y = fan ? (k - (n - 1) / 2) * -0.18 : i * 0.3;
-          m.rotation.z = fan || reduceMotion ? 0 : Math.sin(t * 0.4 + i) * 0.03;
-          m.material.emissiveIntensity = fan ? 0.35 : 0;
-        });
-        root.rotation.y = reduceMotion ? 0 : Math.sin(t * 0.2) * 0.12;
-      },
-    };
-  },
 });
