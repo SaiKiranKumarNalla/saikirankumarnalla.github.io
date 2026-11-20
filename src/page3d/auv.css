@@ -1,0 +1,10 @@
+/* Black Pearl page: figure lightbox and tighter tables inside the cards. */
+.auv-zoom img{cursor:zoom-in;transition:border-color .2s}
+.auv-zoom:hover img{border-color:var(--accent)}
+.s-main .s-table{margin:.9rem 0}
+.auv-lightbox{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;background:rgba(5,4,6,.88);cursor:zoom-out}
+.auv-lightbox[hidden]{display:none}
+.auv-lightbox figure{margin:0;max-width:min(1200px,100%);max-height:100%;display:flex;flex-direction:column;align-items:center;gap:.7rem}
+.auv-lightbox img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:10px;background:#fff}
+.auv-lightbox figcaption{color:rgba(242,236,228,.8);font-size:.85rem;text-align:center;max-width:70ch}
+.auv-lightbox button{position:absolute;top:14px;right:18px;font-size:2rem;line-height:1;color:#f2ece4;background:none;border:0;cursor:pointer}

@@ -3,26 +3,61 @@
 import { auv as A } from '../../content/academics.json';
 import pubs from '../../content/publications.json';
 import { runPage } from './engine.js';
+import './auv.css';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const list = (items) => `<ul class="s-list">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
+const table = (t) => `<table class="s-table"><thead><tr>${t.head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map((r) => `<tr>${r.map((c, j) => (j ? `<td>${esc(c)}</td>` : `<td><b>${esc(c)}</b></td>`)).join('')}</tr>`).join('')}</tbody></table>`;
+const figure = (f) => `<figure class="s-fig auv-zoom"><img src="${esc(f.src)}" alt="${esc(f.caption)}" loading="lazy" decoding="async"><figcaption>${esc(f.caption)}</figcaption></figure>`;
 const paper = pubs.find((p) => p.id === 'oceans2021');
+
+// 3D stage for each step: hero, brief, V-cycle, the vehicle (all design and results steps), team, watch.
+const KF = [
+  { pos: [1.5, 2.5, 18], look: [2.2, 0, 0] },
+  { pos: [2, 4, 18], look: [2.4, 0, 0] },
+  { pos: [1.5, 1, 15], look: [2.2, 0, -1] },
+  { pos: [2.5, 2.5, 15], look: [2.4, 0.3, 0] },
+  { pos: [1.5, 2, 19], look: [2.4, 0, 0] },
+  { pos: [1.5, 2.5, 18], look: [2.2, 0, 0] },
+];
+const STAGE = [0, 1, 2, ...Array(A.steps.length - 3).fill(3), 4, 5];
 
 const STEPS = [
   { title: 'Black Pearl', html: `<p class="s-kicker">Bachelor's · ${esc(A.team)} · ${esc(A.dates)}</p>
       <h1>${esc(A.title)}</h1>
       <p class="s-lede">${esc(A.eli5)}</p>
       <p class="s-meta">${esc(A.degree)}<br>${esc(A.competition)} · ${esc(A.role)}</p>
+      <p class="s-meta">${esc(A.report)}. Supervisor: ${esc(A.supervisor)}.</p>
       <p class="s-scroll">Scroll to build the vehicle</p>` },
   ...A.steps.map((s, i) => ({ title: s.title, html: `<p class="s-kicker">${i + 1} of ${A.steps.length}</p><h2>${esc(s.title)}</h2>
       <p class="s-lede">${esc(s.eli5)}</p><p>${esc(s.text)}</p>
-      ${s.more.length ? `<details class="s-know"><summary>Know more</summary>${list(s.more)}</details>` : ''}` })),
+      ${s.table ? table(s.table) : ''}
+      ${(s.figures || []).map(figure).join('')}
+      ${s.more.length ? `<details class="s-know"><summary>Know more</summary>${list(s.more)}</details>` : ''}
+      ${i === A.steps.length - 1 ? `<h3>Team</h3><p>${A.members.map(esc).join(', ')}. Supervisor: ${esc(A.supervisor)}.</p>` : ''}` })),
   { title: 'Watch', html: `<p class="s-kicker">Watch</p><h2>Black Pearl in action</h2>
       ${A.videos.map((v) => `<h3>${esc(v.title)}</h3><div class="s-video"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.id)}" title="${esc(v.title)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`).join('')}
       ${paper ? `<h3>Paper</h3><div class="s-role"><b>${esc(paper.title)}</b><p>${esc(paper.venue)} · <a href="https://doi.org/${esc(paper.doi)}" target="_blank" rel="noopener">doi.org/${esc(paper.doi)}</a></p></div>` : ''}` },
 ];
 document.getElementById('main').innerHTML = STEPS.map((s, i) =>
   `<section class="s-step${i === 0 ? ' s-hero' : ''}" data-title="${esc(s.title)}"><div class="s-card">${s.html}</div></section>`).join('');
+
+// Figure lightbox: click a figure to enlarge; Escape or a click closes it.
+const box = document.createElement('div');
+box.className = 'auv-lightbox'; box.hidden = true;
+box.innerHTML = '<button type="button" aria-label="Close">&times;</button><figure><img alt=""><figcaption></figcaption></figure>';
+document.body.appendChild(box);
+const closeBox = () => { box.hidden = true; };
+document.getElementById('main').addEventListener('click', (e) => {
+  const fig = e.target.closest('.auv-zoom');
+  if (!fig) return;
+  box.querySelector('img').src = fig.querySelector('img').src;
+  box.querySelector('img').alt = fig.querySelector('img').alt;
+  box.querySelector('figcaption').textContent = fig.querySelector('figcaption').textContent;
+  box.hidden = false;
+});
+box.addEventListener('click', closeBox);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBox(); });
 
 runPage({
   active: 'auv',
@@ -104,15 +139,12 @@ runPage({
     root.add(bubbles);
 
     return {
-      keyframes: [
-        { pos: [1.5, 2.5, 18], look: [2.2, 0, 0] },
-        { pos: [2, 4, 18], look: [2.4, 0, 0] },
-        { pos: [1.5, 1, 15], look: [2.2, 0, -1] },
-        { pos: [2.5, 2.5, 15], look: [2.4, 0.3, 0] },
-        { pos: [1.5, 2, 19], look: [2.4, 0, 0] },
-        { pos: [1.5, 2.5, 18], look: [2.2, 0, 0] },
-      ],
-      update(t, p, dt) {
+      // Text steps beyond the original six share the vehicle stage (3); stage index drives the 3D.
+      keyframes: STAGE.map((g) => KF[g]),
+      update(t, p0, dt) {
+        const lo = Math.max(0, Math.min(STAGE.length - 1, Math.floor(p0))), hi = Math.min(STAGE.length - 1, lo + 1);
+        const p = STAGE[lo] + (STAGE[hi] - STAGE[lo]) * (p0 - lo);
+        const finalAt = vis(p0, STAGE.length - 3, 0.7);
         const time = reduceMotion ? 0 : t;
         props.forEach((pr) => (pr.rotation.z = time * 18));
         const swim = Math.max(vis(p, 0, 1), vis(p, 4, 1), vis(p, 5, 1));
@@ -122,7 +154,7 @@ runPage({
         auv.rotation.set(Math.sin(time * 0.5) * 0.05 * swim, (vis(p, 3, 0.8) ? time * 0.3 : 0.6) + swim * Math.sin(time * 0.3) * 0.2, 0);
         const e = vis(p, 1, 0.8);
         env.visible = e > 0.02; env.material.opacity = e; envLabel.visible = e > 0.6;
-        finalLabel.visible = vis(p, 3, 0.7) > 0.6;
+        finalLabel.visible = finalAt > 0.6;
         vg.visible = vstep > 0.02;
         vg.scale.setScalar(Math.max(0.001, vstep));
         for (let i = 0; i < vNames.length; i++) vg.userData[`l${i}`].visible = vstep > 0.6;
