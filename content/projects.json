@@ -2,7 +2,7 @@
   {
     "id": "virtualpet",
     "name": "Virtual PET Patients",
-    "kind": "research \u00b7 AI",
+    "kind": "research · AI",
     "status": "active",
     "year": 2026,
     "eli5": "Turn a real scan into a LEGO-model patient that a computer scanner can scan again, with a person checking every step.",
@@ -139,7 +139,7 @@
         },
         {
           "level": "Coordinator",
-          "who": "Atlas \u00b7 Management",
+          "who": "Atlas · Management",
           "does": "Breaks requests into tasks, assigns departments, runs meetings and the weekly review",
           "model": "Codex CLI"
         },
@@ -173,21 +173,25 @@
   },
   {
     "id": "animus",
-    "name": "ANIMUS Jobs",
+    "name": "ANIMUS Career",
     "kind": "AI agent",
-    "status": "coming-soon",
+    "status": "active",
     "year": 2026,
-    "eli5": "A job-hunting sidekick that finds jobs, checks they're real, and helps write the letter.",
-    "summary": "Local-first AI career agent: multi-source discovery, AI web radar, link verification by Claude/Codex, tailored CVs and letters, Fellowship Match, kanban, calendar, and a game layer with XP and rarity tiers.",
+    "eli5": "Your CV becomes a 3D map of your skills; the agent uses it to find jobs, research openings and skills worth learning.",
+    "summary": "Local-first AI career agent: your resume becomes a 3D knowledge graph of skills, projects and roles. It finds jobs, PhD/postdoc and lab openings, fellowships and events, tracks trending skills, reviews your GitHub and plans domain switches. A browser version runs with no install; the full local agent uses your Claude Code, Codex or Gemini subscriptions.",
     "stack": [
       "Python",
+      "FastAPI",
       "SQLite",
+      "JavaScript",
+      "Three.js",
       "Claude Code",
       "Codex",
-      "Gemini"
+      "Gemini",
+      "MCP"
     ],
-    "public": false,
-    "note": "Public release soon; screenshots only.",
+    "public": true,
+    "note": "Open source. The web version keeps your data in your browser.",
     "more": {
       "problem": "Job and fellowship searching is scattered across dozens of sites, full of dead links, and hard to tailor applications for.",
       "approach": [
@@ -197,15 +201,19 @@
         "Runs locally on your own AI subscriptions: no API bills, CV stays on your machine"
       ],
       "status": [
-        "Version 0.6, macOS and Linux tested",
-        "Public release coming soon"
+        "Version 1.0, public on GitHub",
+        "Browser version live on GitHub Pages; local agent for macOS, Linux and Windows"
       ]
     },
     "architecture": {
       "figures": [
         {
-          "src": "/media/agentic/animus-world-map.webp",
-          "caption": "ANIMUS world map: every verified opportunity pinned by location and type, scored against the CV, with remote and online listings alongside."
+          "src": "/media/agentic/animus-career-graph.jpg",
+          "caption": "ANIMUS Career: a resume turned into a 3D knowledge graph of skills, projects, roles and education (fictional sample data)."
+        },
+        {
+          "src": "/media/agentic/animus-career-onboarding.jpg",
+          "caption": "Onboarding: choose a local model, an API key or the local agent, then add a resume."
         }
       ],
       "hierarchy": [
@@ -218,7 +226,7 @@
           "level": "Router",
           "who": "Agent router",
           "does": "Picks a model per task type, falls through on usage limits, login errors or daily budget",
-          "model": "Claude CLI \u2192 Codex \u2192 Gemini \u2192 Anthropic API"
+          "model": "Claude CLI → Codex → Gemini → Anthropic API"
         },
         {
           "level": "Council",
@@ -243,7 +251,21 @@
         "Never invents facts about the candidate: everything comes from the stored resume",
         "No scraping of sites whose terms forbid it"
       ]
-    }
+    },
+    "links": [
+      {
+        "label": "Live web app",
+        "href": "https://saikirankumarnalla.github.io/animus-career/"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/SaiKiranKumarNalla/animus-career"
+      },
+      {
+        "label": "Predecessor: ANIMUS Jobs",
+        "href": "https://github.com/SaiKiranKumarNalla/animus-jobs"
+      }
+    ]
   },
   {
     "id": "flowlab",
@@ -410,7 +432,16 @@
         "Gameplay, the world and footage are on the Kage game page"
       ]
     },
-    "stack": ["Blender", "Godot", "Meshy AI", "Claude Code", "Codex CLI", "Antigravity CLI", "Three.js", "Python"]
+    "stack": [
+      "Blender",
+      "Godot",
+      "Meshy AI",
+      "Claude Code",
+      "Codex CLI",
+      "Antigravity CLI",
+      "Three.js",
+      "Python"
+    ]
   },
   {
     "id": "tenglish-lm",
